@@ -3,7 +3,7 @@
 import prisma from "@/lib/prisma";
 import { registrationSchema, RegistrationInput } from "@/lib/validations/registration";
 import { generateQrToken, generateRegistrationNumber, generateQrDataUrl } from "@/lib/qr";
-import { sendRegistrationConfirmationEmail } from "@/lib/resend";
+import { sendRegistrationConfirmationEmail } from "@/lib/mailer";
 import { ActionResponse } from "@/types";
 import { revalidatePath } from "next/cache";
 
