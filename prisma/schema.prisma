@@ -1,0 +1,289 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ----------------------------------------------------
+// ENUMS
+// ----------------------------------------------------
+
+enum Role {
+  SUPER_ADMIN
+  ORGANIZER
+  STAFF
+  PARTICIPANT
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  REGISTRATION_OPEN
+  REGISTRATION_CLOSED
+  EVENT_COMPLETED
+}
+
+enum RegistrationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  ATTENDED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+// ----------------------------------------------------
+// AUTH & USERS (NextAuth / Auth.js Compatible)
+// ----------------------------------------------------
+
+model User {
+  id              String       @id @default(cuid())
+  name            String?
+  email           String?      @unique
+  emailVerified   DateTime?
+  image           String?
+  role            Role         @default(PARTICIPANT)
+  googleAccountId String?
+  accounts        Account[]
+  sessions        Session[]
+  participant     Participant?
+  auditLogs       AuditLog[]
+  staffCheckIns   CheckIn[]    @relation("StaffCheckIns")
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([role])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ----------------------------------------------------
+// PARTICIPANT PROFILE
+// ----------------------------------------------------
+
+model Participant {
+  id                 String         @id @default(cuid())
+  userId             String         @unique
+  name               String
+  email              String         @unique
+  phone              String
+  college            String
+  department         String
+  year               String
+  imageUrl           String?
+  cloudinaryPublicId String?
+  user               User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  registrations      Registration[]
+  certificates       Certificate[]
+  teamMemberships    TeamMember[]
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  @@index([email])
+  @@index([phone])
+  @@index([college])
+}
+
+// ----------------------------------------------------
+// EVENT DOMAIN
+// ----------------------------------------------------
+
+model EventCategory {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  events      Event[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Event {
+  id                   String          @id @default(cuid())
+  name                 String
+  slug                 String          @unique
+  description          String          @db.Text
+  venue                String
+  startAt              DateTime
+  endAt                DateTime
+  capacity             Int
+  registrationOpen     Boolean         @default(true)
+  registrationDeadline DateTime
+  status               EventStatus     @default(DRAFT)
+  posterUrl            String?
+  isTeamEvent          Boolean         @default(false)
+  minTeamSize          Int             @default(1)
+  maxTeamSize          Int             @default(1)
+  categoryId           String?
+  category             EventCategory?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  registrations        Registration[]
+  teams                Team[]
+  certificates         Certificate[]
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+
+  @@index([slug])
+  @@index([status])
+  @@index([startAt])
+}
+
+// ----------------------------------------------------
+// TEAMS
+// ----------------------------------------------------
+
+model Team {
+  id            String         @id @default(cuid())
+  name          String
+  eventId       String
+  event         Event          @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  leaderId      String
+  members       TeamMember[]
+  registrations Registration[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@unique([name, eventId])
+  @@index([eventId])
+}
+
+model TeamMember {
+  id            String      @id @default(cuid())
+  teamId        String
+  participantId String
+  team          Team        @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+
+  @@unique([teamId, participantId])
+}
+
+// ----------------------------------------------------
+// REGISTRATIONS & CHECK-IN
+// ----------------------------------------------------
+
+model Registration {
+  id                 String             @id @default(cuid())
+  registrationNumber String             @unique
+  participantId      String
+  eventId            String
+  teamId             String?
+  status             RegistrationStatus @default(CONFIRMED)
+  paymentStatus      PaymentStatus      @default(COMPLETED)
+  qrToken            String             @unique
+  checkedIn          Boolean            @default(false)
+  participant        Participant        @relation(fields: [participantId], references: [id], onDelete: Restrict)
+  event              Event              @relation(fields: [eventId], references: [id], onDelete: Restrict)
+  team               Team?              @relation(fields: [teamId], references: [id], onDelete: SetNull)
+  payment            Payment?
+  checkIn            CheckIn?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  @@unique([participantId, eventId], name: "participant_event_unique")
+  @@index([registrationNumber])
+  @@index([qrToken])
+  @@index([status])
+  @@index([checkedIn])
+}
+
+model Payment {
+  id             String        @id @default(cuid())
+  registrationId String        @unique
+  amount         Decimal       @db.Decimal(10, 2)
+  currency       String        @default("INR")
+  status         PaymentStatus @default(PENDING)
+  provider       String?
+  transactionId  String?       @unique
+  registration   Registration  @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model CheckIn {
+  id             String       @id @default(cuid())
+  registrationId String       @unique
+  staffId        String
+  checkedInAt    DateTime     @default(now())
+  deviceInfo     String?
+  registration   Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  staff          User         @relation("StaffCheckIns", fields: [staffId], references: [id], onDelete: Restrict)
+
+  @@index([staffId])
+  @@index([checkedInAt])
+}
+
+// ----------------------------------------------------
+// CERTIFICATES & AUDIT LOGS
+// ----------------------------------------------------
+
+model Certificate {
+  id             String      @id @default(cuid())
+  participantId  String
+  eventId        String
+  certificateUrl String
+  issuedAt       DateTime    @default(now())
+  participant    Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  event          Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([participantId, eventId])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  action    String
+  entity    String
+  entityId  String
+  metadata  Json?
+  actor     User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+
+  @@index([actorId])
+  @@index([entity, entityId])
+  @@index([createdAt])
+}
