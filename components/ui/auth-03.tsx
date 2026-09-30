@@ -14,6 +14,7 @@ import {
   MdArrowForward,
 } from "react-icons/md";
 import { FaGithub, FaGoogle } from "react-icons/fa";
+import { authClient } from "@/lib/auth-client";
 
 export interface Auth3SocialProvider {
   /** Unique key for the provider */
@@ -131,6 +132,19 @@ export function Auth3({
   const [suEmail, setSuEmail] = useState("");
   const [suPassword, setSuPassword] = useState("");
 
+  const handleSocialSignIn = async (providerId: string) => {
+    if (providerId === "google" || providerId === "github") {
+      try {
+        await authClient.signIn.social({
+          provider: providerId,
+          callbackURL: "/dashboard",
+        });
+      } catch (err) {
+        console.error(`${providerId} sign in error:`, err);
+      }
+    }
+  };
+
   const handleSignIn = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSignIn?.(siEmail, siPassword);
@@ -174,7 +188,7 @@ export function Auth3({
                       variant="ghost"
                       type="button"
                       className="h-10 w-full gap-2.5 rounded-none border-2 border-[#333] bg-[#1e1e1e] hover:bg-[#262626] text-white hover:text-white text-sm font-medium shadow-none transition-colors cursor-pointer"
-                      onClick={provider.onClick}
+                      onClick={provider.onClick || (() => handleSocialSignIn(provider.id))}
                     >
                       {provider.icon}
                       {provider.label}
