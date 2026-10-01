@@ -197,14 +197,16 @@ model Team {
 }
 
 model TeamMember {
-  id            String      @id @default(cuid())
+  id            String       @id @default(cuid())
   teamId        String
-  participantId String
-  team          Team        @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
-  createdAt     DateTime    @default(now())
+  name          String
+  phone         String
+  participantId String?
+  team          Team         @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  participant   Participant? @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  createdAt     DateTime     @default(now())
 
-  @@unique([teamId, participantId])
+  @@index([teamId])
 }
 
 // ----------------------------------------------------

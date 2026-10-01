@@ -16,98 +16,94 @@ export function MobileNav() {
 
   return (
     <div className="md:hidden">
-      <Button
+      <button
         aria-controls="mobile-menu"
         aria-expanded={open}
         aria-label="Toggle menu"
-        className="md:hidden"
+        className="size-9 flex items-center justify-center rounded-none border border-[#152A54] bg-[#060D1A] text-white hover:bg-[#0B162C] transition-colors"
         onClick={() => setOpen(!open)}
-        size="icon"
-        variant="outline"
       >
         {open ? (
-          <XIcon className="size-4.5" />
+          <XIcon className="size-4" />
         ) : (
-          <MenuIcon className="size-4.5" />
+          <MenuIcon className="size-4" />
         )}
-      </Button>
+      </button>
       {open && (
         <Portal className="top-14" id="mobile-menu">
           <PortalBackdrop />
           <div
             className={cn(
               "data-[slot=open]:zoom-in-97 ease-out data-[slot=open]:animate-in",
-              "size-full p-4"
+              "size-full p-4 bg-black/95 border-b border-[#152A54]"
             )}
             data-slot={open ? "open" : "closed"}
           >
             {session?.user && (
-              <div className="flex items-center gap-3 p-3 mb-4 rounded-xl border border-border bg-surface">
-                <Avatar className="size-10 rounded-lg after:rounded-lg border border-primary/50">
+              <div className="flex items-center gap-3 p-3 mb-4 rounded-none border border-[#152A54] bg-[#060D1A]">
+                <Avatar className="size-9 rounded-none border border-blue-500/60">
                   {session.user.image && (
                     <AvatarImage
                       src={session.user.image}
                       alt={session.user.name || "User"}
-                      className="rounded-lg object-cover"
+                      className="rounded-none object-cover"
                     />
                   )}
-                  <AvatarFallback className="rounded-lg bg-surface-elevated font-bold text-cyan text-sm">
+                  <AvatarFallback className="rounded-none bg-[#0E1B38] font-mono font-bold text-blue-400 text-xs">
                     {session.user.name?.slice(0, 2).toUpperCase() || "U"}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-foreground truncate">
+                  <p className="text-xs font-mono font-semibold text-white truncate">
                     {session.user.name || "Participant"}
                   </p>
-                  <p className="text-xs text-muted truncate">{session.user.email}</p>
+                  <p className="text-[11px] font-mono text-slate-400 truncate">{session.user.email}</p>
                 </div>
               </div>
             )}
 
-            <div className="grid gap-y-2">
+            <div className="grid gap-y-1">
               {navLinks.map((link) => (
-                <Button
-                  className="justify-start"
+                <Link
                   key={link.label}
-                  variant="ghost"
-                  render={<Link href={link.href} onClick={() => setOpen(false)} />}
-                  nativeButton={false}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className="px-3 py-2 font-mono text-xs uppercase tracking-wider text-slate-300 hover:text-white hover:bg-[#0B162C] border border-transparent hover:border-[#152A54] rounded-none transition-all"
                 >
-                  {link.label}
-                </Button>
+                  &gt; {link.label}
+                </Link>
               ))}
             </div>
 
-            <div className="mt-8 flex flex-col gap-2">
+            <div className="mt-6 flex flex-col gap-2">
               {session?.user ? (
                 <>
-                  <Button
-                    className="w-full border-2 border-primary bg-primary hover:bg-primary-hover text-white cursor-pointer"
-                    render={<Link href="/dashboard" onClick={() => setOpen(false)} />}
-                    nativeButton={false}
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setOpen(false)}
+                    className="w-full py-2.5 text-center font-mono text-xs uppercase tracking-wider font-semibold rounded-none bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 transition-colors"
                   >
-                    Go to Dashboard
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full gap-2 text-error border-error/30 hover:bg-error/10 cursor-pointer"
+                    [ Go to Dashboard ]
+                  </Link>
+                  <button
+                    className="w-full flex items-center justify-center gap-2 py-2 font-mono text-xs uppercase tracking-wider text-red-400 border border-red-900/40 bg-red-950/20 hover:bg-red-950/40 rounded-none transition-colors"
                     onClick={async () => {
                       await signOut();
                       setOpen(false);
                     }}
                   >
-                    <LogOutIcon className="size-4" />
-                    Sign Out
-                  </Button>
+                    <LogOutIcon className="size-3.5" />
+                    [ Sign Out ]
+                  </button>
                 </>
               ) : (
-                <Button
-                  className="w-full border-2 border-primary bg-primary hover:bg-primary-hover text-white cursor-pointer"
-                  render={<Link href="/auth" onClick={() => setOpen(false)} />}
-                  nativeButton={false}
+                <Link
+                  href="/auth"
+                  onClick={() => setOpen(false)}
+                  className="w-full py-2.5 text-center font-mono text-xs uppercase tracking-wider font-semibold rounded-none bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 transition-colors"
                 >
-                  Get Started
-                </Button>
+                  [ Sign In / Register ]
+                </Link>
               )}
             </div>
           </div>

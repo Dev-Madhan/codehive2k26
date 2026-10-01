@@ -86,7 +86,7 @@ function PasswordInput({
 
   return (
     <div className="relative">
-      <MdLock className="text-[#666666] absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 pointer-events-none" />
+      <MdLock className="text-slate-500 absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 pointer-events-none" />
       <Input
         id={id}
         type={visible ? "text" : "password"}
@@ -94,13 +94,13 @@ function PasswordInput({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         autoComplete={autoComplete}
-        className="h-10 w-full rounded-none border-2 border-[#333] bg-[#1e1e1e] dark:bg-[#1e1e1e] pl-10 pr-10 text-sm text-white placeholder:text-[#555555] shadow-none outline-none focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 transition-colors"
+        className="h-10 w-full rounded-none border border-[#152A54] bg-[#03060E] dark:bg-[#03060E] pl-10 pr-10 text-xs font-mono text-white placeholder:text-slate-600 shadow-none outline-none focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset-0 transition-colors"
         required
       />
       <button
         type="button"
         onClick={() => setVisible((v) => !v)}
-        className="text-[#777777] hover:text-white absolute top-1/2 right-3 -translate-y-1/2 transition-colors cursor-pointer"
+        className="text-slate-500 hover:text-white absolute top-1/2 right-3 -translate-y-1/2 transition-colors cursor-pointer"
         aria-label={visible ? "Hide password" : "Show password"}
       >
         {visible ? (
@@ -115,9 +115,9 @@ function PasswordInput({
 
 export function Auth3({
   socialProviders = DEFAULT_SOCIAL_PROVIDERS,
-  dividerText = "or",
-  signInLabel = "Sign in",
-  signUpLabel = "Create account",
+  dividerText = "or continue with email",
+  signInLabel = "Authenticate & Enter",
+  signUpLabel = "Create Account & Register",
   forgotPasswordText = "Forgot password?",
   onForgotPassword,
   onSignIn,
@@ -135,9 +135,14 @@ export function Auth3({
   const handleSocialSignIn = async (providerId: string) => {
     if (providerId === "google" || providerId === "github") {
       try {
+        const callbackURL =
+          typeof window !== "undefined"
+            ? `${window.location.origin}/dashboard`
+            : "/dashboard";
+
         await authClient.signIn.social({
           provider: providerId,
-          callbackURL: "/dashboard",
+          callbackURL,
         });
       } catch (err) {
         console.error(`${providerId} sign in error:`, err);
@@ -156,24 +161,34 @@ export function Auth3({
   };
 
   return (
-    <div className="bg-black min-h-screen w-full flex items-center justify-center px-4 py-16">
+    <div className="w-full flex flex-col items-center justify-center px-4 py-16">
       <div className="w-full max-w-[420px]">
-        {/* Exact Auth Card container matching Image 1 */}
-        <div className="bg-[#141414] border-2 border-[#262626] rounded-none shadow-2xl overflow-hidden">
+        {/* Terminal Title Pill (Reference Image 2 Layout) */}
+        <div className="flex flex-col items-center mb-6">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 font-mono text-xs font-bold text-white bg-blue-600 rounded-none border border-blue-500 shadow-sm">
+            &gt; access_portal
+          </div>
+          <p className="text-xs font-mono text-slate-400 mt-2 text-center">
+            A secure, unified entry point for CodeHive 2K26.
+          </p>
+        </div>
+
+        {/* Centered Precision Terminal Card (Reference Image 2 Layout) */}
+        <div className="bg-[#060D1A] border border-[#152A54] rounded-none shadow-2xl overflow-hidden">
           <Tabs defaultValue="signin" className="w-full">
-            {/* Header tab list */}
-            <TabsList className="bg-[#1a1a1a] border-b border-[#262626] grid h-12 w-full grid-cols-2 rounded-none p-1 gap-1 border-x-0 border-t-0">
+            {/* Header Tab List */}
+            <TabsList className="bg-[#030712] border-b border-[#152A54] grid h-12 w-full grid-cols-2 rounded-none p-1 gap-1 border-x-0 border-t-0">
               <TabsTrigger
                 value="signin"
-                className="h-full rounded-none border border-transparent text-sm font-medium text-[#737373] hover:text-[#a3a3a3] transition-all shadow-none data-active:border-[#444444] data-active:bg-[#242424] data-active:text-white dark:data-active:border-[#444444] dark:data-active:bg-[#242424] dark:data-active:text-white data-[state=active]:border-[#444444] data-[state=active]:bg-[#242424] data-[state=active]:text-white dark:data-[state=active]:border-[#444444] dark:data-[state=active]:bg-[#242424] dark:data-[state=active]:text-white"
+                className="h-full rounded-none border border-transparent font-mono text-xs uppercase tracking-wider font-semibold text-slate-400 hover:text-white transition-all shadow-none data-[state=active]:border-[#152A54] data-[state=active]:bg-[#0B162C] data-[state=active]:text-white"
               >
-                Sign in
+                Sign In
               </TabsTrigger>
               <TabsTrigger
                 value="signup"
-                className="h-full rounded-none border border-transparent text-sm font-medium text-[#737373] hover:text-[#a3a3a3] transition-all shadow-none data-active:border-[#444444] data-active:bg-[#242424] data-active:text-white dark:data-active:border-[#444444] dark:data-active:bg-[#242424] dark:data-active:text-white data-[state=active]:border-[#444444] data-[state=active]:bg-[#242424] data-[state=active]:text-white dark:data-[state=active]:border-[#444444] dark:data-[state=active]:bg-[#242424] dark:data-[state=active]:text-white"
+                className="h-full rounded-none border border-transparent font-mono text-xs uppercase tracking-wider font-semibold text-slate-400 hover:text-white transition-all shadow-none data-[state=active]:border-[#152A54] data-[state=active]:bg-[#0B162C] data-[state=active]:text-white"
               >
-                Create account
+                Create Account
               </TabsTrigger>
             </TabsList>
 
@@ -187,42 +202,42 @@ export function Auth3({
                       key={provider.id}
                       variant="ghost"
                       type="button"
-                      className="h-10 w-full gap-2.5 rounded-none border-2 border-[#333] bg-[#1e1e1e] hover:bg-[#262626] text-white hover:text-white text-sm font-medium shadow-none transition-colors cursor-pointer"
+                      className="h-10 w-full gap-2.5 rounded-none border border-[#152A54] bg-[#030712] hover:bg-[#0B162C] hover:border-blue-500/50 text-white text-xs font-mono font-medium shadow-none transition-colors cursor-pointer"
                       onClick={provider.onClick || (() => handleSocialSignIn(provider.id))}
                     >
                       {provider.icon}
-                      {provider.label}
+                      <span>{provider.label}</span>
                     </Button>
                   ))}
                 </div>
 
                 {/* Divider */}
                 <div className="flex items-center gap-3 py-1">
-                  <div className="flex-1 h-px bg-[#262626]" />
-                  <span className="text-[#666666] shrink-0 text-xs font-normal">
+                  <div className="flex-1 h-px bg-[#152A54]" />
+                  <span className="text-slate-500 shrink-0 font-mono text-[11px] uppercase tracking-wider">
                     {dividerText}
                   </span>
-                  <div className="flex-1 h-px bg-[#262626]" />
+                  <div className="flex-1 h-px bg-[#152A54]" />
                 </div>
 
                 {/* Email Address */}
                 <div className="space-y-1.5">
                   <Label
                     htmlFor="auth3-si-email"
-                    className="text-sm font-medium text-white block"
+                    className="font-mono text-[11px] uppercase tracking-wider text-slate-400 font-semibold block"
                   >
-                    Email address
+                    Email Address
                   </Label>
                   <div className="relative">
-                    <MdEmail className="text-[#666666] absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 pointer-events-none" />
+                    <MdEmail className="text-slate-500 absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 pointer-events-none" />
                     <Input
                       id="auth3-si-email"
                       type="email"
-                      placeholder="you@company.com"
+                      placeholder="participant@domain.edu"
                       value={siEmail}
                       onChange={(e) => setSiEmail(e.target.value)}
                       autoComplete="email"
-                      className="h-10 w-full rounded-none border-2 border-[#333] bg-[#1e1e1e] dark:bg-[#1e1e1e] pl-10 pr-3 text-sm text-white placeholder:text-[#555555] shadow-none outline-none focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 transition-colors"
+                      className="h-10 w-full rounded-none border border-[#152A54] bg-[#03060E] dark:bg-[#03060E] pl-10 pr-3 text-xs font-mono text-white placeholder:text-slate-600 shadow-none outline-none focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset-0 transition-colors"
                       required
                     />
                   </div>
@@ -233,14 +248,14 @@ export function Auth3({
                   <div className="flex items-center justify-between">
                     <Label
                       htmlFor="auth3-si-password"
-                      className="text-sm font-medium text-white"
+                      className="font-mono text-[11px] uppercase tracking-wider text-slate-400 font-semibold"
                     >
                       Password
                     </Label>
                     <button
                       type="button"
                       onClick={onForgotPassword}
-                      className="text-primary hover:text-primary-hover text-sm hover:underline transition-colors cursor-pointer font-normal"
+                      className="text-blue-400 hover:text-blue-300 font-mono text-xs hover:underline transition-colors cursor-pointer font-normal"
                     >
                       {forgotPasswordText}
                     </button>
@@ -254,10 +269,10 @@ export function Auth3({
                   />
                 </div>
 
-                {/* Submit Button */}
+                {/* High-Contrast CTA Button (Reference Image 2 layout) */}
                 <Button
                   type="submit"
-                  className="h-10 w-full gap-2 rounded-none font-semibold text-primary-foreground bg-primary hover:bg-primary-hover shadow-none transition-colors cursor-pointer border-2 border-primary mt-2"
+                  className="h-11 w-full gap-2 rounded-none font-mono text-xs uppercase tracking-wider font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-950/50 transition-colors cursor-pointer border border-blue-500 mt-2"
                 >
                   {signInLabel}
                   <MdArrowForward className="h-4 w-4" />
@@ -274,22 +289,22 @@ export function Auth3({
                     key={provider.id}
                     variant="ghost"
                     type="button"
-                    className="h-10 w-full gap-2.5 rounded-none border-0 border-transparent bg-[#1e1e1e] hover:bg-[#262626] text-white hover:text-white text-sm font-medium shadow-none transition-colors cursor-pointer"
+                    className="h-10 w-full gap-2.5 rounded-none border border-[#152A54] bg-[#030712] hover:bg-[#0B162C] hover:border-blue-500/50 text-white text-xs font-mono font-medium shadow-none transition-colors cursor-pointer"
                     onClick={provider.onClick}
                   >
                     {provider.icon}
-                    {provider.label}
+                    <span>{provider.label}</span>
                   </Button>
                 ))}
               </div>
 
               {/* Divider */}
               <div className="flex items-center gap-3 py-1">
-                <div className="flex-1 h-px bg-[#262626]" />
-                <span className="text-[#666666] shrink-0 text-xs font-normal">
+                <div className="flex-1 h-px bg-[#152A54]" />
+                <span className="text-slate-500 shrink-0 font-mono text-[11px] uppercase tracking-wider">
                   {dividerText}
                 </span>
-                <div className="flex-1 h-px bg-[#262626]" />
+                <div className="flex-1 h-px bg-[#152A54]" />
               </div>
 
               <form onSubmit={handleSignUp} className="space-y-4">
@@ -297,20 +312,20 @@ export function Auth3({
                 <div className="space-y-1.5">
                   <Label
                     htmlFor="auth3-su-name"
-                    className="text-sm font-medium text-white block"
+                    className="font-mono text-[11px] uppercase tracking-wider text-slate-400 font-semibold block"
                   >
-                    Full name
+                    Full Name
                   </Label>
                   <div className="relative">
-                    <MdPerson className="text-[#666666] absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 pointer-events-none" />
+                    <MdPerson className="text-slate-500 absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 pointer-events-none" />
                     <Input
                       id="auth3-su-name"
                       type="text"
-                      placeholder="Jane Smith"
+                      placeholder="Alex Mercer"
                       value={suName}
                       onChange={(e) => setSuName(e.target.value)}
                       autoComplete="name"
-                      className="h-10 w-full rounded-none border-2 border-[#333] bg-[#1e1e1e] dark:bg-[#1e1e1e] pl-10 pr-3 text-sm text-white placeholder:text-[#555555] shadow-none outline-none focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 transition-colors"
+                      className="h-10 w-full rounded-none border border-[#152A54] bg-[#03060E] dark:bg-[#03060E] pl-10 pr-3 text-xs font-mono text-white placeholder:text-slate-600 shadow-none outline-none focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset-0 transition-colors"
                       required
                     />
                   </div>
@@ -320,20 +335,20 @@ export function Auth3({
                 <div className="space-y-1.5">
                   <Label
                     htmlFor="auth3-su-email"
-                    className="text-sm font-medium text-white block"
+                    className="font-mono text-[11px] uppercase tracking-wider text-slate-400 font-semibold block"
                   >
-                    Email address
+                    Email Address
                   </Label>
                   <div className="relative">
-                    <MdEmail className="text-[#666666] absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 pointer-events-none" />
+                    <MdEmail className="text-slate-500 absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 pointer-events-none" />
                     <Input
                       id="auth3-su-email"
                       type="email"
-                      placeholder="you@company.com"
+                      placeholder="alex@college.edu"
                       value={suEmail}
                       onChange={(e) => setSuEmail(e.target.value)}
                       autoComplete="email"
-                      className="h-10 w-full rounded-none border-2 border-[#333] bg-[#1e1e1e] dark:bg-[#1e1e1e] pl-10 pr-3 text-sm text-white placeholder:text-[#555555] shadow-none outline-none focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 transition-colors"
+                      className="h-10 w-full rounded-none border border-[#152A54] bg-[#03060E] dark:bg-[#03060E] pl-10 pr-3 text-xs font-mono text-white placeholder:text-slate-600 shadow-none outline-none focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset-0 transition-colors"
                       required
                     />
                   </div>
@@ -343,13 +358,13 @@ export function Auth3({
                 <div className="space-y-1.5">
                   <Label
                     htmlFor="auth3-su-password"
-                    className="text-sm font-medium text-white block"
+                    className="font-mono text-[11px] uppercase tracking-wider text-slate-400 font-semibold block"
                   >
                     Password
                   </Label>
                   <PasswordInput
                     id="auth3-su-password"
-                    placeholder="At least 8 characters"
+                    placeholder="Min 8 characters"
                     value={suPassword}
                     onChange={setSuPassword}
                     autoComplete="new-password"
@@ -359,24 +374,24 @@ export function Auth3({
                 {/* Submit Button */}
                 <Button
                   type="submit"
-                  className="h-10 w-full gap-2 rounded-none font-semibold text-primary-foreground bg-primary hover:bg-primary-hover shadow-none transition-colors cursor-pointer border-2 border-primary mt-2"
+                  className="h-11 w-full gap-2 rounded-none font-mono text-xs uppercase tracking-wider font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-950/50 transition-colors cursor-pointer border border-blue-500 mt-2"
                 >
                   {signUpLabel}
                   <MdArrowForward className="h-4 w-4" />
                 </Button>
 
-                <p className="text-[#737373] text-center text-xs leading-relaxed pt-1">
-                  By creating an account you agree to our{" "}
+                <p className="text-slate-500 text-center font-mono text-[11px] leading-relaxed pt-1">
+                  By registering you agree to the{" "}
                   <a
                     href={termsHref}
-                    className="text-primary hover:text-primary-hover hover:underline transition-colors"
+                    className="text-blue-400 hover:text-blue-300 hover:underline transition-colors"
                   >
-                    Terms of Service
+                    Terms
                   </a>{" "}
                   and{" "}
                   <a
                     href={privacyHref}
-                    className="text-primary hover:text-primary-hover hover:underline transition-colors"
+                    className="text-blue-400 hover:text-blue-300 hover:underline transition-colors"
                   >
                     Privacy Policy
                   </a>

@@ -1,61 +1,37 @@
-import { Header } from "@/components/header";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { ArrowRightIcon, CalendarIcon, QrCodeIcon } from "lucide-react";
+import { AppSidebar } from "@/components/app-sidebar"
+import { ChartAreaInteractive } from "@/components/chart-area-interactive"
+import { DataTable } from "@/components/data-table"
+import { SectionCards } from "@/components/section-cards"
+import { SiteHeader } from "@/components/site-header"
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 
-export default function ParticipantDashboard() {
+import data from "./data.json"
+
+export default function Page() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <Header />
-      <div className="max-w-5xl mx-auto px-4 py-12 space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Participant Dashboard</h1>
-          <p className="text-muted text-sm mt-1">
-            Manage your registered events, access your check-in passes, and view certificates.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="rounded-xl border border-border bg-surface p-6 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg bg-primary/10 text-cyan">
-                <CalendarIcon className="size-5" />
+    <SidebarProvider
+      style={
+        {
+          "--sidebar-width": "calc(var(--spacing) * 72)",
+          "--header-height": "calc(var(--spacing) * 12)",
+        } as React.CSSProperties
+      }
+    >
+      <AppSidebar variant="inset" />
+      <SidebarInset>
+        <SiteHeader />
+        <div className="flex flex-1 flex-col">
+          <div className="@container/main flex flex-1 flex-col gap-2">
+            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+              <SectionCards />
+              <div className="px-4 lg:px-6">
+                <ChartAreaInteractive />
               </div>
-              <h2 className="text-lg font-bold">My Registrations</h2>
+              <DataTable data={data} />
             </div>
-            <p className="text-sm text-muted">
-              View the events you are currently registered for and download your QR entry passes.
-            </p>
-            <Button
-              className="w-full border-2 border-primary bg-primary hover:bg-primary-hover text-white cursor-pointer font-medium"
-              render={<Link href="/events" />}
-              nativeButton={false}
-            >
-              Browse More Events <ArrowRightIcon className="size-4 ml-1" />
-            </Button>
-          </div>
-
-          <div className="rounded-xl border border-border bg-surface p-6 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg bg-mint/10 text-mint">
-                <QrCodeIcon className="size-5" />
-              </div>
-              <h2 className="text-lg font-bold">Event Day Pass</h2>
-            </div>
-            <p className="text-sm text-muted">
-              Keep your digital QR badge ready for smooth event check-in at the desk.
-            </p>
-            <Button
-              variant="outline"
-              className="w-full border-2 cursor-pointer font-medium"
-              render={<Link href="/events" />}
-              nativeButton={false}
-            >
-              View Pass
-            </Button>
           </div>
         </div>
-      </div>
-    </div>
-  );
+      </SidebarInset>
+    </SidebarProvider>
+  )
 }

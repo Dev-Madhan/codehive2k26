@@ -88,3 +88,42 @@ export async function createEvent(input: EventInput): Promise<ActionResponse<Eve
     };
   }
 }
+
+export async function deleteEventBySlug(slug: string): Promise<ActionResponse<{ count: number }>> {
+  try {
+    const deleted = await prisma.event.delete({
+      where: { slug },
+    });
+
+    revalidatePath("/events");
+    revalidatePath("/admin/events");
+
+    return { success: true, data: { count: 1 } };
+  } catch (error) {
+    console.error("deleteEventBySlug error:", error);
+    return {
+      success: false,
+      error: { code: "INTERNAL_ERROR", message: "Failed to delete event by slug." },
+    };
+  }
+}
+
+export async function deleteEvent(id: string): Promise<ActionResponse<{ count: number }>> {
+  try {
+    const deleted = await prisma.event.delete({
+      where: { id },
+    });
+
+    revalidatePath("/events");
+    revalidatePath("/admin/events");
+
+    return { success: true, data: { count: 1 } };
+  } catch (error) {
+    console.error("deleteEvent error:", error);
+    return {
+      success: false,
+      error: { code: "INTERNAL_ERROR", message: "Failed to delete event." },
+    };
+  }
+}
+

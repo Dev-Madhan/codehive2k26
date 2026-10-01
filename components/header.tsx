@@ -23,7 +23,6 @@ export const navLinks = [
   },
 ];
 
-
 export function Header() {
   const scrolled = useScroll(10);
   const { data: session, isPending } = useSession();
@@ -31,61 +30,52 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 mx-auto w-full max-w-4xl border-transparent border-b md:rounded-md md:border md:transition-all md:ease-out",
+        "sticky top-0 z-50 w-full border-b border-[#152A54] bg-black/90 backdrop-blur-md transition-all",
         {
-          "border-border bg-background/95 backdrop-blur-sm supports-backdrop-filter:bg-background/50 md:top-2 md:max-w-3xl md:shadow":
-            scrolled,
+          "shadow-lg shadow-black/80": scrolled,
         }
       )}
     >
-      <nav
-        className={cn(
-          "relative flex h-14 w-full items-center justify-between px-4 md:h-12 md:transition-all md:ease-out",
-          {
-            "md:px-2": scrolled,
-          }
-        )}
-      >
+      <div className="max-w-7xl mx-auto flex h-14 items-center justify-between px-4 sm:px-6">
+        {/* Logo / Prompt */}
         <Link
-          className="flex items-center gap-1 rounded-md px-2 py-1 font-bold text-lg tracking-tight text-foreground hover:opacity-90 transition-opacity font-heading"
+          className="flex items-center gap-1.5 font-mono font-bold text-base tracking-tight text-white hover:opacity-90 transition-opacity"
           href="/"
         >
-          <span>Code</span>
-          <span className="text-primary">Hive</span>
+          <span className="text-blue-500 font-extrabold">&gt;</span>
+          <span>code</span>
+          <span className="text-blue-400">hive</span>
+          <span className="text-[11px] text-slate-500 font-mono">_2k26</span>
         </Link>
 
         {/* Centered navigation links */}
-        <div className="hidden items-center gap-1 absolute left-1/2 -translate-x-1/2 md:flex">
+        <nav className="hidden items-center gap-1 md:flex">
           {navLinks.map((link) => (
-            <Button
+            <Link
               key={link.label}
-              size="sm"
-              variant="ghost"
-              render={<Link href={link.href} />}
-              nativeButton={false}
+              href={link.href}
+              className="px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-slate-300 hover:text-white hover:bg-[#0B162C] border border-transparent hover:border-[#152A54] rounded-none transition-all"
             >
-              {link.label}
-            </Button>
+              [ {link.label} ]
+            </Link>
           ))}
-        </div>
+        </nav>
 
         {/* Profile / Auth button on the right */}
         <div className="flex items-center gap-3">
           {!isPending && session?.user ? (
             <DropdownMenuAvatar />
           ) : (
-            <Button
-              size="sm"
-              className="hidden md:inline-flex cursor-pointer border-2 border-primary bg-primary hover:bg-primary-hover text-white font-medium"
-              render={<Link href="/auth" />}
-              nativeButton={false}
+            <Link
+              href="/auth"
+              className="hidden md:inline-flex items-center justify-center px-4 py-1.5 font-mono text-xs uppercase tracking-wider font-semibold rounded-none bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 transition-colors shadow-sm"
             >
-              Get Started
-            </Button>
+              [ Sign In ]
+            </Link>
           )}
           <MobileNav />
         </div>
-      </nav>
+      </div>
     </header>
   );
 }
