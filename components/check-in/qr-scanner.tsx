@@ -37,13 +37,13 @@ export function QrScannerComponent() {
   };
 
   return (
-    <div className="max-w-lg mx-auto rounded-xl border border-border bg-surface p-6 space-y-6">
-      <div className="text-center space-y-2">
-        <div className="inline-flex size-12 items-center justify-center rounded-full bg-primary/10 text-cyan">
+    <div className="max-w-lg mx-auto rounded-none border border-[#152A54] bg-[#060D1A] p-6 space-y-6 font-mono">
+      <div className="text-center space-y-2 border-b border-[#152A54] pb-4">
+        <div className="inline-flex size-12 items-center justify-center rounded-none bg-blue-600/15 text-blue-400 border border-blue-500/30">
           <QrCodeIcon className="size-6" />
         </div>
-        <h2 className="text-xl font-bold text-foreground">Event Day Check-In</h2>
-        <p className="text-sm text-muted">
+        <h2 className="text-lg font-bold text-white uppercase tracking-wider">&gt; Event Day Check-In</h2>
+        <p className="text-xs text-slate-400">
           Scan participant QR code or enter the opaque token manually.
         </p>
       </div>
@@ -53,39 +53,41 @@ export function QrScannerComponent() {
           <Input
             value={qrToken}
             onChange={(e) => setQrToken(e.target.value)}
-            placeholder="Enter QR Token (e.g. CH26-A1B2C3D4)"
-            className="font-mono text-center tracking-widest border-2 border-border focus-visible:border-primary text-base"
+            placeholder="ENTER TOKEN (e.g. CH26-A1B2C3D4)"
+            className="h-11 rounded-none border border-[#152A54] bg-[#03060E] text-white font-mono text-center tracking-widest placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-sm"
           />
         </div>
         <Button
           type="submit"
           disabled={loading}
-          className="w-full border-2 border-primary bg-primary hover:bg-primary-hover text-white cursor-pointer font-medium"
+          className="h-11 w-full rounded-none font-mono text-xs uppercase tracking-wider font-bold bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 transition-colors cursor-pointer shadow-md shadow-blue-950/50"
         >
-          {loading ? "Verifying Token..." : "Validate & Check-in"}
+          {loading ? "[ VERIFYING TOKEN... ]" : "[ VALIDATE & CHECK-IN ]"}
         </Button>
       </form>
 
+      {/* Success Notification Banner (Reference Image 3 layout) */}
       {result && (
-        <div className="rounded-lg border border-success/40 bg-success/10 p-4 text-center space-y-2">
-          <div className="flex items-center justify-center gap-2 text-success font-semibold">
-            <CheckCircle2Icon className="size-5" />
-            <span>Checked In Successfully!</span>
+        <div className="rounded-none border border-blue-500/40 bg-blue-950/20 p-4 text-center space-y-2">
+          <div className="flex items-center justify-center gap-2 text-blue-400 font-bold text-xs uppercase">
+            <CheckCircle2Icon className="size-4" />
+            <span>Checked In Successfully</span>
           </div>
-          <p className="text-sm text-foreground">
+          <p className="text-xs text-white">
             <strong>{result.participantName}</strong> ({result.registrationNumber})
           </p>
-          <p className="text-xs text-muted">Event: {result.eventName}</p>
+          <p className="text-[11px] text-slate-400">Event: {result.eventName}</p>
         </div>
       )}
 
+      {/* Error Notification Banner (Reference Image 3 layout) */}
       {error && (
-        <div className="rounded-lg border border-error/40 bg-error/10 p-4 text-center space-y-1 text-error">
-          <div className="flex items-center justify-center gap-2 font-semibold">
-            <AlertCircleIcon className="size-5" />
+        <div className="rounded-none border border-red-900/50 bg-red-950/20 p-4 text-center space-y-1 text-red-400">
+          <div className="flex items-center justify-center gap-2 font-bold text-xs uppercase">
+            <AlertCircleIcon className="size-4" />
             <span>Check-in Failed</span>
           </div>
-          <p className="text-xs">{error}</p>
+          <p className="text-xs text-red-300">{error}</p>
         </div>
       )}
     </div>

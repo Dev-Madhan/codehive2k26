@@ -12,38 +12,41 @@ export default async function AdminParticipantsPage() {
   });
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Participants Directory</h1>
-        <p className="text-sm text-muted">View all verified participants registered in the system.</p>
+    <div className="space-y-6 font-mono">
+      <div className="border-b border-[#152A54] pb-4">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[11px] font-bold text-blue-400 bg-blue-600/15 border border-blue-500/30 mb-2">
+          &gt; admin / participants_registry
+        </div>
+        <h1 className="text-2xl font-bold tracking-tight text-white uppercase">Participants Directory</h1>
+        <p className="text-xs text-slate-400 mt-1">Verified participants registered in the system.</p>
       </div>
 
-      <div className="rounded-xl border border-border bg-surface overflow-hidden">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-surface-elevated text-xs uppercase text-muted border-b border-border">
+      <div className="rounded-none border border-[#152A54] bg-[#060D1A] overflow-x-auto">
+        <table className="w-full text-left text-xs">
+          <thead className="bg-[#03060E] text-[11px] uppercase tracking-wider text-slate-400 border-b border-[#152A54]">
             <tr>
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Email</th>
               <th className="px-4 py-3">Phone</th>
               <th className="px-4 py-3">College</th>
-              <th className="px-4 py-3">Events</th>
+              <th className="px-4 py-3">Events Count</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border">
+          <tbody className="divide-y divide-[#152A54]">
             {participants.length === 0 ? (
               <tr>
-                <td colSpan={5} className="text-center py-8 text-muted">
+                <td colSpan={5} className="text-center py-8 text-slate-500">
                   No participants found.
                 </td>
               </tr>
             ) : (
               participants.map((p) => (
-                <tr key={p.id} className="hover:bg-surface-hover/50">
-                  <td className="px-4 py-3 font-medium">{p.name}</td>
-                  <td className="px-4 py-3 text-muted">{p.email}</td>
-                  <td className="px-4 py-3 text-muted">{p.phone}</td>
-                  <td className="px-4 py-3 text-muted">{p.college}</td>
-                  <td className="px-4 py-3 text-cyan">{p._count.registrations}</td>
+                <tr key={p.id} className="hover:bg-[#0B162C] transition-colors">
+                  <td className="px-4 py-3 font-semibold text-white">{p.name}</td>
+                  <td className="px-4 py-3 text-slate-300">{p.email}</td>
+                  <td className="px-4 py-3 text-slate-400">{p.phone}</td>
+                  <td className="px-4 py-3 text-slate-400 truncate max-w-[200px]">{p.college}</td>
+                  <td className="px-4 py-3 font-bold text-blue-400">{p._count.registrations} EVENTS</td>
                 </tr>
               ))
             )}

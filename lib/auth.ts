@@ -12,6 +12,7 @@ export const auth = betterAuth({
   baseURL: env.BETTER_AUTH_URL,
   trustedOrigins: [
     "http://localhost:3000",
+    "http://127.0.0.1:3000",
     "https://codehive2k26.vercel.app",
     env.NEXT_PUBLIC_APP_URL,
   ],

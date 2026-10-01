@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
+import { JetBrains_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 // Inter: Primary font for body, UI, descriptions, and components
 const inter = Inter({
@@ -9,10 +10,10 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
-// Space Grotesk: Display font strictly for main parts, headings, and branding
-const spaceGrotesk = Space_Grotesk({
+// JetBrains Mono: Monospace display font for terminal headers, code, buttons, and metrics
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-heading",
+  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
@@ -32,13 +33,17 @@ export default function RootLayout({
         "dark",
         "h-full",
         "antialiased",
+        "bg-black",
+        "text-white",
         inter.variable,
-        spaceGrotesk.variable,
+        jetbrainsMono.variable,
         "font-sans"
       )}
       style={{ colorScheme: "dark" }}
     >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans bg-black text-white">
+        <TooltipProvider>{children}</TooltipProvider>
+      </body>
     </html>
   );
 }

@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Event } from "@prisma/client";
 import { formatDate } from "@/utils/formatters";
 import { CalendarIcon, MapPinIcon, UsersIcon, ArrowRightIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 interface EventCardProps {
   event: Event & {
@@ -16,43 +15,46 @@ export function EventCard({ event }: EventCardProps) {
   const isFull = registered >= event.capacity;
 
   return (
-    <div className="group relative rounded-xl border border-border bg-surface p-6 transition-all duration-300 hover:border-cyan/50 hover:shadow-lg hover:shadow-cyan/5 flex flex-col justify-between">
+    <div className="group relative rounded-none border border-[#152A54] bg-[#060D1A] hover:bg-[#081224] p-6 transition-all duration-200 hover:border-blue-500/70 hover:shadow-lg hover:shadow-blue-950/40 flex flex-col justify-between">
       <div className="space-y-4">
+        {/* Category & Status Bar */}
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-primary/20 text-cyan border border-primary/30">
-            {event.category?.name || "General"}
+          <span className="font-mono text-[11px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-none bg-blue-600/15 text-blue-400 border border-blue-500/30">
+            [ {event.category?.name || "General"} ]
           </span>
           <span
-            className={`text-xs px-2.5 py-1 rounded-full border ${
+            className={`font-mono text-[11px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-none border ${
               isFull
-                ? "bg-error/10 text-error border-error/30"
-                : "bg-success/10 text-success border-success/30"
+                ? "bg-red-950/20 text-red-400 border-red-900/40"
+                : "bg-blue-600/20 text-blue-300 border-blue-500/40"
             }`}
           >
-            {isFull ? "Event Full" : "Open"}
+            {isFull ? "[ FULL ]" : "[ OPEN ]"}
           </span>
         </div>
 
+        {/* Title & Description */}
         <div>
-          <h3 className="text-xl font-bold text-foreground group-hover:text-cyan transition-colors">
+          <h3 className="text-lg font-sans font-bold text-white group-hover:text-blue-400 transition-colors tracking-tight">
             {event.name}
           </h3>
-          <p className="mt-2 text-sm text-muted line-clamp-2 leading-relaxed">
+          <p className="mt-2 text-xs font-sans text-slate-300 line-clamp-2 leading-relaxed">
             {event.description}
           </p>
         </div>
 
-        <div className="space-y-2 text-xs text-muted-dark pt-2 border-t border-border/50">
-          <div className="flex items-center gap-2">
-            <CalendarIcon className="size-3.5 text-cyan" />
+        {/* Event Metadata (Reference Image 1 style) */}
+        <div className="space-y-2 text-xs text-slate-400 pt-3 border-t border-[#152A54]">
+          <div className="flex items-center gap-2 font-mono">
+            <CalendarIcon className="size-3.5 text-blue-400 shrink-0" />
             <span>{formatDate(event.startAt)}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <MapPinIcon className="size-3.5 text-mint" />
+          <div className="flex items-center gap-2 font-sans text-slate-300">
+            <MapPinIcon className="size-3.5 text-blue-400 shrink-0" />
             <span>{event.venue}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <UsersIcon className="size-3.5 text-primary" />
+          <div className="flex items-center gap-2 font-mono">
+            <UsersIcon className="size-3.5 text-blue-400 shrink-0" />
             <span>
               {registered} / {event.capacity} Registered
             </span>
@@ -60,15 +62,15 @@ export function EventCard({ event }: EventCardProps) {
         </div>
       </div>
 
+      {/* Action Button */}
       <div className="pt-6">
-        <Button
-          className="w-full gap-2 border-2 border-primary bg-primary hover:bg-primary-hover text-white shadow-none"
-          render={<Link href={`/events/${event.slug}`} />}
-          nativeButton={false}
+        <Link
+          href={`/events/${event.slug}`}
+          className="w-full inline-flex items-center justify-center gap-2 h-10 font-mono text-xs uppercase tracking-wider font-bold rounded-none bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 transition-colors shadow-sm"
         >
-          View Details
-          <ArrowRightIcon className="size-4" />
-        </Button>
+          [ View Event Details ]
+          <ArrowRightIcon className="size-3.5" />
+        </Link>
       </div>
     </div>
   );

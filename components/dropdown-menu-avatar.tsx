@@ -1,22 +1,7 @@
 "use client";
 
-import * as React from "react";
 import { useRouter } from "next/navigation";
-import {
-  CalendarIcon,
-  LayoutDashboardIcon,
-  LogOutIcon,
-  QrCodeIcon,
-  ShieldCheckIcon,
-} from "lucide-react";
-
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/reui/badge";
+import { useSession, signOut } from "@/lib/auth-client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,21 +10,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useSession, signOut } from "@/lib/auth-client";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  LayoutDashboardIcon,
+  CalendarIcon,
+  QrCodeIcon,
+  ShieldCheckIcon,
+  LogOutIcon,
+} from "lucide-react";
 
-function getInitials(name?: string | null): string {
-  if (!name) return "U";
-  const parts = name.trim().split(" ");
-  if (parts.length >= 2) {
-    return (parts[0][0] + parts[1][0]).toUpperCase();
-  }
-  return name.slice(0, 2).toUpperCase();
-}
-
-export interface DropdownMenuAvatarProps {
+interface DropdownMenuAvatarProps {
   /**
-   * "pill": Renders the profile badge with avatar + user name and perfected spacing.
-   * "icon": Renders the circular avatar icon button (default ReUI style).
+   * Style of the trigger button:
+   * - "pill": shows avatar + user's first name + subtle border (recommended for desktop headers)
+   * - "icon": avatar only, standard circular icon button (for compact spaces / mobile)
    */
   variant?: "pill" | "icon";
 }
@@ -48,15 +34,27 @@ export function DropdownMenuAvatar({ variant = "pill" }: DropdownMenuAvatarProps
   const router = useRouter();
   const { data: session } = useSession();
 
-  const userImage = session?.user?.image || undefined;
-  const userName = session?.user?.name || "Participant";
-  const userEmail = session?.user?.email;
-  const firstName = session?.user?.name?.split(" ")[0] || "Account";
-  const initials = getInitials(session?.user?.name || session?.user?.email);
+  if (!session?.user) return null;
 
-  const rawRole = (session?.user as { role?: string })?.role || "PARTICIPANT";
-  const isAdmin = ["SUPER_ADMIN", "ORGANIZER", "STAFF"].includes(rawRole);
-  const roleLabel = rawRole.toLowerCase().replace("_", " ");
+  const user = session.user;
+  const userName = user.name || "User";
+  const userEmail = user.email || "";
+  const userImage = user.image || undefined;
+  const userRole = (user as { role?: string }).role?.toLowerCase() || "user";
+  const isAdmin = userRole === "admin";
+  const isOrganizer = userRole === "organizer";
+  const roleLabel = isAdmin ? "Admin" : isOrganizer ? "Organizer" : "Participant";
+
+  // First name for the pill trigger
+  const firstName = userName.split(" ")[0];
+
+  // Two-letter initials for fallback
+  const initials = userName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
 
   const handleSignOut = async () => {
     try {
@@ -64,7 +62,7 @@ export function DropdownMenuAvatar({ variant = "pill" }: DropdownMenuAvatarProps
       router.push("/");
       router.refresh();
     } catch (err) {
-      console.error("Sign out error:", err);
+      console.error("Sign out failed:", err);
     }
   };
 
@@ -75,22 +73,22 @@ export function DropdownMenuAvatar({ variant = "pill" }: DropdownMenuAvatarProps
           variant === "pill" ? (
             <button
               type="button"
-              className="flex items-center gap-2.5 p-1 sm:py-1 sm:pl-1.5 sm:pr-3.5 rounded-xl border border-border/70 bg-surface/50 hover:bg-surface hover:border-cyan/50 backdrop-blur-sm transition-all duration-200 group cursor-pointer shadow-xs focus:outline-none"
+              className="flex items-center gap-2 p-1 sm:py-1 sm:pl-1.5 sm:pr-3 rounded-none border border-[#152A54] bg-[#060D1A] hover:bg-[#0B162C] hover:border-blue-500/60 transition-all duration-200 group cursor-pointer shadow-xs focus:outline-none"
               title={`Signed in as ${userName}`}
             >
-              <Avatar className="size-8 rounded-lg after:rounded-lg border-2 border-cyan/80 group-hover:border-cyan transition-colors shrink-0">
+              <Avatar className="size-7 rounded-none border border-blue-500/80 group-hover:border-blue-400 transition-colors shrink-0">
                 {userImage && (
                   <AvatarImage
                     src={userImage}
                     alt={userName}
-                    className="rounded-lg object-cover"
+                    className="rounded-none object-cover"
                   />
                 )}
-                <AvatarFallback className="rounded-lg bg-surface-elevated text-xs font-bold text-cyan">
+                <AvatarFallback className="rounded-none bg-[#0E1B38] text-[11px] font-mono font-bold text-blue-400">
                   {initials}
                 </AvatarFallback>
               </Avatar>
-              <span className="hidden sm:inline text-sm font-semibold text-foreground tracking-tight max-w-[120px] truncate">
+              <span className="hidden sm:inline font-mono text-xs font-semibold text-white tracking-tight max-w-[120px] truncate">
                 {firstName}
               </span>
             </button>
@@ -98,11 +96,11 @@ export function DropdownMenuAvatar({ variant = "pill" }: DropdownMenuAvatarProps
             <Button
               variant="ghost"
               size="icon"
-              className="rounded-full cursor-pointer hover:bg-surface border border-border/50 hover:border-cyan/50 transition-colors"
+              className="rounded-none cursor-pointer hover:bg-[#0B162C] border border-[#152A54] hover:border-blue-500/50 transition-colors"
             >
-              <Avatar className="size-8 rounded-full border-2 border-cyan/80 hover:border-cyan transition-colors">
-                {userImage && <AvatarImage src={userImage} alt={userName} className="rounded-full object-cover" />}
-                <AvatarFallback className="rounded-full bg-surface-elevated text-xs font-bold text-cyan">
+              <Avatar className="size-7 rounded-none border border-blue-500/80 hover:border-blue-400 transition-colors">
+                {userImage && <AvatarImage src={userImage} alt={userName} className="rounded-none object-cover" />}
+                <AvatarFallback className="rounded-none bg-[#0E1B38] text-[11px] font-mono font-bold text-blue-400">
                   {initials}
                 </AvatarFallback>
               </Avatar>
@@ -110,19 +108,18 @@ export function DropdownMenuAvatar({ variant = "pill" }: DropdownMenuAvatarProps
           )
         }
       />
-      <DropdownMenuContent align="end" className="w-64 p-1.5 bg-surface border-border shadow-2xl rounded-xl">
+      <DropdownMenuContent align="end" className="w-64 p-1.5 bg-[#060D1A] border-[#152A54] shadow-2xl rounded-none">
         {/* User Identity Header */}
-        <div className="px-3 py-2.5 flex items-center justify-between gap-2 border-b border-border/60">
+        <div className="px-3 py-2.5 flex items-center justify-between gap-2 border-b border-[#152A54]">
           <div className="flex flex-col min-w-0">
-            <p className="text-sm font-semibold text-foreground truncate">{userName}</p>
+            <p className="text-xs font-mono font-bold text-white truncate">{userName}</p>
             {userEmail && (
-              <p className="text-xs text-muted truncate mt-0.5">{userEmail}</p>
+              <p className="text-[11px] font-mono text-slate-400 truncate mt-0.5">{userEmail}</p>
             )}
           </div>
           <Badge
-            variant={isAdmin ? "primary-light" : "outline"}
-            size="xs"
-            className="capitalize shrink-0 font-medium"
+            variant="outline"
+            className="capitalize shrink-0 font-mono text-[10px] rounded-none border-blue-500/40 text-blue-400 bg-blue-500/10 px-1.5 py-0.5"
           >
             {roleLabel}
           </Badge>
@@ -131,76 +128,76 @@ export function DropdownMenuAvatar({ variant = "pill" }: DropdownMenuAvatarProps
         {/* Participant Navigation Section */}
         <DropdownMenuGroup className="py-1">
           <DropdownMenuItem
-            className="cursor-pointer gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-elevated focus:bg-surface-elevated text-foreground transition-colors"
+            className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-[#0B162C] focus:bg-[#0B162C] text-slate-200 hover:text-white transition-colors"
             onClick={() => router.push("/dashboard")}
           >
-            <div className="p-1 rounded-md bg-cyan/10 text-cyan">
+            <div className="p-1 rounded-none bg-blue-600/15 text-blue-400">
               <LayoutDashboardIcon className="size-4" />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-medium">My Dashboard</span>
-              <span className="text-[11px] text-muted">Passes & registrations</span>
+              <span className="text-xs font-mono font-medium">My Dashboard</span>
+              <span className="text-[10px] text-slate-400">Passes & registrations</span>
             </div>
           </DropdownMenuItem>
 
           <DropdownMenuItem
-            className="cursor-pointer gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-elevated focus:bg-surface-elevated text-foreground transition-colors"
+            className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-[#0B162C] focus:bg-[#0B162C] text-slate-200 hover:text-white transition-colors"
             onClick={() => router.push("/events")}
           >
-            <div className="p-1 rounded-md bg-primary/10 text-primary">
+            <div className="p-1 rounded-none bg-blue-600/15 text-blue-400">
               <CalendarIcon className="size-4" />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-medium">Browse Events</span>
-              <span className="text-[11px] text-muted">Hackathons & workshops</span>
+              <span className="text-xs font-mono font-medium">Browse Events</span>
+              <span className="text-[10px] text-slate-400">Hackathons & workshops</span>
             </div>
           </DropdownMenuItem>
 
           <DropdownMenuItem
-            className="cursor-pointer gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-elevated focus:bg-surface-elevated text-foreground transition-colors"
+            className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-[#0B162C] focus:bg-[#0B162C] text-slate-200 hover:text-white transition-colors"
             onClick={() => router.push("/dashboard")}
           >
-            <div className="p-1 rounded-md bg-mint/10 text-mint">
+            <div className="p-1 rounded-none bg-blue-600/15 text-blue-400">
               <QrCodeIcon className="size-4" />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-medium">Event Day Pass</span>
-              <span className="text-[11px] text-muted">Digital QR check-in</span>
+              <span className="text-xs font-mono font-medium">Event Day Pass</span>
+              <span className="text-[10px] text-slate-400">Digital QR check-in</span>
             </div>
           </DropdownMenuItem>
         </DropdownMenuGroup>
 
-        {/* Organizer / Admin Section (if applicable) */}
+        {/* Organizer / Admin Section */}
         {isAdmin && (
           <>
-            <DropdownMenuSeparator className="bg-border/60" />
-            <div className="px-3 py-1 text-[10px] font-semibold text-muted tracking-wider uppercase">
+            <DropdownMenuSeparator className="bg-[#152A54]" />
+            <div className="px-3 py-1 text-[10px] font-mono font-semibold text-slate-400 tracking-wider uppercase">
               Organizer Portal
             </div>
             <DropdownMenuGroup>
               <DropdownMenuItem
-                className="cursor-pointer gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-elevated focus:bg-surface-elevated text-foreground transition-colors"
+                className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-[#0B162C] focus:bg-[#0B162C] text-slate-200 hover:text-white transition-colors"
                 onClick={() => router.push("/admin/dashboard")}
               >
-                <div className="p-1 rounded-md bg-primary/10 text-primary">
+                <div className="p-1 rounded-none bg-blue-600/15 text-blue-400">
                   <ShieldCheckIcon className="size-4" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium">Admin Dashboard</span>
-                  <span className="text-[11px] text-muted">Manage events & attendees</span>
+                  <span className="text-xs font-mono font-medium">Admin Dashboard</span>
+                  <span className="text-[10px] text-slate-400">Manage events & attendees</span>
                 </div>
               </DropdownMenuItem>
 
               <DropdownMenuItem
-                className="cursor-pointer gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-elevated focus:bg-surface-elevated text-foreground transition-colors"
+                className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-[#0B162C] focus:bg-[#0B162C] text-slate-200 hover:text-white transition-colors"
                 onClick={() => router.push("/admin/check-in")}
               >
-                <div className="p-1 rounded-md bg-cyan/10 text-cyan">
+                <div className="p-1 rounded-none bg-blue-600/15 text-blue-400">
                   <QrCodeIcon className="size-4" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium">Live Scanner</span>
-                  <span className="text-[11px] text-muted">Scan attendee passes</span>
+                  <span className="text-xs font-mono font-medium">Live Scanner</span>
+                  <span className="text-[10px] text-slate-400">Scan attendee passes</span>
                 </div>
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -208,14 +205,14 @@ export function DropdownMenuAvatar({ variant = "pill" }: DropdownMenuAvatarProps
         )}
 
         {/* Sign Out */}
-        <DropdownMenuSeparator className="bg-border/60" />
+        <DropdownMenuSeparator className="bg-[#152A54]" />
         <DropdownMenuItem
           variant="destructive"
-          className="cursor-pointer gap-2.5 px-3 py-2 rounded-lg hover:bg-error/10 focus:bg-error/10 text-error focus:text-error transition-colors mt-0.5"
+          className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-red-950/30 text-red-400 focus:text-red-400 transition-colors mt-0.5"
           onClick={handleSignOut}
         >
           <LogOutIcon className="size-4 shrink-0" />
-          <span className="text-sm font-medium">Sign Out</span>
+          <span className="text-xs font-mono font-medium">Sign Out</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

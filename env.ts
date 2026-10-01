@@ -1,11 +1,16 @@
 import { z } from "zod";
 
+const isProduction = process.env.NODE_ENV === "production";
+const defaultAppUrl = isProduction
+  ? "https://codehive2k26.vercel.app"
+  : "http://localhost:3000";
+
 const serverSchema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
   DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
   DIRECT_URL: z.string().optional(),
   BETTER_AUTH_SECRET: z.string().min(1, "BETTER_AUTH_SECRET is required"),
-  BETTER_AUTH_URL: z.string().url().default("https://codehive2k26.vercel.app"),
+  BETTER_AUTH_URL: z.string().url().default(defaultAppUrl),
   GOOGLE_CLIENT_ID: z.string().optional().default(""),
   GOOGLE_CLIENT_SECRET: z.string().optional().default(""),
   GITHUB_CLIENT_ID: z.string().optional().default(""),
@@ -22,7 +27,7 @@ const serverSchema = z.object({
 });
 
 const clientSchema = z.object({
-  NEXT_PUBLIC_APP_URL: z.string().url().default("https://codehive2k26.vercel.app"),
+  NEXT_PUBLIC_APP_URL: z.string().url().default(defaultAppUrl),
 });
 
 const isServer = typeof window === "undefined";

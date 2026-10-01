@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "header": "CodeCraft Hackathon",
+    "type": "Technical Track",
+    "status": "In Process",
+    "target": "180",
+    "limit": "200",
+    "reviewer": "Madhan Kumar"
+  },
+  {
+    "id": 2,
+    "header": "Bug Hunt & Reverse Engg",
+    "type": "Cybersecurity",
+    "status": "Done",
+    "target": "95",
+    "limit": "100",
+    "reviewer": "Security Lead"
+  },
+  {
+    "id": 3,
+    "header": "Prompt Masters Arena",
+    "type": "GenAI / LLM",
+    "status": "In Process",
+    "target": "140",
+    "limit": "150",
+    "reviewer": "AI Research Group"
+  },
+  {
+    "id": 4,
+    "header": "Speed Coding Sprint",
+    "type": "Algorithms",
+    "status": "Done",
+    "target": "120",
+    "limit": "120",
+    "reviewer": "Competitive Staff"
+  },
+  {
+    "id": 5,
+    "header": "UI/UX Designathon",
+    "type": "Product & Design",
+    "status": "In Process",
+    "target": "85",
+    "limit": "100",
+    "reviewer": "Design Jury"
+  },
+  {
+    "id": 6,
+    "header": "Technical Paper Presentation",
+    "type": "Research Track",
+    "status": "Done",
+    "target": "48",
+    "limit": "50",
+    "reviewer": "Faculty Chair"
+  },
+  {
+    "id": 7,
+    "header": "Web3 & Smart Contract Audit",
+    "type": "Blockchain",
+    "status": "In Process",
+    "target": "62",
+    "limit": "80",
+    "reviewer": "Web3 Coordinator"
+  },
+  {
+    "id": 8,
+    "header": "Tech Quiz & Trivia Bowl",
+    "type": "Non-Technical",
+    "status": "Done",
+    "target": "110",
+    "limit": "120",
+    "reviewer": "Quiz Master"
+  },
+  {
+    "id": 9,
+    "header": "Cloud Architect Battle",
+    "type": "DevOps & Cloud",
+    "status": "Done",
+    "target": "75",
+    "limit": "80",
+    "reviewer": "Cloud Architect"
+  },
+  {
+    "id": 10,
+    "header": "Battle of Bands & Cultural",
+    "type": "Evening Gala",
+    "status": "In Process",
+    "target": "350",
+    "limit": "400",
+    "reviewer": "Cultural Comm"
+  }
+]

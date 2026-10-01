@@ -6,6 +6,8 @@ import { Team } from "@prisma/client";
 
 export async function createTeam(
   leaderParticipantId: string,
+  leaderName: string,
+  leaderPhone: string,
   eventId: string,
   teamName: string
 ): Promise<ActionResponse<Team>> {
@@ -38,6 +40,8 @@ export async function createTeam(
       await tx.teamMember.create({
         data: {
           teamId: newTeam.id,
+          name: leaderName,
+          phone: leaderPhone,
           participantId: leaderParticipantId,
         },
       });
@@ -54,3 +58,4 @@ export async function createTeam(
     };
   }
 }
+
