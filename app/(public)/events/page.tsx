@@ -23,7 +23,7 @@ export default async function EventsPage() {
               Events &amp; Challenges
             </h1>
             <p className="text-slate-300 text-xs sm:text-sm font-sans max-w-2xl">
-              Explore and register for technical symposiums, hackathons, and challenges at CodeHive 2K26.
+              Explore and register for TECH FORGE and AGENT VIBE at CodeHive 2K26 2.0. Entry is 100% Free with Certificates for all participants.
             </p>
           </div>
 

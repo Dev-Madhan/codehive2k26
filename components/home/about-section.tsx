@@ -8,26 +8,26 @@ import { BrainCircuitIcon, CpuIcon, ShieldCheckIcon } from "lucide-react";
 const pillars = [
   {
     icon: CpuIcon,
-    tag: "FLAGSHIP_EVENT_01",
-    title: "TECHFORGE",
-    subtitle: "Enterprise Software Crucible",
-    desc: "The flagship progressive technical challenge of CodeHive 2K26. Teams design, develop, and defend an enterprise-grade software architecture across four rounds.",
+    tag: "EVENT_01 // TECH FORGE",
+    title: "TECH FORGE",
+    subtitle: "One Problem. Four Rounds. One Champion.",
+    desc: "A 2-day technical challenge where you Analyze, Build, Adapt & Defend. Solve a real-world problem, build your solution, and face surprise technical challenges testing your coding, problem-solving, and innovation skills.",
     accent: "blue",
   },
   {
     icon: BrainCircuitIcon,
-    tag: "FLAGSHIP_EVENT_02",
-    title: "AGENTVIBE",
-    subtitle: "Autonomous AI Engineering",
-    desc: "The premier AI agent engineering challenge. Architect and deploy intelligent autonomous agents that process context, call tools, and execute workflows safely.",
+    tag: "EVENT_02 // AGENT VIBE",
+    title: "AGENT VIBE",
+    subtitle: "One Idea. Four Rounds. One AI Champion.",
+    desc: "A 2-day AI challenge where you Imagine, Build, Adapt & Deploy. Design and develop intelligent AI agents to solve real-world problems using LLMs, APIs, and modern AI tools.",
     accent: "sky",
   },
   {
     icon: ShieldCheckIcon,
-    tag: "EVALUATION_PROTOCOL",
-    title: "TECHNICAL VIVA",
-    subtitle: "Architectural Defense",
-    desc: "Zero tolerance for shallow demos. Qualifying teams face live stress-testing, codebase scrutiny, and technical defense before industry engineering juries.",
+    tag: "INDUSTRY COLLABORATION",
+    title: "INDUSTRY & BIC",
+    subtitle: "Real-World Evaluation",
+    desc: "Organized by the Department of CSBS, Vel Tech Multi Tech, in association with Sri Vensy Technologies Pvt Ltd & Business Intelligence Club with four rigorous evaluation rounds.",
     accent: "indigo",
   },
 ];
@@ -85,17 +85,17 @@ export function AboutSection() {
           <div className="flex items-center gap-3 mb-4">
             <div className="h-px w-8 bg-blue-500" />
             <span className="font-mono text-[11px] uppercase tracking-widest text-blue-500">
-              WHAT IS CODEHIVE
+              ABOUT CODEHIVE 2K26 2.0
             </span>
           </div>
           <h2 className="font-mono text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-tight">
-            FORGE YOUR{" "}
+            IDEAS × CODE ×{" "}
             <span className="bg-gradient-to-r from-blue-400 to-sky-300 bg-clip-text text-transparent">
-              LEGACY
+              IMPACT
             </span>
           </h2>
           <p className="mt-4 max-w-2xl text-slate-400 text-base leading-relaxed">
-            CodeHive 2K26 is South India&apos;s premier 24-hour national engineering crucible — where 500+ elite builders compete, collaborate, and ship products that matter.
+            CodeHive 2K26 2.0 is a flagship National Level Hackathon organized on 23 &amp; 24 October 2026 by the Department of Computer Science and Business Systems, Vel Tech Multi Tech Dr. Rangarajan Dr. Sakunthala Engineering College, in association with Sri Vensy Technologies Pvt Ltd &amp; Business Intelligence Club.
           </p>
         </div>
 
@@ -132,10 +132,10 @@ export function AboutSection() {
                 <h3 className="font-mono text-lg font-black uppercase text-white mb-1 tracking-tight">
                   {pillar.title}
                 </h3>
-                <p className="font-mono text-xs text-slate-400 mb-3 uppercase tracking-wide">
+                <p className="font-mono text-xs text-blue-400 mb-3 uppercase tracking-wide">
                   // {pillar.subtitle}
                 </p>
-                <p className="text-sm text-slate-400 leading-relaxed">
+                <p className="text-sm text-slate-400 leading-relaxed font-sans">
                   {pillar.desc}
                 </p>
               </div>
@@ -152,10 +152,10 @@ export function AboutSection() {
           style={{ transitionDelay: "400ms" }}
         >
           {[
-            { val: "500+", label: "Elite Builders" },
-            { val: "24H", label: "Non-Stop Hacking" },
-            { val: "₹50K+", label: "Prize Pool" },
-            { val: "4", label: "Evaluation Rounds" },
+            { val: "2 DAYS", label: "23 & 24 Oct 2026" },
+            { val: "₹20,000", label: "Total Prize Pool" },
+            { val: "100% FREE", label: "Zero Entry Fee" },
+            { val: "ALL", label: "Certificates Awarded" },
           ].map((stat) => (
             <div
               key={stat.label}

@@ -8,30 +8,30 @@ import { TrophyIcon, MedalIcon, AwardIcon, GiftIcon, CodeIcon, UsersIcon } from 
 const prizes = [
   {
     rank: "01",
-    label: "CHAMPION",
-    amount: "₹20,000",
-    track: "GRAND PRIZE",
-    perks: ["Cash Prize", "Internship Referral", "Exclusive Swag Kit", "Hall of Fame"],
+    label: "FIRST PRIZE",
+    amount: "₹5,000",
+    track: "1ST PLACE // PER TRACK",
+    perks: ["Cash Award", "Winner Trophy", "Merit Certificate", "Hall of Fame"],
     icon: TrophyIcon,
     featured: true,
     accent: "blue",
   },
   {
     rank: "02",
-    label: "RUNNER-UP",
-    amount: "₹10,000",
-    track: "FIRST RUNNER-UP",
-    perks: ["Cash Prize", "Mentorship Session", "Premium Swag", "Certificate"],
+    label: "SECOND PRIZE",
+    amount: "₹3,000",
+    track: "2ND PLACE // PER TRACK",
+    perks: ["Cash Award", "Runner-Up Trophy", "Merit Certificate", "Mentorship Session"],
     icon: MedalIcon,
     featured: false,
     accent: "sky",
   },
   {
     rank: "03",
-    label: "SECOND RUNNER-UP",
-    amount: "₹5,000",
-    track: "SECOND RUNNER-UP",
-    perks: ["Cash Prize", "Swag Kit", "Certificate"],
+    label: "THIRD PRIZE",
+    amount: "₹2,000",
+    track: "3RD PLACE // PER TRACK",
+    perks: ["Cash Award", "Second Runner-Up Trophy", "Merit Certificate", "Exclusive Swag"],
     icon: AwardIcon,
     featured: false,
     accent: "indigo",
@@ -41,18 +41,18 @@ const prizes = [
 const perks = [
   {
     icon: GiftIcon,
-    title: "Merch & Swag",
-    desc: "Exclusive CodeHive 2K26 merchandise for all finalists",
+    title: "100% Free Entry",
+    desc: "Zero registration fee for all eligible student builders and collegiate teams",
   },
   {
-    icon: CodeIcon,
-    title: "API Credits",
-    desc: "Cloud and AI platform credits worth ₹10,000+ per team",
+    icon: AwardIcon,
+    title: "Certificates For All",
+    desc: "Official CodeHive 2K26 2.0 participation certificates for all registered attendees",
   },
   {
     icon: UsersIcon,
-    title: "Networking",
-    desc: "Direct access to industry leaders and startup founders",
+    title: "Industry Jury & Networking",
+    desc: "Direct evaluation and jury feedback with Sri Vensy Technologies & industry experts",
   },
 ];
 
@@ -81,18 +81,18 @@ export function PrizesSection() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="h-px w-8 bg-blue-500" />
             <span className="font-mono text-[11px] uppercase tracking-widest text-blue-500">
-              PRIZES &amp; PERKS
+              PRIZES &amp; RECOGNITION
             </span>
             <div className="h-px w-8 bg-blue-500" />
           </div>
           <h2 className="font-mono text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-tight">
             TOTAL PRIZE POOL{" "}
             <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">
-              ₹50,000+
+              ₹20,000
             </span>
           </h2>
-          <p className="mt-3 text-slate-400 text-base max-w-xl mx-auto">
-            Cash prizes, internship referrals, API credits, and exclusive swag across all tracks.
+          <p className="mt-3 text-slate-400 text-base max-w-xl mx-auto font-sans">
+            Cash awards for 1st, 2nd, and 3rd place winners across tracks, plus 100% Free Entry &amp; Certificates for all participants.
           </p>
         </div>
 
