@@ -174,6 +174,12 @@ export function RegistrationsClient({
     [soundEnabled, playLiveTone]
   );
 
+  // Immediate fetch on mount to ensure fresh data right away
+  React.useEffect(() => {
+    fetchLiveRegistrations(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Auto-sync polling timer (every 5 seconds)
   React.useEffect(() => {
     if (!autoSync) return;
