@@ -53,7 +53,7 @@ export function DigitalEventPass({
       {/* ─────────────────────────────────────────────────
           PRINT STYLES: Isolates the ticket when printing
           ───────────────────────────────────────────────── */}
-      <style jsx global>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @media print {
           body * {
             visibility: hidden !important;
@@ -78,7 +78,7 @@ export function DigitalEventPass({
             display: none !important;
           }
         }
-      `}</style>
+      ` }} />
 
       {/* Main Ticket Container */}
       <div
