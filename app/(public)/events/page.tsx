@@ -2,6 +2,9 @@ import { Header } from "@/components/header";
 import { EventCard } from "@/components/events/event-card";
 import { getEvents } from "@/actions/event";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function EventsPage() {
   const result = await getEvents();
   const events = result.success ? result.data : [];

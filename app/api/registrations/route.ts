@@ -1,42 +1,73 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const eventId = searchParams.get("eventId");
+    const eventSlug = searchParams.get("eventSlug");
+    const limitParam = searchParams.get("limit");
+    const limit = limitParam ? Math.min(Math.max(parseInt(limitParam, 10), 1), 500) : 200;
+
+    const where: any = {};
+    if (eventId && eventId !== "ALL") {
+      where.eventId = eventId;
+    } else if (eventSlug && eventSlug !== "ALL") {
+      where.event = { slug: eventSlug };
+    }
 
     const registrations = await prisma.registration.findMany({
-      where: eventId ? { eventId } : undefined,
-      select: {
-        id: true,
-        registrationNumber: true,
-        status: true,
-        checkedIn: true,
-        createdAt: true,
-        participant: {
-          select: {
-            name: true,
-            college: true,
-          },
-        },
+      where,
+      include: {
         event: {
           select: {
             name: true,
             slug: true,
           },
         },
+        participant: {
+          select: {
+            name: true,
+            email: true,
+            phone: true,
+            college: true,
+          },
+        },
       },
       orderBy: { createdAt: "desc" },
-      take: 100,
+      take: limit,
     });
 
-    return NextResponse.json({ success: true, data: registrations });
+    return NextResponse.json(
+      {
+        success: true,
+        data: registrations,
+        count: registrations.length,
+        timestamp: new Date().toISOString(),
+      },
+      {
+        status: 200,
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+          "Pragma": "no-cache",
+          "Expires": "0",
+        },
+      }
+    );
   } catch (error) {
     console.error("API /api/registrations error:", error);
     return NextResponse.json(
       { success: false, error: { code: "INTERNAL_ERROR", message: "Failed to fetch registrations." } },
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate",
+        },
+      }
     );
   }
 }
+

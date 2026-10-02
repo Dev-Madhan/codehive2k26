@@ -348,8 +348,15 @@ export async function createRegistration(
       passengersCount: teamSizeNum,
     }).catch((err) => console.error("Email notification dispatch error:", err));
 
-    revalidatePath(`/events/${event.slug}`);
+    revalidatePath("/admin/registrations");
+    revalidatePath("/admin/dashboard");
+    revalidatePath("/admin/participants");
+    revalidatePath("/admin/events");
+    revalidatePath("/admin/reports");
+    revalidatePath("/admin/settings");
     revalidatePath("/dashboard");
+    revalidatePath(`/events/${event.slug}`);
+    revalidatePath("/events");
 
     return {
       success: true,

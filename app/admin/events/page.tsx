@@ -1,6 +1,9 @@
 import prisma from "@/lib/prisma";
 import { EventsClient } from "@/components/admin/events-client";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function AdminEventsPage() {
   const events = await prisma.event.findMany({
     include: {
