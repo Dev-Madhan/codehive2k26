@@ -262,3 +262,222 @@
     font-family: var(--font-mono), monospace;
   }
 }
+
+/* ============================================================
+   CODEHIVE 2K26 — TOAST NOTIFICATIONS (SONNER THEME)
+   ============================================================ */
+
+[data-sonner-toaster] {
+  font-family: var(--font-mono), monospace !important;
+  z-index: 99999 !important;
+  --width: 400px !important;
+}
+
+/* Master container styling for each toast */
+[data-sonner-toast],
+[data-sonner-toast][data-styled="true"] {
+  border-radius: 0px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  padding: 14px 16px !important;
+  gap: 12px !important;
+  box-sizing: border-box !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(21, 42, 84, 0.4) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+/* Cyber laser accent line on top of each toast */
+[data-sonner-toast]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #2563EB, #38BDF8, #2563EB);
+  pointer-events: none;
+  z-index: 20;
+}
+
+[data-sonner-toast][data-type="success"]::before {
+  background: linear-gradient(90deg, #059669, #10B981, #059669);
+}
+
+[data-sonner-toast][data-type="error"]::before {
+  background: linear-gradient(90deg, #DC2626, #F43F5E, #DC2626);
+}
+
+[data-sonner-toast][data-type="warning"]::before {
+  background: linear-gradient(90deg, #D97706, #F59E0B, #D97706);
+}
+
+[data-sonner-toast][data-type="info"]::before,
+[data-sonner-toast][data-type="loading"]::before {
+  background: linear-gradient(90deg, #2563EB, #38BDF8, #2563EB);
+}
+
+/* Align icon cleanly to the top row alongside title */
+[data-sonner-toast] [data-icon],
+[data-sonner-toast][data-styled="true"] [data-icon] {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  align-self: flex-start !important;
+  margin: 0 !important;
+  margin-top: 1px !important;
+  padding: 0 !important;
+  flex-shrink: 0 !important;
+}
+
+/* Content block: takes full remaining width, reserves space for close button */
+[data-sonner-toast] [data-content],
+[data-sonner-toast][data-styled="true"] [data-content] {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  padding-right: 24px !important;
+  gap: 3px !important;
+}
+
+/* Title text */
+[data-sonner-toast] [data-title],
+[data-sonner-toast][data-styled="true"] [data-title] {
+  font-family: var(--font-mono), monospace !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  line-height: 1.35 !important;
+  margin: 0 !important;
+}
+
+/* Description text */
+[data-sonner-toast] [data-description],
+[data-sonner-toast][data-styled="true"] [data-description] {
+  font-family: var(--font-mono), monospace !important;
+  font-size: 11px !important;
+  line-height: 1.5 !important;
+  color: #94A3B8 !important;
+  word-break: break-word !important;
+  margin: 0 !important;
+}
+
+/* Top-Right Cyber Close Button (unclipped, inside toast boundary) */
+[data-sonner-toast] [data-close-button],
+[data-sonner-toast][data-styled="true"] [data-close-button] {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  left: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  width: 22px !important;
+  height: 22px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 0px !important;
+  border: 1px solid #1E3A6E !important;
+  background: #03060E !important;
+  color: #94A3B8 !important;
+  opacity: 0.8 !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+  z-index: 30 !important;
+  padding: 0 !important;
+}
+
+[data-sonner-toast] [data-close-button]:hover,
+[data-sonner-toast][data-styled="true"] [data-close-button]:hover {
+  opacity: 1 !important;
+  background: #0B162C !important;
+  color: #FFFFFF !important;
+  border-color: #38BDF8 !important;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.3) !important;
+}
+
+[data-sonner-toast] [data-close-button] svg,
+[data-sonner-toast][data-styled="true"] [data-close-button] svg {
+  width: 12px !important;
+  height: 12px !important;
+  stroke-width: 2 !important;
+}
+
+/* Cyber theme colors & hover glow per toast type */
+[data-sonner-toast][data-type="success"] {
+  border-color: rgba(16, 185, 129, 0.45) !important;
+  background: #020C0A !important;
+}
+[data-sonner-toast][data-type="success"] [data-title] {
+  color: #34D399 !important;
+}
+[data-sonner-toast][data-type="success"] [data-close-button]:hover {
+  border-color: #10B981 !important;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.3) !important;
+}
+
+[data-sonner-toast][data-type="error"] {
+  border-color: rgba(244, 63, 94, 0.45) !important;
+  background: #0C0307 !important;
+}
+[data-sonner-toast][data-type="error"] [data-title] {
+  color: #FB7185 !important;
+}
+[data-sonner-toast][data-type="error"] [data-close-button]:hover {
+  border-color: #F43F5E !important;
+  box-shadow: 0 0 8px rgba(244, 63, 94, 0.3) !important;
+}
+
+[data-sonner-toast][data-type="warning"] {
+  border-color: rgba(245, 158, 11, 0.45) !important;
+  background: #0C0802 !important;
+}
+[data-sonner-toast][data-type="warning"] [data-title] {
+  color: #FBBF24 !important;
+}
+[data-sonner-toast][data-type="warning"] [data-close-button]:hover {
+  border-color: #F59E0B !important;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.3) !important;
+}
+
+[data-sonner-toast][data-type="info"],
+[data-sonner-toast][data-type="loading"] {
+  border-color: rgba(56, 189, 248, 0.4) !important;
+  background: #040915 !important;
+}
+[data-sonner-toast][data-type="info"] [data-title],
+[data-sonner-toast][data-type="loading"] [data-title] {
+  color: #38BDF8 !important;
+}
+
+/* Desktop positioning: bottom right */
+@media (min-width: 641px) {
+  [data-sonner-toaster][data-x-position="right"] {
+    right: 24px !important;
+    bottom: 24px !important;
+  }
+}
+
+/* Mobile positioning: pinned to bottom of the screen */
+@media (max-width: 640px) {
+  [data-sonner-toaster] {
+    left: 12px !important;
+    right: 12px !important;
+    bottom: 16px !important;
+    width: auto !important;
+    max-width: calc(100vw - 24px) !important;
+    margin: 0 auto !important;
+  }
+  [data-sonner-toaster] [data-sonner-toast] {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}

@@ -19,23 +19,54 @@ export default async function AdminSettingsPage() {
     prisma.registration.count(),
   ]);
 
+  const roles = [
+    {
+      tier: "SUPER_ADMIN",
+      scope: "Full System Governance",
+      ops: "All settings, users, events, registrations, and exports",
+      status: "AUTHORITATIVE",
+      color: "text-amber-400 border-amber-500/30 bg-amber-500/15",
+    },
+    {
+      tier: "ORGANIZER",
+      scope: "Event & Registration Lead",
+      ops: "Event and registration management; operational dashboard",
+      status: "OPERATIONAL",
+      color: "text-blue-400 border-blue-500/30 bg-blue-600/15",
+    },
+    {
+      tier: "STAFF",
+      scope: "On-Site Gate Check-in",
+      ops: "QR check-in scanner and limited attendee lookup",
+      status: "FIELD_VERIFIED",
+      color: "text-emerald-400 border-emerald-500/30 bg-emerald-500/15",
+    },
+    {
+      tier: "PARTICIPANT",
+      scope: "Symposium Attendee",
+      ops: "Public event discovery, registration, ticket pass lookup",
+      status: "PUBLIC",
+      color: "text-slate-300 border-slate-700 bg-slate-800",
+    },
+  ];
+
   return (
-    <div className="space-y-8 font-mono">
+    <div className="space-y-6 font-mono max-w-full">
       {/* Header */}
-      <div className="border-b border-[#152A54] pb-4">
+      <div className="border-b border-[#152A54] pb-3 sm:pb-4">
         <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[11px] font-bold text-blue-400 bg-blue-600/15 border border-blue-500/30 mb-2">
           &gt; admin / operational_settings
         </div>
-        <h1 className="text-2xl font-bold tracking-tight text-white uppercase">System Configuration</h1>
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white uppercase">System Configuration</h1>
         <p className="text-xs text-slate-400 mt-1">
           Operational controls, role permissions matrix, and service telemetry for CodeHive 2K26.
         </p>
       </div>
 
       {/* Grid of Settings Modules */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {/* Module 1: Event Operational Parameters */}
-        <div className="rounded-none border border-[#152A54] bg-[#060D1A] p-5 space-y-4">
+        <div className="rounded-none border border-[#152A54] bg-[#060D1A] p-4 sm:p-5 space-y-4">
           <div className="flex items-center justify-between border-b border-[#152A54] pb-3">
             <div className="flex items-center gap-2">
               <SlidersIcon className="size-4 text-blue-400" />
@@ -47,42 +78,42 @@ export default async function AdminSettingsPage() {
           </div>
 
           <div className="space-y-3 text-xs">
-            <div className="flex items-center justify-between py-1.5 border-b border-[#152A54]/50">
-              <div>
+            <div className="flex items-start sm:items-center justify-between py-1.5 border-b border-[#152A54]/50 gap-2">
+              <div className="min-w-0 flex-1">
                 <p className="font-semibold text-slate-200">Registration Gate</p>
-                <p className="text-[11px] text-slate-400">Accept incoming attendee registrations</p>
+                <p className="text-[10px] sm:text-[11px] text-slate-400">Accept incoming attendee registrations</p>
               </div>
-              <span className="px-2 py-0.5 text-[10px] font-bold bg-blue-600/20 text-blue-400 border border-blue-500/40">
+              <span className="px-2 py-0.5 text-[10px] font-bold bg-blue-600/20 text-blue-400 border border-blue-500/40 shrink-0">
                 ENABLED
               </span>
             </div>
 
-            <div className="flex items-center justify-between py-1.5 border-b border-[#152A54]/50">
-              <div>
+            <div className="flex items-start sm:items-center justify-between py-1.5 border-b border-[#152A54]/50 gap-2">
+              <div className="min-w-0 flex-1">
                 <p className="font-semibold text-slate-200">Duplicate Check Prevention</p>
-                <p className="text-[11px] text-slate-400">Enforce unique email + event database invariant</p>
+                <p className="text-[10px] sm:text-[11px] text-slate-400">Enforce unique email + event invariant</p>
               </div>
-              <span className="px-2 py-0.5 text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+              <span className="px-2 py-0.5 text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 shrink-0">
                 STRICT
               </span>
             </div>
 
-            <div className="flex items-center justify-between py-1.5 border-b border-[#152A54]/50">
-              <div>
+            <div className="flex items-start sm:items-center justify-between py-1.5 border-b border-[#152A54]/50 gap-2">
+              <div className="min-w-0 flex-1">
                 <p className="font-semibold text-slate-200">Auto QR Token Generation</p>
-                <p className="text-[11px] text-slate-400">Mint cryptographic check-in QR code on submit</p>
+                <p className="text-[10px] sm:text-[11px] text-slate-400">Mint cryptographic check-in QR on submit</p>
               </div>
-              <span className="px-2 py-0.5 text-[10px] font-bold bg-blue-600/20 text-blue-400 border border-blue-500/40">
+              <span className="px-2 py-0.5 text-[10px] font-bold bg-blue-600/20 text-blue-400 border border-blue-500/40 shrink-0">
                 ENABLED
               </span>
             </div>
 
-            <div className="flex items-center justify-between py-1.5">
-              <div>
+            <div className="flex items-start sm:items-center justify-between py-1.5 gap-2">
+              <div className="min-w-0 flex-1">
                 <p className="font-semibold text-slate-200">Check-in Double Entry Guard</p>
-                <p className="text-[11px] text-slate-400">Reject scans if already marked checkedIn</p>
+                <p className="text-[10px] sm:text-[11px] text-slate-400">Reject scans if already marked checkedIn</p>
               </div>
-              <span className="px-2 py-0.5 text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+              <span className="px-2 py-0.5 text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 shrink-0">
                 ENFORCED
               </span>
             </div>
@@ -90,7 +121,7 @@ export default async function AdminSettingsPage() {
         </div>
 
         {/* Module 2: System Telemetry & Infrastructure */}
-        <div className="rounded-none border border-[#152A54] bg-[#060D1A] p-5 space-y-4">
+        <div className="rounded-none border border-[#152A54] bg-[#060D1A] p-4 sm:p-5 space-y-4">
           <div className="flex items-center justify-between border-b border-[#152A54] pb-3">
             <div className="flex items-center gap-2">
               <DatabaseIcon className="size-4 text-blue-400" />
@@ -102,42 +133,42 @@ export default async function AdminSettingsPage() {
           </div>
 
           <div className="space-y-3 text-xs">
-            <div className="flex items-center justify-between py-1.5 border-b border-[#152A54]/50">
-              <div className="flex items-center gap-2">
-                <span className="size-2 bg-emerald-400 rounded-none" />
-                <span className="font-semibold text-slate-200">PostgreSQL / Neon DB</span>
+            <div className="flex items-center justify-between py-1.5 border-b border-[#152A54]/50 gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="size-2 bg-emerald-400 rounded-none shrink-0" />
+                <span className="font-semibold text-slate-200 truncate">Neon PostgreSQL</span>
               </div>
-              <span className="text-slate-400 font-mono text-[11px]">
+              <span className="text-slate-400 font-mono text-[10px] sm:text-[11px] shrink-0">
                 {registrationCount} Regs / {eventCount} Events
               </span>
             </div>
 
-            <div className="flex items-center justify-between py-1.5 border-b border-[#152A54]/50">
-              <div className="flex items-center gap-2">
-                <span className="size-2 bg-emerald-400 rounded-none" />
-                <span className="font-semibold text-slate-200">Better-Auth Engine</span>
+            <div className="flex items-center justify-between py-1.5 border-b border-[#152A54]/50 gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="size-2 bg-emerald-400 rounded-none shrink-0" />
+                <span className="font-semibold text-slate-200 truncate">Better-Auth</span>
               </div>
-              <span className="text-slate-400 font-mono text-[11px]">
+              <span className="text-slate-400 font-mono text-[10px] sm:text-[11px] shrink-0">
                 {userCount} Verified Users
               </span>
             </div>
 
-            <div className="flex items-center justify-between py-1.5 border-b border-[#152A54]/50">
-              <div className="flex items-center gap-2">
-                <span className="size-2 bg-emerald-400 rounded-none" />
-                <span className="font-semibold text-slate-200">Cloudinary Media Pipeline</span>
+            <div className="flex items-center justify-between py-1.5 border-b border-[#152A54]/50 gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="size-2 bg-emerald-400 rounded-none shrink-0" />
+                <span className="font-semibold text-slate-200 truncate">Cloud Storage</span>
               </div>
-              <span className="text-blue-400 font-mono text-[11px]">
+              <span className="text-blue-400 font-mono text-[10px] sm:text-[11px] shrink-0">
                 POSTERS_MOUNTED
               </span>
             </div>
 
-            <div className="flex items-center justify-between py-1.5">
-              <div className="flex items-center gap-2">
-                <span className="size-2 bg-emerald-400 rounded-none" />
-                <span className="font-semibold text-slate-200">Resend / SMTP Dispatch</span>
+            <div className="flex items-center justify-between py-1.5 gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="size-2 bg-emerald-400 rounded-none shrink-0" />
+                <span className="font-semibold text-slate-200 truncate">SMTP / Resend</span>
               </div>
-              <span className="text-blue-400 font-mono text-[11px]">
+              <span className="text-blue-400 font-mono text-[10px] sm:text-[11px] shrink-0">
                 STANDBY_READY
               </span>
             </div>
@@ -145,17 +176,38 @@ export default async function AdminSettingsPage() {
         </div>
       </div>
 
-      {/* Role Management Matrix (Blueprint Section 08) */}
-      <div className="rounded-none border border-[#152A54] bg-[#060D1A] p-5 space-y-4">
+      {/* Role Management Matrix (Mobile Responsive) */}
+      <div className="rounded-none border border-[#152A54] bg-[#060D1A] p-4 sm:p-5 space-y-4">
         <div className="flex items-center justify-between border-b border-[#152A54] pb-3">
           <div className="flex items-center gap-2">
             <LockIcon className="size-4 text-amber-400" />
             <h2 className="text-sm font-bold text-white uppercase">Role Access Control Matrix</h2>
           </div>
-          <span className="text-[10px] text-slate-400 font-mono">CODEHIVE 2K26 RBAC</span>
+          <span className="text-[10px] text-slate-400 font-mono">CODEHIVE RBAC</span>
         </div>
 
-        <div className="overflow-x-auto">
+        {/* ── Mobile Role Cards (< md) ── */}
+        <div className="block md:hidden space-y-3">
+          {roles.map((r) => (
+            <div key={r.tier} className="bg-[#03060E] border border-[#152A54] p-3 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className={`text-xs font-bold px-2 py-0.5 border ${r.color}`}>
+                  {r.tier}
+                </span>
+                <span className="text-[10px] text-slate-400 uppercase tracking-wider">
+                  {r.status}
+                </span>
+              </div>
+              <div className="space-y-1 text-xs">
+                <p className="font-semibold text-white">{r.scope}</p>
+                <p className="text-[11px] text-slate-400 leading-relaxed">{r.ops}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* ── Desktop Role Table (>= md) ── */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-[#03060E] text-[11px] uppercase tracking-wider text-slate-400 border-b border-[#152A54]">
               <tr>
@@ -166,46 +218,18 @@ export default async function AdminSettingsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#152A54]">
-              <tr className="hover:bg-[#0B162C] transition-colors">
-                <td className="px-4 py-3 font-bold text-amber-400">SUPER_ADMIN</td>
-                <td className="px-4 py-3 text-slate-200">Full System Governance</td>
-                <td className="px-4 py-3 text-slate-400">All settings, users, events, registrations, and exports</td>
-                <td className="px-4 py-3">
-                  <span className="px-2 py-0.5 text-[10px] font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30">
-                    AUTHORITATIVE
-                  </span>
-                </td>
-              </tr>
-              <tr className="hover:bg-[#0B162C] transition-colors">
-                <td className="px-4 py-3 font-bold text-blue-400">ORGANIZER</td>
-                <td className="px-4 py-3 text-slate-200">Event &amp; Registration Lead</td>
-                <td className="px-4 py-3 text-slate-400">Event and registration management; operational dashboard</td>
-                <td className="px-4 py-3">
-                  <span className="px-2 py-0.5 text-[10px] font-bold bg-blue-600/15 text-blue-400 border border-blue-500/30">
-                    OPERATIONAL
-                  </span>
-                </td>
-              </tr>
-              <tr className="hover:bg-[#0B162C] transition-colors">
-                <td className="px-4 py-3 font-bold text-emerald-400">STAFF</td>
-                <td className="px-4 py-3 text-slate-200">On-Site Gate Check-in</td>
-                <td className="px-4 py-3 text-slate-400">QR check-in scanner and limited attendee lookup</td>
-                <td className="px-4 py-3">
-                  <span className="px-2 py-0.5 text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                    FIELD_VERIFIED
-                  </span>
-                </td>
-              </tr>
-              <tr className="hover:bg-[#0B162C] transition-colors">
-                <td className="px-4 py-3 font-bold text-slate-400">PARTICIPANT</td>
-                <td className="px-4 py-3 text-slate-200">Symposium Attendee</td>
-                <td className="px-4 py-3 text-slate-400">Public event discovery, registration, ticket pass lookup</td>
-                <td className="px-4 py-3">
-                  <span className="px-2 py-0.5 text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-700">
-                    PUBLIC
-                  </span>
-                </td>
-              </tr>
+              {roles.map((r) => (
+                <tr key={r.tier} className="hover:bg-[#0B162C] transition-colors">
+                  <td className="px-4 py-3 font-bold text-white">{r.tier}</td>
+                  <td className="px-4 py-3 text-slate-200">{r.scope}</td>
+                  <td className="px-4 py-3 text-slate-400">{r.ops}</td>
+                  <td className="px-4 py-3">
+                    <span className={`px-2 py-0.5 text-[10px] font-bold border ${r.color}`}>
+                      {r.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

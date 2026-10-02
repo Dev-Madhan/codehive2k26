@@ -9,6 +9,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 export interface NavSecondaryItem {
@@ -24,6 +25,13 @@ export function NavSecondary({
   items: NavSecondaryItem[];
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
   const pathname = usePathname();
+  const { isMobile, setOpenMobile } = useSidebar();
+
+  const handleLinkClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
 
   return (
     <SidebarGroup {...props} className="font-mono p-2">
@@ -36,11 +44,17 @@ export function NavSecondary({
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   tooltip={item.title}
-                  render={item.url.startsWith("/") ? <Link href={item.url} /> : <a href={item.url} />}
-                  className={`rounded-none text-xs uppercase tracking-wider transition-colors ${
+                  render={
+                    item.url.startsWith("/") ? (
+                      <Link href={item.url} onClick={handleLinkClick} />
+                    ) : (
+                      <a href={item.url} onClick={handleLinkClick} />
+                    )
+                  }
+                  className={`rounded-none text-xs uppercase tracking-wider transition-colors min-h-[38px] px-3 ${
                     isActive
                       ? "bg-[#0B162C] text-white border-l-2 border-blue-500 font-bold"
-                      : "text-slate-500 hover:text-slate-300 hover:bg-[#060D1A] border-l-2 border-transparent"
+                      : "text-slate-500 hover:text-slate-300 hover:bg-[#060D1A] border-l-2 border-transparent active:bg-[#0B162C]"
                   }`}
                 >
                   <span className={`shrink-0 ${isActive ? "text-blue-400" : "text-slate-500"}`}>

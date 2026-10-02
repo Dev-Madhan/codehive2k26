@@ -165,17 +165,19 @@ export function ChartAreaInteractive() {
   })
 
   return (
-    <Card className="@container/card rounded-none border border-[#152A54] bg-[#060D1A] shadow-none">
-      <CardHeader>
-        <CardTitle className="font-mono font-bold text-white text-base">&gt; Traffic &amp; Registrations Overview</CardTitle>
-        <CardDescription className="font-mono text-xs text-slate-400">
-          <span className="hidden @[540px]/card:block">
-            Verified participant flow for the last 3 months
-          </span>
-          <span className="@[540px]/card:hidden">Last 3 months</span>
-        </CardDescription>
-        <CardAction>
-          <div className="hidden @[767px]/card:flex items-center gap-1.5 font-mono">
+    <Card className="@container/card rounded-none border border-[#152A54] bg-[#060D1A] shadow-none max-w-full overflow-hidden">
+      <CardHeader className="p-3.5 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div className="space-y-1">
+          <CardTitle className="font-mono font-bold text-white text-sm sm:text-base">&gt; Traffic &amp; Registrations</CardTitle>
+          <CardDescription className="font-mono text-[11px] sm:text-xs text-slate-400">
+            <span className="hidden @[540px]/card:block">
+              Verified participant flow for the selected window
+            </span>
+            <span className="@[540px]/card:hidden">Participant traffic flow</span>
+          </CardDescription>
+        </div>
+        <CardAction className="self-start sm:self-auto">
+          <div className="hidden @[640px]/card:flex items-center gap-1.5 font-mono">
             {[
               { value: "90d", label: "90 Days" },
               { value: "30d", label: "30 Days" },
@@ -187,7 +189,7 @@ export function ChartAreaInteractive() {
                   key={item.value}
                   type="button"
                   onClick={() => setTimeRange(item.value)}
-                  className={`px-3 py-1.5 text-xs font-mono uppercase tracking-wider transition-all cursor-pointer rounded-none border ${
+                  className={`px-2.5 py-1 text-xs font-mono uppercase tracking-wider transition-all cursor-pointer rounded-none border ${
                     isActive
                       ? "bg-blue-600 text-white border-blue-500 font-bold shadow-sm shadow-blue-950/50"
                       : "bg-[#03060E] text-slate-400 border-[#152A54] hover:bg-[#0B162C] hover:text-white"
@@ -207,7 +209,7 @@ export function ChartAreaInteractive() {
             }}
           >
             <SelectTrigger
-              className="flex w-36 rounded-none border-[#152A54] bg-[#03060E] font-mono text-xs text-slate-300 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
+              className="flex w-32 sm:w-36 rounded-none border-[#152A54] bg-[#03060E] font-mono text-xs text-slate-300 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[640px]/card:hidden"
               size="sm"
               aria-label="Select a value"
             >
@@ -227,10 +229,10 @@ export function ChartAreaInteractive() {
           </Select>
         </CardAction>
       </CardHeader>
-      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+      <CardContent className="px-1.5 sm:px-6 pt-1 sm:pt-4">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          className="aspect-auto h-[190px] sm:h-[250px] w-full"
         >
           <AreaChart data={filteredData}>
             <defs>

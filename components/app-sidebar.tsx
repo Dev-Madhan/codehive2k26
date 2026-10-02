@@ -10,6 +10,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { NavMain, type NavMainItem } from "@/components/nav-main";
 import { NavSecondary, type NavSecondaryItem } from "@/components/nav-secondary";
@@ -18,10 +19,11 @@ import {
   LayoutDashboardIcon,
   ClipboardListIcon,
   CalendarDaysIcon,
-  QrCodeIcon,
+  TicketIcon,
   BarChart3Icon,
   ExternalLinkIcon,
   Settings2Icon,
+  XIcon,
 } from "lucide-react";
 
 // Minimal, essential console navigation
@@ -42,9 +44,9 @@ const navItems: NavMainItem[] = [
     icon: <CalendarDaysIcon className="size-4" />,
   },
   {
-    title: "Check-in",
+    title: "Pass Verifier",
     url: "/admin/check-in",
-    icon: <QrCodeIcon className="size-4" />,
+    icon: <TicketIcon className="size-4" />,
   },
   {
     title: "Reports",
@@ -68,29 +70,39 @@ const secondaryItems: NavSecondaryItem[] = [
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { isMobile, setOpenMobile } = useSidebar();
+
   return (
     <Sidebar
       collapsible="offcanvas"
       className="rounded-none border-r border-[#152A54] bg-[#030712] text-white"
       {...props}
     >
-      {/* Brand Header */}
-      <SidebarHeader className="border-b border-[#152A54] p-3">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              className="data-[slot=sidebar-menu-button]:p-1.5! rounded-none hover:bg-[#0B162C] transition-colors"
-              render={<Link href="/dashboard" />}
-            >
-              <div className="flex items-center gap-1 font-mono">
-                <span className="text-blue-500 font-extrabold text-sm">&gt;</span>
-                <span className="font-bold text-white text-sm">code</span>
-                <span className="font-bold text-blue-400 text-sm">hive</span>
-                <span className="text-[10px] text-slate-500 ml-1">2K26</span>
-              </div>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+      {/* Brand Header with Mobile Dismiss */}
+      <SidebarHeader className="border-b border-[#152A54] p-3 flex flex-row items-center justify-between">
+        <Link
+          href="/dashboard"
+          onClick={() => {
+            if (isMobile) setOpenMobile(false);
+          }}
+          className="flex items-center gap-1 font-mono p-1 hover:bg-[#0B162C] transition-colors"
+        >
+          <span className="text-blue-500 font-extrabold text-sm">&gt;</span>
+          <span className="font-bold text-white text-sm">code</span>
+          <span className="font-bold text-blue-400 text-sm">hive</span>
+          <span className="text-[10px] text-slate-500 ml-1">2K26</span>
+        </Link>
+
+        {isMobile && (
+          <button
+            type="button"
+            onClick={() => setOpenMobile(false)}
+            className="p-1.5 text-slate-400 hover:text-white hover:bg-[#0B162C] border border-[#152A54] transition-colors cursor-pointer"
+            aria-label="Close navigation menu"
+          >
+            <XIcon className="size-3.5" />
+          </button>
+        )}
       </SidebarHeader>
 
       {/* Nav Content */}

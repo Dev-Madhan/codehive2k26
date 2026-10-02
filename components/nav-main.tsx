@@ -9,6 +9,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 export interface NavMainItem {
@@ -23,6 +24,13 @@ export function NavMain({
   items: NavMainItem[];
 }) {
   const pathname = usePathname();
+  const { isMobile, setOpenMobile } = useSidebar();
+
+  const handleLinkClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
 
   return (
     <SidebarGroup className="p-2">
@@ -37,11 +45,11 @@ export function NavMain({
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   tooltip={item.title}
-                  render={<Link href={item.url} />}
-                  className={`rounded-none text-xs uppercase tracking-wider transition-colors duration-150 ${
+                  render={<Link href={item.url} onClick={handleLinkClick} />}
+                  className={`rounded-none text-xs uppercase tracking-wider transition-colors duration-150 min-h-[40px] px-3 ${
                     isActive
-                      ? "bg-[#0B162C] text-white border-l-2 border-blue-500 font-bold"
-                      : "text-slate-400 hover:text-white hover:bg-[#060D1A] border-l-2 border-transparent"
+                      ? "bg-[#0B162C] text-white border-l-2 border-blue-500 font-bold shadow-xs"
+                      : "text-slate-400 hover:text-white hover:bg-[#060D1A] border-l-2 border-transparent active:bg-[#0B162C]"
                   }`}
                 >
                   <span

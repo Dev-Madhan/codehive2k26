@@ -57,3 +57,24 @@ export async function generateQrSvg(token: string): Promise<string> {
     throw new Error("QR SVG generation failed");
   }
 }
+
+/**
+ * Generate QR code as a PNG Buffer for embedding in emails via CID attachments.
+ * Compatible with Gmail, Outlook, Apple Mail, and standard email clients.
+ */
+export async function generateQrBuffer(content: string): Promise<Buffer> {
+  try {
+    return await QRCode.toBuffer(content, {
+      width: 320,
+      margin: 1,
+      color: {
+        dark: "#03060E",
+        light: "#FFFFFF",
+      },
+      errorCorrectionLevel: "H",
+    });
+  } catch (error) {
+    console.error("Failed to generate QR buffer:", error);
+    throw new Error("QR buffer generation failed");
+  }
+}

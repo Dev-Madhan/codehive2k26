@@ -14,9 +14,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       }
     >
       <AppSidebar variant="inset" />
-      <SidebarInset className="bg-[#030712] min-h-screen flex flex-col">
+      <SidebarInset className="bg-[#030712] min-h-screen flex flex-col max-w-full overflow-x-hidden">
         <SiteHeader />
-        <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto bg-black text-white">
+        <main className="flex-1 p-3 sm:p-5 md:p-6 lg:p-8 overflow-y-auto bg-black text-white max-w-full">
           {children}
         </main>
       </SidebarInset>

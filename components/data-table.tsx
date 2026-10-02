@@ -410,7 +410,7 @@ export function DataTable({
       defaultValue="outline"
       className="w-full flex-col justify-start gap-6"
     >
-      <div className="flex items-center justify-between px-4 lg:px-6">
+      <div className="flex flex-wrap items-center justify-between gap-2.5 px-3 sm:px-4 lg:px-6">
         <Label htmlFor="view-selector" className="sr-only">
           View
         </Label>
@@ -424,7 +424,7 @@ export function DataTable({
           ]}
         >
           <SelectTrigger
-            className="flex w-fit @4xl/main:hidden font-mono text-xs rounded-none border-[#152A54]"
+            className="flex w-fit @4xl/main:hidden font-mono text-xs rounded-none border-[#152A54] bg-[#060D1A]"
             size="sm"
             id="view-selector"
           >
@@ -484,15 +484,15 @@ export function DataTable({
           </DropdownMenu>
           <Button variant="outline" size="sm" className="rounded-none border-[#152A54] bg-[#060D1A] hover:bg-[#0B162C] text-slate-300 font-mono text-xs">
             <PlusIcon className="size-3.5 mr-1 text-blue-400" />
-            <span className="hidden lg:inline">Add Track</span>
+            <span className="hidden sm:inline">Add Track</span>
           </Button>
         </div>
       </div>
       <TabsContent
         value="outline"
-        className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
+        className="relative flex flex-col gap-4 overflow-auto px-3 sm:px-4 lg:px-6 max-w-full"
       >
-        <div className="overflow-hidden rounded-none border border-[#152A54] bg-[#060D1A]">
+        <div className="overflow-x-auto rounded-none border border-[#152A54] bg-[#060D1A] max-w-full">
           <DndContext
             collisionDetection={closestCenter}
             modifiers={[restrictToVerticalAxis]}
@@ -540,12 +540,12 @@ export function DataTable({
             </Table>
           </DndContext>
         </div>
-        <div className="flex items-center justify-between px-2 font-mono text-xs">
-          <div className="hidden flex-1 text-slate-500 lg:flex">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-2 font-mono text-xs">
+          <div className="text-slate-500 text-center sm:text-left text-[11px] sm:text-xs">
             {table.getFilteredSelectedRowModel().rows.length} of{" "}
             {table.getFilteredRowModel().rows.length} track(s) selected.
           </div>
-          <div className="flex w-full items-center gap-6 lg:w-fit">
+          <div className="flex w-full sm:w-auto items-center justify-between sm:justify-end gap-3 sm:gap-6">
             <div className="hidden items-center gap-2 lg:flex">
               <Label htmlFor="rows-per-page" className="text-xs text-slate-400">
                 Rows per page
@@ -578,7 +578,7 @@ export function DataTable({
               Page {table.state.pagination.pageIndex + 1} of{" "}
               {table.getPageCount()}
             </div>
-            <div className="ml-auto flex items-center gap-1.5 lg:ml-0">
+            <div className="flex items-center gap-1.5">
               <Button
                 variant="outline"
                 className="hidden size-8 rounded-none border-[#152A54] bg-[#060D1A] hover:bg-[#0B162C] text-slate-300 p-0 lg:flex"
