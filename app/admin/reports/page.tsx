@@ -1,6 +1,9 @@
 import prisma from "@/lib/prisma";
 import { ReportsClient } from "@/components/admin/reports-client";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function AdminReportsPage() {
   const [
     totalRegistrations,

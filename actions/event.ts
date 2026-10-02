@@ -73,11 +73,17 @@ export async function createEvent(input: EventInput): Promise<ActionResponse<Eve
 
   try {
     const event = await prisma.event.create({
-      data: parsed.data,
+      data: {
+        ...parsed.data,
+        status: (parsed.data as any).status || "PUBLISHED",
+      },
     });
 
     revalidatePath("/events");
     revalidatePath("/admin/events");
+    revalidatePath("/admin/registrations");
+    revalidatePath("/admin/dashboard");
+    revalidatePath("/admin/reports");
 
     return { success: true, data: event };
   } catch (error) {
@@ -97,6 +103,9 @@ export async function deleteEventBySlug(slug: string): Promise<ActionResponse<{ 
 
     revalidatePath("/events");
     revalidatePath("/admin/events");
+    revalidatePath("/admin/registrations");
+    revalidatePath("/admin/dashboard");
+    revalidatePath("/admin/reports");
 
     return { success: true, data: { count: 1 } };
   } catch (error) {

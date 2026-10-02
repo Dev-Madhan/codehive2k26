@@ -12,6 +12,9 @@ import {
 } from "lucide-react";
 import prisma from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function AdminSettingsPage() {
   const [userCount, eventCount, registrationCount] = await Promise.all([
     prisma.user.count(),

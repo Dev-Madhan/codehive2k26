@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { checkInSchema, CheckInInput } from "@/lib/validations/checkin";
 import { ActionResponse } from "@/types";
 import { CheckInResult } from "@/types/registration";
+import { revalidatePath } from "next/cache";
 
 export async function checkInParticipant(
   staffUserId: string,
@@ -129,6 +130,13 @@ export async function checkInParticipant(
         },
       });
     });
+
+    revalidatePath("/admin/registrations");
+    revalidatePath("/admin/dashboard");
+    revalidatePath("/admin/check-in");
+    revalidatePath("/admin/reports");
+    revalidatePath(`/registration/${registration.registrationNumber}`);
+    revalidatePath(`/registration/${registration.id}`);
 
     return {
       success: true,

@@ -1,27 +1,40 @@
 import prisma from "@/lib/prisma";
 import { RegistrationsClient } from "@/components/admin/registrations-client";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function AdminRegistrationsPage() {
-  const registrations = await prisma.registration.findMany({
-    include: {
-      event: {
-        select: {
-          name: true,
-          slug: true,
+  const [registrations, events] = await Promise.all([
+    prisma.registration.findMany({
+      include: {
+        event: {
+          select: {
+            name: true,
+            slug: true,
+          },
+        },
+        participant: {
+          select: {
+            name: true,
+            email: true,
+            phone: true,
+            college: true,
+          },
         },
       },
-      participant: {
-        select: {
-          name: true,
-          email: true,
-          phone: true,
-          college: true,
-        },
+      orderBy: { createdAt: "desc" },
+      take: 200,
+    }),
+    prisma.event.findMany({
+      select: {
+        id: true,
+        name: true,
+        slug: true,
       },
-    },
-    orderBy: { createdAt: "desc" },
-    take: 100,
-  });
+      orderBy: { name: "asc" },
+    }),
+  ]);
 
   return (
     <div className="space-y-5 font-mono max-w-full">
@@ -33,7 +46,8 @@ export default async function AdminRegistrationsPage() {
         <p className="text-xs text-slate-400 mt-1">Live attendee roster with transport tracking and gate check-in status.</p>
       </div>
 
-      <RegistrationsClient initialRegistrations={registrations} />
+      <RegistrationsClient initialRegistrations={registrations} events={events} />
     </div>
   );
 }
+

@@ -6,6 +6,9 @@ import { formatDate } from "@/utils/formatters";
 import Link from "next/link";
 import { ShieldCheckIcon, CheckCircle2Icon, UsersIcon, CalendarIcon, MapPinIcon, BuildingIcon, BusIcon } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 interface Props {
   params: Promise<{ id: string }>;
 }

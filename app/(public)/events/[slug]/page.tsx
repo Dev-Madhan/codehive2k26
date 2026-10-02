@@ -7,6 +7,9 @@ import { formatDate } from "@/utils/formatters";
 import { notFound } from "next/navigation";
 import { CalendarIcon, MapPinIcon, UsersIcon, ArrowLeftIcon } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 interface Props {
   params: Promise<{ slug: string }>;
 }

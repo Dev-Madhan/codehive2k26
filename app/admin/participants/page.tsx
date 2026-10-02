@@ -1,6 +1,9 @@
 import prisma from "@/lib/prisma";
 import { ParticipantsClient } from "@/components/admin/participants-client";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function AdminParticipantsPage() {
   const participants = await prisma.participant.findMany({
     include: {
