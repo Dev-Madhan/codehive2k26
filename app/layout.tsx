@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Inter } from "next/font/google";
+import { JetBrains_Mono, Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,9 +17,16 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
 });
 
+// Space Grotesk: High-impact display font for headlines, heroes, and prominent typography
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["300", "400", "500", "600", "700"],
+});
+
 export const metadata: Metadata = {
-  title: "CodeHive 2K26 — Premier Event & Hackathon Platform",
-  description: "Next-generation college symposium and hackathon registration platform.",
+  title: "CodeHive 2K26 — Premier National Symposium & Hackathon",
+  description: "South India's flagship 24-hour engineering hackathon and tech symposium platform.",
 };
 
 export default function RootLayout({
@@ -38,11 +45,12 @@ export default function RootLayout({
         "text-white",
         inter.variable,
         jetbrainsMono.variable,
+        spaceGrotesk.variable,
         "font-sans"
       )}
       style={{ colorScheme: "dark" }}
     >
-      <body className="min-h-full flex flex-col font-sans bg-black text-white">
+      <body className="min-h-full flex flex-col font-sans bg-black text-white selection:bg-blue-600 selection:text-white">
         <TooltipProvider>{children}</TooltipProvider>
         <Toaster />
       </body>
