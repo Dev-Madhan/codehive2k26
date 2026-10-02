@@ -4,38 +4,22 @@ import { useRef } from "react";
 import { useInView } from "@/hooks/use-in-view";
 import { cn } from "@/lib/utils";
 
-const sponsors = {
-  title: [
-    { name: "TechCorp AI", tier: "TITLE" },
+const associations = {
+  industry: [
+    { name: "Sri Vensy Technologies Pvt Ltd", role: "Industry Partner" },
+    { name: "Business Intelligence Club", role: "Technical Club Partner" },
   ],
-  gold: [
-    { name: "CloudNova", tier: "GOLD" },
-    { name: "DevMatrix", tier: "GOLD" },
+  institution: [
+    { name: "Vel Tech Multi Tech Dr. Rangarajan Dr. Sakunthala Engineering College", role: "Host Institution (Autonomous)" },
+    { name: "Department of Computer Science & Business Systems", role: "Organizing Department" },
   ],
-  silver: [
-    { name: "ByteForge", tier: "SILVER" },
-    { name: "Quantum Labs", tier: "SILVER" },
-    { name: "NeuralStack", tier: "SILVER" },
+  accreditations: [
+    { name: "NBA Accredited", code: "NBA" },
+    { name: "NAAC 'A' Grade", code: "NAAC A" },
+    { name: "AICTE Approved", code: "AICTE" },
+    { name: "Anna University Affiliated", code: "AU" },
   ],
 };
-
-function SponsorCard({ name, tier }: { name: string; tier: string }) {
-  const sizeMap = {
-    TITLE: "h-16 text-base",
-    GOLD: "h-12 text-sm",
-    SILVER: "h-10 text-xs",
-  };
-  return (
-    <div
-      className={cn(
-        "flex items-center justify-center border border-[#152A54]/60 bg-[#060D1A]/60 px-6 font-mono font-bold uppercase tracking-widest text-slate-500 hover:text-slate-300 hover:border-blue-500/30 transition-all cursor-default",
-        sizeMap[tier as keyof typeof sizeMap] || "h-10 text-xs"
-      )}
-    >
-      {name}
-    </div>
-  );
-}
 
 export function SponsorsSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -59,92 +43,86 @@ export function SponsorsSection() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="h-px w-8 bg-blue-500" />
             <span className="font-mono text-[11px] uppercase tracking-widest text-blue-500">
-              SPONSORS &amp; PARTNERS
+              ASSOCIATION &amp; PARTNERS
             </span>
             <div className="h-px w-8 bg-blue-500" />
           </div>
           <h2 className="font-mono text-3xl sm:text-4xl font-black uppercase tracking-tight text-white">
-            BACKED BY{" "}
+            IN ASSOCIATION{" "}
             <span className="bg-gradient-to-r from-blue-400 to-sky-300 bg-clip-text text-transparent">
-              INDUSTRY LEADERS
+              WITH
             </span>
           </h2>
-          <p className="mt-3 text-slate-500 text-sm max-w-lg mx-auto">
-            Leading technology companies powering the next generation of builders.
+          <p className="mt-3 text-slate-400 text-sm max-w-xl mx-auto font-sans">
+            Powering industry-standard problem statements, technical evaluation, and student excellence.
           </p>
         </div>
 
-        {/* Title sponsors */}
+        {/* Association Cards */}
         <div
           className={cn(
-            "mb-6 flex justify-center transition-all duration-700",
+            "grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-4xl mx-auto mb-10 transition-all duration-700",
             inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           )}
-          style={{ transitionDelay: "100ms" }}
+          style={{ transitionDelay: "150ms" }}
         >
-          <div className="relative">
-            <div className="absolute -top-2 left-1/2 -translate-x-1/2 font-mono text-[9px] uppercase tracking-widest text-blue-500 whitespace-nowrap">
-              ◆ TITLE SPONSOR ◆
-            </div>
-            {sponsors.title.map((s) => (
-              <SponsorCard key={s.name} {...s} />
-            ))}
-          </div>
-        </div>
-
-        {/* Gold sponsors */}
-        <div className="mb-4">
-          <p className="text-center font-mono text-[9px] uppercase tracking-widest text-slate-600 mb-3">
-            ◆ GOLD ◆
-          </p>
-          <div
-            className={cn(
-              "flex flex-wrap justify-center gap-3 transition-all duration-700",
-              inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            )}
-            style={{ transitionDelay: "200ms" }}
-          >
-            {sponsors.gold.map((s) => (
-              <SponsorCard key={s.name} {...s} />
-            ))}
-          </div>
-        </div>
-
-        {/* Silver sponsors */}
-        <div>
-          <p className="text-center font-mono text-[9px] uppercase tracking-widest text-slate-700 mb-3">
-            ◆ SILVER ◆
-          </p>
-          <div
-            className={cn(
-              "flex flex-wrap justify-center gap-3 transition-all duration-700",
-              inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            )}
-            style={{ transitionDelay: "300ms" }}
-          >
-            {sponsors.silver.map((s) => (
-              <SponsorCard key={s.name} {...s} />
-            ))}
-          </div>
-        </div>
-
-        {/* CTA to become sponsor */}
-        <div
-          className={cn(
-            "mt-12 text-center transition-all duration-700",
-            inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          )}
-          style={{ transitionDelay: "400ms" }}
-        >
-          <p className="font-mono text-xs text-slate-600 uppercase tracking-widest">
-            Interested in sponsoring?{" "}
-            <a
-              href="mailto:codehive@example.com"
-              className="text-blue-400 hover:text-white transition-colors border-b border-blue-500/40 hover:border-blue-400"
+          {associations.industry.map((partner) => (
+            <div
+              key={partner.name}
+              className="relative p-6 border border-blue-500/40 bg-[#060D1A]/80 backdrop-blur-sm hover:border-blue-400 transition-all group"
             >
-              contact@codehive.in
-            </a>
+              <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r border-blue-400" />
+              <div className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b border-l border-blue-400" />
+              <p className="font-mono text-[10px] uppercase tracking-widest text-sky-400 mb-2">
+                ◆ {partner.role} ◆
+              </p>
+              <h3 className="font-mono text-lg sm:text-xl font-bold uppercase text-white tracking-tight group-hover:text-blue-300 transition-colors">
+                {partner.name}
+              </h3>
+            </div>
+          ))}
+        </div>
+
+        {/* Institutional & Department Banner */}
+        <div
+          className={cn(
+            "border border-[#152A54]/80 bg-[#03060E]/90 max-w-4xl mx-auto p-6 sm:p-8 mb-10 text-center transition-all duration-700",
+            inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          )}
+          style={{ transitionDelay: "250ms" }}
+        >
+          <p className="font-mono text-[11px] uppercase tracking-widest text-blue-400 mb-2">
+            ORGANIZED BY
           </p>
+          <h4 className="font-mono text-base sm:text-lg font-bold text-white uppercase tracking-tight mb-1">
+            Department of Computer Science and Business Systems
+          </h4>
+          <p className="text-xs sm:text-sm text-slate-400 font-sans max-w-2xl mx-auto">
+            Vel Tech Multi Tech Dr. Rangarajan Dr. Sakunthala Engineering College
+          </p>
+          <p className="font-mono text-[11px] text-slate-500 uppercase tracking-wider mt-1">
+            An Autonomous Institution • Approved by AICTE, New Delhi &amp; Affiliated to Anna University, Chennai
+          </p>
+        </div>
+
+        {/* Accreditation Badges */}
+        <div
+          className={cn(
+            "flex flex-wrap items-center justify-center gap-3 max-w-3xl mx-auto transition-all duration-700",
+            inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          )}
+          style={{ transitionDelay: "350ms" }}
+        >
+          {associations.accreditations.map((acc) => (
+            <div
+              key={acc.name}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-[#152A54] bg-[#060D1A] font-mono text-xs text-slate-300 hover:border-blue-500/50 transition-colors"
+            >
+              <span className="w-1.5 h-1.5 rounded-none bg-blue-500" />
+              <span className="font-bold text-white">{acc.code}</span>
+              <span className="text-slate-500 text-[11px]">({acc.name})</span>
+            </div>
+          ))}
         </div>
       </div>
     </section>

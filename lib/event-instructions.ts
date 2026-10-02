@@ -33,14 +33,14 @@ export interface CleanEventInstructions {
 const INSTRUCTIONS_MAP: Record<string, CleanEventInstructions> = {
   "techforge-2026": {
     slug: "techforge-2026",
-    title: "TECHFORGE",
+    title: "TECH FORGE",
     format: "2-Day Technical Competition (4 Progressive Rounds)",
     totalRounds: 4,
     totalMarks: 200,
     brief:
-      "A progressive team-based technical challenge where participants build, evolve, and defend a real-world enterprise application across two days. Day 1 builds the core architecture; qualifying teams advance to Day 2 for real-time stream integration and live technical defense.",
+      "TECHFORGE is a 2-day technical challenge where you Analyze, Build, Adapt & Defend. Solve a real-world problem, develop your solution, and face a surprise technical challenge that will test your coding, problem-solving, and innovation skills.",
     corePrinciple:
-      "AI-allowed, tool-flexible, and technology-independent — but integrity, technical ownership, and the ability to defend your solution are mandatory.",
+      "One Problem. Four Rounds. One Champion. — AI-allowed, tool-flexible, and technology-independent, with live jury defense.",
     rounds: [
       {
         roundNumber: 1,
@@ -113,14 +113,14 @@ const INSTRUCTIONS_MAP: Record<string, CleanEventInstructions> = {
   },
   "agentvibe-2026": {
     slug: "agentvibe-2026",
-    title: "AGENTVIBE",
+    title: "AGENT VIBE",
     format: "2-Day AI Agent Building Challenge (4 Progressive Rounds)",
     totalRounds: 4,
     totalMarks: 200,
     brief:
-      "A flagship AI agent engineering competition where teams design, build, integrate, and test an intelligent autonomous productivity agent. Day 1 focuses on core agent understanding, classification, and drafting; qualifying teams advance to Day 2 for surprise context linking and live technical defense.",
+      "AGENT VIBE is a 2-day AI challenge where you Imagine, Build, Adapt & Deploy. Design and develop intelligent AI agents to solve real-world problems, then tackle surprise challenges that will test your creativity, AI skills, and ability to innovate using LLMs, APIs, and modern AI tools.",
     corePrinciple:
-      "From ideas to intelligent agents — prompt, build, and automate safely while maintaining total technical ownership.",
+      "One Idea. Four Rounds. One AI Champion. — Imagine, Build, Adapt & Deploy intelligent autonomous agents.",
     rounds: [
       {
         roundNumber: 1,

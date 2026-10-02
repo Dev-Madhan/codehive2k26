@@ -35,16 +35,16 @@ const REAL_EVENTS: RealEventItem[] = [
   {
     id: "techforge-2026",
     slug: "techforge-2026",
-    name: "TECHFORGE",
-    tag: "FLAGSHIP TECHNICAL",
-    category: "TECHNICAL // 4 ROUNDS",
-    subtitle: "Enterprise Software Challenge",
+    name: "TECH FORGE",
+    tag: "EVENT 1 // TECHNICAL",
+    category: "2-DAY TECHNICAL // 4 ROUNDS",
+    subtitle: "One Problem. Four Rounds. One Champion.",
     description:
-      "The flagship 2-day progressive technical challenge of CodeHive 2K26. Teams design, develop, and defend an enterprise-grade software solution across multiple rounds, testing core system architecture, practical engineering, and adaptability under pressure.",
+      "TECHFORGE is a 2-day technical challenge where you Analyze, Build, Adapt & Defend. Solve a real-world problem, develop your solution, and face a surprise technical challenge that will test your coding, problem-solving, and innovation skills.",
     rounds: "4 Rounds (200 Pts)",
     teamSize: "1–3 Builders",
     capacity: "120 Slots",
-    venue: "Main Auditorium & Computing Center",
+    venue: "Palani Murugan Hall of Fame, Vel Tech Multi Tech",
     status: "OPEN",
     accent: "blue",
     href: "/events/techforge-2026",
@@ -52,16 +52,16 @@ const REAL_EVENTS: RealEventItem[] = [
   {
     id: "agentvibe-2026",
     slug: "agentvibe-2026",
-    name: "AGENTVIBE",
-    tag: "AI AGENT CHALLENGE",
-    category: "AI // 4 ROUNDS",
-    subtitle: "Autonomous AI Engineering",
+    name: "AGENT VIBE",
+    tag: "EVENT 2 // AI AGENT",
+    category: "2-DAY AI // 4 ROUNDS",
+    subtitle: "One Idea. Four Rounds. One AI Champion.",
     description:
-      "The premier AI agent engineering challenge of CodeHive 2K26. Teams design, build, and deploy an autonomous productivity agent that understands context, connects data, and executes real-world actions safely.",
+      "AGENT VIBE is a 2-day AI challenge where you Imagine, Build, Adapt & Deploy. Design and develop intelligent AI agents to solve real-world problems, then tackle surprise challenges that will test your creativity, AI skills, and ability to innovate using LLMs, APIs, and modern AI tools.",
     rounds: "4 Rounds (200 Pts)",
     teamSize: "1–3 Builders",
     capacity: "100 Slots",
-    venue: "AI Innovation Lab & Tech Center",
+    venue: "Palani Murugan Hall of Fame, Vel Tech Multi Tech",
     status: "OPEN",
     accent: "sky",
     href: "/events/agentvibe-2026",
@@ -112,15 +112,15 @@ export function EventsSection({ initialEvents }: EventsSectionProps) {
           return {
             id: ev.id || defaultRef.id,
             slug: ev.slug || defaultRef.slug,
-            name: ev.name || defaultRef.name,
-            tag: isTechforge ? "FLAGSHIP TECHNICAL" : "AI AGENT CHALLENGE",
-            category: ev.category?.name ? `${ev.category.name.toUpperCase()} // 4 ROUNDS` : defaultRef.category,
+            name: defaultRef.name,
+            tag: isTechforge ? "EVENT 1 // TECHNICAL" : "EVENT 2 // AI AGENT",
+            category: isTechforge ? "2-DAY TECHNICAL // 4 ROUNDS" : "2-DAY AI // 4 ROUNDS",
             subtitle: defaultRef.subtitle,
-            description: ev.description || defaultRef.description,
+            description: defaultRef.description,
             rounds: defaultRef.rounds,
             teamSize: `${ev.minTeamSize || 1}–${ev.maxTeamSize || 3} Builders`,
             capacity: `${ev.capacity || 100} Slots`,
-            venue: ev.venue || defaultRef.venue,
+            venue: "Palani Murugan Hall of Fame, Vel Tech Multi Tech",
             status: ev.registrationOpen ? "OPEN" : "CLOSED",
             accent: (idx % 2 === 0 ? "blue" : "sky") as "blue" | "sky",
             href: `/events/${ev.slug}`,
@@ -159,7 +159,7 @@ export function EventsSection({ initialEvents }: EventsSectionProps) {
                 </span>
               </h2>
               <p className="mt-2 text-xs sm:text-sm font-sans text-slate-400 max-w-xl">
-                Official technical symposium challenges of CodeHive 2K26. Register your team to compete.
+                Official 2-Day National Hackathon challenges of CodeHive 2K26 2.0. Entry is 100% Free with Certificates awarded to all participants.
               </p>
             </div>
             <Link

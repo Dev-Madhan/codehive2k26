@@ -7,36 +7,32 @@ import { PlusIcon, MinusIcon } from "lucide-react";
 
 const faqs = [
   {
-    q: "Who can participate in CodeHive 2K26?",
-    a: "Any engineering student or recent graduate from any institution across India. Whether you're a freshman or a final-year student — all builders are welcome.",
+    q: "Who can participate in CodeHive 2K26 2.0?",
+    a: "Any college or engineering student builder across India. You can participate solo or in a team of 1 to 3 members.",
   },
   {
-    q: "What is the team size?",
-    a: "Teams of 1 to 3 members. Solo participation is fully allowed and competitive.",
+    q: "Is there any registration fee?",
+    a: "No. Entry is 100% FREE. As an added benefit, verified official participation certificates will be awarded to all participants.",
   },
   {
-    q: "Is there a registration fee?",
-    a: "No. CodeHive 2K26 is completely free to enter. Just register, qualify, and show up.",
+    q: "When and where is the hackathon conducted?",
+    a: "CodeHive 2K26 2.0 is a 2-day on-site event on 23 & 24 October 2026, running from 8:30 AM to 3:30 PM daily at Palani Murugan Hall of Fame, Vel Tech Multi Tech Dr. Rangarajan Dr. Sakunthala Engineering College, Avadi, Chennai.",
   },
   {
-    q: "What events can I participate in?",
-    a: "You can register for TECHFORGE (Enterprise Software & Architecture Challenge) or AGENTVIBE (Autonomous AI Agent Challenge). Teams can register directly through our events registry.",
+    q: "What challenges / events can I register for?",
+    a: "You can register for EVENT 1: TECH FORGE (Analyze, Build, Adapt & Defend — One Problem. Four Rounds. One Champion.) or EVENT 2: AGENT VIBE (Imagine, Build, Adapt & Deploy — One Idea. Four Rounds. One AI Champion.).",
   },
   {
-    q: "Will food and accommodation be provided?",
-    a: "Yes — meals, snacks, and beverages will be provided throughout the 24-hour on-site hackathon. Accommodation support details will be shared closer to the event date.",
+    q: "What is the prize pool distribution?",
+    a: "The total prize pool is ₹20,000 with ₹10,000 allocated per track: 1st Prize: ₹5,000, 2nd Prize: ₹3,000, and 3rd Prize: ₹2,000.",
   },
   {
-    q: "What tech stack should I use?",
-    a: "Any tech stack of your choice. We evaluate on problem-solving quality, innovation, and execution — not the tools you use.",
+    q: "Who are the organizers and partners?",
+    a: "CodeHive 2K26 2.0 is organized by the Department of Computer Science and Business Systems (CSBS), Vel Tech Multi Tech (Autonomous, NBA & NAAC 'A' Grade), in association with Sri Vensy Technologies Pvt Ltd & Business Intelligence Club.",
   },
   {
-    q: "How are projects evaluated?",
-    a: "Projects go through 4 rounds: Ideation Review, Technical Depth, Live Demo, and Final Pitching. Judges are industry professionals from leading tech companies.",
-  },
-  {
-    q: "When do problem statements release?",
-    a: "Official event guidelines and problem statements are published on our events registry. Detailed round directives and surprise scenarios are released at the start of each round.",
+    q: "Who should I contact for event queries or coordination?",
+    a: "You can directly contact our student coordinators: Jagadeesh N (+91 81100 57344) or Shanmugapriyan S (+91 90430 24062), or message our official Instagram handle @codehive_2k26.",
   },
 ];
 
