@@ -1,0 +1,197 @@
+"use client";
+
+import { useRef } from "react";
+import { useInView } from "@/hooks/use-in-view";
+import { cn } from "@/lib/utils";
+import { TrophyIcon, MedalIcon, AwardIcon, GiftIcon, CodeIcon, UsersIcon } from "lucide-react";
+
+const prizes = [
+  {
+    rank: "01",
+    label: "CHAMPION",
+    amount: "₹20,000",
+    track: "GRAND PRIZE",
+    perks: ["Cash Prize", "Internship Referral", "Exclusive Swag Kit", "Hall of Fame"],
+    icon: TrophyIcon,
+    featured: true,
+    accent: "blue",
+  },
+  {
+    rank: "02",
+    label: "RUNNER-UP",
+    amount: "₹10,000",
+    track: "FIRST RUNNER-UP",
+    perks: ["Cash Prize", "Mentorship Session", "Premium Swag", "Certificate"],
+    icon: MedalIcon,
+    featured: false,
+    accent: "sky",
+  },
+  {
+    rank: "03",
+    label: "SECOND RUNNER-UP",
+    amount: "₹5,000",
+    track: "SECOND RUNNER-UP",
+    perks: ["Cash Prize", "Swag Kit", "Certificate"],
+    icon: AwardIcon,
+    featured: false,
+    accent: "indigo",
+  },
+];
+
+const perks = [
+  {
+    icon: GiftIcon,
+    title: "Merch & Swag",
+    desc: "Exclusive CodeHive 2K26 merchandise for all finalists",
+  },
+  {
+    icon: CodeIcon,
+    title: "API Credits",
+    desc: "Cloud and AI platform credits worth ₹10,000+ per team",
+  },
+  {
+    icon: UsersIcon,
+    title: "Networking",
+    desc: "Direct access to industry leaders and startup founders",
+  },
+];
+
+export function PrizesSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { threshold: 0.05, once: true });
+
+  return (
+    <section
+      ref={ref}
+      className="relative py-24 sm:py-32 bg-[#030712] border-t border-[#152A54]/60 overflow-hidden"
+    >
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(21,42,84,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(21,42,84,0.05)_1px,transparent_1px)] bg-[size:60px_60px]" />
+
+      {/* Prize glow */}
+      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-blue-900/15 to-transparent blur-[120px]" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div
+          className={cn(
+            "mb-16 text-center transition-all duration-700",
+            inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          )}
+        >
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="h-px w-8 bg-blue-500" />
+            <span className="font-mono text-[11px] uppercase tracking-widest text-blue-500">
+              PRIZES &amp; PERKS
+            </span>
+            <div className="h-px w-8 bg-blue-500" />
+          </div>
+          <h2 className="font-mono text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-tight">
+            TOTAL PRIZE POOL{" "}
+            <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">
+              ₹50,000+
+            </span>
+          </h2>
+          <p className="mt-3 text-slate-400 text-base max-w-xl mx-auto">
+            Cash prizes, internship referrals, API credits, and exclusive swag across all tracks.
+          </p>
+        </div>
+
+        {/* Prize podium */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-12">
+          {prizes.map((prize, i) => {
+            const Icon = prize.icon;
+            const isFeatured = prize.featured;
+            return (
+              <div
+                key={prize.rank}
+                className={cn(
+                  "relative flex flex-col p-6 border transition-all duration-700",
+                  isFeatured
+                    ? "border-blue-500/60 bg-[#060D1A] shadow-[0_0_40px_rgba(37,99,235,0.15)] md:-mt-4"
+                    : "border-[#152A54]/80 bg-[#060D1A]/60",
+                  inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                )}
+                style={{ transitionDelay: `${i * 100}ms` }}
+              >
+                {/* Featured badge */}
+                {isFeatured && (
+                  <div className="absolute -top-px left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
+                )}
+
+                {/* Corner */}
+                <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-blue-400/60" />
+
+                {/* Rank */}
+                <div className="flex items-start justify-between mb-4">
+                  <span className="font-mono text-5xl font-black text-[#152A54] leading-none select-none">
+                    {prize.rank}
+                  </span>
+                  <div className={cn(
+                    "p-2.5",
+                    isFeatured ? "bg-blue-500/15" : "bg-[#0B162C]"
+                  )}>
+                    <Icon className={cn("size-5", isFeatured ? "text-blue-400" : "text-slate-400")} />
+                  </div>
+                </div>
+
+                {/* Label & track */}
+                <p className="font-mono text-[10px] uppercase tracking-widest text-slate-500 mb-1">
+                  {prize.track} // {prize.label}
+                </p>
+
+                {/* Amount */}
+                <p className={cn(
+                  "font-mono text-3xl sm:text-4xl font-black mb-4 tracking-tight",
+                  isFeatured
+                    ? "bg-gradient-to-r from-blue-400 to-sky-300 bg-clip-text text-transparent"
+                    : "text-white"
+                )}>
+                  {prize.amount}
+                </p>
+
+                {/* Perks */}
+                <ul className="space-y-2 flex-1">
+                  {prize.perks.map((perk) => (
+                    <li key={perk} className="flex items-center gap-2 text-sm text-slate-400">
+                      <span className={cn("w-1 h-1 shrink-0", isFeatured ? "bg-blue-400" : "bg-[#152A54]")} />
+                      {perk}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Additional perks */}
+        <div
+          className={cn(
+            "grid grid-cols-1 sm:grid-cols-3 gap-4 transition-all duration-700",
+            inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          )}
+          style={{ transitionDelay: "400ms" }}
+        >
+          {perks.map((perk) => {
+            const Icon = perk.icon;
+            return (
+              <div
+                key={perk.title}
+                className="flex items-start gap-3 p-4 border border-[#152A54]/60 bg-[#060D1A]/40"
+              >
+                <div className="p-2 bg-[#0B162C] shrink-0">
+                  <Icon className="size-4 text-blue-400" />
+                </div>
+                <div>
+                  <p className="font-mono text-xs font-bold uppercase tracking-wider text-white mb-1">
+                    {perk.title}
+                  </p>
+                  <p className="text-xs text-slate-500 leading-relaxed">{perk.desc}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
