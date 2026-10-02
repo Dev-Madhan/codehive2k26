@@ -25,7 +25,14 @@ import {
   UserIcon,
   PhoneIcon,
   MailIcon,
+  IdCardIcon,
+  BusIcon,
 } from "lucide-react";
+import { TeamIdUploader } from "@/components/registration/team-id-uploader";
+import { VelTechPickupSelector } from "@/components/registration/veltech-pickup-selector";
+import { toast } from "sonner";
+import { DigitalEventPass } from "@/components/tickets/digital-event-pass";
+import { RegistrationSuccessPayload } from "@/types/registration";
 
 // ─────────────────────────────────────────────────
 // CONSTANTS (Cleaned - No brackets)
@@ -60,6 +67,11 @@ interface Props {
 interface TeamMember {
   name: string;
   phone: string;
+  collegeIdUrl?: string;
+  transportOptIn?: boolean;
+  pickupRoute?: string;
+  pickupStop?: string;
+  pickupLandmark?: string;
 }
 
 type OtpStatus = "idle" | "sending" | "sent" | "verifying" | "verified";
@@ -87,6 +99,14 @@ export function RegistrationForm({
   const [department, setDepartment] = useState("");
   const [year, setYear] = useState<string>("");
   const [members, setMembers] = useState<TeamMember[]>([]);
+  const [idCardPdf, setIdCardPdf] = useState<File | null>(null);
+
+  // Vel Tech Campus Transportation state
+  const [transportOptIn, setTransportOptIn] = useState<boolean>(false);
+  const [samePickupForTeam, setSamePickupForTeam] = useState<boolean>(true);
+  const [leaderPickupRoute, setLeaderPickupRoute] = useState<string>("");
+  const [leaderPickupStop, setLeaderPickupStop] = useState<string>("");
+  const [leaderPickupLandmark, setLeaderPickupLandmark] = useState<string>("");
 
   // Email OTP flow state
   const [otpStatus, setOtpStatus] = useState<OtpStatus>("idle");
@@ -98,12 +118,15 @@ export function RegistrationForm({
 
   // Submission state
   const [loading, setLoading] = useState(false);
+  const [uploadStep, setUploadStep] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [successData, setSuccessData] = useState<{
-    registrationNumber: string;
-    qrToken: string;
-  } | null>(null);
+  const [successData, setSuccessData] =
+    useState<RegistrationSuccessPayload | null>(null);
   const [copied, setCopied] = useState(false);
+
+  // Derived state
+  const isEmailVerified = otpStatus === "verified";
+  const teamSizeNum = parseInt(teamSize, 10) || 1;
 
   // Auth session
   const { data: session } = useSession();
@@ -127,6 +150,11 @@ export function RegistrationForm({
           ...Array.from({ length: count - prev.length }, () => ({
             name: "",
             phone: "",
+            collegeIdUrl: "",
+            transportOptIn: false,
+            pickupRoute: "",
+            pickupStop: "",
+            pickupLandmark: "",
           })),
         ];
       }
@@ -145,7 +173,7 @@ export function RegistrationForm({
 
   // ───── Member Update Handler ───────────────────
   const updateMember = useCallback(
-    (index: number, field: keyof TeamMember, value: string) => {
+    (index: number, field: keyof TeamMember, value: any) => {
       setMembers((prev) => {
         const updated = [...prev];
         updated[index] = { ...updated[index], [field]: value };
@@ -207,94 +235,164 @@ export function RegistrationForm({
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setUploadStep(null);
 
-    const effectiveUserId = session?.user?.id || userId;
-    const res = await createRegistration(effectiveUserId, {
-      eventId,
-      teamSize: teamSize as "1" | "2" | "3",
-      teamName: parseInt(teamSize) > 1 ? teamName : undefined,
-      name: leaderName,
-      email: leaderEmail,
-      phone: leaderPhone,
-      college,
-      department,
-      year: year as any,
-      emailVerificationToken: verificationToken,
-      members,
-    });
-
-    setLoading(false);
-
-    if (res.success) {
-      setSuccessData(res.data);
-    } else {
-      setError(res.error.message);
+    // Validate that the mandatory ID cards PDF is selected
+    if (!idCardPdf) {
+      setError(
+        teamSizeNum > 1
+          ? `Please upload a single PDF containing the collection of ID cards of all ${teamSizeNum} team members.`
+          : "Please upload your College ID card PDF document before registering."
+      );
+      setLoading(false);
+      return;
     }
-  };
 
-  // ───── Copy ID ─────────────────────────────────
-  const copyId = () => {
-    if (successData?.registrationNumber) {
-      navigator.clipboard.writeText(successData.registrationNumber);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+    // Validate Vel Tech bus pickup details if opted in
+    if (transportOptIn) {
+      if (!leaderPickupRoute || !leaderPickupStop || !leaderPickupLandmark.trim()) {
+        setError(
+          teamSizeNum > 1 && !samePickupForTeam
+            ? "Please complete the Team Leader's Vel Tech bus pickup details (Route, Stop, and Landmark)."
+            : "Please complete all Vel Tech bus pickup details (Route, Stop, and Landmark)."
+        );
+        setLoading(false);
+        return;
+      }
+
+      if (!samePickupForTeam && teamSizeNum > 1) {
+        for (let i = 0; i < members.length; i++) {
+          const m = members[i];
+          if (m.transportOptIn && (!m.pickupRoute || !m.pickupStop || !m.pickupLandmark?.trim())) {
+            setError(`Please complete Member ${i + 2}'s Vel Tech bus pickup details (Route, Stop, and Landmark).`);
+            setLoading(false);
+            return;
+          }
+        }
+      }
+    }
+
+    try {
+      // ─────────────────────────────────────────────────────────────
+      // STEP 1: Upload the single PDF to Tigris Storage
+      // (This only executes on full form submission; nothing is uploaded before)
+      // ─────────────────────────────────────────────────────────────
+      setUploadStep("Uploading ID cards document...");
+
+      const uploadRes = await fetch("/api/upload/college-id", {
+        method: "POST",
+        headers: {
+          "Content-Type": idCardPdf.type || "application/pdf",
+        },
+        body: idCardPdf,
+      });
+
+      if (!uploadRes.ok) {
+        let errorMsg = "Failed to upload ID cards document.";
+        try {
+          const errData = await uploadRes.json();
+          if (errData.error) errorMsg = errData.error;
+        } catch {}
+        throw new Error(errorMsg);
+      }
+
+      const uploadResult = (await uploadRes.json()) as { url: string; key: string };
+      const uploadedPdfUrl = uploadResult.url;
+
+      // ─────────────────────────────────────────────────────────────
+      // STEP 2: Create Registration Record with the Tigris S3 URL
+      // ─────────────────────────────────────────────────────────────
+      setUploadStep("Finalizing event registration record...");
+
+      const effectiveUserId = session?.user?.id || userId;
+      const res = await createRegistration(effectiveUserId, {
+        eventId,
+        teamSize: teamSize as "1" | "2" | "3",
+        teamName: parseInt(teamSize) > 1 ? teamName : undefined,
+        name: leaderName,
+        email: leaderEmail,
+        phone: leaderPhone,
+        college,
+        department,
+        year: year as any,
+        imageUrl: uploadedPdfUrl,
+        emailVerificationToken: verificationToken,
+        transportOptIn,
+        samePickupForTeam: teamSizeNum > 1 ? samePickupForTeam : true,
+        pickupRoute: transportOptIn ? leaderPickupRoute : undefined,
+        pickupStop: transportOptIn ? leaderPickupStop : undefined,
+        pickupLandmark: transportOptIn ? leaderPickupLandmark : undefined,
+        members: members.map((m) => ({
+          name: m.name,
+          phone: m.phone,
+          collegeIdUrl: uploadedPdfUrl, // All team members reference the team's combined PDF
+          transportOptIn: samePickupForTeam ? transportOptIn : Boolean(m.transportOptIn),
+          pickupRoute: samePickupForTeam ? (transportOptIn ? leaderPickupRoute : undefined) : m.pickupRoute,
+          pickupStop: samePickupForTeam ? (transportOptIn ? leaderPickupStop : undefined) : m.pickupStop,
+          pickupLandmark: samePickupForTeam ? (transportOptIn ? leaderPickupLandmark : undefined) : m.pickupLandmark,
+        })),
+      });
+
+      if (res.success) {
+        setSuccessData(res.data);
+        toast.success("Registration Confirmed!", {
+          description: `Event pass generated for ${eventName}. Pass Code: ${res.data.registrationNumber}`,
+        });
+      } else {
+        setError(res.error.message);
+        toast.error("Registration Failed", {
+          description: res.error.message,
+        });
+      }
+    } catch (err: any) {
+      console.error("[Registration Submit Error]", err);
+      const errMsg =
+        err.message ||
+        "An unexpected error occurred during registration. Please verify your connection and try again.";
+      setError(errMsg);
+      toast.error("Submission Error", {
+        description: errMsg,
+      });
+    } finally {
+      setLoading(false);
+      setUploadStep(null);
     }
   };
 
   // ─────────────────────────────────────────────────
-  // SUCCESS STATE
+  // SUCCESS STATE: RENDER CYBERPUNK DIGITAL EVENT PASS
   // ─────────────────────────────────────────────────
 
   if (successData) {
     return (
-      <div className="rounded-none border border-blue-500/50 bg-[#060D1A] p-8 text-center space-y-5">
-        <div className="inline-flex size-12 items-center justify-center rounded-none bg-blue-600/20 text-blue-400 border border-blue-500/40 text-xl font-mono font-bold">
-          <CheckIcon className="size-6" />
-        </div>
-        <div>
-          <h3 className="text-xl font-mono font-bold text-white uppercase tracking-wider">
-            Registration Successful
-          </h3>
-          <p className="text-xs font-mono text-slate-400 mt-1">
-            {parseInt(teamSize) > 1 ? "Team" : "Individual"} registration
-            confirmed for{" "}
-            <span className="text-white font-semibold">{eventName}</span>.
-          </p>
-        </div>
-
-        <div className="p-4 rounded-none border border-[#152A54] bg-[#03060E] space-y-2">
-          <div className="text-[11px] font-mono text-slate-500 uppercase tracking-wider">
-            Registration ID
-          </div>
-          <div className="text-lg font-mono font-bold text-blue-400 tracking-wider">
-            {successData.registrationNumber}
-          </div>
-          <p className="text-[11px] font-mono text-slate-400">
-            A confirmation email with your event pass and check-in QR code has been dispatched to{" "}
-            <span className="text-white font-semibold">{leaderEmail}</span>.
-          </p>
-        </div>
-
-        <div className="flex justify-center gap-3">
-          <button
-            type="button"
-            onClick={copyId}
-            className="inline-flex items-center gap-1.5 px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-slate-300 bg-[#0B162C] border border-[#152A54] hover:text-white hover:border-blue-500 transition-colors cursor-pointer"
-          >
-            <CopyIcon className="size-3 text-blue-400" />
-            <span>{copied ? "COPIED" : "COPY ID"}</span>
-          </button>
-        </div>
-      </div>
+      <DigitalEventPass
+        ticket={successData}
+        onRegisterAnother={() => {
+          setSuccessData(null);
+          setLeaderName("");
+          setLeaderPhone("");
+          setLeaderEmail("");
+          setOtpStatus("idle");
+          setVerificationToken("");
+          setCollege("");
+          setDepartment("");
+          setYear("");
+          setTeamName("");
+          setIdCardPdf(null);
+          setMembers([]);
+          setTransportOptIn(false);
+          setSamePickupForTeam(true);
+          setLeaderPickupRoute("");
+          setLeaderPickupStop("");
+          setLeaderPickupLandmark("");
+        }}
+      />
     );
   }
 
   // ─────────────────────────────────────────────────
   // FORM STATE
   // ─────────────────────────────────────────────────
-
-  const isEmailVerified = otpStatus === "verified";
-  const teamSizeNum = parseInt(teamSize);
 
   // Filter team size options based on event constraints
   const filteredTeamSizeOptions = TEAM_SIZE_OPTIONS.filter((opt) => {
@@ -307,9 +405,9 @@ export function RegistrationForm({
       : TEAM_SIZE_OPTIONS;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
       {error && (
-        <div className="p-3 rounded-none border border-red-900/50 bg-red-950/20 text-xs font-mono text-red-400">
+        <div className="p-3.5 rounded-none border border-red-900/50 bg-red-950/20 text-xs font-mono text-red-400 leading-relaxed">
           {error}
         </div>
       )}
@@ -317,7 +415,7 @@ export function RegistrationForm({
       {/* ═══════════════════════════════════════════════
           SECTION 01: TEAM CONFIGURATION
           ═══════════════════════════════════════════════ */}
-      <div className="rounded-none border border-[#152A54] bg-[#060D1A] p-5 space-y-4">
+      <div className="rounded-none border border-[#152A54] bg-[#060D1A] p-4 sm:p-5 space-y-4">
         <div className="flex items-center gap-2 border-b border-[#152A54] pb-3">
           <UsersIcon className="size-4 text-blue-400" />
           <h3 className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
@@ -325,7 +423,7 @@ export function RegistrationForm({
           </h3>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
           <div className="space-y-1.5">
             <Label
               htmlFor="reg-team-size"
@@ -341,7 +439,7 @@ export function RegistrationForm({
             >
               <SelectTrigger
                 id="reg-team-size"
-                className="h-10 w-full rounded-none border border-[#152A54] bg-[#03060E] px-3 text-white font-sans text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 data-placeholder:text-slate-600"
+                className="h-11 sm:h-10 w-full rounded-none border border-[#152A54] bg-[#03060E] px-3 text-white font-sans text-base sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 data-placeholder:text-slate-600"
               >
                 <SelectValue placeholder="Select team size" />
               </SelectTrigger>
@@ -374,7 +472,7 @@ export function RegistrationForm({
                 value={teamName}
                 onChange={(e) => setTeamName(e.target.value)}
                 placeholder="e.g. CyberHive"
-                className="h-10 rounded-none border border-[#152A54] bg-[#03060E] text-white font-sans text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="h-11 sm:h-10 rounded-none border border-[#152A54] bg-[#03060E] text-white font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
           )}
@@ -384,7 +482,7 @@ export function RegistrationForm({
       {/* ═══════════════════════════════════════════════
           SECTION 02: TEAM LEADER
           ═══════════════════════════════════════════════ */}
-      <div className="rounded-none border border-[#152A54] bg-[#060D1A] p-5 space-y-4">
+      <div className="rounded-none border border-[#152A54] bg-[#060D1A] p-4 sm:p-5 space-y-4">
         <div className="flex items-center gap-2 border-b border-[#152A54] pb-3">
           <UserIcon className="size-4 text-blue-400" />
           <h3 className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
@@ -406,7 +504,7 @@ export function RegistrationForm({
             value={leaderName}
             onChange={(e) => setLeaderName(e.target.value)}
             placeholder="Jane Doe"
-            className="h-10 rounded-none border border-[#152A54] bg-[#03060E] text-white font-sans text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="h-11 sm:h-10 rounded-none border border-[#152A54] bg-[#03060E] text-white font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           />
         </div>
 
@@ -419,9 +517,9 @@ export function RegistrationForm({
             >
               Email Address
             </Label>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <div className="relative flex-1">
-                <MailIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-slate-500" />
+                <MailIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-slate-500 pointer-events-none" />
                 <Input
                   id="reg-leader-email"
                   type="email"
@@ -439,7 +537,7 @@ export function RegistrationForm({
                   }}
                   placeholder="leader@example.com"
                   disabled={isEmailVerified}
-                  className="h-10 pl-9 rounded-none border border-[#152A54] bg-[#03060E] text-white font-sans text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:opacity-60"
+                  className="h-11 sm:h-10 pl-9 rounded-none border border-[#152A54] bg-[#03060E] text-white font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:opacity-60"
                 />
               </div>
               {!isEmailVerified && (
@@ -451,7 +549,7 @@ export function RegistrationForm({
                     cooldown > 0 ||
                     !leaderEmail.includes("@")
                   }
-                  className="h-10 px-4 font-mono text-[11px] uppercase tracking-wider font-bold rounded-none bg-[#0B162C] hover:bg-[#102246] text-blue-400 border border-[#152A54] hover:border-blue-500/50 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+                  className="h-11 sm:h-10 px-4 font-mono text-[11px] uppercase tracking-wider font-bold rounded-none bg-[#0B162C] hover:bg-[#102246] text-blue-400 border border-[#152A54] hover:border-blue-500/50 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0 w-full sm:w-auto justify-center"
                 >
                   {otpStatus === "sending" ? (
                     <Loader2Icon className="size-3.5 animate-spin" />
@@ -472,15 +570,15 @@ export function RegistrationForm({
 
           {/* OTP Input (Visible after code is sent) */}
           {(otpStatus === "sent" || otpStatus === "verifying") && (
-            <div className="space-y-3 p-4 rounded-none border border-[#152A54] bg-[#03060E]">
+            <div className="space-y-3 p-3.5 sm:p-4 rounded-none border border-[#152A54] bg-[#03060E]">
               {otpSuccessMessage && (
                 <p className="text-[11px] font-mono text-blue-400">
                   {otpSuccessMessage}
                 </p>
               )}
 
-              <div className="flex gap-2 items-end">
-                <div className="flex-1 space-y-1.5">
+              <div className="flex flex-col sm:flex-row gap-2.5 sm:items-end">
+                <div className="w-full sm:flex-1 space-y-1.5">
                   <Label className="font-mono text-[10px] uppercase tracking-wider text-slate-400 font-bold block">
                     Enter 6-Digit Email OTP
                   </Label>
@@ -493,14 +591,14 @@ export function RegistrationForm({
                       setOtpCode(e.target.value.replace(/\D/g, "").slice(0, 6))
                     }
                     placeholder="● ● ● ● ● ●"
-                    className="h-10 rounded-none border border-[#152A54] bg-[#060D1A] text-white font-mono text-sm tracking-[0.5em] text-center placeholder:text-slate-600 placeholder:tracking-[0.3em] focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    className="h-11 sm:h-10 rounded-none border border-[#152A54] bg-[#060D1A] text-white font-mono text-base sm:text-sm tracking-[0.4em] sm:tracking-[0.5em] text-center placeholder:text-slate-600 placeholder:tracking-[0.3em] focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
                 <Button
                   type="button"
                   onClick={handleVerifyOtp}
                   disabled={otpCode.length !== 6 || otpStatus === "verifying"}
-                  className="h-10 px-4 font-mono text-[11px] uppercase tracking-wider font-bold rounded-none bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+                  className="h-11 sm:h-10 px-5 font-mono text-[11px] uppercase tracking-wider font-bold rounded-none bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0 w-full sm:w-auto justify-center"
                 >
                   {otpStatus === "verifying" ? (
                     <Loader2Icon className="size-3.5 animate-spin" />
@@ -516,7 +614,7 @@ export function RegistrationForm({
           {/* Verified Badge */}
           {isEmailVerified && (
             <div className="flex items-center gap-2 p-2.5 rounded-none border border-emerald-700/40 bg-emerald-950/20">
-              <ShieldCheckIcon className="size-4 text-emerald-400" />
+              <ShieldCheckIcon className="size-4 text-emerald-400 shrink-0" />
               <span className="text-[11px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
                 Email Authorized & Verified
               </span>
@@ -540,7 +638,7 @@ export function RegistrationForm({
             Mobile Number
           </Label>
           <div className="relative">
-            <PhoneIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-slate-500" />
+            <PhoneIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-slate-500 pointer-events-none" />
             <Input
               id="reg-leader-phone"
               type="tel"
@@ -553,13 +651,13 @@ export function RegistrationForm({
                 setLeaderPhone(val);
               }}
               placeholder="+91 98765 43210"
-              className="h-10 pl-9 rounded-none border border-[#152A54] bg-[#03060E] text-white font-sans text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="h-11 sm:h-10 pl-9 rounded-none border border-[#152A54] bg-[#03060E] text-white font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
           </div>
         </div>
 
         {/* College + Year */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           <div className="space-y-1.5 sm:col-span-2">
             <Label
               htmlFor="reg-college"
@@ -573,7 +671,7 @@ export function RegistrationForm({
               value={college}
               onChange={(e) => setCollege(e.target.value)}
               placeholder="Engineering College"
-              className="h-10 rounded-none border border-[#152A54] bg-[#03060E] text-white font-sans text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="h-11 sm:h-10 rounded-none border border-[#152A54] bg-[#03060E] text-white font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
           </div>
 
@@ -592,7 +690,7 @@ export function RegistrationForm({
             >
               <SelectTrigger
                 id="reg-year"
-                className="h-10 w-full rounded-none border border-[#152A54] bg-[#03060E] px-3 text-white font-sans text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 data-placeholder:text-slate-600"
+                className="h-11 sm:h-10 w-full rounded-none border border-[#152A54] bg-[#03060E] px-3 text-white font-sans text-base sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 data-placeholder:text-slate-600"
               >
                 <SelectValue placeholder="Select year" />
               </SelectTrigger>
@@ -627,17 +725,18 @@ export function RegistrationForm({
             value={department}
             onChange={(e) => setDepartment(e.target.value)}
             placeholder="Computer Science & Engineering"
-            className="h-10 rounded-none border border-[#152A54] bg-[#03060E] text-white font-sans text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="h-11 sm:h-10 rounded-none border border-[#152A54] bg-[#03060E] text-white font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           />
         </div>
+
       </div>
 
       {/* ═══════════════════════════════════════════════
           SECTION 03: TEAM ROSTER (Only for teamSize > 1)
           ═══════════════════════════════════════════════ */}
       {teamSizeNum > 1 && members.length > 0 && (
-        <div className="rounded-none border border-[#152A54] bg-[#060D1A] p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-[#152A54] pb-3">
+        <div className="rounded-none border border-[#152A54] bg-[#060D1A] p-4 sm:p-5 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-b border-[#152A54] pb-3">
             <div className="flex items-center gap-2">
               <UsersIcon className="size-4 text-blue-400" />
               <h3 className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
@@ -652,7 +751,7 @@ export function RegistrationForm({
           {members.map((member, index) => (
             <div
               key={index}
-              className="space-y-3 p-4 rounded-none border border-[#152A54]/60 bg-[#03060E]"
+              className="space-y-3 p-3.5 sm:p-4 rounded-none border border-[#152A54]/60 bg-[#03060E]"
             >
               <div className="flex items-center gap-2">
                 <span className="inline-flex items-center justify-center size-6 rounded-none border border-blue-500/40 bg-blue-600/15 text-[10px] font-mono font-bold text-blue-400">
@@ -675,7 +774,7 @@ export function RegistrationForm({
                       updateMember(index, "name", e.target.value)
                     }
                     placeholder="Member name"
-                    className="h-10 rounded-none border border-[#152A54] bg-[#060D1A] text-white font-sans text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    className="h-11 sm:h-10 rounded-none border border-[#152A54] bg-[#060D1A] text-white font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
 
@@ -697,34 +796,265 @@ export function RegistrationForm({
                       )
                     }
                     placeholder="+91 98765 43210"
-                    className="h-10 rounded-none border border-[#152A54] bg-[#060D1A] text-white font-sans text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    className="h-11 sm:h-10 rounded-none border border-[#152A54] bg-[#060D1A] text-white font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
               </div>
+
             </div>
           ))}
         </div>
       )}
 
       {/* ═══════════════════════════════════════════════
+          SECTION: VEL TECH CAMPUS TRANSPORTATION (6:00 AM ONWARDS)
+          ═══════════════════════════════════════════════ */}
+      <div className="rounded-none border border-[#152A54] bg-[#060D1A] p-4 sm:p-5 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2 border-b border-[#152A54] pb-3">
+          <div className="flex items-center gap-2">
+            <BusIcon className="size-4 text-sky-400 shrink-0" />
+            <h3 className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+              {teamSizeNum > 1
+                ? "Section 04: Vel Tech Campus Transportation Logistics"
+                : "Section 03: Vel Tech Campus Transportation Logistics"}
+            </h3>
+          </div>
+          <span className="self-start sm:self-auto text-[10px] font-mono text-sky-400 font-semibold border border-sky-500/30 bg-sky-500/10 px-2 py-0.5">
+            FREE SERVICE • 6:00 AM ONWARDS
+          </span>
+        </div>
+
+        <p className="text-xs font-sans text-slate-300 leading-relaxed">
+          Vel Tech provides complimentary campus bus transportation for all registered participants across major city corridors starting from{" "}
+          <strong className="text-white font-mono">6:00 AM onwards</strong>.
+        </p>
+
+        {/* Transportation Mode Toggle */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+          <button
+            type="button"
+            onClick={() => setTransportOptIn(false)}
+            className={`p-3.5 text-left border transition-all rounded-none cursor-pointer flex flex-col gap-1 ${
+              !transportOptIn
+                ? "border-blue-500 bg-blue-950/20 text-white"
+                : "border-[#152A54] bg-[#03060E] text-slate-400 hover:border-slate-700"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-200">
+                🚗 Own Transportation
+              </span>
+              {!transportOptIn && (
+                <span className="size-2 rounded-full bg-blue-400" />
+              )}
+            </div>
+            <span className="text-[11px] text-slate-400 font-sans">
+              I / our team will reach the Vel Tech campus directly on our own.
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setTransportOptIn(true)}
+            className={`p-3.5 text-left border transition-all rounded-none cursor-pointer flex flex-col gap-1 ${
+              transportOptIn
+                ? "border-sky-400 bg-sky-950/20 text-white shadow-sm shadow-sky-950/40"
+                : "border-[#152A54] bg-[#03060E] text-slate-400 hover:border-slate-700"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-sky-400">
+                🚌 Vel Tech Bus Pickup
+              </span>
+              {transportOptIn && (
+                <span className="size-2 rounded-full bg-sky-400 animate-pulse" />
+              )}
+            </div>
+            <span className="text-[11px] text-slate-400 font-sans">
+              Avail free Vel Tech bus pickup from designated city stops from 6:00 AM onwards.
+            </span>
+          </button>
+        </div>
+
+        {/* Expanded Transport Configuration */}
+        {transportOptIn && (
+          <div className="space-y-4 pt-2">
+            {teamSizeNum > 1 && (
+              <div className="p-3.5 border border-[#152A54] bg-[#03060E] space-y-2">
+                <Label className="font-mono text-[10px] uppercase tracking-wider text-slate-400 font-bold block">
+                  Team Boarding Preference:
+                </Label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSamePickupForTeam(true)}
+                    className={`p-2.5 text-left text-xs font-mono border transition-all cursor-pointer ${
+                      samePickupForTeam
+                        ? "border-sky-400 bg-sky-950/30 text-sky-300 font-bold"
+                        : "border-[#152A54] text-slate-400 hover:border-slate-700"
+                    }`}
+                  >
+                    [•] All Team Members Board Together
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSamePickupForTeam(false)}
+                    className={`p-2.5 text-left text-xs font-mono border transition-all cursor-pointer ${
+                      !samePickupForTeam
+                        ? "border-sky-400 bg-sky-950/30 text-sky-300 font-bold"
+                        : "border-[#152A54] text-slate-400 hover:border-slate-700"
+                    }`}
+                  >
+                    [ ] Individual Member Pickup Locations
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* If same pickup for team (or individual participant) */}
+            {(samePickupForTeam || teamSizeNum === 1) ? (
+              <VelTechPickupSelector
+                title={
+                  teamSizeNum > 1
+                    ? `Vel Tech Boarding Details (Entire Team: ${teamSizeNum} Passengers)`
+                    : "Vel Tech Boarding Details (Participant)"
+                }
+                routeValue={leaderPickupRoute}
+                stopValue={leaderPickupStop}
+                landmarkValue={leaderPickupLandmark}
+                onRouteChange={setLeaderPickupRoute}
+                onStopChange={setLeaderPickupStop}
+                onLandmarkChange={setLeaderPickupLandmark}
+                passengerCount={teamSizeNum}
+                showScheduleNotice={true}
+              />
+            ) : (
+              /* Individual Pickups per member */
+              <div className="space-y-4">
+                {/* Leader Pickup */}
+                <VelTechPickupSelector
+                  title={`Member 01 (Team Leader: ${leaderName || "Leader"})`}
+                  routeValue={leaderPickupRoute}
+                  stopValue={leaderPickupStop}
+                  landmarkValue={leaderPickupLandmark}
+                  onRouteChange={setLeaderPickupRoute}
+                  onStopChange={setLeaderPickupStop}
+                  onLandmarkChange={setLeaderPickupLandmark}
+                  passengerCount={1}
+                  showScheduleNotice={true}
+                />
+
+                {/* Additional Members Pickups */}
+                {members.map((member, idx) => (
+                  <div key={idx} className="space-y-3 p-3.5 border border-[#152A54] bg-[#03060E]">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-mono font-bold text-slate-300 uppercase">
+                        Member {String(idx + 2).padStart(2, "0")}: {member.name || `Member ${idx + 2}`}
+                      </span>
+                      <label className="flex items-center gap-1.5 cursor-pointer text-xs font-mono text-sky-400">
+                        <input
+                          type="checkbox"
+                          checked={Boolean(member.transportOptIn)}
+                          onChange={(e) =>
+                            updateMember(idx, "transportOptIn", e.target.checked)
+                          }
+                          className="size-3.5 rounded border-[#152A54] bg-[#060D1A] accent-sky-500"
+                        />
+                        <span>Needs Vel Tech Bus</span>
+                      </label>
+                    </div>
+
+                    {member.transportOptIn && (
+                      <VelTechPickupSelector
+                        routeValue={member.pickupRoute || ""}
+                        stopValue={member.pickupStop || ""}
+                        landmarkValue={member.pickupLandmark || ""}
+                        onRouteChange={(val) => updateMember(idx, "pickupRoute", val)}
+                        onStopChange={(val) => updateMember(idx, "pickupStop", val)}
+                        onLandmarkChange={(val) => updateMember(idx, "pickupLandmark", val)}
+                        passengerCount={1}
+                        showScheduleNotice={false}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* ═══════════════════════════════════════════════
+          SECTION 05: COLLEGE ID CARDS (SINGLE PDF)
+          ═══════════════════════════════════════════════ */}
+      <div className="rounded-none border border-[#152A54] bg-[#060D1A] p-4 sm:p-5 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2 border-b border-[#152A54] pb-3">
+          <div className="flex items-center gap-2">
+            <IdCardIcon className="size-4 text-blue-400 shrink-0" />
+            <h3 className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+              {teamSizeNum > 1
+                ? "Section 05: Team College ID Cards (Single PDF)"
+                : "Section 04: College ID Card (PDF)"}
+            </h3>
+          </div>
+          <span className="self-start sm:self-auto text-[10px] font-mono text-rose-400 font-semibold border border-rose-500/30 bg-rose-500/10 px-2 py-0.5">
+            MANDATORY • SINGLE PDF
+          </span>
+        </div>
+
+        <p className="text-xs font-mono text-slate-300 leading-relaxed">
+          The team leader must upload a single PDF containing the collection of ID cards of all team members.
+        </p>
+
+        <TeamIdUploader
+          id="team-ids-pdf"
+          teamSize={teamSizeNum}
+          onFileChange={setIdCardPdf}
+          disabled={loading}
+        />
+      </div>
+
+      {/* ═══════════════════════════════════════════════
           SUBMIT BUTTON
           ═══════════════════════════════════════════════ */}
-      <Button
-        type="submit"
-        disabled={loading || !isEmailVerified || !year}
-        className="h-11 w-full font-mono text-xs uppercase tracking-wider font-bold rounded-none bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 transition-colors cursor-pointer shadow-md shadow-blue-950/50 disabled:opacity-40 disabled:cursor-not-allowed"
-      >
-        {loading ? (
-          <>
-            <Loader2Icon className="size-4 animate-spin mr-2" />
-            Processing Registration...
-          </>
-        ) : !isEmailVerified ? (
-          "Verify Email to Continue"
-        ) : (
-          `Confirm & Register ${teamSizeNum > 1 ? "Team" : ""}`
-        )}
-      </Button>
+      {(() => {
+        const isTransportComplete =
+          !transportOptIn ||
+          (Boolean(leaderPickupRoute) &&
+            Boolean(leaderPickupStop) &&
+            Boolean(leaderPickupLandmark && leaderPickupLandmark.trim().length >= 3) &&
+            (samePickupForTeam ||
+              members.every(
+                (m) =>
+                  !m.transportOptIn ||
+                  (Boolean(m.pickupRoute) &&
+                    Boolean(m.pickupStop) &&
+                    Boolean(m.pickupLandmark && m.pickupLandmark.trim().length >= 3))
+              )));
+
+        return (
+          <Button
+            type="submit"
+            disabled={loading || !isEmailVerified || !year || !idCardPdf || !isTransportComplete}
+            className="h-12 sm:h-11 w-full font-mono text-xs sm:text-sm uppercase tracking-wider font-bold rounded-none bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white border border-blue-500 transition-all cursor-pointer shadow-lg shadow-blue-950/60 disabled:opacity-40 disabled:cursor-not-allowed justify-center"
+          >
+            {loading ? (
+              <>
+                <Loader2Icon className="size-4 animate-spin mr-2" />
+                {uploadStep || "Processing Registration..."}
+              </>
+            ) : !isEmailVerified ? (
+              "Verify Email to Continue"
+            ) : !idCardPdf ? (
+              "Upload College ID PDF to Continue"
+            ) : !isTransportComplete ? (
+              "Complete Vel Tech Bus Details to Continue"
+            ) : (
+              `Confirm & Register ${teamSizeNum > 1 ? "Team" : ""}`
+            )}
+          </Button>
+        );
+      })()}
     </form>
   );
 }

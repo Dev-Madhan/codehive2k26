@@ -201,12 +201,18 @@ model TeamMember {
   teamId        String
   name          String
   phone         String
+  collegeIdUrl  String?
   participantId String?
+  transportOptIn Boolean      @default(false)
+  pickupRoute    String?
+  pickupStop     String?
+  pickupLandmark String?
   team          Team         @relation(fields: [teamId], references: [id], onDelete: Cascade)
   participant   Participant? @relation(fields: [participantId], references: [id], onDelete: Cascade)
   createdAt     DateTime     @default(now())
 
   @@index([teamId])
+  @@index([pickupRoute])
 }
 
 // ----------------------------------------------------
@@ -223,6 +229,12 @@ model Registration {
   paymentStatus      PaymentStatus      @default(COMPLETED)
   qrToken            String             @unique
   checkedIn          Boolean            @default(false)
+  transportOptIn     Boolean            @default(false)
+  samePickupForTeam  Boolean            @default(true)
+  pickupRoute        String?
+  pickupStop         String?
+  pickupLandmark     String?
+  passengersCount    Int                @default(1)
   participant        Participant        @relation(fields: [participantId], references: [id], onDelete: Restrict)
   event              Event              @relation(fields: [eventId], references: [id], onDelete: Restrict)
   team               Team?              @relation(fields: [teamId], references: [id], onDelete: SetNull)
@@ -236,6 +248,8 @@ model Registration {
   @@index([qrToken])
   @@index([status])
   @@index([checkedIn])
+  @@index([transportOptIn])
+  @@index([pickupRoute])
 }
 
 model Payment {

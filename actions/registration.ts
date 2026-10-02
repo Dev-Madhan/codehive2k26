@@ -2,16 +2,17 @@
 
 import prisma from "@/lib/prisma";
 import { registrationSchema, RegistrationInput } from "@/lib/validations/registration";
-import { generateQrToken, generateRegistrationNumber, generateQrDataUrl } from "@/lib/qr";
+import { generateQrToken, generateRegistrationNumber, generateQrDataUrl, generateQrBuffer } from "@/lib/qr";
 import { sendRegistrationConfirmationEmail } from "@/lib/mailer";
 import { validateVerificationToken } from "@/lib/otp-token";
 import { ActionResponse } from "@/types";
+import { RegistrationSuccessPayload } from "@/types/registration";
 import { revalidatePath } from "next/cache";
 
 export async function createRegistration(
   userId: string,
   input: RegistrationInput
-): Promise<ActionResponse<{ registrationNumber: string; qrToken: string }>> {
+): Promise<ActionResponse<RegistrationSuccessPayload>> {
   const parsed = registrationSchema.safeParse(input);
   if (!parsed.success) {
     return {
@@ -37,6 +38,11 @@ export async function createRegistration(
     imageUrl,
     emailVerificationToken,
     members,
+    transportOptIn,
+    samePickupForTeam,
+    pickupRoute,
+    pickupStop,
+    pickupLandmark,
   } = parsed.data;
 
   // 1. Validate Email Verification Token
@@ -228,17 +234,40 @@ export async function createRegistration(
             teamId: team.id,
             name,
             phone,
+            collegeIdUrl: imageUrl || null,
             participantId: participant.id,
+            transportOptIn: Boolean(transportOptIn),
+            pickupRoute: transportOptIn ? pickupRoute : null,
+            pickupStop: transportOptIn ? pickupStop : null,
+            pickupLandmark: transportOptIn ? pickupLandmark : null,
           },
         });
 
         // Add additional team members
         for (const member of members) {
+          const memberTransportOptIn = samePickupForTeam
+            ? Boolean(transportOptIn)
+            : Boolean(member.transportOptIn);
+          const memberRoute = samePickupForTeam
+            ? (transportOptIn ? pickupRoute : null)
+            : (member.transportOptIn ? member.pickupRoute : null);
+          const memberStop = samePickupForTeam
+            ? (transportOptIn ? pickupStop : null)
+            : (member.transportOptIn ? member.pickupStop : null);
+          const memberLandmark = samePickupForTeam
+            ? (transportOptIn ? pickupLandmark : null)
+            : (member.transportOptIn ? member.pickupLandmark : null);
+
           await tx.teamMember.create({
             data: {
               teamId: team.id,
               name: member.name,
               phone: member.phone,
+              collegeIdUrl: member.collegeIdUrl || imageUrl || null,
+              transportOptIn: memberTransportOptIn,
+              pickupRoute: memberRoute,
+              pickupStop: memberStop,
+              pickupLandmark: memberLandmark,
             },
           });
         }
@@ -254,30 +283,70 @@ export async function createRegistration(
           qrToken,
           status: "CONFIRMED",
           paymentStatus: "COMPLETED",
+          transportOptIn: Boolean(transportOptIn),
+          samePickupForTeam: Boolean(samePickupForTeam),
+          pickupRoute: transportOptIn ? pickupRoute : null,
+          pickupStop: transportOptIn ? pickupStop : null,
+          pickupLandmark: transportOptIn ? pickupLandmark : null,
+          passengersCount: teamSizeNum,
         },
       });
 
       return { registration, participant };
     });
 
-    // 5. Trigger confirmation email asynchronously
-    generateQrDataUrl(qrToken)
-      .then((qrDataUrl) => {
-        return sendRegistrationConfirmationEmail({
-          to: email,
-          participantName: name,
-          eventName: event.name,
-          registrationNumber,
-          venue: event.venue,
-          date: event.startAt.toLocaleDateString("en-IN", {
-            day: "numeric",
-            month: "short",
-            year: "numeric",
-          }),
-          qrCodeUrl: qrDataUrl,
-        });
-      })
-      .catch((err) => console.error("Email notification dispatch error:", err));
+    // 5. Generate Real-time Scannable Live Pass URL & QR representations
+    const appBaseUrl =
+      process.env.NEXT_PUBLIC_APP_URL && !process.env.NEXT_PUBLIC_APP_URL.includes("localhost")
+        ? process.env.NEXT_PUBLIC_APP_URL.replace(/\/+$/, "")
+        : (process.env.VERCEL_PROJECT_PRODUCTION_URL
+            ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+            : "https://codehive2k26.vercel.app");
+
+    const livePassUrl = `${appBaseUrl}/registration/${registrationNumber}`;
+
+    let qrDataUrl = "";
+    let qrBuffer: Buffer | undefined;
+    try {
+      // The QR code encodes the live real-time digital pass verification URL.
+      // When scanned with any smartphone camera or gate scanner, it opens the verified pass in real time.
+      qrDataUrl = await generateQrDataUrl(livePassUrl);
+      qrBuffer = await generateQrBuffer(livePassUrl);
+    } catch (err) {
+      console.error("QR Code generation fallback error:", err);
+    }
+
+    const formattedDate = event.startAt.toLocaleDateString("en-IN", {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+
+    const resolvedTeamName = teamSizeNum > 1 ? (teamName || `${name}'s Team`) : null;
+
+    // Trigger confirmation email with ticket asynchronously
+    sendRegistrationConfirmationEmail({
+      to: email,
+      participantName: name,
+      eventName: event.name,
+      registrationNumber,
+      venue: event.venue,
+      date: formattedDate,
+      qrCodeUrl: qrDataUrl,
+      qrBuffer,
+      passUrl: livePassUrl,
+      teamName: resolvedTeamName,
+      college,
+      department,
+      members: teamSizeNum > 1 ? members : [],
+      transportOptIn: Boolean(transportOptIn),
+      samePickupForTeam: Boolean(samePickupForTeam),
+      pickupRoute: transportOptIn ? pickupRoute : null,
+      pickupStop: transportOptIn ? pickupStop : null,
+      pickupLandmark: transportOptIn ? pickupLandmark : null,
+      passengersCount: teamSizeNum,
+    }).catch((err) => console.error("Email notification dispatch error:", err));
 
     revalidatePath(`/events/${event.slug}`);
     revalidatePath("/dashboard");
@@ -287,8 +356,35 @@ export async function createRegistration(
       data: {
         registrationNumber,
         qrToken,
+        qrDataUrl,
+        eventName: event.name,
+        eventSlug: event.slug,
+        venue: event.venue,
+        date: formattedDate,
+        teamName: resolvedTeamName,
+        leaderName: name,
+        leaderEmail: email,
+        leaderPhone: phone,
+        college,
+        department,
+        year,
+        transportOptIn: Boolean(transportOptIn),
+        samePickupForTeam: Boolean(samePickupForTeam),
+        pickupRoute: transportOptIn ? pickupRoute : null,
+        pickupStop: transportOptIn ? pickupStop : null,
+        pickupLandmark: transportOptIn ? pickupLandmark : null,
+        passengersCount: teamSizeNum,
+        teamMembers: members.map((m) => ({
+          name: m.name,
+          phone: m.phone,
+          transportOptIn: samePickupForTeam ? Boolean(transportOptIn) : Boolean(m.transportOptIn),
+          pickupRoute: samePickupForTeam ? (transportOptIn ? pickupRoute : null) : m.pickupRoute,
+          pickupStop: samePickupForTeam ? (transportOptIn ? pickupStop : null) : m.pickupStop,
+          pickupLandmark: samePickupForTeam ? (transportOptIn ? pickupLandmark : null) : m.pickupLandmark,
+        })),
+        confirmedAt: new Date().toISOString(),
       },
-      message: "Registration successful!",
+      message: "Registration successful! Your official event pass has been generated.",
     };
   } catch (error: any) {
     if (error.message === "DUPLICATE_REGISTRATION") {

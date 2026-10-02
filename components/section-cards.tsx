@@ -38,30 +38,31 @@ const stats = [
 
 export function SectionCards() {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 px-4 lg:px-6 font-mono">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 px-3 sm:px-4 lg:px-6 font-mono">
       {stats.map((s) => {
         const Icon = s.icon;
         return (
           <div
             key={s.label}
-            className="border border-[#152A54] bg-[#060D1A] p-4 transition-colors hover:border-blue-500/40"
+            className="border border-[#152A54] bg-[#060D1A] p-3 sm:p-4 transition-colors hover:border-blue-500/40 relative group"
           >
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+            <div className="flex items-center justify-between text-slate-400 gap-1">
+              <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-slate-400 truncate">
                 {s.label}
               </span>
-              <Icon className="size-3.5 text-blue-400" />
+              <Icon className="size-3.5 text-blue-400 shrink-0" />
             </div>
 
-            <div className="mt-3 flex items-baseline justify-between gap-2">
-              <span className="text-2xl font-bold tracking-tight text-white tabular-nums">
+            <div className="mt-2 sm:mt-3 flex items-baseline justify-between gap-1 flex-wrap">
+              <span className="text-xl sm:text-2xl font-bold tracking-tight text-white tabular-nums">
                 {s.value}
               </span>
               <span
-                className={`text-[11px] font-medium ${
+                className={`text-[10px] sm:text-[11px] font-medium shrink-0 flex items-center gap-1 ${
                   s.isStatus ? "text-emerald-400 font-semibold" : "text-slate-400"
                 }`}
               >
+                {s.isStatus && <span className="size-1.5 bg-emerald-400 rounded-none animate-pulse shrink-0" />}
                 {s.detail}
               </span>
             </div>

@@ -3,6 +3,7 @@ import { JetBrains_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner";
 
 // Inter: Primary font for body, UI, descriptions, and components
 const inter = Inter({
@@ -43,6 +44,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans bg-black text-white">
         <TooltipProvider>{children}</TooltipProvider>
+        <Toaster />
       </body>
     </html>
   );

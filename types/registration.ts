@@ -10,6 +10,24 @@ export interface RegistrationDetails {
   checkedIn: boolean;
   qrToken: string;
   qrDataUrl?: string;
+  transportOptIn?: boolean;
+  samePickupForTeam?: boolean;
+  pickupRoute?: string | null;
+  pickupStop?: string | null;
+  pickupLandmark?: string | null;
+  passengersCount?: number;
+  team?: {
+    name: string;
+    members: Array<{
+      id: string;
+      name: string;
+      phone: string;
+      transportOptIn?: boolean;
+      pickupRoute?: string | null;
+      pickupStop?: string | null;
+      pickupLandmark?: string | null;
+    }>;
+  } | null;
   createdAt: Date;
   event: {
     id: string;
@@ -36,4 +54,40 @@ export interface CheckInResult {
   eventName: string;
   checkedInAt: Date;
   alreadyCheckedIn?: boolean;
+  teamName?: string | null;
+  college?: string;
+  department?: string;
+  teamMembers?: string[];
+}
+
+export interface RegistrationSuccessPayload {
+  registrationNumber: string;
+  qrToken: string;
+  qrDataUrl: string;
+  eventName: string;
+  eventSlug: string;
+  venue: string;
+  date: string;
+  teamName?: string | null;
+  leaderName: string;
+  leaderEmail: string;
+  leaderPhone: string;
+  college: string;
+  department: string;
+  year: string;
+  transportOptIn: boolean;
+  samePickupForTeam: boolean;
+  pickupRoute?: string | null;
+  pickupStop?: string | null;
+  pickupLandmark?: string | null;
+  passengersCount: number;
+  teamMembers: Array<{
+    name: string;
+    phone: string;
+    transportOptIn?: boolean;
+    pickupRoute?: string | null;
+    pickupStop?: string | null;
+    pickupLandmark?: string | null;
+  }>;
+  confirmedAt: string;
 }
