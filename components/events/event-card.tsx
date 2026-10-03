@@ -11,9 +11,6 @@ interface EventCardProps {
 }
 
 export function EventCard({ event }: EventCardProps) {
-  const registered = event._count?.registrations ?? 0;
-  const isFull = registered >= event.capacity;
-
   return (
     <div className="group relative rounded-none border border-[#152A54] bg-[#060D1A] hover:bg-[#081224] p-6 transition-all duration-200 hover:border-blue-500/70 hover:shadow-lg hover:shadow-blue-950/40 flex flex-col justify-between">
       <div className="space-y-4">
@@ -22,14 +19,8 @@ export function EventCard({ event }: EventCardProps) {
           <span className="font-mono text-[11px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-none bg-blue-600/15 text-blue-400 border border-blue-500/30">
             [ {event.category?.name || "General"} ]
           </span>
-          <span
-            className={`font-mono text-[11px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-none border ${
-              isFull
-                ? "bg-red-950/20 text-red-400 border-red-900/40"
-                : "bg-blue-600/20 text-blue-300 border-blue-500/40"
-            }`}
-          >
-            {isFull ? "[ FULL ]" : "[ OPEN ]"}
+          <span className="font-mono text-[11px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-none border bg-blue-600/20 text-blue-300 border-blue-500/40">
+            [ OPEN ]
           </span>
         </div>
 
@@ -55,9 +46,7 @@ export function EventCard({ event }: EventCardProps) {
           </div>
           <div className="flex items-center gap-2 font-mono">
             <UsersIcon className="size-3.5 text-blue-400 shrink-0" />
-            <span>
-              {registered} / {event.capacity} Registered
-            </span>
+            <span>Entries: Unlimited</span>
           </div>
         </div>
       </div>

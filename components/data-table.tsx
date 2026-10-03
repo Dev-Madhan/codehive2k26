@@ -1,6 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
+import Link from "next/link";
 import {
   closestCenter,
   DndContext,
@@ -11,15 +12,15 @@ import {
   useSensors,
   type DragEndEvent,
   type UniqueIdentifier,
-} from "@dnd-kit/core"
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers"
+} from "@dnd-kit/core";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import {
   arrayMove,
   SortableContext,
   useSortable,
   verticalListSortingStrategy,
-} from "@dnd-kit/sortable"
-import { CSS } from "@dnd-kit/utilities"
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import {
   columnFilteringFeature,
   columnVisibilityFeature,
@@ -37,21 +38,13 @@ import {
   type ColumnVisibilityState,
   type Row,
   type SortingState,
-} from "@tanstack/react-table"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
-import { toast } from "sonner"
-import { z } from "zod"
+} from "@tanstack/react-table";
+import { z } from "zod";
 
-import { useIsMobile } from "@/hooks/use-mobile"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  type ChartConfig,
-} from "@/components/ui/chart"
-import { Checkbox } from "@/components/ui/checkbox"
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Drawer,
   DrawerClose,
@@ -61,17 +54,15 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer"
+} from "@/components/ui/drawer";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/dropdown-menu";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -79,8 +70,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -88,17 +78,30 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   Tabs,
-  TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/components/ui/tabs"
-import { GripVerticalIcon, CircleCheckIcon, LoaderIcon, EllipsisVerticalIcon, Columns3Icon, ChevronDownIcon, PlusIcon, ChevronsLeftIcon, ChevronLeftIcon, ChevronRightIcon, ChevronsRightIcon, TrendingUpIcon } from "lucide-react"
+} from "@/components/ui/tabs";
+import {
+  GripVerticalIcon,
+  CircleCheckIcon,
+  EllipsisVerticalIcon,
+  Columns3Icon,
+  ChevronDownIcon,
+  PlusIcon,
+  ChevronsLeftIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ChevronsRightIcon,
+  CalendarDaysIcon,
+  MapPinIcon,
+  UsersIcon,
+  SparklesIcon,
+} from "lucide-react";
+import type { DashboardEventItem } from "@/types/dashboard";
 
-// New in v9: declare the features this table uses — anything you don't
-// register is tree-shaken out of the bundle.
 const features = tableFeatures({
   columnFilteringFeature,
   columnVisibilityFeature,
@@ -108,41 +111,177 @@ const features = tableFeatures({
   filteredRowModel: createFilteredRowModel(),
   paginatedRowModel: createPaginatedRowModel(),
   sortedRowModel: createSortedRowModel(),
-})
+});
+
+export const schema = z.object({
+  id: z.number(),
+  dbId: z.string(),
+  header: z.string(),
+  slug: z.string(),
+  type: z.string(),
+  categorySlug: z.string(),
+  status: z.string(),
+  venue: z.string(),
+  isTeamEvent: z.boolean(),
+  minTeamSize: z.number(),
+  maxTeamSize: z.number(),
+  teamFormat: z.string(),
+  startAt: z.string(),
+  endAt: z.string(),
+  registrationsCount: z.number(),
+  teamsCount: z.number(),
+  description: z.string(),
+});
 
 const columnHelper = createColumnHelper<
   typeof features,
   z.infer<typeof schema>
->()
+>();
 
-export const schema = z.object({
-  id: z.number(),
-  header: z.string(),
-  type: z.string(),
-  status: z.string(),
-  target: z.string(),
-  limit: z.string(),
-  reviewer: z.string(),
-})
-
-// Create a separate component for the drag handle
 function DragHandle({ id }: { id: number }) {
-  const { attributes, listeners } = useSortable({
-    id,
-  })
+  const { attributes, listeners } = useSortable({ id });
   return (
     <Button
       {...attributes}
       {...listeners}
       variant="ghost"
       size="icon"
-      className="size-7 text-muted-foreground hover:bg-transparent"
+      className="size-7 text-muted-foreground hover:bg-transparent cursor-grab active:cursor-grabbing"
     >
-      <GripVerticalIcon className="size-3 text-muted-foreground" />
+      <GripVerticalIcon className="size-3 text-slate-500" />
       <span className="sr-only">Drag to reorder</span>
     </Button>
-  )
+  );
 }
+
+function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
+  const isMobile = useIsMobile();
+  return (
+    <Drawer swipeDirection={isMobile ? "down" : "right"}>
+      <DrawerTrigger
+        render={
+          <Button
+            variant="link"
+            className="w-fit px-0 text-left font-mono font-bold text-xs text-white hover:text-blue-400 transition-colors cursor-pointer"
+          />
+        }
+      >
+        {item.header}
+      </DrawerTrigger>
+      <DrawerContent className="bg-[#060D1A] border-[#152A54] text-white font-mono rounded-none max-w-2xl mx-auto">
+        <DrawerHeader className="gap-1 border-b border-[#152A54] p-4 sm:p-5">
+          <div className="flex items-center gap-2 flex-wrap mb-1">
+            <span className="text-[10px] font-bold text-blue-400 bg-blue-950/60 border border-blue-500/40 px-2 py-0.5 uppercase tracking-wider">
+              {item.type}
+            </span>
+            <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-500/40 px-2 py-0.5 uppercase tracking-wider">
+              {item.status}
+            </span>
+            <span className="text-[10px] font-bold text-purple-400 bg-purple-950/60 border border-purple-500/40 px-2 py-0.5 uppercase tracking-wider">
+              {item.teamFormat}
+            </span>
+          </div>
+          <DrawerTitle className="text-base sm:text-xl font-bold text-white uppercase tracking-tight flex items-center gap-2">
+            <SparklesIcon className="size-4 text-blue-400 shrink-0" />
+            <span>{item.header}</span>
+          </DrawerTitle>
+          <DrawerDescription className="text-xs text-slate-400 leading-relaxed">
+            {item.venue}
+          </DrawerDescription>
+        </DrawerHeader>
+
+        <div className="flex flex-col gap-3.5 overflow-y-auto p-4 sm:p-5 text-xs max-h-[65vh]">
+          {/* Key Metrics Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+            <div className="border border-[#152A54] bg-[#03060E] p-3 space-y-1">
+              <span className="text-[10px] uppercase text-slate-400 font-semibold tracking-wider block">
+                Total Registrations
+              </span>
+              <p className="text-2xl font-bold text-blue-400 tabular-nums">
+                {item.registrationsCount}
+              </p>
+            </div>
+            <div className="border border-[#152A54] bg-[#03060E] p-3 space-y-1">
+              <span className="text-[10px] uppercase text-slate-400 font-semibold tracking-wider block">
+                Teams Formed
+              </span>
+              <p className="text-2xl font-bold text-purple-400 tabular-nums">
+                {item.teamsCount}
+              </p>
+            </div>
+            <div className="border border-[#152A54] bg-[#03060E] p-3 space-y-1 col-span-2 sm:col-span-1">
+              <span className="text-[10px] uppercase text-slate-400 font-semibold tracking-wider block">
+                Participation Mode
+              </span>
+              <p className="text-xs font-bold text-white uppercase mt-1">
+                {item.teamFormat}
+              </p>
+            </div>
+          </div>
+
+          {/* Description */}
+          <div className="border border-[#152A54] bg-[#03060E] p-3.5 space-y-2">
+            <span className="text-[10px] uppercase tracking-wider text-blue-400 font-bold block flex items-center gap-1.5">
+              <span>Track Challenge Overview</span>
+            </span>
+            <p className="text-xs text-slate-300 leading-relaxed whitespace-pre-line">
+              {item.description || "Official symposium challenge details and guidelines."}
+            </p>
+          </div>
+
+          {/* Logistics & Timings */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div className="border border-[#152A54] bg-[#03060E] p-3 space-y-1">
+              <div className="flex items-center gap-1.5 text-slate-400">
+                <MapPinIcon className="size-3 text-slate-500" />
+                <span className="text-[10px] uppercase font-semibold tracking-wider">Venue</span>
+              </div>
+              <p className="text-xs text-white font-semibold">{item.venue}</p>
+            </div>
+            <div className="border border-[#152A54] bg-[#03060E] p-3 space-y-1">
+              <div className="flex items-center gap-1.5 text-slate-400">
+                <CalendarDaysIcon className="size-3 text-slate-500" />
+                <span className="text-[10px] uppercase font-semibold tracking-wider">Dates</span>
+              </div>
+              <p className="text-xs text-white font-semibold">
+                {item.startAt
+                  ? new Date(item.startAt).toLocaleDateString("en-IN", {
+                      weekday: "short",
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })
+                  : "October 2026"}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <DrawerFooter className="border-t border-[#152A54] bg-[#03060E] flex flex-row items-center justify-between gap-3 p-4">
+          <div className="flex items-center gap-2">
+            <Link
+              href="/admin/registrations"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 border border-blue-400 transition-colors uppercase"
+            >
+              <UsersIcon className="size-3.5" />
+              <span>View Attendees</span>
+            </Link>
+            <Link
+              href="/admin/events"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-300 hover:text-white bg-[#060D1A] hover:bg-[#0B162C] border border-[#152A54] transition-colors uppercase"
+            >
+              <span>Manage Track</span>
+            </Link>
+          </div>
+          <DrawerClose render={<Button variant="outline" className="rounded-none border-[#152A54] bg-[#060D1A] text-slate-300 font-mono text-xs uppercase" />}>
+            Close
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
+  );
+}
+
 const columns = columnHelper.columns([
   columnHelper.display({
     id: "drag",
@@ -178,125 +317,73 @@ const columns = columnHelper.columns([
   }),
   columnHelper.accessor("header", {
     header: "Event / Track",
-    cell: ({ row }) => {
-      return <TableCellViewer item={row.original} />
-    },
+    cell: ({ row }) => <TableCellViewer item={row.original} />,
     enableHiding: false,
   }),
   columnHelper.accessor("type", {
     header: "Category",
     cell: ({ row }) => (
-      <div className="w-32">
-        <Badge variant="outline" className="px-1.5 font-mono text-[10px] text-blue-400 border-blue-500/30 bg-blue-600/10 rounded-none">
-          {row.original.type}
-        </Badge>
-      </div>
+      <Badge
+        variant="outline"
+        className="px-1.5 font-mono text-[10px] text-blue-400 border-blue-500/30 bg-blue-600/10 rounded-none uppercase"
+      >
+        {row.original.type}
+      </Badge>
+    ),
+  }),
+  columnHelper.accessor("teamFormat", {
+    header: "Format",
+    cell: ({ row }) => (
+      <Badge
+        variant="outline"
+        className="px-1.5 font-mono text-[10px] text-purple-400 border-purple-500/30 bg-purple-600/10 rounded-none uppercase"
+      >
+        {row.original.teamFormat}
+      </Badge>
     ),
   }),
   columnHelper.accessor("status", {
     header: "Status",
     cell: ({ row }) => (
-      <Badge variant="outline" className="px-1.5 font-mono text-[10px] rounded-none border-[#152A54]">
-        {row.original.status === "Done" ? (
-          <CircleCheckIcon className="fill-green-500 dark:fill-green-400 size-3 mr-1" />
-        ) : (
-          <LoaderIcon className="size-3 mr-1 text-blue-400 animate-spin" />
-        )}
+      <Badge
+        variant="outline"
+        className="px-1.5 font-mono text-[10px] rounded-none border-[#152A54] text-emerald-400 bg-emerald-950/20"
+      >
+        <CircleCheckIcon className="size-3 mr-1 text-emerald-400" />
         {row.original.status}
       </Badge>
     ),
   }),
-  columnHelper.accessor("target", {
-    header: () => <div className="w-full text-right font-mono">Registered</div>,
+  columnHelper.accessor("registrationsCount", {
+    header: () => <div className="w-full text-right font-mono">Registrations</div>,
     cell: ({ row }) => (
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          toast.promise(new Promise((resolve) => setTimeout(resolve, 1000)), {
-            loading: `Saving ${row.original.header}`,
-            success: "Done",
-            error: "Error",
-          })
-        }}
-      >
-        <Label htmlFor={`${row.original.id}-target`} className="sr-only">
-          Registered
-        </Label>
-        <Input
-          className="h-8 w-16 border-transparent bg-transparent text-right shadow-none hover:bg-input/30 focus-visible:border focus-visible:bg-background dark:bg-transparent dark:hover:bg-input/30 dark:focus-visible:bg-input/30 font-mono text-xs"
-          defaultValue={row.original.target}
-          id={`${row.original.id}-target`}
-        />
-      </form>
+      <div className="text-right font-mono text-xs font-bold text-white tabular-nums pr-2">
+        {row.original.registrationsCount}
+      </div>
     ),
   }),
-  columnHelper.accessor("limit", {
-    header: () => <div className="w-full text-right font-mono">Max Cap</div>,
+  columnHelper.accessor("teamsCount", {
+    header: () => <div className="w-full text-right font-mono">Teams</div>,
     cell: ({ row }) => (
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          toast.promise(new Promise((resolve) => setTimeout(resolve, 1000)), {
-            loading: `Saving ${row.original.header}`,
-            success: "Done",
-            error: "Error",
-          })
-        }}
-      >
-        <Label htmlFor={`${row.original.id}-limit`} className="sr-only">
-          Max Cap
-        </Label>
-        <Input
-          className="h-8 w-16 border-transparent bg-transparent text-right shadow-none hover:bg-input/30 focus-visible:border focus-visible:bg-background dark:bg-transparent dark:hover:bg-input/30 dark:focus-visible:bg-input/30 font-mono text-xs"
-          defaultValue={row.original.limit}
-          id={`${row.original.id}-limit`}
-        />
-      </form>
+      <div className="text-right font-mono text-xs font-semibold text-slate-300 tabular-nums pr-2">
+        {row.original.teamsCount}
+      </div>
     ),
   }),
-  columnHelper.accessor("reviewer", {
-    header: "Lead Coordinator",
-    cell: ({ row }) => {
-      const isAssigned = row.original.reviewer !== "Assign reviewer"
-      if (isAssigned) {
-        return <span className="font-mono text-xs text-slate-300">{row.original.reviewer}</span>
-      }
-      return (
-        <>
-          <Label htmlFor={`${row.original.id}-reviewer`} className="sr-only">
-            Lead Coordinator
-          </Label>
-          <Select
-            items={[
-              { label: "Madhan Kumar", value: "Madhan Kumar" },
-              { label: "Faculty Coordinator", value: "Faculty Coordinator" },
-              { label: "Tech Lead", value: "Tech Lead" },
-            ]}
-          >
-            <SelectTrigger
-              className="w-38 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate font-mono text-xs rounded-none border-[#152A54]"
-              size="sm"
-              id={`${row.original.id}-reviewer`}
-            >
-              <SelectValue placeholder="Assign Coordinator" />
-            </SelectTrigger>
-            <SelectContent align="end" className="font-mono text-xs rounded-none border-[#152A54] bg-[#030712]">
-              <SelectGroup>
-                <SelectItem value="Madhan Kumar">Madhan Kumar</SelectItem>
-                <SelectItem value="Faculty Coordinator">
-                  Faculty Coordinator
-                </SelectItem>
-                <SelectItem value="Tech Lead">Tech Lead</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </>
-      )
-    },
+  columnHelper.accessor("venue", {
+    header: "Venue",
+    cell: ({ row }) => (
+      <span
+        className="font-mono text-xs text-slate-400 truncate max-w-[160px] block"
+        title={row.original.venue}
+      >
+        {row.original.venue}
+      </span>
+    ),
   }),
   columnHelper.display({
     id: "actions",
-    cell: () => (
+    cell: ({ row }) => (
       <DropdownMenu>
         <DropdownMenuTrigger
           render={
@@ -307,29 +394,39 @@ const columns = columnHelper.columns([
             />
           }
         >
-          <EllipsisVerticalIcon
-          />
+          <EllipsisVerticalIcon className="size-4 text-slate-400" />
           <span className="sr-only">Open menu</span>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
-          <DropdownMenuItem>Make a copy</DropdownMenuItem>
-          <DropdownMenuItem>Favorite</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+        <DropdownMenuContent
+          align="end"
+          className="w-44 font-mono text-xs bg-[#060D1A] border-[#152A54] text-slate-200 rounded-none"
+        >
+          <DropdownMenuItem
+            render={<Link href="/admin/registrations" />}
+            className="cursor-pointer hover:bg-[#0B162C]"
+          >
+            View Registrations
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            render={<Link href="/admin/events" />}
+            className="cursor-pointer hover:bg-[#0B162C]"
+          >
+            Event Settings
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     ),
   }),
-])
+]);
+
 function DraggableRow({
   row,
 }: {
-  row: Row<typeof features, z.infer<typeof schema>>
+  row: Row<typeof features, z.infer<typeof schema>>;
 }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
     id: row.original.id,
-  })
+  });
   return (
     <TableRow
       data-state={row.getIsSelected() && "selected"}
@@ -347,38 +444,84 @@ function DraggableRow({
         </TableCell>
       ))}
     </TableRow>
-  )
+  );
 }
+
 export function DataTable({
   data: initialData,
 }: {
-  data: z.infer<typeof schema>[]
+  data: DashboardEventItem[];
 }) {
-  const [data, setData] = React.useState(() => initialData)
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [data, setData] = React.useState(() => initialData);
+  const [activeCategory, setActiveCategory] = React.useState<string>("all");
+  const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
-    React.useState<ColumnVisibilityState>({})
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
-  const [sorting, setSorting] = React.useState<SortingState>([])
+    React.useState<ColumnVisibilityState>({});
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
-  })
-  const sortableId = React.useId()
+  });
+
+  React.useEffect(() => {
+    setData(initialData);
+  }, [initialData]);
+
+  const sortableId = React.useId();
   const sensors = useSensors(
     useSensor(MouseSensor, {}),
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {})
-  )
+  );
+
+  // Compute category statistics for tabs
+  const categoryStats = React.useMemo(() => {
+    const technicalCount = data.filter(
+      (d) =>
+        d.categorySlug === "technical" ||
+        d.type.toLowerCase().includes("technical")
+    ).length;
+    const nonTechnicalCount = data.filter(
+      (d) =>
+        d.categorySlug === "non-technical" ||
+        d.type.toLowerCase().includes("non-technical")
+    ).length;
+    return {
+      all: data.length,
+      technical: technicalCount,
+      nonTechnical: nonTechnicalCount,
+    };
+  }, [data]);
+
+  // Filter items based on activeCategory
+  const filteredData = React.useMemo(() => {
+    if (activeCategory === "all") return data;
+    if (activeCategory === "technical") {
+      return data.filter(
+        (d) =>
+          d.categorySlug === "technical" ||
+          d.type.toLowerCase().includes("technical")
+      );
+    }
+    if (activeCategory === "non-technical") {
+      return data.filter(
+        (d) =>
+          d.categorySlug === "non-technical" ||
+          d.type.toLowerCase().includes("non-technical")
+      );
+    }
+    return data;
+  }, [data, activeCategory]);
+
   const dataIds = React.useMemo<UniqueIdentifier[]>(
-    () => data?.map(({ id }) => id) || [],
-    [data]
-  )
+    () => filteredData?.map(({ id }) => id) || [],
+    [filteredData]
+  );
+
   const table = useTable({
     features,
-    data,
+    data: filteredData,
     columns,
     state: {
       sorting,
@@ -394,34 +537,37 @@ export function DataTable({
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: setPagination,
-  })
+  });
+
   function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event
+    const { active, over } = event;
     if (active && over && active.id !== over.id) {
-      setData((data) => {
-        const oldIndex = dataIds.indexOf(active.id)
-        const newIndex = dataIds.indexOf(over.id)
-        return arrayMove(data, oldIndex, newIndex)
-      })
+      setData((prev) => {
+        const oldIndex = prev.findIndex((item) => item.id === active.id);
+        const newIndex = prev.findIndex((item) => item.id === over.id);
+        if (oldIndex !== -1 && newIndex !== -1) {
+          return arrayMove(prev, oldIndex, newIndex);
+        }
+        return prev;
+      });
     }
   }
+
   return (
     <Tabs
-      defaultValue="outline"
-      className="w-full flex-col justify-start gap-6"
+      value={activeCategory}
+      onValueChange={setActiveCategory}
+      className="w-full flex-col justify-start gap-4 sm:gap-6 font-mono"
     >
       <div className="flex flex-wrap items-center justify-between gap-2.5 px-3 sm:px-4 lg:px-6">
         <Label htmlFor="view-selector" className="sr-only">
-          View
+          View Category
         </Label>
         <Select
-          defaultValue="all"
-          items={[
-            { label: "All Tracks", value: "all" },
-            { label: "Technical Events", value: "technical" },
-            { label: "Design & AI", value: "design-ai" },
-            { label: "Non-Technical", value: "non-technical" },
-          ]}
+          value={activeCategory}
+          onValueChange={(val) => {
+            if (val) setActiveCategory(val);
+          }}
         >
           <SelectTrigger
             className="flex w-fit @4xl/main:hidden font-mono text-xs rounded-none border-[#152A54] bg-[#060D1A]"
@@ -430,35 +576,66 @@ export function DataTable({
           >
             <SelectValue placeholder="Filter Track" />
           </SelectTrigger>
-          <SelectContent className="font-mono text-xs rounded-none border-[#152A54] bg-[#030712]">
+          <SelectContent>
+            <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-[#152A54]/60 mb-1 flex items-center justify-between">
+              <span>// SYMPOSIUM TRACKS</span>
+              <span className="text-blue-400 font-bold">{categoryStats.all} TOTAL</span>
+            </div>
             <SelectGroup>
-              <SelectItem value="all">All Tracks</SelectItem>
-              <SelectItem value="technical">Technical Events</SelectItem>
-              <SelectItem value="design-ai">Design &amp; AI</SelectItem>
-              <SelectItem value="non-technical">Non-Technical</SelectItem>
+              <SelectItem value="all">All Tracks ({categoryStats.all})</SelectItem>
+              <SelectItem value="technical">
+                Technical ({categoryStats.technical})
+              </SelectItem>
+              <SelectItem value="non-technical">
+                Non-Technical ({categoryStats.nonTechnical})
+              </SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
+
         <TabsList className="hidden font-mono text-xs rounded-none border border-[#152A54] bg-[#060D1A] **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-none **:data-[slot=badge]:bg-blue-600/20 **:data-[slot=badge]:text-blue-400 **:data-[slot=badge]:px-1 @4xl/main:flex">
-          <TabsTrigger value="outline" className="rounded-none data-[state=active]:bg-[#0B162C] data-[state=active]:text-white">All Tracks</TabsTrigger>
-          <TabsTrigger value="past-performance" className="rounded-none data-[state=active]:bg-[#0B162C] data-[state=active]:text-white">
-            Technical <Badge variant="secondary">5</Badge>
+          <TabsTrigger
+            value="all"
+            className="rounded-none data-[state=active]:bg-[#0B162C] data-[state=active]:text-white flex items-center gap-1.5"
+          >
+            All Tracks <Badge variant="secondary">{categoryStats.all}</Badge>
           </TabsTrigger>
-          <TabsTrigger value="key-personnel" className="rounded-none data-[state=active]:bg-[#0B162C] data-[state=active]:text-white">
-            Design &amp; AI <Badge variant="secondary">3</Badge>
+          <TabsTrigger
+            value="technical"
+            className="rounded-none data-[state=active]:bg-[#0B162C] data-[state=active]:text-white flex items-center gap-1.5"
+          >
+            Technical <Badge variant="secondary">{categoryStats.technical}</Badge>
           </TabsTrigger>
-          <TabsTrigger value="focus-documents" className="rounded-none data-[state=active]:bg-[#0B162C] data-[state=active]:text-white">Non-Technical</TabsTrigger>
+          <TabsTrigger
+            value="non-technical"
+            className="rounded-none data-[state=active]:bg-[#0B162C] data-[state=active]:text-white flex items-center gap-1.5"
+          >
+            Non-Technical <Badge variant="secondary">{categoryStats.nonTechnical}</Badge>
+          </TabsTrigger>
         </TabsList>
+
         <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger
-              render={<Button variant="outline" size="sm" className="rounded-none border-[#152A54] bg-[#060D1A] hover:bg-[#0B162C] text-slate-300 font-mono text-xs" />}
+              render={
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="rounded-none border-[#152A54] bg-[#060D1A] hover:bg-[#0B162C] text-slate-300 font-mono text-xs"
+                />
+              }
             >
-              <Columns3Icon data-icon="inline-start" className="size-3.5 mr-1 text-slate-400" />
+              <Columns3Icon className="size-3.5 mr-1 text-slate-400" />
               Columns
-              <ChevronDownIcon data-icon="inline-end" className="size-3.5 ml-1 text-slate-400" />
+              <ChevronDownIcon className="size-3.5 ml-1 text-slate-400" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-36 rounded-none border border-[#152A54] bg-[#030712] font-mono text-xs text-slate-200">
+            <DropdownMenuContent
+              align="end"
+              className="w-44"
+            >
+              <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-[#152A54]/60 mb-1 flex items-center justify-between">
+                <span>// TOGGLE COLUMNS</span>
+              </div>
               {table
                 .getAllColumns()
                 .filter(
@@ -466,32 +643,35 @@ export function DataTable({
                     typeof column.accessorFn !== "undefined" &&
                     column.getCanHide()
                 )
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize rounded-none hover:bg-[#0B162C]"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  )
-                })}
+                .map((column) => (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize rounded-none hover:bg-[#0B162C]"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                ))}
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button variant="outline" size="sm" className="rounded-none border-[#152A54] bg-[#060D1A] hover:bg-[#0B162C] text-slate-300 font-mono text-xs">
+
+          <Button
+            render={<Link href="/admin/events" />}
+            nativeButton={false}
+            variant="outline"
+            size="sm"
+            className="rounded-none border-[#152A54] bg-[#060D1A] hover:bg-[#0B162C] text-slate-300 font-mono text-xs cursor-pointer"
+          >
             <PlusIcon className="size-3.5 mr-1 text-blue-400" />
             <span className="hidden sm:inline">Add Track</span>
           </Button>
         </div>
       </div>
-      <TabsContent
-        value="outline"
-        className="relative flex flex-col gap-4 overflow-auto px-3 sm:px-4 lg:px-6 max-w-full"
-      >
+
+      <div className="relative flex flex-col gap-4 overflow-auto px-3 sm:px-4 lg:px-6 max-w-full">
         <div className="overflow-x-auto rounded-none border border-[#152A54] bg-[#060D1A] max-w-full">
           <DndContext
             collisionDetection={closestCenter}
@@ -504,15 +684,13 @@ export function DataTable({
               <TableHeader className="sticky top-0 z-10 bg-[#03060E] border-b border-[#152A54]">
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      return (
-                        <TableHead key={header.id} colSpan={header.colSpan}>
-                          {header.isPlaceholder ? null : (
-                            <FlexRender header={header} />
-                          )}
-                        </TableHead>
-                      )
-                    })}
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id} colSpan={header.colSpan}>
+                        {header.isPlaceholder ? null : (
+                          <FlexRender header={header} />
+                        )}
+                      </TableHead>
+                    ))}
                   </TableRow>
                 ))}
               </TableHeader>
@@ -532,7 +710,7 @@ export function DataTable({
                       colSpan={columns.length}
                       className="h-24 text-center text-slate-500 font-mono text-xs"
                     >
-                      No events recorded.
+                      No events registered in this track category.
                     </TableCell>
                   </TableRow>
                 )}
@@ -540,6 +718,8 @@ export function DataTable({
             </Table>
           </DndContext>
         </div>
+
+        {/* Pagination Footer */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-2 font-mono text-xs">
           <div className="text-slate-500 text-center sm:text-left text-[11px] sm:text-xs">
             {table.getFilteredSelectedRowModel().rows.length} of{" "}
@@ -553,20 +733,27 @@ export function DataTable({
               <Select
                 value={`${table.state.pagination.pageSize}`}
                 onValueChange={(value) => {
-                  table.setPageSize(Number(value))
+                  table.setPageSize(Number(value));
                 }}
-                items={[10, 20, 30, 40, 50].map((pageSize) => ({
-                  label: `${pageSize}`,
-                  value: `${pageSize}`,
-                }))}
               >
-                <SelectTrigger size="sm" className="w-20 rounded-none border-[#152A54] bg-[#060D1A] font-mono text-xs text-slate-300" id="rows-per-page">
+                <SelectTrigger
+                  size="sm"
+                  className="w-20 rounded-none border-[#152A54] bg-[#060D1A] font-mono text-xs text-slate-300"
+                  id="rows-per-page"
+                >
                   <SelectValue placeholder={table.state.pagination.pageSize} />
                 </SelectTrigger>
-                <SelectContent side="top" className="rounded-none border-[#152A54] bg-[#030712] font-mono text-xs text-slate-300">
+                <SelectContent
+                  side="top"
+                  className="rounded-none border-[#152A54] bg-[#030712] font-mono text-xs text-slate-300"
+                >
                   <SelectGroup>
                     {[10, 20, 30, 40, 50].map((pageSize) => (
-                      <SelectItem key={pageSize} value={`${pageSize}`} className="rounded-none hover:bg-[#0B162C]">
+                      <SelectItem
+                        key={pageSize}
+                        value={`${pageSize}`}
+                        className="rounded-none hover:bg-[#0B162C]"
+                      >
                         {pageSize}
                       </SelectItem>
                     ))}
@@ -576,7 +763,7 @@ export function DataTable({
             </div>
             <div className="flex w-fit items-center justify-center text-xs text-slate-400">
               Page {table.state.pagination.pageIndex + 1} of{" "}
-              {table.getPageCount()}
+              {Math.max(table.getPageCount(), 1)}
             </div>
             <div className="flex items-center gap-1.5">
               <Button
@@ -621,259 +808,7 @@ export function DataTable({
             </div>
           </div>
         </div>
-      </TabsContent>
-      <TabsContent
-        value="past-performance"
-        className="flex flex-col px-4 lg:px-6"
-      >
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
-      </TabsContent>
-      <TabsContent value="key-personnel" className="flex flex-col px-4 lg:px-6">
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
-      </TabsContent>
-      <TabsContent
-        value="focus-documents"
-        className="flex flex-col px-4 lg:px-6"
-      >
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
-      </TabsContent>
+      </div>
     </Tabs>
-  )
-}
-const chartData = [
-  {
-    month: "January",
-    desktop: 186,
-    mobile: 80,
-  },
-  {
-    month: "February",
-    desktop: 305,
-    mobile: 200,
-  },
-  {
-    month: "March",
-    desktop: 237,
-    mobile: 120,
-  },
-  {
-    month: "April",
-    desktop: 73,
-    mobile: 190,
-  },
-  {
-    month: "May",
-    desktop: 209,
-    mobile: 130,
-  },
-  {
-    month: "June",
-    desktop: 214,
-    mobile: 140,
-  },
-]
-const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "var(--primary)",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "var(--primary)",
-  },
-} satisfies ChartConfig
-function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
-  const isMobile = useIsMobile()
-  return (
-    <Drawer swipeDirection={isMobile ? "down" : "right"}>
-      <DrawerTrigger
-        render={
-          <Button
-            variant="link"
-            className="w-fit px-0 text-left text-foreground"
-          />
-        }
-      >
-        {item.header}
-      </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader className="gap-1">
-          <DrawerTitle>{item.header}</DrawerTitle>
-          <DrawerDescription>
-            Showing total visitors for the last 6 months
-          </DrawerDescription>
-        </DrawerHeader>
-        <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
-          {!isMobile && (
-            <>
-              <ChartContainer config={chartConfig}>
-                <AreaChart
-                  accessibilityLayer
-                  data={chartData}
-                  margin={{
-                    left: 0,
-                    right: 10,
-                  }}
-                >
-                  <CartesianGrid vertical={false} />
-                  <XAxis
-                    dataKey="month"
-                    tickLine={false}
-                    axisLine={false}
-                    tickMargin={8}
-                    tickFormatter={(value) => value.slice(0, 3)}
-                    hide
-                  />
-                  <ChartTooltip
-                    cursor={false}
-                    content={<ChartTooltipContent indicator="dot" />}
-                  />
-                  <Area
-                    dataKey="mobile"
-                    type="natural"
-                    fill="var(--color-mobile)"
-                    fillOpacity={0.6}
-                    stroke="var(--color-mobile)"
-                    stackId="a"
-                  />
-                  <Area
-                    dataKey="desktop"
-                    type="natural"
-                    fill="var(--color-desktop)"
-                    fillOpacity={0.4}
-                    stroke="var(--color-desktop)"
-                    stackId="a"
-                  />
-                </AreaChart>
-              </ChartContainer>
-              <Separator />
-              <div className="grid gap-2">
-                <div className="flex gap-2 leading-none font-medium">
-                  Trending up by 5.2% this month{" "}
-                  <TrendingUpIcon className="size-4" />
-                </div>
-                <div className="text-muted-foreground">
-                  Showing total visitors for the last 6 months. This is just
-                  some random text to test the layout. It spans multiple lines
-                  and should wrap around.
-                </div>
-              </div>
-              <Separator />
-            </>
-          )}
-          <form className="flex flex-col gap-4">
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="header">Header</Label>
-              <Input id="header" defaultValue={item.header} />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="type">Type</Label>
-                <Select
-                  defaultValue={item.type}
-                  items={[
-                    { label: "Table of Contents", value: "Table of Contents" },
-                    { label: "Executive Summary", value: "Executive Summary" },
-                    {
-                      label: "Technical Approach",
-                      value: "Technical Approach",
-                    },
-                    { label: "Design", value: "Design" },
-                    { label: "Capabilities", value: "Capabilities" },
-                    { label: "Focus Documents", value: "Focus Documents" },
-                    { label: "Narrative", value: "Narrative" },
-                    { label: "Cover Page", value: "Cover Page" },
-                  ]}
-                >
-                  <SelectTrigger id="type" className="w-full">
-                    <SelectValue placeholder="Select a type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="Table of Contents">
-                        Table of Contents
-                      </SelectItem>
-                      <SelectItem value="Executive Summary">
-                        Executive Summary
-                      </SelectItem>
-                      <SelectItem value="Technical Approach">
-                        Technical Approach
-                      </SelectItem>
-                      <SelectItem value="Design">Design</SelectItem>
-                      <SelectItem value="Capabilities">Capabilities</SelectItem>
-                      <SelectItem value="Focus Documents">
-                        Focus Documents
-                      </SelectItem>
-                      <SelectItem value="Narrative">Narrative</SelectItem>
-                      <SelectItem value="Cover Page">Cover Page</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="status">Status</Label>
-                <Select
-                  defaultValue={item.status}
-                  items={[
-                    { label: "Done", value: "Done" },
-                    { label: "In Progress", value: "In Progress" },
-                    { label: "Not Started", value: "Not Started" },
-                  ]}
-                >
-                  <SelectTrigger id="status" className="w-full">
-                    <SelectValue placeholder="Select a status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="Done">Done</SelectItem>
-                      <SelectItem value="In Progress">In Progress</SelectItem>
-                      <SelectItem value="Not Started">Not Started</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="target">Target</Label>
-                <Input id="target" defaultValue={item.target} />
-              </div>
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="limit">Limit</Label>
-                <Input id="limit" defaultValue={item.limit} />
-              </div>
-            </div>
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="reviewer">Reviewer</Label>
-              <Select
-                defaultValue={item.reviewer}
-                items={[
-                  { label: "Eddie Lake", value: "Eddie Lake" },
-                  { label: "Jamik Tashpulatov", value: "Jamik Tashpulatov" },
-                  { label: "Emily Whalen", value: "Emily Whalen" },
-                ]}
-              >
-                <SelectTrigger id="reviewer" className="w-full">
-                  <SelectValue placeholder="Select a reviewer" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="Eddie Lake">Eddie Lake</SelectItem>
-                    <SelectItem value="Jamik Tashpulatov">
-                      Jamik Tashpulatov
-                    </SelectItem>
-                    <SelectItem value="Emily Whalen">Emily Whalen</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-          </form>
-        </div>
-        <DrawerFooter>
-          <Button>Submit</Button>
-          <DrawerClose render={<Button variant="outline" />}>Done</DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  )
+  );
 }

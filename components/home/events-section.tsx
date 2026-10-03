@@ -24,7 +24,7 @@ interface RealEventItem {
   description: string;
   rounds: string;
   teamSize: string;
-  capacity: string;
+  entries: string;
   venue: string;
   status: string;
   accent: "blue" | "sky";
@@ -43,7 +43,7 @@ const REAL_EVENTS: RealEventItem[] = [
       "TECHFORGE is a 2-day technical challenge where you Analyze, Build, Adapt & Defend. Solve a real-world problem, develop your solution, and face a surprise technical challenge that will test your coding, problem-solving, and innovation skills.",
     rounds: "4 Rounds (200 Pts)",
     teamSize: "1–3 Builders",
-    capacity: "120 Slots",
+    entries: "Unlimited",
     venue: "Palani Murugan Hall of Fame, Vel Tech Multi Tech",
     status: "OPEN",
     accent: "blue",
@@ -60,7 +60,7 @@ const REAL_EVENTS: RealEventItem[] = [
       "AGENT VIBE is a 2-day AI challenge where you Imagine, Build, Adapt & Deploy. Design and develop intelligent AI agents to solve real-world problems, then tackle surprise challenges that will test your creativity, AI skills, and ability to innovate using LLMs, APIs, and modern AI tools.",
     rounds: "4 Rounds (200 Pts)",
     teamSize: "1–3 Builders",
-    capacity: "100 Slots",
+    entries: "Unlimited",
     venue: "Palani Murugan Hall of Fame, Vel Tech Multi Tech",
     status: "OPEN",
     accent: "sky",
@@ -119,7 +119,7 @@ export function EventsSection({ initialEvents }: EventsSectionProps) {
             description: defaultRef.description,
             rounds: defaultRef.rounds,
             teamSize: `${ev.minTeamSize || 1}–${ev.maxTeamSize || 3} Builders`,
-            capacity: `${ev.capacity || 100} Slots`,
+            entries: "Unlimited",
             venue: "Palani Murugan Hall of Fame, Vel Tech Multi Tech",
             status: ev.registrationOpen ? "OPEN" : "CLOSED",
             accent: (idx % 2 === 0 ? "blue" : "sky") as "blue" | "sky",
@@ -254,10 +254,10 @@ export function EventsSection({ initialEvents }: EventsSectionProps) {
                   <div>
                     <div className="flex items-center gap-1 text-slate-500 mb-0.5">
                       <CalendarIcon className="size-3 text-blue-400" />
-                      <span className="font-mono text-[9px] uppercase tracking-wider">CAPACITY</span>
+                      <span className="font-mono text-[9px] uppercase tracking-wider">ENTRIES</span>
                     </div>
                     <p className="font-mono text-xs font-bold text-white">
-                      {event.capacity}
+                      {event.entries}
                     </p>
                   </div>
 

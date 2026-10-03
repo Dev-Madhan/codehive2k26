@@ -17,10 +17,6 @@ export const navLinks = [
     label: "Dashboard",
     href: "/dashboard",
   },
-  {
-    label: "About",
-    href: "#",
-  },
 ];
 
 export function Header() {

@@ -36,7 +36,7 @@ export default async function AdminReportsPage() {
           &gt; admin / analytics_reports
         </div>
         <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white uppercase">Reports &amp; Analytics</h1>
-        <p className="text-xs text-slate-400 mt-1">Real-time attendance rates, track capacity metrics, and exportable reports.</p>
+        <p className="text-xs text-slate-400 mt-1">Real-time attendance rates, registration metrics, and exportable reports.</p>
       </div>
 
       <ReportsClient
