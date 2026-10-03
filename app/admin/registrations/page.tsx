@@ -12,14 +12,40 @@ export default async function AdminRegistrationsPage() {
           select: {
             name: true,
             slug: true,
+            venue: true,
+            startAt: true,
           },
         },
         participant: {
           select: {
+            id: true,
             name: true,
             email: true,
             phone: true,
             college: true,
+            department: true,
+            year: true,
+            imageUrl: true,
+          },
+        },
+        team: {
+          select: {
+            id: true,
+            name: true,
+            members: {
+              select: {
+                id: true,
+                name: true,
+                phone: true,
+                transportOptIn: true,
+                pickupStop: true,
+              },
+            },
+          },
+        },
+        checkIn: {
+          select: {
+            checkedInAt: true,
           },
         },
       },
@@ -35,6 +61,7 @@ export default async function AdminRegistrationsPage() {
       orderBy: { name: "asc" },
     }),
   ]);
+
 
   return (
     <div className="space-y-5 font-mono max-w-full">

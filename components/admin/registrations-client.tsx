@@ -18,8 +18,43 @@ import {
   BellIcon,
   BellOffIcon,
   SparklesIcon,
+  PhoneIcon,
+  MailIcon,
+  GraduationCapIcon,
+  BookOpenIcon,
+  CalendarCheckIcon,
+  MapPinIcon,
+  UsersIcon,
+  Trash2Icon,
+  ShieldAlertIcon,
+  BadgeCheckIcon,
+  TicketIcon,
+  XCircleIcon,
+  AlertTriangleIcon,
+  ClockIcon as ClockAltIcon,
+  DownloadIcon,
 } from "lucide-react";
 import { toast } from "sonner";
+import { ExportDataDialog } from "@/components/admin/export-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { deleteRegistration } from "@/actions/registration";
 
 export interface RegistrationItem {
   id: string;
@@ -33,15 +68,35 @@ export interface RegistrationItem {
   passengersCount: number;
   createdAt: Date | string;
   participant: {
+    id?: string;
     name: string;
     email: string;
     phone: string;
     college: string;
+    department?: string;
+    year?: string;
+    imageUrl?: string | null;
   };
   event: {
     name: string;
     slug?: string;
+    venue?: string;
+    startAt?: Date | string;
   };
+  team?: {
+    id: string;
+    name: string;
+    members?: {
+      id: string;
+      name: string;
+      phone: string;
+      transportOptIn: boolean;
+      pickupStop?: string | null;
+    }[];
+  } | null;
+  checkIn?: {
+    checkedInAt: Date | string;
+  } | null;
 }
 
 interface EventOption {
@@ -49,6 +104,538 @@ interface EventOption {
   name: string;
   slug?: string;
 }
+
+// ─── Participant Detail Dialog ───────────────────────────────────────────────
+
+function ParticipantDetailDialog({
+  registration,
+  open,
+  onOpenChange,
+  onRemove,
+}: {
+  registration: RegistrationItem;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onRemove: () => void;
+}) {
+  const { participant, event, team, checkIn } = registration;
+  const [isCopied, setIsCopied] = React.useState(false);
+
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(registration.registrationNumber);
+    setIsCopied(true);
+    toast.success(`Copied Pass Code: ${registration.registrationNumber}`);
+    setTimeout(() => setIsCopied(false), 2000);
+  };
+
+  const initials = participant.name
+    .split(" ")
+    .filter(Boolean)
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase() || "PA";
+
+  const registeredAt = new Date(registration.createdAt).toLocaleString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const checkedInAt = checkIn
+    ? new Date(checkIn.checkedInAt).toLocaleString("en-IN", {
+        day: "numeric",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : null;
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent
+        className="max-w-2xl w-full bg-[#060D1A] border border-[#152A54] text-white p-0 overflow-hidden font-mono max-h-[90vh] flex flex-col no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        showCloseButton={false}
+      >
+        {/* ── Header Banner ── */}
+        <div className="relative bg-gradient-to-r from-[#0B162C] to-[#060D1A] border-b border-[#152A54] p-5 shrink-0">
+          {/* Terminal breadcrumb */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-bold text-blue-400 bg-blue-600/15 border border-blue-500/30 tracking-wider">
+              &gt; ADMIN // PARTICIPANT_DOSSIER
+            </div>
+            <button
+              onClick={() => onOpenChange(false)}
+              className="text-slate-500 hover:text-white transition-colors p-1 border border-transparent hover:border-[#152A54] hover:bg-[#0B162C] cursor-pointer"
+            >
+              <XIcon className="size-4" />
+              <span className="sr-only">Close</span>
+            </button>
+          </div>
+
+          {/* Participant identity block */}
+          <div className="flex items-center gap-4">
+            {/* Avatar */}
+            {participant.imageUrl ? (
+              <img
+                src={participant.imageUrl}
+                alt={participant.name}
+                className="size-14 object-cover border-2 border-blue-500/60 shrink-0"
+              />
+            ) : (
+              <div className="size-14 rounded-none bg-[#0E1B38] border-2 border-blue-500/60 text-blue-400 font-bold text-lg flex items-center justify-center shrink-0">
+                {initials}
+              </div>
+            )}
+            <div className="min-w-0 flex-1">
+              <h2 className="text-lg font-bold text-white tracking-tight truncate">
+                {participant.name}
+              </h2>
+              <p className="text-xs text-slate-400 truncate">{participant.email}</p>
+              <div className="flex items-center gap-2 mt-2 flex-wrap">
+                {/* Registration Status Badge */}
+                <span
+                  className={`inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 border ${
+                    registration.checkedIn
+                      ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-400"
+                      : "border-amber-500/40 bg-amber-500/10 text-amber-400"
+                  }`}
+                >
+                  {registration.checkedIn ? (
+                    <>
+                      <CheckCircle2Icon className="size-3 shrink-0 text-emerald-400" />
+                      <span>VERIFIED</span>
+                    </>
+                  ) : (
+                    <>
+                      <ClockIcon className="size-3 shrink-0 text-amber-400" />
+                      <span>PENDING</span>
+                    </>
+                  )}
+                </span>
+
+                {/* Entry Type Badge */}
+                <span
+                  className={`inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 border ${
+                    team 
+                      ? "border-purple-500/40 bg-purple-500/15 text-purple-400"
+                      : "border-slate-500/40 bg-slate-500/15 text-slate-300"
+                  }`}
+                >
+                  <UsersIcon className={`size-3 shrink-0 ${team ? "text-purple-400" : "text-slate-400"}`} />
+                  <span>{team ? "TEAM ENTRY" : "SOLO ENTRY"}</span>
+                </span>
+
+                {/* Pass Code Badge with copy action */}
+                <button
+                  type="button"
+                  onClick={handleCopyCode}
+                  className="inline-flex items-center gap-1.5 text-[10px] font-bold text-blue-400 bg-blue-950/40 border border-blue-500/30 px-2 py-0.5 hover:bg-blue-900/50 hover:border-blue-400/60 transition-colors cursor-pointer"
+                  title="Click to copy pass code"
+                >
+                  <TicketIcon className="size-3 shrink-0 text-blue-400" />
+                  <span>{registration.registrationNumber}</span>
+                  {isCopied ? (
+                    <CheckIcon className="size-2.5 text-emerald-400" />
+                  ) : (
+                    <CopyIcon className="size-2.5 text-blue-400/70" />
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Scrollable Content (Scrollbar Hidden, Full Scroll Functionality Retained) ── */}
+        <div className="overflow-y-auto flex-1 p-5 space-y-5 no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+
+          {/* ── Section: Personal Information ── */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <UserIcon className="size-3.5 text-blue-400" />
+              <h3 className="text-[11px] font-bold uppercase tracking-wider text-blue-400">
+                PERSONAL INFORMATION
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <InfoField
+                icon={<PhoneIcon className="size-3 text-slate-500" />}
+                label="PHONE NUMBER"
+                value={participant.phone}
+              />
+              <InfoField
+                icon={<MailIcon className="size-3 text-slate-500" />}
+                label="EMAIL ADDRESS"
+                value={participant.email}
+                mono
+              />
+              <InfoField
+                icon={<Building2Icon className="size-3 text-slate-500" />}
+                label="COLLEGE / INSTITUTION"
+                value={participant.college}
+              />
+              {participant.department && (
+                <InfoField
+                  icon={<BookOpenIcon className="size-3 text-slate-500" />}
+                  label="DEPARTMENT"
+                  value={participant.department}
+                />
+              )}
+              {participant.year && (
+                <InfoField
+                  icon={<GraduationCapIcon className="size-3 text-slate-500" />}
+                  label="ACADEMIC YEAR"
+                  value={participant.year}
+                />
+              )}
+            </div>
+          </div>
+
+          <div className="border-t border-[#152A54]" />
+
+          {/* ── Section: Registration Details ── */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <TicketIcon className="size-3.5 text-blue-400" />
+              <h3 className="text-[11px] font-bold uppercase tracking-wider text-blue-400">
+                REGISTRATION DETAILS
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <InfoField
+                icon={<BadgeCheckIcon className="size-3 text-slate-500" />}
+                label="PASS ID"
+                value={registration.registrationNumber}
+                mono
+                highlight
+              />
+              <InfoField
+                icon={<UsersIcon className="size-3 text-slate-500" />}
+                label="ENTRY TYPE"
+                value={team ? `TEAM (${team.name})` : "INDIVIDUAL (SOLO)"}
+                highlight={!!team}
+              />
+              <InfoField
+                icon={<CalendarCheckIcon className="size-3 text-slate-500" />}
+                label="REGISTERED ON"
+                value={registeredAt}
+              />
+              <InfoField
+                icon={<SparklesIcon className="size-3 text-slate-500" />}
+                label="EVENT"
+                value={event.name}
+              />
+              {event.venue && (
+                <InfoField
+                  icon={<MapPinIcon className="size-3 text-slate-500" />}
+                  label="VENUE"
+                  value={event.venue}
+                />
+              )}
+              {event.startAt && (
+                <InfoField
+                  icon={<CalendarIcon className="size-3 text-slate-500" />}
+                  label="EVENT DATE"
+                  value={new Date(event.startAt).toLocaleDateString("en-IN", {
+                    weekday: "short",
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                />
+              )}
+              <div className="flex flex-col gap-0.5 bg-[#03060E] border border-[#152A54] p-2.5">
+                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">
+                  CHECK-IN STATUS
+                </span>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  {registration.checkedIn ? (
+                    <>
+                      <CheckCircle2Icon className="size-3.5 text-emerald-400 shrink-0" />
+                      <span className="text-[11px] font-bold uppercase text-emerald-400">
+                        VERIFIED{" "}
+                        {checkedInAt && (
+                          <span className="text-slate-400 font-normal lowercase tracking-normal">
+                            · {checkedInAt}
+                          </span>
+                        )}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <ClockIcon className="size-3.5 text-amber-400 shrink-0" />
+                      <span className="text-[11px] font-bold uppercase text-amber-400">
+                        PENDING CHECK-IN
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Section: Transport Details ── */}
+          {registration.transportOptIn && (
+            <>
+              <div className="border-t border-[#152A54]" />
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <BusIcon className="size-3.5 text-sky-400" />
+                  <h3 className="text-[11px] font-bold uppercase tracking-wider text-sky-400">
+                    TRANSPORT DETAILS
+                  </h3>
+                </div>
+                <div className="bg-[#03060E] border border-sky-500/30 p-3 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-sky-400 uppercase tracking-wider">
+                      <BusIcon className="size-3 shrink-0" />
+                      BUS TRANSPORT • {registration.passengersCount} SEAT{registration.passengersCount > 1 ? "S" : ""}
+                    </span>
+                    <span className="text-[10px] font-bold text-amber-400 font-mono">
+                      DEPARTURE: 06:00 AM
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                    {registration.pickupRoute && (
+                      <InfoField
+                        icon={<MapPinIcon className="size-3 text-slate-500" />}
+                        label="PICKUP ROUTE"
+                        value={registration.pickupRoute}
+                      />
+                    )}
+                    {registration.pickupStop && (
+                      <InfoField
+                        icon={<MapPinIcon className="size-3 text-slate-500" />}
+                        label="PICKUP STOP"
+                        value={registration.pickupStop}
+                      />
+                    )}
+                    {registration.pickupLandmark && (
+                      <InfoField
+                        icon={<MapPinIcon className="size-3 text-slate-500" />}
+                        label="LANDMARK"
+                        value={registration.pickupLandmark}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* ── Section: Team Members ── */}
+          {team && team.members && team.members.length > 0 && (
+            <>
+              <div className="border-t border-[#152A54]" />
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <UsersIcon className="size-3.5 text-purple-400" />
+                  <h3 className="text-[11px] font-bold uppercase tracking-wider text-purple-400">
+                    TEAM • {team.name}
+                  </h3>
+                </div>
+                <div className="space-y-2">
+                  {team.members.map((member, idx) => (
+                    <div
+                      key={member.id}
+                      className="flex items-center justify-between gap-2 bg-[#03060E] border border-[#152A54] px-3 py-2"
+                    >
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="text-[10px] text-slate-500 shrink-0 font-bold">
+                          #{idx + 1}
+                        </span>
+                        <span className="text-xs text-white font-semibold truncate">
+                          {member.name}
+                        </span>
+                        <span className="text-[10px] text-slate-400 truncate hidden sm:inline font-mono">
+                          {member.phone}
+                        </span>
+                      </div>
+                      {member.transportOptIn && (
+                        <span className="text-[9px] text-sky-400 font-bold border border-sky-500/30 bg-sky-950/30 px-1.5 py-0.5 shrink-0 tracking-wider">
+                          BUS PASS
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* ── Footer Actions ── */}
+        <div className="shrink-0 border-t border-[#152A54] bg-[#03060E] px-5 py-3 flex items-center justify-between gap-3">
+          <button
+            onClick={onRemove}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] uppercase tracking-wider font-bold text-red-400 border border-red-900/60 bg-red-950/30 hover:bg-red-950/60 hover:text-red-300 transition-colors cursor-pointer"
+          >
+            <Trash2Icon className="size-3 shrink-0" />
+            <span>REMOVE CANDIDATE</span>
+          </button>
+          <button
+            onClick={() => onOpenChange(false)}
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 text-[11px] uppercase tracking-wider font-bold text-slate-300 border border-[#152A54] bg-[#060D1A] hover:bg-[#0B162C] hover:text-white transition-colors cursor-pointer"
+          >
+            <span>CLOSE</span>
+          </button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+// ─── Info Field Sub-component ────────────────────────────────────────────────
+
+function InfoField({
+  icon,
+  label,
+  value,
+  mono = false,
+  highlight = false,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  mono?: boolean;
+  highlight?: boolean;
+}) {
+  return (
+    <div className="flex flex-col gap-0.5 bg-[#03060E] border border-[#152A54] p-2.5">
+      <div className="flex items-center gap-1.5">
+        {icon}
+        <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">{label}</span>
+      </div>
+      <span
+        className={`text-[11px] font-semibold truncate ${
+          highlight ? "text-blue-400 font-mono font-bold" : "text-white"
+        } ${mono ? "font-mono" : ""}`}
+        title={value}
+      >
+        {value}
+      </span>
+    </div>
+  );
+}
+
+// ─── Remove Candidate Confirmation Dialog ───────────────────────────────────
+
+function RemoveCandidateDialog({
+  registration,
+  open,
+  onOpenChange,
+  onConfirm,
+  isRemoving,
+}: {
+  registration: RegistrationItem;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onConfirm: () => void;
+  isRemoving: boolean;
+}) {
+  return (
+    <Dialog open={open} onOpenChange={isRemoving ? undefined : onOpenChange}>
+      <DialogContent
+        className="max-w-md w-full bg-[#060D1A] border border-red-900/60 text-white p-0 overflow-hidden font-mono no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        showCloseButton={false}
+      >
+        {/* Danger header */}
+        <div className="border-b border-red-900/40 bg-red-950/20 px-5 py-4">
+          <div className="flex items-center gap-3">
+            <div className="size-9 flex items-center justify-center border border-red-500/40 bg-red-950/40 text-red-400 shrink-0">
+              <ShieldAlertIcon className="size-5" />
+            </div>
+            <div>
+              <DialogTitle className="text-sm font-bold text-white uppercase tracking-wider">
+                REMOVE CANDIDATE
+              </DialogTitle>
+              <DialogDescription className="text-[11px] text-red-400 mt-0.5">
+                Permanent action. Candidate record will be deleted from the database.
+              </DialogDescription>
+            </div>
+          </div>
+        </div>
+
+        {/* Confirmation body */}
+        <div className="px-5 py-4 space-y-4 max-h-[75vh] overflow-y-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <p className="text-xs text-slate-300 leading-relaxed">
+            You are about to permanently delete the registration record for:
+          </p>
+
+          {/* Candidate card */}
+          <div className="border border-red-900/50 bg-red-950/10 p-3 space-y-1.5">
+            <p className="text-sm font-bold text-white">{registration.participant.name}</p>
+            <p className="text-[11px] text-slate-400 font-mono">{registration.participant.email}</p>
+            <div className="flex items-center gap-2 pt-0.5">
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-400 bg-blue-950/40 border border-blue-500/30 px-2 py-0.5 font-mono">
+                <TicketIcon className="size-2.5" />
+                <span>{registration.registrationNumber}</span>
+              </span>
+              <span className="text-[10px] text-slate-500">•</span>
+              <span className="text-[10px] text-slate-300 uppercase tracking-wider font-semibold">
+                {registration.event.name}
+              </span>
+            </div>
+          </div>
+
+          {/* Warning list */}
+          <div className="bg-[#03060E] border border-red-900/40 p-3 space-y-2">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-red-400 flex items-center gap-1.5">
+              <ShieldAlertIcon className="size-3.5 shrink-0" />
+              <span>CRITICAL ACTION WARNING:</span>
+            </p>
+            <ul className="space-y-1.5 text-[11px] text-slate-300">
+              <li className="flex items-start gap-2">
+                <XCircleIcon className="size-3.5 text-red-400 shrink-0 mt-0.5" />
+                <span>Permanent deletion of participant registration record</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <XCircleIcon className="size-3.5 text-red-400 shrink-0 mt-0.5" />
+                <span>Purge linked gate check-in pass and payment records</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <XCircleIcon className="size-3.5 text-red-400 shrink-0 mt-0.5" />
+                <span>Revoke candidate event pass code and QR credentials</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Action buttons */}
+        <div className="border-t border-[#152A54] bg-[#03060E] px-5 py-3 flex items-center justify-end gap-2">
+          <button
+            onClick={() => onOpenChange(false)}
+            disabled={isRemoving}
+            className="px-4 py-1.5 text-[11px] uppercase tracking-wider font-bold text-slate-300 border border-[#152A54] bg-[#060D1A] hover:bg-[#0B162C] hover:text-white transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            CANCEL
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={isRemoving}
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 text-[11px] uppercase tracking-wider font-bold text-white border border-red-600 bg-red-700 hover:bg-red-600 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isRemoving ? (
+              <>
+                <span className="size-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span>REMOVING...</span>
+              </>
+            ) : (
+              <>
+                <Trash2Icon className="size-3 shrink-0" />
+                <span>CONFIRM REMOVAL</span>
+              </>
+            )}
+          </button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+// ─── Main RegistrationsClient Component ─────────────────────────────────────
 
 export function RegistrationsClient({
   initialRegistrations,
@@ -70,6 +657,14 @@ export function RegistrationsClient({
   const [lastSyncedAt, setLastSyncedAt] = React.useState<Date>(new Date());
   const [newlyAddedIds, setNewlyAddedIds] = React.useState<Set<string>>(new Set());
   const [soundEnabled, setSoundEnabled] = React.useState(false);
+
+  // Dialog state
+  const [selectedRegistration, setSelectedRegistration] =
+    React.useState<RegistrationItem | null>(null);
+  const [detailDialogOpen, setDetailDialogOpen] = React.useState(false);
+  const [removeDialogOpen, setRemoveDialogOpen] = React.useState(false);
+  const [isRemoving, setIsRemoving] = React.useState(false);
+  const [exportDialogOpen, setExportDialogOpen] = React.useState(false);
 
   // Sync initial registrations when prop changes
   React.useEffect(() => {
@@ -219,6 +814,52 @@ export function RegistrationsClient({
     }, 2000);
   };
 
+  // Open participant detail dialog
+  const handleOpenDetail = (registration: RegistrationItem) => {
+    setSelectedRegistration(registration);
+    setDetailDialogOpen(true);
+    setRemoveDialogOpen(false);
+  };
+
+  // Trigger remove dialog from within detail dialog
+  const handleRequestRemove = () => {
+    setDetailDialogOpen(false);
+    setTimeout(() => setRemoveDialogOpen(true), 150); // slight delay for animation
+  };
+
+  // Handle confirmed remove from database
+  const handleConfirmRemove = async () => {
+    if (!selectedRegistration) return;
+
+    setIsRemoving(true);
+    try {
+      const result = await deleteRegistration(selectedRegistration.id);
+
+      if (result.success) {
+        toast.success("Candidate removed successfully", {
+          description: `${selectedRegistration.participant.name}'s registration has been permanently deleted.`,
+          duration: 5000,
+        });
+        // Remove from local state immediately
+        setRegistrations((prev) =>
+          prev.filter((r) => r.id !== selectedRegistration.id)
+        );
+        setRemoveDialogOpen(false);
+        setSelectedRegistration(null);
+      } else {
+        toast.error("Failed to remove candidate", {
+          description: result.error?.message || "An unexpected error occurred.",
+          duration: 5000,
+        });
+      }
+    } catch (err) {
+      console.error("Remove candidate error:", err);
+      toast.error("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsRemoving(false);
+    }
+  };
+
   // Derive available event names for filtering
   const availableEvents = React.useMemo(() => {
     const set = new Set<string>();
@@ -261,6 +902,33 @@ export function RegistrationsClient({
 
   return (
     <div className="space-y-4 font-mono">
+      {/* ── Dialogs ── */}
+      {selectedRegistration && (
+        <>
+          <ParticipantDetailDialog
+            registration={selectedRegistration}
+            open={detailDialogOpen}
+            onOpenChange={(open) => {
+              setDetailDialogOpen(open);
+              if (!open) setSelectedRegistration(null);
+            }}
+            onRemove={handleRequestRemove}
+          />
+          <RemoveCandidateDialog
+            registration={selectedRegistration}
+            open={removeDialogOpen}
+            onOpenChange={(open) => {
+              if (!isRemoving) {
+                setRemoveDialogOpen(open);
+                if (!open) setSelectedRegistration(null);
+              }
+            }}
+            onConfirm={handleConfirmRemove}
+            isRemoving={isRemoving}
+          />
+        </>
+      )}
+
       {/* ── Real-Time Status & Live Sync Control Strip ── */}
       <div className="flex flex-wrap items-center justify-between gap-2.5 border border-[#152A54] bg-[#060D1A] px-3 py-2 text-xs">
         <div className="flex items-center gap-2.5">
@@ -293,7 +961,7 @@ export function RegistrationsClient({
 
           <span className="text-[10px] sm:text-[11px] text-slate-400">
             Last update:{" "}
-            <strong className="text-slate-200">
+            <strong className="text-slate-200" suppressHydrationWarning>
               {lastSyncedAt.toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
@@ -399,7 +1067,7 @@ export function RegistrationsClient({
         {/* Filter Pills & Event Dropdown */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           {/* Status Filter Pills */}
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5 text-xs">
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5 text-xs [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {[
               { id: "ALL", label: `All (${totalCount})` },
               { id: "CHECKED_IN", label: `Verified (${checkedInCount})` },
@@ -426,27 +1094,58 @@ export function RegistrationsClient({
 
           {/* Event Filter Dropdown */}
           {availableEvents.length > 0 && (
-            <div className="flex items-center gap-1.5 shrink-0 text-xs">
-              <span className="text-[11px] text-slate-400 uppercase tracking-wider">Event:</span>
-              <select
+            <div className="flex items-center gap-2 shrink-0 text-xs">
+              <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider font-mono">
+                EVENT:
+              </span>
+              <Select
                 value={selectedEvent}
-                onChange={(e) => setSelectedEvent(e.target.value)}
-                className="bg-[#03060E] border border-[#152A54] text-xs text-white px-2 py-1 focus:border-blue-500 focus:outline-hidden rounded-none cursor-pointer"
+                onValueChange={(val) => {
+                  if (val !== null) setSelectedEvent(val);
+                }}
               >
-                <option value="ALL">All Hosted Events ({availableEvents.length})</option>
-                {availableEvents.map((evtName) => (
-                  <option key={evtName} value={evtName}>
-                    {evtName}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger
+                  size="sm"
+                  className="h-7 w-auto min-w-[180px] max-w-[260px] rounded-none border border-[#152A54] bg-[#03060E] text-white font-mono text-xs px-2.5 py-1 hover:border-blue-500/50 hover:bg-[#0B162C] focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500/40 shadow-none transition-colors cursor-pointer [&_svg]:text-blue-400 gap-2"
+                  aria-label="Filter by Event"
+                >
+                  <SelectValue placeholder="All Hosted Events" />
+                </SelectTrigger>
+                <SelectContent
+                  align="end"
+                  side="bottom"
+                  sideOffset={4}
+                  alignItemWithTrigger={false}
+                  className="rounded-none border border-[#152A54] bg-[#060D1A] font-mono text-xs text-white shadow-2xl p-1 no-scrollbar min-w-[210px] ring-1 ring-blue-500/20 z-50 animate-in fade-in-0 zoom-in-95 duration-100"
+                >
+                  <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-[#152A54]/60 mb-1 flex items-center justify-between">
+                    <span>// HOSTED EVENTS</span>
+                    <span className="text-blue-400 font-bold">{availableEvents.length} TOTAL</span>
+                  </div>
+                  <SelectItem
+                    value="ALL"
+                    className="rounded-none font-mono text-xs text-slate-300 hover:bg-[#0B162C] hover:text-white data-[highlighted]:bg-[#0B162C] data-[highlighted]:text-white data-[selected]:text-blue-400 data-[selected]:bg-blue-950/40 data-[selected]:font-bold cursor-pointer py-1.5 px-2.5 transition-colors [&_svg]:text-blue-400"
+                  >
+                    All Hosted Events ({availableEvents.length})
+                  </SelectItem>
+                  {availableEvents.map((evtName) => (
+                    <SelectItem
+                      key={evtName}
+                      value={evtName}
+                      className="rounded-none font-mono text-xs text-slate-300 hover:bg-[#0B162C] hover:text-white data-[highlighted]:bg-[#0B162C] data-[highlighted]:text-white data-[selected]:text-blue-400 data-[selected]:bg-blue-950/40 data-[selected]:font-bold cursor-pointer py-1.5 px-2.5 transition-colors [&_svg]:text-blue-400"
+                    >
+                      {evtName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           )}
         </div>
       </div>
 
       {/* ── Results Count Bar ── */}
-      <div className="flex items-center justify-between text-[11px] text-slate-400 px-1">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-slate-400 px-1">
         <span>
           Showing <strong className="text-white">{filteredRegistrations.length}</strong> of {totalCount} registrations
           {newlyAddedIds.size > 0 && (
@@ -455,18 +1154,28 @@ export function RegistrationsClient({
             </span>
           )}
         </span>
-        {(search || filter !== "ALL" || selectedEvent !== "ALL") && (
+        <div className="flex items-center gap-2 self-end sm:self-auto">
+          {(search || filter !== "ALL" || selectedEvent !== "ALL") && (
+            <button
+              onClick={() => {
+                setSearch("");
+                setFilter("ALL");
+                setSelectedEvent("ALL");
+              }}
+              className="text-blue-400 hover:underline cursor-pointer mr-1"
+            >
+              [ Reset Filters ]
+            </button>
+          )}
           <button
-            onClick={() => {
-              setSearch("");
-              setFilter("ALL");
-              setSelectedEvent("ALL");
-            }}
-            className="text-blue-400 hover:underline cursor-pointer"
+            type="button"
+            onClick={() => setExportDialogOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1 font-mono text-xs uppercase font-semibold text-white bg-blue-600 hover:bg-blue-500 border border-blue-500 transition-colors cursor-pointer shrink-0 shadow-xs"
           >
-            [ Reset Filters ]
+            <DownloadIcon className="size-3" />
+            <span>[ Export Data ]</span>
           </button>
-        )}
+        </div>
       </div>
 
       {/* ── Mobile Card View (< md) ── */}
@@ -513,20 +1222,38 @@ export function RegistrationsClient({
 
                   <div className="flex items-center gap-1.5 shrink-0">
                     <span
-                      className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 border ${
+                      className={`inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 border ${
                         r.checkedIn
                           ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-400"
-                          : "border-[#152A54] bg-[#03060E] text-slate-500"
+                          : "border-amber-500/40 bg-amber-500/10 text-amber-400"
                       }`}
                     >
-                      {r.checkedIn ? "VERIFIED" : "PENDING"}
+                      {r.checkedIn ? (
+                        <>
+                          <CheckCircle2Icon className="size-2.5 shrink-0 text-emerald-400" />
+                          <span>VERIFIED</span>
+                        </>
+                      ) : (
+                        <>
+                          <ClockIcon className="size-2.5 shrink-0 text-amber-400" />
+                          <span>PENDING</span>
+                        </>
+                      )}
                     </span>
                   </div>
                 </div>
 
-                {/* Attendee Info */}
+                {/* Attendee Info — Name is now clickable */}
                 <div className="space-y-1">
-                  <p className="text-sm font-bold text-white">{r.participant.name}</p>
+                  <button
+                    type="button"
+                    onClick={() => handleOpenDetail(r)}
+                    className="text-sm font-bold text-white hover:text-blue-400 transition-colors text-left cursor-pointer group flex items-center gap-1.5"
+                    title="Click to view full candidate details"
+                  >
+                    <span>{r.participant.name}</span>
+                    <UserIcon className="size-3 text-slate-600 group-hover:text-blue-400 transition-colors shrink-0" />
+                  </button>
                   <p className="text-xs text-slate-400 truncate">{r.participant.email}</p>
                   <div className="flex items-center gap-1.5 text-xs text-slate-400 truncate">
                     <Building2Icon className="size-3 text-slate-500 shrink-0" />
@@ -580,7 +1307,7 @@ export function RegistrationsClient({
       </div>
 
       {/* ── Desktop Table View (>= md) ── */}
-      <div className="hidden md:block rounded-none border border-[#152A54] bg-[#060D1A] overflow-x-auto">
+      <div className="hidden md:block rounded-none border border-[#152A54] bg-[#060D1A] overflow-x-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         <table className="w-full text-left text-xs">
           <thead className="bg-[#03060E] text-[11px] uppercase tracking-wider text-slate-400 border-b border-[#152A54]">
             <tr>
@@ -635,13 +1362,32 @@ export function RegistrationsClient({
                       </div>
                     </td>
                     <td className="px-4 py-3">
-                      <p className="font-semibold text-white">{r.participant.name}</p>
-                      <p className="text-[10px] text-slate-400 truncate max-w-[170px]" title={r.participant.email}>
-                        {r.participant.email}
-                      </p>
+                      {/* Participant name — clickable */}
+                      <button
+                        type="button"
+                        onClick={() => handleOpenDetail(r)}
+                        className="group flex items-center gap-1.5 text-left cursor-pointer"
+                        title="Click to view full candidate details"
+                      >
+                        <div>
+                          <p className="font-semibold text-white group-hover:text-blue-400 transition-colors flex items-center gap-1">
+                            {r.participant.name}
+                            <UserIcon className="size-3 text-slate-600 group-hover:text-blue-400 transition-colors shrink-0 opacity-0 group-hover:opacity-100" />
+                          </p>
+                          <p
+                            className="text-[10px] text-slate-400 truncate max-w-[170px]"
+                            title={r.participant.email}
+                          >
+                            {r.participant.email}
+                          </p>
+                        </div>
+                      </button>
                     </td>
                     <td className="px-4 py-3 text-slate-300 font-semibold">{r.event.name}</td>
-                    <td className="px-4 py-3 text-slate-400 truncate max-w-[180px]" title={r.participant.college}>
+                    <td
+                      className="px-4 py-3 text-slate-400 truncate max-w-[180px]"
+                      title={r.participant.college}
+                    >
                       {r.participant.college}
                     </td>
                     <td className="px-4 py-3">
@@ -676,13 +1422,23 @@ export function RegistrationsClient({
                     </td>
                     <td className="px-4 py-3">
                       <span
-                        className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-none border ${
+                        className={`inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-none border ${
                           r.checkedIn
-                            ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-400 font-bold"
-                            : "border-[#152A54] bg-[#03060E] text-slate-500"
+                            ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-400"
+                            : "border-amber-500/40 bg-amber-500/10 text-amber-400"
                         }`}
                       >
-                        {r.checkedIn ? "VERIFIED" : "PENDING"}
+                        {r.checkedIn ? (
+                          <>
+                            <CheckCircle2Icon className="size-2.5 shrink-0 text-emerald-400" />
+                            <span>VERIFIED</span>
+                          </>
+                        ) : (
+                          <>
+                            <ClockIcon className="size-2.5 shrink-0 text-amber-400" />
+                            <span>PENDING</span>
+                          </>
+                        )}
                       </span>
                     </td>
                   </tr>
@@ -692,7 +1448,14 @@ export function RegistrationsClient({
           </tbody>
         </table>
       </div>
+
+      {/* ── Custom Filtered Data Export Dialog ── */}
+      <ExportDataDialog
+        open={exportDialogOpen}
+        onOpenChange={setExportDialogOpen}
+        events={events}
+        defaultScope="REGISTRATIONS"
+      />
     </div>
   );
 }
-

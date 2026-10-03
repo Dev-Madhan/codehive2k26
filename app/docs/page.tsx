@@ -98,7 +98,7 @@ export default function DocsPage() {
                   <li>• Real-time operations dashboard</li>
                   <li>• Registration search &amp; status transitions</li>
                   <li>• Participant registry &amp; college breakdown</li>
-                  <li>• Event capacity &amp; schedule configuration</li>
+                  <li>• Event track &amp; schedule configuration</li>
                 </ul>
               </div>
 

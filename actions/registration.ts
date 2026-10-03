@@ -70,14 +70,9 @@ export async function createRegistration(
   }
 
   try {
-    // 2. Validate Event & Capacity
+    // 2. Validate Event (Entries are Unlimited)
     const event = await prisma.event.findUnique({
       where: { id: eventId },
-      include: {
-        _count: {
-          select: { registrations: true },
-        },
-      },
     });
 
     if (!event) {
@@ -91,13 +86,6 @@ export async function createRegistration(
       return {
         success: false,
         error: { code: "EVENT_CLOSED", message: "Registration for this event is closed." },
-      };
-    }
-
-    if (event._count.registrations >= event.capacity) {
-      return {
-        success: false,
-        error: { code: "EVENT_FULL", message: "Event capacity has been reached." },
       };
     }
 
@@ -424,6 +412,69 @@ export async function createRegistration(
           isDev && error?.message
             ? `Registration failed: ${error.message}`
             : "Failed to complete registration.",
+      },
+    };
+  }
+}
+
+export async function deleteRegistration(
+  registrationId: string
+): Promise<ActionResponse<{ registrationId: string }>> {
+  if (!registrationId) {
+    return {
+      success: false,
+      error: { code: "INVALID_INPUT", message: "Registration ID is required." },
+    };
+  }
+
+  try {
+    // Verify registration exists before deleting
+    const registration = await prisma.registration.findUnique({
+      where: { id: registrationId },
+      include: {
+        participant: { select: { name: true } },
+        event: { select: { name: true, slug: true } },
+      },
+    });
+
+    if (!registration) {
+      return {
+        success: false,
+        error: { code: "NOT_FOUND", message: "Registration not found." },
+      };
+    }
+
+    // Delete registration (cascades to CheckIn and Payment via schema)
+    await prisma.registration.delete({
+      where: { id: registrationId },
+    });
+
+    // Revalidate all admin views
+    revalidatePath("/admin/registrations");
+    revalidatePath("/admin/dashboard");
+    revalidatePath("/admin/participants");
+    revalidatePath("/admin/events");
+    revalidatePath("/admin/reports");
+    revalidatePath("/dashboard");
+    revalidatePath(`/events/${registration.event.slug}`);
+    revalidatePath("/events");
+
+    return {
+      success: true,
+      data: { registrationId },
+      message: `Registration for ${registration.participant.name} removed successfully.`,
+    };
+  } catch (error: any) {
+    const isDev = process.env.NODE_ENV === "development";
+    console.error("deleteRegistration error:", error);
+    return {
+      success: false,
+      error: {
+        code: "INTERNAL_ERROR",
+        message:
+          isDev && error?.message
+            ? `Failed to delete registration: ${error.message}`
+            : "Failed to remove registration.",
       },
     };
   }

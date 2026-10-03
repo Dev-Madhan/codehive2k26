@@ -52,7 +52,7 @@ export default async function AdminDashboardPage() {
     },
     {
       label: "Event Catalog",
-      desc: "Monitor seat capacity & formats",
+      desc: "Manage event tracks & formats",
       href: "/admin/events",
       icon: CalendarIcon,
       color: "text-sky-400 border-sky-500/30",

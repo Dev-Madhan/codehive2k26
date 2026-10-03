@@ -139,7 +139,7 @@
   /* ───────── UI System Tokens ───────── */
   --card: #060D1A;
   --card-foreground: #FFFFFF;
-  --popover: #0E1B38;
+  --popover: #060D1A;
   --popover-foreground: #FFFFFF;
   --primary-foreground: #FFFFFF;
   --secondary: #0A1325;
@@ -213,7 +213,7 @@
 
   --card: #060D1A;
   --card-foreground: #FFFFFF;
-  --popover: #0E1B38;
+  --popover: #060D1A;
   --popover-foreground: #FFFFFF;
   --primary-foreground: #FFFFFF;
   --secondary: #0A1325;
@@ -261,6 +261,22 @@
   }
   code, pre, .font-mono {
     font-family: var(--font-mono), monospace;
+  }
+  select {
+    background-color: #03060E;
+    color: #FFFFFF;
+    border: 1px solid #152A54;
+    font-family: var(--font-mono), monospace;
+    border-radius: 0;
+  }
+  select option {
+    background-color: #060D1A;
+    color: #E2E8F0;
+    font-family: var(--font-mono), monospace;
+  }
+  select option:checked {
+    background-color: #0B162C;
+    color: #38BDF8;
   }
 }
 
@@ -481,4 +497,22 @@
     width: 100% !important;
     max-width: 100% !important;
   }
+}
+
+/* ============================================================
+   SCROLLBAR UTILITIES
+   Hides scrollbars completely while preserving full scrollability
+   ============================================================ */
+.no-scrollbar::-webkit-scrollbar,
+.scrollbar-none::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+.no-scrollbar,
+.scrollbar-none {
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
 }

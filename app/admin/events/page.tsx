@@ -5,20 +5,29 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function AdminEventsPage() {
-  const events = await prisma.event.findMany({
-    include: {
-      category: {
-        select: {
-          id: true,
-          name: true,
+  const [events, categories] = await Promise.all([
+    prisma.event.findMany({
+      include: {
+        category: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
+        _count: {
+          select: {
+            registrations: true,
+            teams: true,
+          },
         },
       },
-      _count: {
-        select: { registrations: true },
-      },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.eventCategory.findMany({
+      orderBy: { name: "asc" },
+    }),
+  ]);
 
   return (
     <div className="space-y-5 font-mono max-w-full">
@@ -28,11 +37,11 @@ export default async function AdminEventsPage() {
             &gt; admin / event_catalog
           </div>
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white uppercase">Event Management</h1>
-          <p className="text-xs text-slate-400 mt-1">Configure, monitor, and manage symposium events and capacity flow.</p>
+          <p className="text-xs text-slate-400 mt-1">Configure, monitor, and manage symposium events and registration flow.</p>
         </div>
       </div>
 
-      <EventsClient initialEvents={events} />
+      <EventsClient initialEvents={events} categories={categories} />
     </div>
   );
 }

@@ -14,10 +14,12 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+import { ExportDataDialog } from "@/components/admin/export-dialog";
+
 interface EventReportItem {
   id: string;
   name: string;
-  capacity: number;
+  capacity?: number;
   status: string;
   category?: { name: string } | null;
   _count: {
@@ -39,6 +41,7 @@ export function ReportsClient({
   events: EventReportItem[];
 }) {
   const [search, setSearch] = React.useState("");
+  const [exportDialogOpen, setExportDialogOpen] = React.useState(false);
 
   const attendanceRate =
     totalRegistrations > 0
@@ -54,38 +57,6 @@ export function ReportsClient({
         (e.category?.name && e.category.name.toLowerCase().includes(q))
     );
   }, [events, search]);
-
-  const handleExportSummary = () => {
-    try {
-      const csvRows = [
-        ["Event Name", "Category", "Registrations", "Capacity", "Occupancy %", "Status"],
-        ...events.map((e) => {
-          const pct = e.capacity > 0 ? Math.round((e._count.registrations / e.capacity) * 100) : 0;
-          return [
-            `"${e.name.replace(/"/g, '""')}"`,
-            `"${e.category?.name || "General"}"`,
-            e._count.registrations,
-            e.capacity,
-            `${pct}%`,
-            e.status,
-          ];
-        }),
-      ];
-      const blob = new Blob([csvRows.map((r) => r.join(",")).join("\n")], {
-        type: "text/csv;charset=utf-8;",
-      });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `codehive-symposium-report-${new Date().toISOString().slice(0, 10)}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      toast.success("Symposium report CSV downloaded!");
-    } catch {
-      toast.error("Failed to generate CSV export");
-    }
-  };
 
   return (
     <div className="space-y-5 font-mono max-w-full">
@@ -164,9 +135,9 @@ export function ReportsClient({
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[#152A54] pb-4">
           <div>
             <h2 className="text-sm sm:text-base font-bold text-white uppercase tracking-wider">
-              &gt; Event Occupancy &amp; Registrations
+              &gt; Event Registrations Breakdown
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">Capacity breakdown per symposium track.</p>
+            <p className="text-xs text-slate-400 mt-0.5">Registration breakdown per symposium track.</p>
           </div>
 
           <div className="flex items-center gap-2">
@@ -182,12 +153,12 @@ export function ReportsClient({
             </div>
             <button
               type="button"
-              onClick={handleExportSummary}
+              onClick={() => setExportDialogOpen(true)}
               className="inline-flex items-center gap-1.5 px-3 py-1 font-mono text-xs uppercase font-semibold text-white bg-blue-600 hover:bg-blue-500 border border-blue-500 transition-colors cursor-pointer shrink-0"
             >
               <DownloadIcon className="size-3" />
-              <span className="hidden sm:inline">[ Export CSV ]</span>
-              <span className="sm:hidden">CSV</span>
+              <span className="hidden sm:inline">[ Export Data / CSV ]</span>
+              <span className="sm:hidden">EXPORT</span>
             </button>
           </div>
         </div>
@@ -198,12 +169,6 @@ export function ReportsClient({
             <p className="text-xs text-slate-500 py-4 text-center">No matching events found.</p>
           ) : (
             filteredEvents.map((ev) => {
-              const fillPct =
-                ev.capacity > 0
-                  ? Math.min(100, Math.round((ev._count.registrations / ev.capacity) * 100))
-                  : 0;
-              const isFull = fillPct >= 100;
-
               return (
                 <div
                   key={ev.id}
@@ -217,35 +182,17 @@ export function ReportsClient({
                       <h3 className="text-xs font-bold text-white leading-snug">{ev.name}</h3>
                     </div>
                     <span
-                      className={`text-[10px] font-bold uppercase px-1.5 py-0.5 shrink-0 border ${
-                        isFull
-                          ? "border-red-500/40 bg-red-950/40 text-red-400"
-                          : "border-blue-500/40 bg-blue-950/40 text-blue-300"
-                      }`}
+                      className="text-[10px] font-bold uppercase px-1.5 py-0.5 shrink-0 border border-blue-500/40 bg-blue-950/40 text-blue-300"
                     >
-                      {isFull ? "FULL" : `${ev.capacity - ev._count.registrations} LEFT`}
+                      OPEN
                     </span>
                   </div>
 
-                  <div className="space-y-1 pt-1">
-                    <div className="flex justify-between text-[11px]">
-                      <span className="text-slate-400">Seats:</span>
-                      <span className="font-bold text-white tabular-nums">
-                        {ev._count.registrations} / {ev.capacity} ({fillPct}%)
-                      </span>
-                    </div>
-                    <div className="w-full h-1.5 bg-[#060D1A] border border-[#152A54]">
-                      <div
-                        className={`h-full ${
-                          isFull
-                            ? "bg-red-500"
-                            : fillPct >= 80
-                            ? "bg-amber-400"
-                            : "bg-blue-500"
-                        }`}
-                        style={{ width: `${fillPct}%` }}
-                      />
-                    </div>
+                  <div className="flex items-center justify-between text-xs pt-1 border-t border-[#152A54]/60">
+                    <span className="text-slate-400 text-[10px] uppercase">Registrations:</span>
+                    <span className="font-bold text-blue-400 tabular-nums">
+                      {ev._count.registrations} (Unlimited)
+                    </span>
                   </div>
                 </div>
               );
@@ -259,11 +206,6 @@ export function ReportsClient({
             <p className="text-xs text-slate-500 py-6 text-center">No matching events found.</p>
           ) : (
             filteredEvents.map((ev) => {
-              const fillPct =
-                ev.capacity > 0
-                  ? Math.min(100, Math.round((ev._count.registrations / ev.capacity) * 100))
-                  : 0;
-
               return (
                 <div key={ev.id} className="py-3 flex items-center justify-between text-xs gap-4 hover:bg-[#0B162C]/40 px-2 transition-colors">
                   <div className="flex items-center gap-3 min-w-0">
@@ -273,28 +215,12 @@ export function ReportsClient({
                     <span className="font-semibold text-white truncate">{ev.name}</span>
                   </div>
 
-                  <div className="flex items-center gap-4 shrink-0">
-                    <div className="w-32 space-y-1">
-                      <div className="flex justify-between text-[10px]">
-                        <span className="text-slate-400">Fill:</span>
-                        <span className="font-bold text-blue-400">{fillPct}%</span>
-                      </div>
-                      <div className="w-full h-1.5 bg-[#03060E] border border-[#152A54]">
-                        <div
-                          className={`h-full ${
-                            fillPct >= 100
-                              ? "bg-red-500"
-                              : fillPct >= 80
-                              ? "bg-amber-400"
-                              : "bg-blue-500"
-                          }`}
-                          style={{ width: `${fillPct}%` }}
-                        />
-                      </div>
-                    </div>
-
-                    <span className="text-blue-400 font-bold min-w-[100px] text-right">
-                      {ev._count.registrations} / {ev.capacity} SEATS
+                  <div className="flex items-center gap-3 shrink-0">
+                    <span className="text-blue-400 font-bold min-w-[120px] text-right font-mono">
+                      {ev._count.registrations} Registrations
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-mono">
+                      [ Unlimited ]
                     </span>
                   </div>
                 </div>
@@ -303,6 +229,18 @@ export function ReportsClient({
           )}
         </div>
       </div>
+
+      {/* ── Custom Filtered Data Export Dialog ── */}
+      <ExportDataDialog
+        open={exportDialogOpen}
+        onOpenChange={setExportDialogOpen}
+        events={events.map((e) => ({
+          id: e.id,
+          name: e.name,
+          slug: e.name.toLowerCase().replace(/\s+/g, "-"),
+        }))}
+        defaultScope="SUMMARY"
+      />
     </div>
   );
 }

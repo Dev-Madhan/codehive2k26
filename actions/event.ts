@@ -3,7 +3,7 @@
 import prisma from "@/lib/prisma";
 import { eventSchema, EventInput } from "@/lib/validations/event";
 import { ActionResponse } from "@/types";
-import { Event } from "@prisma/client";
+import { Event, EventCategory, EventStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 export async function getEvents(): Promise<ActionResponse<Event[]>> {
@@ -117,6 +117,133 @@ export async function deleteEventBySlug(slug: string): Promise<ActionResponse<{ 
   }
 }
 
+export async function updateEvent(
+  id: string,
+  input: Partial<EventInput> & { status?: EventStatus }
+): Promise<ActionResponse<Event>> {
+  try {
+    const existing = await prisma.event.findUnique({ where: { id } });
+    if (!existing) {
+      return {
+        success: false,
+        error: { code: "NOT_FOUND", message: "Event not found." },
+      };
+    }
+
+    const updated = await prisma.event.update({
+      where: { id },
+      data: {
+        ...(input.name !== undefined && { name: input.name }),
+        ...(input.slug !== undefined && { slug: input.slug }),
+        ...(input.description !== undefined && { description: input.description }),
+        ...(input.venue !== undefined && { venue: input.venue }),
+        ...(input.startAt !== undefined && { startAt: new Date(input.startAt) }),
+        ...(input.endAt !== undefined && { endAt: new Date(input.endAt) }),
+        ...(input.registrationDeadline !== undefined && {
+          registrationDeadline: new Date(input.registrationDeadline),
+        }),
+        ...(input.registrationOpen !== undefined && {
+          registrationOpen: input.registrationOpen,
+        }),
+        ...(input.isTeamEvent !== undefined && { isTeamEvent: input.isTeamEvent }),
+        ...(input.minTeamSize !== undefined && { minTeamSize: Number(input.minTeamSize) }),
+        ...(input.maxTeamSize !== undefined && { maxTeamSize: Number(input.maxTeamSize) }),
+        ...(input.categoryId !== undefined && { categoryId: input.categoryId || null }),
+        ...(input.posterUrl !== undefined && { posterUrl: input.posterUrl || null }),
+        ...(input.status !== undefined && { status: input.status }),
+      },
+    });
+
+    revalidatePath("/events");
+    revalidatePath("/admin/events");
+    revalidatePath("/admin/registrations");
+    revalidatePath("/admin/dashboard");
+    revalidatePath("/admin/reports");
+    revalidatePath("/dashboard");
+
+    return { success: true, data: updated };
+  } catch (error: any) {
+    console.error("updateEvent error:", error);
+    return {
+      success: false,
+      error: { code: "INTERNAL_ERROR", message: error?.message || "Failed to update event." },
+    };
+  }
+}
+
+export async function toggleEventRegistration(
+  id: string,
+  isOpen: boolean
+): Promise<ActionResponse<Event>> {
+  try {
+    const updated = await prisma.event.update({
+      where: { id },
+      data: {
+        registrationOpen: isOpen,
+        status: isOpen ? "REGISTRATION_OPEN" : "REGISTRATION_CLOSED",
+      },
+    });
+
+    revalidatePath("/events");
+    revalidatePath("/admin/events");
+    revalidatePath("/admin/registrations");
+    revalidatePath("/admin/dashboard");
+    revalidatePath("/dashboard");
+
+    return { success: true, data: updated };
+  } catch (error: any) {
+    console.error("toggleEventRegistration error:", error);
+    return {
+      success: false,
+      error: { code: "INTERNAL_ERROR", message: "Failed to toggle registration." },
+    };
+  }
+}
+
+export async function updateEventStatus(
+  id: string,
+  status: EventStatus
+): Promise<ActionResponse<Event>> {
+  try {
+    const updated = await prisma.event.update({
+      where: { id },
+      data: {
+        status,
+        registrationOpen: status === "REGISTRATION_OPEN" || status === "PUBLISHED",
+      },
+    });
+
+    revalidatePath("/events");
+    revalidatePath("/admin/events");
+    revalidatePath("/admin/registrations");
+    revalidatePath("/admin/dashboard");
+    revalidatePath("/dashboard");
+
+    return { success: true, data: updated };
+  } catch (error: any) {
+    console.error("updateEventStatus error:", error);
+    return {
+      success: false,
+      error: { code: "INTERNAL_ERROR", message: "Failed to update status." },
+    };
+  }
+}
+
+export async function getEventCategories(): Promise<ActionResponse<EventCategory[]>> {
+  try {
+    const categories = await prisma.eventCategory.findMany({
+      orderBy: { name: "asc" },
+    });
+    return { success: true, data: categories };
+  } catch (error: any) {
+    console.error("getEventCategories error:", error);
+    return {
+      success: false,
+      error: { code: "INTERNAL_ERROR", message: "Failed to fetch event categories." },
+    };
+  }
+}
+
 export async function deleteEvent(id: string): Promise<ActionResponse<{ count: number }>> {
   try {
     const deleted = await prisma.event.delete({
@@ -125,6 +252,9 @@ export async function deleteEvent(id: string): Promise<ActionResponse<{ count: n
 
     revalidatePath("/events");
     revalidatePath("/admin/events");
+    revalidatePath("/admin/registrations");
+    revalidatePath("/admin/dashboard");
+    revalidatePath("/dashboard");
 
     return { success: true, data: { count: 1 } };
   } catch (error) {
@@ -135,4 +265,5 @@ export async function deleteEvent(id: string): Promise<ActionResponse<{ count: n
     };
   }
 }
+
 

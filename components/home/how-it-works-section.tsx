@@ -263,14 +263,14 @@ export function HowItWorksSection() {
           <div className="flex items-center gap-3">
             <span className="w-1.5 h-1.5 bg-emerald-400 animate-pulse" />
             <p className="font-mono text-xs uppercase tracking-wider text-slate-400">
-              Registrations are live — Slots fill up fast
+              Registrations are live — Open to all participants
             </p>
           </div>
           <Link
             href="/auth"
             className="inline-flex items-center gap-2 px-5 py-2.5 font-mono text-xs uppercase tracking-wider font-bold bg-blue-600 hover:bg-blue-500 text-white border border-blue-400/80 transition-all shadow-[0_0_16px_rgba(37,99,235,0.3)] hover:shadow-[0_0_24px_rgba(59,130,246,0.5)] shrink-0"
           >
-            Secure Your Spot <ArrowRightIcon className="size-3" />
+            Register Now <ArrowRightIcon className="size-3" />
           </Link>
         </div>
       </div>

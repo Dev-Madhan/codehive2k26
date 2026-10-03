@@ -62,7 +62,7 @@ export default async function EventDetailPage({ params }: Props) {
             </div>
             <div className="flex items-center gap-2 font-mono">
               <UsersIcon className="size-4 text-blue-400 shrink-0" />
-              <span>Capacity: {event.capacity} seats</span>
+              <span>Entries: Unlimited</span>
             </div>
           </div>
         </div>
@@ -77,7 +77,7 @@ export default async function EventDetailPage({ params }: Props) {
               Event Registration Portal
             </h2>
             <p className="text-xs font-sans text-slate-300 mt-1">
-              Complete your identity verification and secure your seat.
+              Complete your identity verification and generate your event pass.
             </p>
           </div>
           <RegistrationForm

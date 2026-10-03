@@ -443,13 +443,15 @@ export function RegistrationForm({
               >
                 <SelectValue placeholder="Select team size" />
               </SelectTrigger>
-              <SelectContent className="rounded-none border-[#152A54] bg-[#030712] font-sans text-sm">
+              <SelectContent>
+                <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-[#152A54]/60 mb-1 flex items-center justify-between font-mono">
+                  <span>// TEAM COMPOSITION</span>
+                </div>
                 <SelectGroup>
                   {teamOptions.map((opt) => (
                     <SelectItem
                       key={opt.value}
                       value={opt.value}
-                      className="rounded-none hover:bg-[#0B162C]"
                     >
                       {opt.label}
                     </SelectItem>
@@ -694,13 +696,15 @@ export function RegistrationForm({
               >
                 <SelectValue placeholder="Select year" />
               </SelectTrigger>
-              <SelectContent className="rounded-none border-[#152A54] bg-[#030712] font-sans text-sm">
+              <SelectContent>
+                <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-[#152A54]/60 mb-1 flex items-center justify-between font-mono">
+                  <span>// YEAR OF STUDY</span>
+                </div>
                 <SelectGroup>
                   {YEAR_OPTIONS.map((opt) => (
                     <SelectItem
                       key={opt.value}
                       value={opt.value}
-                      className="rounded-none hover:bg-[#0B162C]"
                     >
                       {opt.label}
                     </SelectItem>

@@ -6,40 +6,77 @@ import {
   CalendarDaysIcon,
   QrCodeIcon,
   RadioIcon,
+  BusIcon,
 } from "lucide-react";
+import type { DashboardStats } from "@/types/dashboard";
 
-const stats = [
-  {
-    label: "Registrations",
-    value: "1,248",
-    detail: "+18% vs target",
-    icon: UsersIcon,
-  },
-  {
-    label: "Active Events",
-    value: "12",
-    detail: "4 tracks open",
-    icon: CalendarDaysIcon,
-  },
-  {
-    label: "Checked In",
-    value: "892",
-    detail: "71.5% turnout",
-    icon: QrCodeIcon,
-  },
-  {
-    label: "Gate Status",
-    value: "ONLINE",
-    detail: "83% capacity",
-    icon: RadioIcon,
-    isStatus: true,
-  },
-];
+export function SectionCards({ stats }: { stats?: DashboardStats }) {
+  const cards = React.useMemo(() => {
+    if (!stats) {
+      return [
+        {
+          label: "Registrations",
+          value: "0",
+          detail: "0 confirmed",
+          icon: UsersIcon,
+        },
+        {
+          label: "Active Events",
+          value: "0",
+          detail: "Tracks Published",
+          icon: CalendarDaysIcon,
+        },
+        {
+          label: "Checked In",
+          value: "0",
+          detail: "0% turnout",
+          icon: QrCodeIcon,
+        },
+        {
+          label: "Gate Status",
+          value: "ONLINE",
+          detail: "All Gates Active",
+          icon: RadioIcon,
+          isStatus: true,
+        },
+      ];
+    }
 
-export function SectionCards() {
+    return [
+      {
+        label: "Total Registrations",
+        value: stats.totalRegistrations.toLocaleString(),
+        detail: `${stats.confirmedRegistrations} confirmed`,
+        icon: UsersIcon,
+      },
+      {
+        label: "Active Events",
+        value: stats.activeEventsCount.toString(),
+        detail: "Symposium Tracks",
+        icon: CalendarDaysIcon,
+      },
+      {
+        label: "Checked In",
+        value: stats.totalCheckIns.toLocaleString(),
+        detail: `${stats.turnoutRate}% turnout`,
+        icon: QrCodeIcon,
+      },
+      {
+        label: "Transit & Gates",
+        value: "ONLINE",
+        detail:
+          stats.busRegistrations > 0
+            ? `${stats.busRegistrations} bus passes`
+            : "All gates active",
+        icon: stats.busRegistrations > 0 ? BusIcon : RadioIcon,
+        isStatus: true,
+      },
+    ];
+  }, [stats]);
+
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 px-3 sm:px-4 lg:px-6 font-mono">
-      {stats.map((s) => {
+      {cards.map((s) => {
         const Icon = s.icon;
         return (
           <div

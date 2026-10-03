@@ -92,7 +92,11 @@ export function VelTechPickupSelector({
             <SelectTrigger className="h-11 sm:h-10 w-full rounded-none border border-[#152A54] bg-[#060D1A] px-3 text-white font-sans text-base sm:text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500 data-placeholder:text-slate-600">
               <SelectValue placeholder="Select Vel Tech bus route corridor" />
             </SelectTrigger>
-            <SelectContent className="rounded-none border-[#152A54] bg-[#030712] font-sans text-xs max-h-64">
+            <SelectContent className="max-h-64">
+              <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-[#152A54]/60 mb-1 flex items-center justify-between font-mono">
+                <span>// VEL TECH CORRIDORS</span>
+                <span className="text-blue-400 font-bold">{VELTECH_BUS_ROUTES.length} ROUTES</span>
+              </div>
               <SelectGroup>
                 {VELTECH_BUS_ROUTES.map((route) => (
                   <SelectItem
@@ -132,7 +136,11 @@ export function VelTechPickupSelector({
                 }
               />
             </SelectTrigger>
-            <SelectContent className="rounded-none border-[#152A54] bg-[#030712] font-sans text-xs max-h-56">
+            <SelectContent className="max-h-56">
+              <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-[#152A54]/60 mb-1 flex items-center justify-between font-mono">
+                <span>// BOARDING STOPS</span>
+                <span className="text-blue-400 font-bold">{availableStops.length} STOPS</span>
+              </div>
               <SelectGroup>
                 {availableStops.map((stop) => (
                   <SelectItem
