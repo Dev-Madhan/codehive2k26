@@ -21,6 +21,7 @@ import {
   ShieldAlertIcon,
   GraduationCapIcon,
   CalendarIcon,
+  ClockIcon,
 } from "lucide-react";
 import { AttendeePdfItem } from "@/components/admin/settings-client";
 
@@ -64,50 +65,46 @@ export function PdfPreviewDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl w-[95vw] bg-[#060D1A] border border-[#152A54] text-white p-0 overflow-hidden font-mono text-xs rounded-none shadow-2xl flex flex-col max-h-[92vh]">
         {/* Header */}
-        <DialogHeader className="p-4 border-b border-[#152A54] bg-[#03060E] space-y-2 shrink-0">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-bold text-blue-400 bg-blue-600/15 border border-blue-500/30 uppercase">
-                <FileTextIcon className="size-3" />
-                DOCUMENT_INSPECTOR // TIGRIS_S3
-              </span>
-              <span className="text-[10px] text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-2 py-0.5 uppercase flex items-center gap-1">
-                <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                VERIFIED_STORAGE
-              </span>
-            </div>
-
-            <div className="text-[10px] text-slate-400">
-              Uploaded:{" "}
-              {new Date(item.uploadedAt).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-              })}
-            </div>
+        <DialogHeader className="p-4 pr-12 border-b border-[#152A54] bg-[#03060E] space-y-2 shrink-0">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-bold text-blue-400 bg-blue-600/15 border border-blue-500/30 uppercase">
+              <FileTextIcon className="size-3" />
+              DOCUMENT_INSPECTOR // TIGRIS_S3
+            </span>
+            <span className="text-[10px] text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-2 py-0.5 uppercase flex items-center gap-1">
+              <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              VERIFIED_STORAGE
+            </span>
           </div>
 
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <DialogTitle className="text-base font-bold text-white uppercase tracking-tight flex items-center gap-2">
-                <span>{item.name}</span>
-                <span className="text-xs font-normal text-slate-400">
-                  ({item.phone})
-                </span>
-              </DialogTitle>
-              <DialogDescription className="text-slate-400 text-xs flex flex-wrap items-center gap-3 mt-1">
-                <span className="flex items-center gap-1 text-slate-300">
-                  <GraduationCapIcon className="size-3 text-slate-400" />
-                  {item.college}
-                  {item.department ? ` • ${item.department}` : ""}
-                  {item.year ? ` • ${item.year}` : ""}
-                </span>
-                <span className="flex items-center gap-1 text-blue-400">
-                  <CalendarIcon className="size-3" />
-                  {item.eventName}
-                </span>
-              </DialogDescription>
-            </div>
+          <div>
+            <DialogTitle className="text-base font-bold text-white uppercase tracking-tight flex items-center gap-2">
+              <span>{item.name}</span>
+              <span className="text-xs font-normal text-slate-400">
+                ({item.phone})
+              </span>
+            </DialogTitle>
+            <DialogDescription className="text-slate-400 text-xs flex flex-wrap items-center gap-3 mt-1.5">
+              <span className="flex items-center gap-1 text-slate-300">
+                <GraduationCapIcon className="size-3 text-slate-400" />
+                {item.college}
+                {item.department ? ` • ${item.department}` : ""}
+                {item.year ? ` • ${item.year}` : ""}
+              </span>
+              <span className="flex items-center gap-1 text-blue-400">
+                <CalendarIcon className="size-3" />
+                {item.eventName}
+              </span>
+              <span className="flex items-center gap-1 text-slate-400 font-mono">
+                <ClockIcon className="size-3 text-slate-500" />
+                Uploaded:{" "}
+                {new Date(item.uploadedAt).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </span>
+            </DialogDescription>
           </div>
         </DialogHeader>
 

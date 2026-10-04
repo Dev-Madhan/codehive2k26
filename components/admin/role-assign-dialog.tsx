@@ -78,7 +78,7 @@ export function RoleAssignDialog({
     <Dialog open={open} onOpenChange={isUpdating ? undefined : onOpenChange}>
       <DialogContent className="max-w-md w-full bg-[#060D1A] border border-[#152A54] text-white p-0 overflow-hidden font-mono text-xs rounded-none shadow-2xl">
         {/* Header */}
-        <DialogHeader className="p-4 sm:p-5 border-b border-[#152A54] bg-[#030712] space-y-1">
+        <DialogHeader className="p-4 sm:p-5 pr-12 border-b border-[#152A54] bg-[#030712] space-y-1">
           <div className="flex items-center gap-2 text-blue-400 font-bold uppercase text-xs">
             <ShieldCheckIcon className="size-4 text-blue-400" />
             <span>&gt; ADMIN // ROLE_ASSIGNER</span>
