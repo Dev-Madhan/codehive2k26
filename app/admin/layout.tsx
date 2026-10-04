@@ -1,23 +1,18 @@
 import * as React from "react";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { getCurrentUserAccess } from "@/lib/auth-server";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  const userRole = (session?.user as { role?: string })?.role?.toUpperCase();
+  const { session, role } = await getCurrentUserAccess();
 
   if (!session?.user) {
     redirect("/auth?callbackUrl=/admin/dashboard");
   }
 
-  if (userRole !== "ADMIN") {
+  if (role !== "ADMIN") {
     redirect("/events");
   }
 

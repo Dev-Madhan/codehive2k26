@@ -14,6 +14,7 @@ import {
   ShieldCheckIcon,
 } from "lucide-react";
 import type { RegistrationSuccessPayload } from "@/types/registration";
+import { getEventCommunity } from "@/lib/event-community";
 
 interface DigitalEventPassProps {
   ticket: RegistrationSuccessPayload;
@@ -444,6 +445,12 @@ export function DigitalEventPass({
   const [copied, setCopied] = useState(false);
   const hasTeam =
     Boolean(ticket.teamName) || ticket.teamMembers.length > 0;
+  const eventCommunity = getEventCommunity(ticket.eventSlug);
+  const whatsappShareUrl = eventCommunity
+    ? `https://wa.me/?text=${encodeURIComponent(
+        `Join the ${eventCommunity.name} WhatsApp group: ${eventCommunity.whatsappInviteUrl}`
+      )}`
+    : null;
 
   const handleCopyCode = async () => {
     try {
@@ -659,6 +666,16 @@ export function DigitalEventPass({
             {copied ? <CheckIcon size={15} /> : <CopyIcon size={15} />}
             <span>{copied ? "Copied" : "Copy code"}</span>
           </button>
+          {eventCommunity && whatsappShareUrl && (
+            <a
+              href={whatsappShareUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ticket-action"
+            >
+              <span>Share {eventCommunity.name} invite</span>
+            </a>
+          )}
         </div>
         {onRegisterAnother ? (
           <button

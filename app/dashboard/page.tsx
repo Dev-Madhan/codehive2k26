@@ -1,6 +1,5 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { getCurrentUserAccess } from "@/lib/auth-server";
 import prisma from "@/lib/prisma";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ChartAreaInteractive } from "@/components/chart-area-interactive";
@@ -19,17 +18,13 @@ export const revalidate = 0;
 
 export default async function DashboardPage() {
   // 1. RBAC Guard: Participants are strictly disallowed from dashboard facilities; only ADMIN can access
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  const userRole = (session?.user as { role?: string })?.role?.toUpperCase();
+  const { session, role } = await getCurrentUserAccess();
 
   if (!session?.user) {
     redirect("/auth?callbackUrl=/dashboard");
   }
 
-  if (userRole !== "ADMIN") {
+  if (role !== "ADMIN") {
     redirect("/events");
   }
   // Fetch real-time data from database

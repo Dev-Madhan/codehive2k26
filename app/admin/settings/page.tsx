@@ -1,7 +1,6 @@
 import * as React from "react";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { getCurrentUserAccess } from "@/lib/auth-server";
 import prisma from "@/lib/prisma";
 import {
   SettingsClient,
@@ -15,17 +14,13 @@ export const revalidate = 0;
 
 export default async function AdminSettingsPage() {
   // 1. RBAC Guard: Ensure active admin session
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  const userRole = (session?.user as { role?: string })?.role?.toUpperCase();
+  const { session, role } = await getCurrentUserAccess();
 
   if (!session?.user) {
     redirect("/auth?callbackUrl=/admin/settings");
   }
 
-  if (userRole !== "ADMIN") {
+  if (role !== "ADMIN") {
     redirect("/events");
   }
 

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import { AdminAccessManager } from "@/components/admin/admin-access-manager";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -17,10 +18,15 @@ import {
 } from "lucide-react";
 
 export default async function AdminDashboardPage() {
-  const [eventCount, registrationCount, checkInCount] = await Promise.all([
+  const [eventCount, registrationCount, checkInCount, admins] = await Promise.all([
     prisma.event.count(),
     prisma.registration.count(),
     prisma.checkIn.count(),
+    prisma.user.findMany({
+      where: { role: "ADMIN" },
+      select: { id: true, email: true },
+      orderBy: { email: "asc" },
+    }),
   ]);
 
   const stats = [
@@ -94,6 +100,10 @@ export default async function AdminDashboardPage() {
           );
         })}
       </div>
+
+      <AdminAccessManager
+        admins={admins}
+      />
 
       {/* ── Mobile Fast Command Hub (Touch Quick Links) ── */}
       <div className="border border-border bg-card p-4 sm:p-6 space-y-3.5">

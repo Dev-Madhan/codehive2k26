@@ -16,7 +16,7 @@ export function AuthPage() {
     try {
       const result = await authClient.signIn.social({
         provider: "google",
-        callbackURL: `${window.location.origin}/dashboard`,
+        callbackURL: `${window.location.origin}/auth/callback`,
       });
 
       if (result.error) {

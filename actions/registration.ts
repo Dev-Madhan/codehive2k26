@@ -326,6 +326,7 @@ export async function createRegistration(
       to: email,
       participantName: name,
       eventName: event.name,
+      eventSlug: event.slug,
       registrationNumber,
       venue: event.venue,
       date: formattedDate,

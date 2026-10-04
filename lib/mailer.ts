@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { getEventCommunity } from "@/lib/event-community";
 import { env } from "@/env";
 import { generateQrBuffer } from "@/lib/qr";
 
@@ -83,6 +84,7 @@ export interface SendRegistrationEmailParams {
   to: string;
   participantName: string;
   eventName: string;
+  eventSlug: string;
   registrationNumber: string;
   venue: string;
   date: string;
@@ -113,6 +115,29 @@ export async function sendRegistrationConfirmationEmail(
 ) {
   const isTeam = Boolean(params.teamName || (params.members && params.members.length > 0));
   const livePassUrl = params.passUrl || getLivePassUrl(params.registrationNumber);
+  const eventCommunity = getEventCommunity(params.eventSlug);
+  const whatsappInviteMarkup = eventCommunity
+    ? `
+      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #071a13; border: 1px solid #166534; margin-bottom: 24px;">
+        <tr>
+          <td style="padding: 18px 20px;">
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #4ade80; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">
+              Join the ${eventCommunity.name} WhatsApp group
+            </div>
+            <p style="margin: 0 0 14px; font-family: 'Inter', sans-serif; font-size: 12px; color: #cbd5e1; line-height: 1.5;">
+              Get event announcements and connect with the ${eventCommunity.name} community.
+            </p>
+            <a href="${eventCommunity.whatsappInviteUrl}" target="_blank" rel="noopener noreferrer" style="display: inline-block; background-color: #16a34a; color: #ffffff; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 11px 20px; text-decoration: none;">
+              Join WhatsApp group
+            </a>
+            <div style="margin-top: 12px; font-family: 'Inter', sans-serif; font-size: 11px; color: #94a3b8; line-height: 1.5;">
+              To share the invite with a teammate, <a href="https://wa.me/?text=${encodeURIComponent(`Join the ${eventCommunity.name} WhatsApp group: ${eventCommunity.whatsappInviteUrl}`)}" target="_blank" rel="noopener noreferrer" style="color: #4ade80; text-decoration: underline;">send it on WhatsApp</a>.
+            </div>
+          </td>
+        </tr>
+      </table>
+    `
+    : "";
 
   // Generate QR buffer if not explicitly passed
   let qrBuffer = params.qrBuffer;
@@ -343,6 +368,8 @@ export async function sendRegistrationConfirmationEmail(
                   </td>
                 </tr>
               </table>
+
+              ${whatsappInviteMarkup}
 
               <!-- Vel Tech Campus Transportation Details -->
               ${

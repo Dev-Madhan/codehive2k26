@@ -1,26 +1,23 @@
 "use server";
 
-import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
-import { auth } from "@/lib/auth";
 import { deleteFromTigris } from "@/lib/tigris";
 import { ActionResponse } from "@/types";
 import { Role } from "@prisma/client";
+import { getCurrentUserAccess } from "@/lib/auth-server";
+import { isBootstrapAdminEmail } from "@/lib/admin-access";
 
 /**
  * Helper to enforce that the caller has an active ADMIN session.
  */
 async function requireAdminSession() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const { session, role } = await getCurrentUserAccess();
 
   if (!session?.user) {
     return { error: { code: "UNAUTHORIZED" as const, message: "Authentication required." } };
   }
 
-  const role = ((session.user as { role?: string })?.role || "").toUpperCase();
   if (role !== "ADMIN") {
     return { error: { code: "FORBIDDEN" as const, message: "Administrative privilege required." } };
   }
@@ -61,13 +58,33 @@ export async function updateUserRole(
     // Fetch target user
     const targetUser = await prisma.user.findUnique({
       where: { id: targetUserId },
-      select: { id: true, email: true, name: true, role: true },
+      select: { id: true, email: true, name: true, role: true, emailVerified: true },
     });
 
     if (!targetUser) {
       return {
         success: false,
         error: { code: "NOT_FOUND", message: "Target user not found." },
+      };
+    }
+
+    if (newRole === "ADMIN" && !targetUser.emailVerified) {
+      return {
+        success: false,
+        error: {
+          code: "FORBIDDEN",
+          message: "This account's email must be verified before admin access can be granted.",
+        },
+      };
+    }
+
+    if (isBootstrapAdminEmail(targetUser.email) && newRole !== "ADMIN") {
+      return {
+        success: false,
+        error: {
+          code: "FORBIDDEN",
+          message: "The bootstrap administrator cannot be demoted.",
+        },
       };
     }
 
@@ -127,6 +144,71 @@ export async function updateUserRole(
       error: {
         code: "INTERNAL_ERROR",
         message: error instanceof Error ? error.message : "Failed to update user role.",
+      },
+    };
+  }
+}
+
+export async function grantAdminByEmail(
+  email: string
+): Promise<ActionResponse<{ id: string; email: string; role: Role }>> {
+  try {
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+      return {
+        success: false,
+        error: { code: "INVALID_INPUT", message: "Enter a valid email address." },
+      };
+    }
+
+    const authCheck = await requireAdminSession();
+    if (authCheck.error) {
+      return { success: false, error: authCheck.error };
+    }
+
+    const targetUser = await prisma.user.findFirst({
+      where: {
+        email: { equals: normalizedEmail, mode: "insensitive" },
+      },
+      select: { id: true, email: true, role: true, emailVerified: true },
+    });
+
+    if (!targetUser) {
+      return {
+        success: false,
+        error: {
+          code: "NOT_FOUND",
+          message: "No account found for that email. Ask them to sign in once, then grant admin access.",
+        },
+      };
+    }
+
+    if (!targetUser.emailVerified) {
+      return {
+        success: false,
+        error: {
+          code: "FORBIDDEN",
+          message: "This account's email must be verified before admin access can be granted.",
+        },
+      };
+    }
+
+    if (targetUser.role === "ADMIN") {
+      return {
+        success: true,
+        data: targetUser,
+        message: "This account already has admin access.",
+      };
+    }
+
+    return updateUserRole(targetUser.id, "ADMIN");
+  } catch (error) {
+    console.error("[grantAdminByEmail Error]:", error);
+    return {
+      success: false,
+      error: {
+        code: "INTERNAL_ERROR",
+        message: error instanceof Error ? error.message : "Failed to grant admin access.",
       },
     };
   }
@@ -324,4 +406,3 @@ export async function revokeUserSession(
     };
   }
 }
-
