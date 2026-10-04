@@ -63,7 +63,7 @@ export function DeletePdfDialog({
     <Dialog open={open} onOpenChange={isDeleting ? undefined : onOpenChange}>
       <DialogContent className="max-w-md w-full bg-[#060D1A] border border-red-900/60 text-white p-0 overflow-hidden font-mono text-xs rounded-none shadow-2xl">
         {/* Header */}
-        <DialogHeader className="p-4 sm:p-5 border-b border-red-900/40 bg-red-950/20 space-y-1">
+        <DialogHeader className="p-4 sm:p-5 pr-12 border-b border-red-900/40 bg-red-950/20 space-y-1">
           <div className="flex items-center gap-2 text-red-400 font-bold uppercase text-xs">
             <ShieldAlertIcon className="size-4 text-red-400" />
             <span>&gt; DANGER // TIGRIS_S3_PURGE</span>
