@@ -40,10 +40,9 @@ export function DropdownMenuAvatar({ variant = "pill" }: DropdownMenuAvatarProps
   const userName = user.name || "User";
   const userEmail = user.email || "";
   const userImage = user.image || undefined;
-  const userRole = (user as { role?: string }).role?.toLowerCase() || "user";
-  const isAdmin = userRole === "admin";
-  const isOrganizer = userRole === "organizer";
-  const roleLabel = isAdmin ? "Admin" : isOrganizer ? "Organizer" : "Participant";
+  const userRole = ((user as { role?: string }).role || "PARTICIPANT").toUpperCase();
+  const isAdmin = userRole === "ADMIN";
+  const roleLabel = isAdmin ? "Admin" : "Participant";
 
   // First name for the pill trigger
   const firstName = userName.split(" ")[0];
@@ -129,19 +128,6 @@ export function DropdownMenuAvatar({ variant = "pill" }: DropdownMenuAvatarProps
         <DropdownMenuGroup className="py-1">
           <DropdownMenuItem
             className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-[#0B162C] focus:bg-[#0B162C] text-slate-200 hover:text-white transition-colors"
-            onClick={() => router.push("/dashboard")}
-          >
-            <div className="p-1 rounded-none bg-blue-600/15 text-blue-400">
-              <LayoutDashboardIcon className="size-4" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xs font-mono font-medium">My Dashboard</span>
-              <span className="text-[10px] text-slate-400">Passes & registrations</span>
-            </div>
-          </DropdownMenuItem>
-
-          <DropdownMenuItem
-            className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-[#0B162C] focus:bg-[#0B162C] text-slate-200 hover:text-white transition-colors"
             onClick={() => router.push("/events")}
           >
             <div className="p-1 rounded-none bg-blue-600/15 text-blue-400">
@@ -152,29 +138,29 @@ export function DropdownMenuAvatar({ variant = "pill" }: DropdownMenuAvatarProps
               <span className="text-[10px] text-slate-400">Hackathons & workshops</span>
             </div>
           </DropdownMenuItem>
-
-          <DropdownMenuItem
-            className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-[#0B162C] focus:bg-[#0B162C] text-slate-200 hover:text-white transition-colors"
-            onClick={() => router.push("/dashboard")}
-          >
-            <div className="p-1 rounded-none bg-blue-600/15 text-blue-400">
-              <QrCodeIcon className="size-4" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xs font-mono font-medium">Event Day Pass</span>
-              <span className="text-[10px] text-slate-400">Digital QR check-in</span>
-            </div>
-          </DropdownMenuItem>
         </DropdownMenuGroup>
 
-        {/* Organizer / Admin Section */}
+        {/* Admin Console Section */}
         {isAdmin && (
           <>
             <DropdownMenuSeparator className="bg-[#152A54]" />
             <div className="px-3 py-1 text-[10px] font-mono font-semibold text-slate-400 tracking-wider uppercase">
-              Organizer Portal
+              Admin Portal
             </div>
             <DropdownMenuGroup>
+              <DropdownMenuItem
+                className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-[#0B162C] focus:bg-[#0B162C] text-slate-200 hover:text-white transition-colors"
+                onClick={() => router.push("/dashboard")}
+              >
+                <div className="p-1 rounded-none bg-blue-600/15 text-blue-400">
+                  <LayoutDashboardIcon className="size-4" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-xs font-mono font-medium">Live Dashboard</span>
+                  <span className="text-[10px] text-slate-400">Operations & analytics</span>
+                </div>
+              </DropdownMenuItem>
+
               <DropdownMenuItem
                 className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-[#0B162C] focus:bg-[#0B162C] text-slate-200 hover:text-white transition-colors"
                 onClick={() => router.push("/admin/dashboard")}
@@ -183,7 +169,7 @@ export function DropdownMenuAvatar({ variant = "pill" }: DropdownMenuAvatarProps
                   <ShieldCheckIcon className="size-4" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xs font-mono font-medium">Admin Dashboard</span>
+                  <span className="text-xs font-mono font-medium">Admin Management</span>
                   <span className="text-[10px] text-slate-400">Manage events & attendees</span>
                 </div>
               </DropdownMenuItem>

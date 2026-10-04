@@ -205,10 +205,10 @@ export default async function RegistrationViewPage({ params }: Props) {
               &gt; Staff Gate Check-In
             </Link>
             <Link
-              href="/dashboard"
+              href="/events"
               className="flex-1 inline-flex items-center justify-center h-10 px-4 text-xs font-mono font-bold uppercase tracking-wider bg-[#030712] hover:bg-[#0B1528] text-slate-300 hover:text-white transition-colors border border-[#1E293B]"
             >
-              Return to Dashboard
+              &gt; Explore More Events
             </Link>
           </div>
 
