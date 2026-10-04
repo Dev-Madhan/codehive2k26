@@ -4,16 +4,16 @@ export default function AdminRegistrationsLoading() {
   return (
     <div className="space-y-6 font-mono">
       {/* Terminal Header */}
-      <div className="border-b border-[#152A54] pb-4 space-y-2">
+      <div className="border-b border-border pb-4 space-y-2">
         <Skeleton className="h-4 w-48" />
         <Skeleton className="h-8 w-56" />
         <Skeleton className="h-3.5 w-72" />
       </div>
 
       {/* Table Container Skeleton */}
-      <div className="rounded-none border border-[#152A54] bg-[#060D1A] overflow-hidden">
+      <div className="rounded-none border border-border bg-card overflow-hidden">
         {/* Table Head */}
-        <div className="bg-[#03060E] border-b border-[#152A54] px-4 py-3 grid grid-cols-6 gap-4">
+        <div className="bg-background border-b border-border px-4 py-3 grid grid-cols-6 gap-4">
           <Skeleton className="h-3 w-16" />
           <Skeleton className="h-3 w-24" />
           <Skeleton className="h-3 w-20" />

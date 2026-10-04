@@ -66,7 +66,11 @@ interface Props {
 
 interface TeamMember {
   name: string;
+  email: string;
   phone: string;
+  college: string;
+  department: string;
+  year: string;
   collegeIdUrl?: string;
   transportOptIn?: boolean;
   pickupRoute?: string;
@@ -149,7 +153,11 @@ export function RegistrationForm({
           ...prev,
           ...Array.from({ length: count - prev.length }, () => ({
             name: "",
+            email: "",
             phone: "",
+            college: "",
+            department: "",
+            year: "",
             collegeIdUrl: "",
             transportOptIn: false,
             pickupRoute: "",
@@ -324,7 +332,11 @@ export function RegistrationForm({
         pickupLandmark: transportOptIn ? leaderPickupLandmark : undefined,
         members: members.map((m) => ({
           name: m.name,
+          email: m.email,
           phone: m.phone,
+          college: m.college,
+          department: m.department,
+          year: m.year,
           collegeIdUrl: uploadedPdfUrl, // All team members reference the team's combined PDF
           transportOptIn: samePickupForTeam ? transportOptIn : Boolean(m.transportOptIn),
           pickupRoute: samePickupForTeam ? (transportOptIn ? leaderPickupRoute : undefined) : m.pickupRoute,
@@ -415,10 +427,10 @@ export function RegistrationForm({
       {/* ═══════════════════════════════════════════════
           SECTION 01: TEAM CONFIGURATION
           ═══════════════════════════════════════════════ */}
-      <div className="rounded-none border border-[#152A54] bg-[#060D1A] p-4 sm:p-5 space-y-4">
-        <div className="flex items-center gap-2 border-b border-[#152A54] pb-3">
+      <div className="rounded-none border border-border bg-card p-4 sm:p-5 space-y-4">
+        <div className="flex items-center gap-2 border-b border-border pb-3">
           <UsersIcon className="size-4 text-blue-400" />
-          <h3 className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+          <h3 className="text-[11px] font-mono font-bold text-foreground-secondary uppercase tracking-wider">
             Section 01: Team Configuration
           </h3>
         </div>
@@ -427,7 +439,7 @@ export function RegistrationForm({
           <div className="space-y-1.5">
             <Label
               htmlFor="reg-team-size"
-              className="font-sans text-xs uppercase tracking-wider text-slate-300 font-semibold block"
+              className="font-sans text-xs uppercase tracking-wider text-foreground-secondary font-semibold block"
             >
               Team Size
             </Label>
@@ -439,12 +451,12 @@ export function RegistrationForm({
             >
               <SelectTrigger
                 id="reg-team-size"
-                className="h-11 sm:h-10 w-full rounded-none border border-[#152A54] bg-[#03060E] px-3 text-white font-sans text-base sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 data-placeholder:text-slate-600"
+                className="h-11 sm:h-10 w-full rounded-none border border-border bg-background px-3 text-foreground font-sans text-base sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 data-placeholder:text-slate-600"
               >
                 <SelectValue placeholder="Select team size" />
               </SelectTrigger>
               <SelectContent>
-                <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-[#152A54]/60 mb-1 flex items-center justify-between font-mono">
+                <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-border/60 mb-1 flex items-center justify-between font-mono">
                   <span>// TEAM COMPOSITION</span>
                 </div>
                 <SelectGroup>
@@ -465,7 +477,7 @@ export function RegistrationForm({
             <div className="space-y-1.5">
               <Label
                 htmlFor="reg-team-name"
-                className="font-sans text-xs uppercase tracking-wider text-slate-300 font-semibold block"
+                className="font-sans text-xs uppercase tracking-wider text-foreground-secondary font-semibold block"
               >
                 Team Name
               </Label>
@@ -474,7 +486,7 @@ export function RegistrationForm({
                 value={teamName}
                 onChange={(e) => setTeamName(e.target.value)}
                 placeholder="e.g. CyberHive"
-                className="h-11 sm:h-10 rounded-none border border-[#152A54] bg-[#03060E] text-white font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="h-11 sm:h-10 rounded-none border border-border bg-background text-foreground font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
           )}
@@ -484,10 +496,10 @@ export function RegistrationForm({
       {/* ═══════════════════════════════════════════════
           SECTION 02: TEAM LEADER
           ═══════════════════════════════════════════════ */}
-      <div className="rounded-none border border-[#152A54] bg-[#060D1A] p-4 sm:p-5 space-y-4">
-        <div className="flex items-center gap-2 border-b border-[#152A54] pb-3">
+      <div className="rounded-none border border-border bg-card p-4 sm:p-5 space-y-4">
+        <div className="flex items-center gap-2 border-b border-border pb-3">
           <UserIcon className="size-4 text-blue-400" />
-          <h3 className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+          <h3 className="text-[11px] font-mono font-bold text-foreground-secondary uppercase tracking-wider">
             Section 02: Team Leader
           </h3>
         </div>
@@ -496,7 +508,7 @@ export function RegistrationForm({
         <div className="space-y-1.5">
           <Label
             htmlFor="reg-leader-name"
-            className="font-sans text-xs uppercase tracking-wider text-slate-300 font-semibold block"
+            className="font-sans text-xs uppercase tracking-wider text-foreground-secondary font-semibold block"
           >
             Full Name
           </Label>
@@ -506,7 +518,7 @@ export function RegistrationForm({
             value={leaderName}
             onChange={(e) => setLeaderName(e.target.value)}
             placeholder="Jane Doe"
-            className="h-11 sm:h-10 rounded-none border border-[#152A54] bg-[#03060E] text-white font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="h-11 sm:h-10 rounded-none border border-border bg-background text-foreground font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           />
         </div>
 
@@ -515,7 +527,7 @@ export function RegistrationForm({
           <div className="space-y-1.5">
             <Label
               htmlFor="reg-leader-email"
-              className="font-sans text-xs uppercase tracking-wider text-slate-300 font-semibold block"
+              className="font-sans text-xs uppercase tracking-wider text-foreground-secondary font-semibold block"
             >
               Email Address
             </Label>
@@ -539,7 +551,7 @@ export function RegistrationForm({
                   }}
                   placeholder="leader@example.com"
                   disabled={isEmailVerified}
-                  className="h-11 sm:h-10 pl-9 rounded-none border border-[#152A54] bg-[#03060E] text-white font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:opacity-60"
+                  className="h-11 sm:h-10 pl-9 rounded-none border border-border bg-background text-foreground font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:opacity-60"
                 />
               </div>
               {!isEmailVerified && (
@@ -551,7 +563,7 @@ export function RegistrationForm({
                     cooldown > 0 ||
                     !leaderEmail.includes("@")
                   }
-                  className="h-11 sm:h-10 px-4 font-mono text-[11px] uppercase tracking-wider font-bold rounded-none bg-[#0B162C] hover:bg-[#102246] text-blue-400 border border-[#152A54] hover:border-blue-500/50 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0 w-full sm:w-auto justify-center"
+                  className="h-11 sm:h-10 px-4 font-mono text-[11px] uppercase tracking-wider font-bold rounded-none bg-secondary hover:bg-secondary text-blue-400 border border-border hover:border-blue-500/50 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0 w-full sm:w-auto justify-center"
                 >
                   {otpStatus === "sending" ? (
                     <Loader2Icon className="size-3.5 animate-spin" />
@@ -572,7 +584,7 @@ export function RegistrationForm({
 
           {/* OTP Input (Visible after code is sent) */}
           {(otpStatus === "sent" || otpStatus === "verifying") && (
-            <div className="space-y-3 p-3.5 sm:p-4 rounded-none border border-[#152A54] bg-[#03060E]">
+            <div className="space-y-3 p-3.5 sm:p-4 rounded-none border border-border bg-background">
               {otpSuccessMessage && (
                 <p className="text-[11px] font-mono text-blue-400">
                   {otpSuccessMessage}
@@ -581,7 +593,7 @@ export function RegistrationForm({
 
               <div className="flex flex-col sm:flex-row gap-2.5 sm:items-end">
                 <div className="w-full sm:flex-1 space-y-1.5">
-                  <Label className="font-mono text-[10px] uppercase tracking-wider text-slate-400 font-bold block">
+                  <Label className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground font-bold block">
                     Enter 6-Digit Email OTP
                   </Label>
                   <Input
@@ -593,14 +605,14 @@ export function RegistrationForm({
                       setOtpCode(e.target.value.replace(/\D/g, "").slice(0, 6))
                     }
                     placeholder="● ● ● ● ● ●"
-                    className="h-11 sm:h-10 rounded-none border border-[#152A54] bg-[#060D1A] text-white font-mono text-base sm:text-sm tracking-[0.4em] sm:tracking-[0.5em] text-center placeholder:text-slate-600 placeholder:tracking-[0.3em] focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    className="h-11 sm:h-10 rounded-none border border-border bg-card text-foreground font-mono text-base sm:text-sm tracking-[0.4em] sm:tracking-[0.5em] text-center placeholder:text-slate-600 placeholder:tracking-[0.3em] focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
                 <Button
                   type="button"
                   onClick={handleVerifyOtp}
                   disabled={otpCode.length !== 6 || otpStatus === "verifying"}
-                  className="h-11 sm:h-10 px-5 font-mono text-[11px] uppercase tracking-wider font-bold rounded-none bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0 w-full sm:w-auto justify-center"
+                  className="h-11 sm:h-10 px-5 font-mono text-[11px] uppercase tracking-wider font-bold rounded-none bg-blue-600 hover:bg-blue-700 text-foreground border border-blue-500 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0 w-full sm:w-auto justify-center"
                 >
                   {otpStatus === "verifying" ? (
                     <Loader2Icon className="size-3.5 animate-spin" />
@@ -635,7 +647,7 @@ export function RegistrationForm({
         <div className="space-y-1.5">
           <Label
             htmlFor="reg-leader-phone"
-            className="font-sans text-xs uppercase tracking-wider text-slate-300 font-semibold block"
+            className="font-sans text-xs uppercase tracking-wider text-foreground-secondary font-semibold block"
           >
             Mobile Number
           </Label>
@@ -653,7 +665,7 @@ export function RegistrationForm({
                 setLeaderPhone(val);
               }}
               placeholder="+91 98765 43210"
-              className="h-11 sm:h-10 pl-9 rounded-none border border-[#152A54] bg-[#03060E] text-white font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="h-11 sm:h-10 pl-9 rounded-none border border-border bg-background text-foreground font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
           </div>
         </div>
@@ -663,7 +675,7 @@ export function RegistrationForm({
           <div className="space-y-1.5 sm:col-span-2">
             <Label
               htmlFor="reg-college"
-              className="font-sans text-xs uppercase tracking-wider text-slate-300 font-semibold block"
+              className="font-sans text-xs uppercase tracking-wider text-foreground-secondary font-semibold block"
             >
               College / Institution
             </Label>
@@ -673,14 +685,14 @@ export function RegistrationForm({
               value={college}
               onChange={(e) => setCollege(e.target.value)}
               placeholder="Engineering College"
-              className="h-11 sm:h-10 rounded-none border border-[#152A54] bg-[#03060E] text-white font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="h-11 sm:h-10 rounded-none border border-border bg-background text-foreground font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
           </div>
 
           <div className="space-y-1.5">
             <Label
               htmlFor="reg-year"
-              className="font-sans text-xs uppercase tracking-wider text-slate-300 font-semibold block"
+              className="font-sans text-xs uppercase tracking-wider text-foreground-secondary font-semibold block"
             >
               Year of Study
             </Label>
@@ -692,12 +704,12 @@ export function RegistrationForm({
             >
               <SelectTrigger
                 id="reg-year"
-                className="h-11 sm:h-10 w-full rounded-none border border-[#152A54] bg-[#03060E] px-3 text-white font-sans text-base sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 data-placeholder:text-slate-600"
+                className="h-11 sm:h-10 w-full rounded-none border border-border bg-background px-3 text-foreground font-sans text-base sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 data-placeholder:text-slate-600"
               >
                 <SelectValue placeholder="Select year" />
               </SelectTrigger>
               <SelectContent>
-                <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-[#152A54]/60 mb-1 flex items-center justify-between font-mono">
+                <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-border/60 mb-1 flex items-center justify-between font-mono">
                   <span>// YEAR OF STUDY</span>
                 </div>
                 <SelectGroup>
@@ -719,7 +731,7 @@ export function RegistrationForm({
         <div className="space-y-1.5">
           <Label
             htmlFor="reg-dept"
-            className="font-sans text-xs uppercase tracking-wider text-slate-300 font-semibold block"
+            className="font-sans text-xs uppercase tracking-wider text-foreground-secondary font-semibold block"
           >
             Department
           </Label>
@@ -729,7 +741,7 @@ export function RegistrationForm({
             value={department}
             onChange={(e) => setDepartment(e.target.value)}
             placeholder="Computer Science & Engineering"
-            className="h-11 sm:h-10 rounded-none border border-[#152A54] bg-[#03060E] text-white font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="h-11 sm:h-10 rounded-none border border-border bg-background text-foreground font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           />
         </div>
 
@@ -739,11 +751,11 @@ export function RegistrationForm({
           SECTION 03: TEAM ROSTER (Only for teamSize > 1)
           ═══════════════════════════════════════════════ */}
       {teamSizeNum > 1 && members.length > 0 && (
-        <div className="rounded-none border border-[#152A54] bg-[#060D1A] p-4 sm:p-5 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-b border-[#152A54] pb-3">
+        <div className="rounded-none border border-border bg-card p-4 sm:p-5 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-b border-border pb-3">
             <div className="flex items-center gap-2">
               <UsersIcon className="size-4 text-blue-400" />
-              <h3 className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+              <h3 className="text-[11px] font-mono font-bold text-foreground-secondary uppercase tracking-wider">
                 Section 03: Team Roster
               </h3>
             </div>
@@ -755,38 +767,56 @@ export function RegistrationForm({
           {members.map((member, index) => (
             <div
               key={index}
-              className="space-y-3 p-3.5 sm:p-4 rounded-none border border-[#152A54]/60 bg-[#03060E]"
+              className="space-y-3 p-3.5 sm:p-4 rounded-none border border-border/60 bg-background"
             >
               <div className="flex items-center gap-2">
                 <span className="inline-flex items-center justify-center size-6 rounded-none border border-blue-500/40 bg-blue-600/15 text-[10px] font-mono font-bold text-blue-400">
                   {String(index + 2).padStart(2, "0")}
                 </span>
-                <span className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+                <span className="text-[11px] font-mono font-bold text-foreground-secondary uppercase tracking-wider">
                   Member {String(index + 2).padStart(2, "0")}
                 </span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1.5">
-                  <Label className="font-sans text-xs uppercase tracking-wider text-slate-300 font-semibold block">
+                  <Label htmlFor={`member-${index}-name`} className="font-sans text-xs uppercase tracking-wider text-foreground-secondary font-semibold block">
                     Full Name
                   </Label>
                   <Input
+                    id={`member-${index}-name`}
                     required
                     value={member.name}
                     onChange={(e) =>
                       updateMember(index, "name", e.target.value)
                     }
                     placeholder="Member name"
-                    className="h-11 sm:h-10 rounded-none border border-[#152A54] bg-[#060D1A] text-white font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    className="h-11 sm:h-10 rounded-none border border-border bg-card text-foreground font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label className="font-sans text-xs uppercase tracking-wider text-slate-300 font-semibold block">
+                  <Label htmlFor={`member-${index}-email`} className="font-sans text-xs uppercase tracking-wider text-foreground-secondary font-semibold block">
+                    Email Address
+                  </Label>
+                  <Input
+                    id={`member-${index}-email`}
+                    required
+                    type="email"
+                    autoComplete="email"
+                    value={member.email}
+                    onChange={(e) => updateMember(index, "email", e.target.value)}
+                    placeholder="member@college.edu"
+                    className="h-11 sm:h-10 rounded-none border border-border bg-card text-foreground font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor={`member-${index}-phone`} className="font-sans text-xs uppercase tracking-wider text-foreground-secondary font-semibold block">
                     Mobile Number
                   </Label>
                   <Input
+                    id={`member-${index}-phone`}
                     required
                     type="tel"
                     pattern="[6-9][0-9]{9}"
@@ -800,8 +830,64 @@ export function RegistrationForm({
                       )
                     }
                     placeholder="+91 98765 43210"
-                    className="h-11 sm:h-10 rounded-none border border-[#152A54] bg-[#060D1A] text-white font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    className="h-11 sm:h-10 rounded-none border border-border bg-card text-foreground font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor={`member-${index}-college`} className="font-sans text-xs uppercase tracking-wider text-foreground-secondary font-semibold block">
+                    College / Institution
+                  </Label>
+                  <Input
+                    id={`member-${index}-college`}
+                    required
+                    value={member.college}
+                    onChange={(e) => updateMember(index, "college", e.target.value)}
+                    placeholder="Engineering College"
+                    className="h-11 sm:h-10 rounded-none border border-border bg-card text-foreground font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor={`member-${index}-department`} className="font-sans text-xs uppercase tracking-wider text-foreground-secondary font-semibold block">
+                    Department
+                  </Label>
+                  <Input
+                    id={`member-${index}-department`}
+                    required
+                    value={member.department}
+                    onChange={(e) => updateMember(index, "department", e.target.value)}
+                    placeholder="Computer Science & Engineering"
+                    className="h-11 sm:h-10 rounded-none border border-border bg-card text-foreground font-sans text-base sm:text-sm placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor={`member-${index}-year`} className="font-sans text-xs uppercase tracking-wider text-foreground-secondary font-semibold block">
+                    Year of Study
+                  </Label>
+                  <Select
+                    value={member.year}
+                    onValueChange={(value) => {
+                      if (value) updateMember(index, "year", value);
+                    }}
+                  >
+                    <SelectTrigger
+                      id={`member-${index}-year`}
+                      className="h-11 sm:h-10 w-full rounded-none border border-border bg-card px-3 text-foreground font-sans text-base sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 data-placeholder:text-slate-600"
+                    >
+                      <SelectValue placeholder="Select year" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {YEAR_OPTIONS.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
@@ -813,11 +899,11 @@ export function RegistrationForm({
       {/* ═══════════════════════════════════════════════
           SECTION: VEL TECH CAMPUS TRANSPORTATION (6:00 AM ONWARDS)
           ═══════════════════════════════════════════════ */}
-      <div className="rounded-none border border-[#152A54] bg-[#060D1A] p-4 sm:p-5 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2 border-b border-[#152A54] pb-3">
+      <div className="rounded-none border border-border bg-card p-4 sm:p-5 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2 border-b border-border pb-3">
           <div className="flex items-center gap-2">
             <BusIcon className="size-4 text-sky-400 shrink-0" />
-            <h3 className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+            <h3 className="text-[11px] font-mono font-bold text-foreground-secondary uppercase tracking-wider">
               {teamSizeNum > 1
                 ? "Section 04: Vel Tech Campus Transportation Logistics"
                 : "Section 03: Vel Tech Campus Transportation Logistics"}
@@ -828,9 +914,9 @@ export function RegistrationForm({
           </span>
         </div>
 
-        <p className="text-xs font-sans text-slate-300 leading-relaxed">
+        <p className="text-xs font-sans text-foreground-secondary leading-relaxed">
           Vel Tech provides complimentary campus bus transportation for all registered participants across major city corridors starting from{" "}
-          <strong className="text-white font-mono">6:00 AM onwards</strong>.
+          <strong className="text-foreground font-mono">6:00 AM onwards</strong>.
         </p>
 
         {/* Transportation Mode Toggle */}
@@ -840,19 +926,19 @@ export function RegistrationForm({
             onClick={() => setTransportOptIn(false)}
             className={`p-3.5 text-left border transition-all rounded-none cursor-pointer flex flex-col gap-1 ${
               !transportOptIn
-                ? "border-blue-500 bg-blue-950/20 text-white"
-                : "border-[#152A54] bg-[#03060E] text-slate-400 hover:border-slate-700"
+                ? "border-blue-500 bg-blue-950/20 text-foreground"
+                : "border-border bg-background text-muted-foreground hover:border-slate-700"
             }`}
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-200">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-foreground">
                 🚗 Own Transportation
               </span>
               {!transportOptIn && (
                 <span className="size-2 rounded-full bg-blue-400" />
               )}
             </div>
-            <span className="text-[11px] text-slate-400 font-sans">
+            <span className="text-[11px] text-muted-foreground font-sans">
               I / our team will reach the Vel Tech campus directly on our own.
             </span>
           </button>
@@ -862,8 +948,8 @@ export function RegistrationForm({
             onClick={() => setTransportOptIn(true)}
             className={`p-3.5 text-left border transition-all rounded-none cursor-pointer flex flex-col gap-1 ${
               transportOptIn
-                ? "border-sky-400 bg-sky-950/20 text-white shadow-sm shadow-sky-950/40"
-                : "border-[#152A54] bg-[#03060E] text-slate-400 hover:border-slate-700"
+                ? "border-sky-400 bg-sky-950/20 text-foreground shadow-sm shadow-sky-950/40"
+                : "border-border bg-background text-muted-foreground hover:border-slate-700"
             }`}
           >
             <div className="flex items-center justify-between">
@@ -874,7 +960,7 @@ export function RegistrationForm({
                 <span className="size-2 rounded-full bg-sky-400 animate-pulse" />
               )}
             </div>
-            <span className="text-[11px] text-slate-400 font-sans">
+            <span className="text-[11px] text-muted-foreground font-sans">
               Avail free Vel Tech bus pickup from designated city stops from 6:00 AM onwards.
             </span>
           </button>
@@ -884,8 +970,8 @@ export function RegistrationForm({
         {transportOptIn && (
           <div className="space-y-4 pt-2">
             {teamSizeNum > 1 && (
-              <div className="p-3.5 border border-[#152A54] bg-[#03060E] space-y-2">
-                <Label className="font-mono text-[10px] uppercase tracking-wider text-slate-400 font-bold block">
+              <div className="p-3.5 border border-border bg-background space-y-2">
+                <Label className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground font-bold block">
                   Team Boarding Preference:
                 </Label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -895,7 +981,7 @@ export function RegistrationForm({
                     className={`p-2.5 text-left text-xs font-mono border transition-all cursor-pointer ${
                       samePickupForTeam
                         ? "border-sky-400 bg-sky-950/30 text-sky-300 font-bold"
-                        : "border-[#152A54] text-slate-400 hover:border-slate-700"
+                        : "border-border text-muted-foreground hover:border-slate-700"
                     }`}
                   >
                     [•] All Team Members Board Together
@@ -906,7 +992,7 @@ export function RegistrationForm({
                     className={`p-2.5 text-left text-xs font-mono border transition-all cursor-pointer ${
                       !samePickupForTeam
                         ? "border-sky-400 bg-sky-950/30 text-sky-300 font-bold"
-                        : "border-[#152A54] text-slate-400 hover:border-slate-700"
+                        : "border-border text-muted-foreground hover:border-slate-700"
                     }`}
                   >
                     [ ] Individual Member Pickup Locations
@@ -950,9 +1036,9 @@ export function RegistrationForm({
 
                 {/* Additional Members Pickups */}
                 {members.map((member, idx) => (
-                  <div key={idx} className="space-y-3 p-3.5 border border-[#152A54] bg-[#03060E]">
+                  <div key={idx} className="space-y-3 p-3.5 border border-border bg-background">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-mono font-bold text-slate-300 uppercase">
+                      <span className="text-[11px] font-mono font-bold text-foreground-secondary uppercase">
                         Member {String(idx + 2).padStart(2, "0")}: {member.name || `Member ${idx + 2}`}
                       </span>
                       <label className="flex items-center gap-1.5 cursor-pointer text-xs font-mono text-sky-400">
@@ -962,7 +1048,7 @@ export function RegistrationForm({
                           onChange={(e) =>
                             updateMember(idx, "transportOptIn", e.target.checked)
                           }
-                          className="size-3.5 rounded border-[#152A54] bg-[#060D1A] accent-sky-500"
+                          className="size-3.5 rounded border-border bg-card accent-sky-500"
                         />
                         <span>Needs Vel Tech Bus</span>
                       </label>
@@ -991,22 +1077,22 @@ export function RegistrationForm({
       {/* ═══════════════════════════════════════════════
           SECTION 05: COLLEGE ID CARDS (SINGLE PDF)
           ═══════════════════════════════════════════════ */}
-      <div className="rounded-none border border-[#152A54] bg-[#060D1A] p-4 sm:p-5 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2 border-b border-[#152A54] pb-3">
+      <div className="rounded-none border border-blue-500/50 bg-blue-950/10 p-4 sm:p-5 space-y-4 shadow-[0_0_28px_rgba(37,99,235,0.12)]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2 border-b border-border pb-3">
           <div className="flex items-center gap-2">
-            <IdCardIcon className="size-4 text-blue-400 shrink-0" />
-            <h3 className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+            <IdCardIcon className="size-5 text-blue-300 shrink-0" />
+            <h3 className="text-xs font-mono font-bold text-foreground uppercase tracking-wider">
               {teamSizeNum > 1
                 ? "Section 05: Team College ID Cards (Single PDF)"
                 : "Section 04: College ID Card (PDF)"}
             </h3>
           </div>
-          <span className="self-start sm:self-auto text-[10px] font-mono text-rose-400 font-semibold border border-rose-500/30 bg-rose-500/10 px-2 py-0.5">
+          <span className="self-start sm:self-auto text-[10px] font-mono text-rose-300 font-bold border border-rose-500/50 bg-rose-500/15 px-2.5 py-1">
             MANDATORY • SINGLE PDF
           </span>
         </div>
 
-        <p className="text-xs font-mono text-slate-300 leading-relaxed">
+        <p className="text-sm font-sans text-foreground leading-relaxed">
           The team leader must upload a single PDF containing the collection of ID cards of all team members.
         </p>
 
@@ -1040,7 +1126,7 @@ export function RegistrationForm({
           <Button
             type="submit"
             disabled={loading || !isEmailVerified || !year || !idCardPdf || !isTransportComplete}
-            className="h-12 sm:h-11 w-full font-mono text-xs sm:text-sm uppercase tracking-wider font-bold rounded-none bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white border border-blue-500 transition-all cursor-pointer shadow-lg shadow-blue-950/60 disabled:opacity-40 disabled:cursor-not-allowed justify-center"
+            className="h-12 sm:h-11 w-full font-mono text-xs sm:text-sm uppercase tracking-wider font-bold rounded-none bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-foreground border border-blue-500 transition-all cursor-pointer shadow-lg shadow-blue-950/60 disabled:opacity-40 disabled:cursor-not-allowed justify-center"
           >
             {loading ? (
               <>

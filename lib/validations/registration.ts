@@ -5,9 +5,13 @@ const indianPhoneRegex = /^[6-9]\d{9}$/;
 // Team member sub-schema (for additional members beyond the leader)
 const teamMemberSchema = z.object({
   name: z.string().min(2, "Member name must be at least 2 characters").max(100),
+  email: z.string().email("Enter a valid team member email address"),
   phone: z
     .string()
     .regex(indianPhoneRegex, "Must be a valid 10-digit Indian mobile number"),
+  college: z.string().min(2, "College name is required").max(150),
+  department: z.string().min(2, "Department is required").max(100),
+  year: z.enum(["1st Year", "2nd Year", "3rd Year", "4th Year", "Postgraduate"]),
   collegeIdUrl: z.string().url("Invalid College ID URL").optional().or(z.literal("")),
   // Individual member transport preferences (if individual pickup mode is chosen)
   transportOptIn: z.boolean().optional().default(false),

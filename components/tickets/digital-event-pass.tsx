@@ -83,20 +83,20 @@ export function DigitalEventPass({
       {/* Main Ticket Container */}
       <div
         id="codehive-digital-pass"
-        className="relative overflow-hidden rounded-none border-2 border-blue-500/70 bg-[#040814] shadow-2xl shadow-blue-950/60 p-5 sm:p-8"
+        className="relative overflow-hidden rounded-none border-2 border-blue-500/70 bg-background shadow-2xl shadow-blue-950/60 p-5 sm:p-8"
       >
         {/* Futuristic Cyber Scanlines / Glow Accent */}
         <div className="absolute top-0 right-0 size-48 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 size-48 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* ── Top Bar ── */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#152A54] pb-4 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4 mb-6">
           <div className="flex items-center gap-2">
             <span className="text-blue-500 font-extrabold text-base">&gt;</span>
-            <span className="font-mono font-bold text-white text-sm sm:text-base tracking-tight">
+            <span className="font-mono font-bold text-foreground text-sm sm:text-base tracking-tight">
               code<span className="text-blue-400">hive</span>_2k26
             </span>
-            <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest ml-1 border-l border-[#152A54] pl-2">
+            <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest ml-1 border-l border-border pl-2">
               DIGITAL EVENT PASS
             </span>
           </div>
@@ -115,32 +115,32 @@ export function DigitalEventPass({
             <span className="text-[10px] uppercase font-mono tracking-widest text-blue-400 font-semibold block">
               OFFICIAL PARTICIPATION PASS
             </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold font-sans text-white tracking-tight uppercase">
+            <h2 className="text-2xl sm:text-3xl font-extrabold font-sans text-foreground tracking-tight uppercase">
               {ticket.eventName}
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-none border border-[#152A54] bg-[#02050E] text-xs">
-            <div className="flex items-center gap-2.5 text-slate-300">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-none border border-border bg-background text-xs">
+            <div className="flex items-center gap-2.5 text-foreground-secondary">
               <CalendarIcon className="size-4 text-blue-400 shrink-0" />
               <div>
                 <span className="text-[10px] text-slate-500 uppercase block font-mono">Date</span>
-                <span className="font-semibold text-white">{ticket.date}</span>
+                <span className="font-semibold text-foreground">{ticket.date}</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 text-slate-300">
+            <div className="flex items-center gap-2.5 text-foreground-secondary">
               <MapPinIcon className="size-4 text-blue-400 shrink-0" />
               <div>
                 <span className="text-[10px] text-slate-500 uppercase block font-mono">Venue</span>
-                <span className="font-semibold text-white">{ticket.venue}</span>
+                <span className="font-semibold text-foreground">{ticket.venue}</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* ── Verification Block: Pass Code & QR Code ── */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 sm:p-5 rounded-none border-2 border-blue-500/40 bg-[#060D1A] mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 sm:p-5 rounded-none border-2 border-blue-500/40 bg-card mb-6">
           {/* Pass Code (3 Columns on Desktop) */}
           <div className="md:col-span-3 flex flex-col justify-between space-y-4">
             <div>
@@ -150,12 +150,12 @@ export function DigitalEventPass({
                   GATE PASS VERIFICATION CODE
                 </span>
               </div>
-              <p className="text-xs text-slate-400 font-sans leading-relaxed">
+              <p className="text-xs text-muted-foreground font-sans leading-relaxed">
                 Present this code or show the scannable QR pass at the entrance desk on event day.
               </p>
             </div>
 
-            <div className="p-3.5 rounded-none border border-[#152A54] bg-[#02050E] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="p-3.5 rounded-none border border-border bg-background flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <span className="text-[9px] uppercase font-mono text-slate-500 block">
                   PASS CODE / TICKET ID
@@ -168,16 +168,16 @@ export function DigitalEventPass({
               <button
                 type="button"
                 onClick={handleCopyCode}
-                className="inline-flex items-center justify-center gap-1.5 h-10 px-4 font-mono text-xs font-bold uppercase tracking-wider text-white bg-blue-600 hover:bg-blue-700 active:scale-95 border border-blue-500 transition-all cursor-pointer shrink-0"
+                className="inline-flex items-center justify-center gap-1.5 h-10 px-4 font-mono text-xs font-bold uppercase tracking-wider text-foreground bg-blue-600 hover:bg-blue-700 active:scale-95 border border-blue-500 transition-all cursor-pointer shrink-0"
               >
                 {copied ? (
                   <>
-                    <CheckIcon className="size-3.5 text-white" />
+                    <CheckIcon className="size-3.5 text-foreground" />
                     <span>COPIED</span>
                   </>
                 ) : (
                   <>
-                    <CopyIcon className="size-3.5 text-white" />
+                    <CopyIcon className="size-3.5 text-foreground" />
                     <span>COPY CODE</span>
                   </>
                 )}
@@ -191,7 +191,7 @@ export function DigitalEventPass({
           </div>
 
           {/* Scannable QR Code (2 Columns on Desktop) */}
-          <div className="md:col-span-2 flex flex-col items-center justify-center p-3 rounded-none border border-[#152A54] bg-[#02050E] text-center">
+          <div className="md:col-span-2 flex flex-col items-center justify-center p-3 rounded-none border border-border bg-background text-center">
             {ticket.qrDataUrl ? (
               <div className="p-2 bg-white rounded-none border-2 border-blue-500/80 shadow-md shadow-blue-500/20">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -206,16 +206,16 @@ export function DigitalEventPass({
                 QR Unavailable
               </div>
             )}
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mt-2 block">
+            <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest mt-2 block">
               OFFICIAL SCAN PASS
             </span>
           </div>
         </div>
 
         {/* ── Attendee & Team Credentials ── */}
-        <div className="space-y-3 border-t border-[#152A54] pt-5">
-          <div className="flex items-center justify-between text-xs text-slate-400 uppercase">
-            <span className="flex items-center gap-1.5 font-bold text-slate-300">
+        <div className="space-y-3 border-t border-border pt-5">
+          <div className="flex items-center justify-between text-xs text-muted-foreground uppercase">
+            <span className="flex items-center gap-1.5 font-bold text-foreground-secondary">
               <UserIcon className="size-3.5 text-blue-400" />
               Attendee Credentials
             </span>
@@ -226,37 +226,37 @@ export function DigitalEventPass({
             )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs bg-[#02050E] p-3.5 border border-[#152A54]">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs bg-background p-3.5 border border-border">
             <div>
               <span className="text-[10px] text-slate-500 block uppercase font-mono">
                 {hasTeam ? "Team Leader" : "Participant"}
               </span>
-              <span className="font-bold text-white font-sans">{ticket.leaderName}</span>
-              <span className="text-[11px] text-slate-400 block font-mono mt-0.5">
+              <span className="font-bold text-foreground font-sans">{ticket.leaderName}</span>
+              <span className="text-[11px] text-muted-foreground block font-mono mt-0.5">
                 {ticket.leaderPhone}
               </span>
             </div>
 
             <div>
               <span className="text-[10px] text-slate-500 block uppercase font-mono">Institution</span>
-              <span className="font-semibold text-white font-sans">{ticket.college}</span>
-              <span className="text-[11px] text-slate-400 block font-sans mt-0.5">
+              <span className="font-semibold text-foreground font-sans">{ticket.college}</span>
+              <span className="text-[11px] text-muted-foreground block font-sans mt-0.5">
                 {ticket.department}
               </span>
             </div>
 
             <div>
               <span className="text-[10px] text-slate-500 block uppercase font-mono">Year</span>
-              <span className="font-semibold text-white font-mono">Year {ticket.year}</span>
+              <span className="font-semibold text-foreground font-mono">Year {ticket.year}</span>
             </div>
           </div>
 
           {/* Team Members Roster (if applicable) */}
           {hasTeam && ticket.teamMembers && ticket.teamMembers.length > 0 && (
             <div className="space-y-2 pt-2">
-              <div className="flex items-center gap-1.5 text-xs text-slate-400">
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <UsersIcon className="size-3.5 text-blue-400" />
-                <span className="font-bold uppercase text-[11px] tracking-wider text-slate-300">
+                <span className="font-bold uppercase text-[11px] tracking-wider text-foreground-secondary">
                   Registered Team Roster ({ticket.teamMembers.length + 1} Members)
                 </span>
               </div>
@@ -268,7 +268,7 @@ export function DigitalEventPass({
                     <span className="inline-flex size-5 items-center justify-center text-[9px] font-bold text-blue-400 bg-blue-600/20 border border-blue-500/40">
                       01
                     </span>
-                    <span className="font-semibold text-white">{ticket.leaderName}</span>
+                    <span className="font-semibold text-foreground">{ticket.leaderName}</span>
                   </div>
                   <span className="text-[10px] font-mono text-blue-400 uppercase font-bold">
                     Leader
@@ -279,13 +279,13 @@ export function DigitalEventPass({
                 {ticket.teamMembers.map((member, idx) => (
                   <div
                     key={idx}
-                    className="p-2.5 rounded-none border border-[#152A54] bg-[#02050E] flex items-center justify-between"
+                    className="p-2.5 rounded-none border border-border bg-background flex items-center justify-between"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="inline-flex size-5 items-center justify-center text-[9px] font-bold text-slate-400 bg-slate-800 border border-[#152A54]">
+                      <span className="inline-flex size-5 items-center justify-center text-[9px] font-bold text-muted-foreground bg-slate-800 border border-border">
                         {String(idx + 2).padStart(2, "0")}
                       </span>
-                      <span className="font-semibold text-slate-200">{member.name}</span>
+                      <span className="font-semibold text-foreground">{member.name}</span>
                     </div>
                     <span className="text-[10px] font-mono text-slate-500">
                       {member.phone}
@@ -298,9 +298,9 @@ export function DigitalEventPass({
         </div>
 
         {/* ── Vel Tech Campus Transportation Details ── */}
-        <div className="space-y-2 border-t border-[#152A54] pt-5">
-          <div className="flex items-center justify-between text-xs text-slate-400 uppercase">
-            <span className="flex items-center gap-1.5 font-bold text-slate-300">
+        <div className="space-y-2 border-t border-border pt-5">
+          <div className="flex items-center justify-between text-xs text-muted-foreground uppercase">
+            <span className="flex items-center gap-1.5 font-bold text-foreground-secondary">
               <BusIcon className="size-3.5 text-sky-400" />
               Vel Tech Campus Transportation
             </span>
@@ -311,20 +311,20 @@ export function DigitalEventPass({
 
           {ticket.transportOptIn ? (
             <div className="p-3.5 rounded-none border border-sky-500/40 bg-sky-950/20 space-y-2 text-xs">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-[#152A54]/80 pb-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-border/80 pb-2">
                 <span className="font-mono font-bold text-sky-300 uppercase tracking-wider text-[11px]">
                   [ OFFICIAL VEL TECH BUS PASS ]
                 </span>
-                <span className="text-[10px] font-mono text-slate-400">
+                <span className="text-[10px] font-mono text-muted-foreground">
                   {ticket.passengersCount} Seat{ticket.passengersCount > 1 ? "s" : ""} Reserved • Report by 06:00 AM
                 </span>
               </div>
 
               {ticket.samePickupForTeam || !ticket.teamMembers || ticket.teamMembers.length === 0 ? (
-                <div className="space-y-1 text-slate-300">
+                <div className="space-y-1 text-foreground-secondary">
                   <div className="flex items-start gap-2">
                     <span className="text-[10px] font-mono text-slate-500 uppercase shrink-0 mt-0.5">Route:</span>
-                    <span className="font-bold text-white">{ticket.pickupRoute}</span>
+                    <span className="font-bold text-foreground">{ticket.pickupRoute}</span>
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="text-[10px] font-mono text-slate-500 uppercase shrink-0 mt-0.5">Boarding Stop:</span>
@@ -332,23 +332,23 @@ export function DigitalEventPass({
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="text-[10px] font-mono text-slate-500 uppercase shrink-0 mt-0.5">Landmark:</span>
-                    <span className="text-slate-200">{ticket.pickupLandmark}</span>
+                    <span className="text-foreground">{ticket.pickupLandmark}</span>
                   </div>
                 </div>
               ) : (
                 <div className="space-y-2 divide-y divide-[#152A54]/60 pt-1">
                   <div className="text-[11px] space-y-0.5">
                     <span className="font-bold text-sky-400">Leader ({ticket.leaderName}):</span>
-                    <p className="text-slate-200">{ticket.pickupRoute} &gt; {ticket.pickupStop}</p>
-                    <p className="text-[10px] font-mono text-slate-400">Landmark: {ticket.pickupLandmark}</p>
+                    <p className="text-foreground">{ticket.pickupRoute} &gt; {ticket.pickupStop}</p>
+                    <p className="text-[10px] font-mono text-muted-foreground">Landmark: {ticket.pickupLandmark}</p>
                   </div>
                   {ticket.teamMembers.map((m, idx) => (
                     <div key={idx} className="text-[11px] pt-1.5 space-y-0.5">
-                      <span className="font-bold text-slate-300">Member {idx + 2} ({m.name}):</span>
+                      <span className="font-bold text-foreground-secondary">Member {idx + 2} ({m.name}):</span>
                       {m.transportOptIn ? (
                         <>
-                          <p className="text-slate-200">{m.pickupRoute} &gt; {m.pickupStop}</p>
-                          <p className="text-[10px] font-mono text-slate-400">Landmark: {m.pickupLandmark}</p>
+                          <p className="text-foreground">{m.pickupRoute} &gt; {m.pickupStop}</p>
+                          <p className="text-[10px] font-mono text-muted-foreground">Landmark: {m.pickupLandmark}</p>
                         </>
                       ) : (
                         <p className="text-slate-500 italic">Self-Arranged Transportation</p>
@@ -359,14 +359,14 @@ export function DigitalEventPass({
               )}
             </div>
           ) : (
-            <div className="p-3 rounded-none border border-[#152A54] bg-[#02050E] text-xs text-slate-400">
+            <div className="p-3 rounded-none border border-border bg-background text-xs text-muted-foreground">
               Participant has opted for Self-Arranged Commute directly to Vel Tech campus.
             </div>
           )}
         </div>
 
         {/* ── Footer Notice ── */}
-        <div className="mt-6 pt-4 border-t border-[#152A54] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[10px] font-mono text-slate-500">
+        <div className="mt-6 pt-4 border-t border-border flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[10px] font-mono text-slate-500">
           <span>CODEHIVE 2K26 ORGANIZING COMMITTEE &bull; GATE VERIFICATION</span>
           <span>ISSUED: {new Date(ticket.confirmedAt).toLocaleDateString("en-IN")}</span>
         </div>
@@ -378,7 +378,7 @@ export function DigitalEventPass({
           <button
             type="button"
             onClick={handlePrint}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-11 px-5 font-mono text-xs font-bold uppercase tracking-wider text-white bg-blue-600 hover:bg-blue-700 active:scale-95 border border-blue-500 transition-all cursor-pointer shadow-lg shadow-blue-950/60"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-11 px-5 font-mono text-xs font-bold uppercase tracking-wider text-foreground bg-blue-600 hover:bg-blue-700 active:scale-95 border border-blue-500 transition-all cursor-pointer shadow-lg shadow-blue-950/60"
           >
             <PrinterIcon className="size-3.5" />
             <span>Print / Save Ticket</span>
@@ -387,7 +387,7 @@ export function DigitalEventPass({
           <button
             type="button"
             onClick={handleCopyCode}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-11 px-5 font-mono text-xs font-bold uppercase tracking-wider text-slate-300 bg-[#0B162C] hover:bg-[#102246] hover:text-white border border-[#152A54] hover:border-blue-500/60 transition-colors cursor-pointer"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-11 px-5 font-mono text-xs font-bold uppercase tracking-wider text-foreground-secondary bg-secondary hover:bg-secondary hover:text-foreground border border-border hover:border-blue-500/60 transition-colors cursor-pointer"
           >
             <CopyIcon className="size-3.5 text-blue-400" />
             <span>{copied ? "Pass Code Copied!" : "Copy Pass Code"}</span>

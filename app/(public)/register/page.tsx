@@ -13,7 +13,7 @@ export default function RegisterIndexPage() {
         </p>
         <Button
           size="lg"
-          className="border-2 border-primary bg-primary hover:bg-primary-hover text-white cursor-pointer font-semibold"
+          className="border-2 border-primary bg-primary hover:bg-primary-hover text-foreground cursor-pointer font-semibold"
           render={<Link href="/events" />}
           nativeButton={false}
         >

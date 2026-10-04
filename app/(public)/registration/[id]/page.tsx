@@ -45,7 +45,7 @@ export default async function RegistrationViewPage({ params }: Props) {
   const isTeam = Boolean(registration.team && registration.team.members.length > 0);
 
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-100 font-sans selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-background text-slate-100 font-sans selection:bg-blue-600 selection:text-foreground">
       <Header />
       <main className="max-w-xl mx-auto px-4 py-10 sm:py-16">
         
@@ -58,10 +58,10 @@ export default async function RegistrationViewPage({ params }: Props) {
               <ShieldCheckIcon className="size-3.5 text-emerald-400" />
               <span>Official Digital Entry Pass</span>
             </div>
-            <h1 className="text-2xl font-bold tracking-tight text-white uppercase">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground uppercase">
               {registration.event.name}
             </h1>
-            <p className="text-xs font-mono text-slate-400 uppercase tracking-widest">
+            <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest">
               CodeHive 2K26 &bull; Verified Pass
             </p>
           </div>
@@ -112,7 +112,7 @@ export default async function RegistrationViewPage({ params }: Props) {
             <p className="font-mono font-extrabold text-3xl text-sky-400 tracking-[0.2em]">
               {registration.registrationNumber}
             </p>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-[11px] text-muted-foreground">
               Quote this code or present the QR code at the registration desk
             </p>
           </div>
@@ -120,23 +120,23 @@ export default async function RegistrationViewPage({ params }: Props) {
           {/* Metadata Table */}
           <div className="text-left font-mono text-xs space-y-2.5 border-t border-[#1E293B] pt-5">
             <div className="flex items-center justify-between border-b border-[#1E293B]/70 pb-2">
-              <span className="text-slate-400 uppercase text-[11px]">Participant:</span>
-              <span className="font-semibold text-white">{registration.participant.name}</span>
+              <span className="text-muted-foreground uppercase text-[11px]">Participant:</span>
+              <span className="font-semibold text-foreground">{registration.participant.name}</span>
             </div>
             <div className="flex items-center justify-between border-b border-[#1E293B]/70 pb-2">
-              <span className="text-slate-400 uppercase text-[11px]">College:</span>
-              <span className="font-semibold text-white truncate max-w-[220px]">{registration.participant.college}</span>
+              <span className="text-muted-foreground uppercase text-[11px]">College:</span>
+              <span className="font-semibold text-foreground truncate max-w-[220px]">{registration.participant.college}</span>
             </div>
             <div className="flex items-center justify-between border-b border-[#1E293B]/70 pb-2">
-              <span className="text-slate-400 uppercase text-[11px]">Department:</span>
-              <span className="font-semibold text-white">{registration.participant.department}</span>
+              <span className="text-muted-foreground uppercase text-[11px]">Department:</span>
+              <span className="font-semibold text-foreground">{registration.participant.department}</span>
             </div>
             <div className="flex items-center justify-between border-b border-[#1E293B]/70 pb-2">
-              <span className="text-slate-400 uppercase text-[11px]">Date &amp; Time:</span>
-              <span className="font-semibold text-white">{formatDate(registration.event.startAt)}</span>
+              <span className="text-muted-foreground uppercase text-[11px]">Date &amp; Time:</span>
+              <span className="font-semibold text-foreground">{formatDate(registration.event.startAt)}</span>
             </div>
             <div className="flex items-center justify-between border-b border-[#1E293B]/70 pb-2">
-              <span className="text-slate-400 uppercase text-[11px]">Venue:</span>
+              <span className="text-muted-foreground uppercase text-[11px]">Venue:</span>
               <span className="font-semibold text-sky-400">{registration.event.venue}</span>
             </div>
           </div>
@@ -157,20 +157,20 @@ export default async function RegistrationViewPage({ params }: Props) {
               <div className="space-y-1.5 text-xs">
                 <div>
                   <span className="text-slate-500 uppercase text-[10px] block">Designated Route Corridor:</span>
-                  <strong className="text-white">{registration.pickupRoute || "Vel Tech Campus Network"}</strong>
+                  <strong className="text-foreground">{registration.pickupRoute || "Vel Tech Campus Network"}</strong>
                 </div>
                 <div>
                   <span className="text-slate-500 uppercase text-[10px] block">Boarding Stop &amp; Exact Landmark:</span>
                   <span className="text-sky-300 font-semibold">{registration.pickupStop}</span>
-                  <span className="text-slate-300"> &bull; {registration.pickupLandmark}</span>
+                  <span className="text-foreground-secondary"> &bull; {registration.pickupLandmark}</span>
                 </div>
-                <p className="text-[10px] text-slate-400 pt-1 leading-relaxed border-t border-[#1E293B]/60 mt-1">
+                <p className="text-[10px] text-muted-foreground pt-1 leading-relaxed border-t border-[#1E293B]/60 mt-1">
                   Advisory: Vel Tech buses operate from 6:00 AM onwards. Report to your boarding landmark by 06:00 AM sharp.
                 </p>
               </div>
             </div>
           ) : (
-            <div className="border border-[#1E293B] bg-[#040914] p-3 text-left font-mono text-xs text-slate-400">
+            <div className="border border-[#1E293B] bg-[#040914] p-3 text-left font-mono text-xs text-muted-foreground">
               <span className="text-slate-500 uppercase text-[10px] block">Transportation:</span>
               <span>Self-Arranged Commute (Direct to Vel Tech Campus)</span>
             </div>
@@ -183,11 +183,11 @@ export default async function RegistrationViewPage({ params }: Props) {
                 <UsersIcon className="size-3.5" />
                 <span>Team: {registration.team.name}</span>
               </div>
-              <ul className="text-xs text-slate-300 space-y-1.5 pt-1">
+              <ul className="text-xs text-foreground-secondary space-y-1.5 pt-1">
                 {registration.team.members.map((member, idx) => (
                   <li key={member.id} className="flex justify-between items-center text-[11px]">
                     <span>
-                      <strong className="text-white">[{idx + 1}] {member.name}</strong>
+                      <strong className="text-foreground">[{idx + 1}] {member.name}</strong>
                     </span>
                     <span className="text-slate-500">{member.phone}</span>
                   </li>
@@ -200,13 +200,13 @@ export default async function RegistrationViewPage({ params }: Props) {
           <div className="border-t border-[#1E293B] pt-5 flex flex-col sm:flex-row gap-3">
             <Link
               href={`/admin/check-in?code=${registration.registrationNumber}`}
-              className="flex-1 inline-flex items-center justify-center h-10 px-4 text-xs font-mono font-bold uppercase tracking-wider bg-blue-600 hover:bg-blue-700 text-white transition-colors border border-blue-500"
+              className="flex-1 inline-flex items-center justify-center h-10 px-4 text-xs font-mono font-bold uppercase tracking-wider bg-blue-600 hover:bg-blue-700 text-foreground transition-colors border border-blue-500"
             >
               &gt; Staff Gate Check-In
             </Link>
             <Link
               href="/dashboard"
-              className="flex-1 inline-flex items-center justify-center h-10 px-4 text-xs font-mono font-bold uppercase tracking-wider bg-[#030712] hover:bg-[#0B1528] text-slate-300 hover:text-white transition-colors border border-[#1E293B]"
+              className="flex-1 inline-flex items-center justify-center h-10 px-4 text-xs font-mono font-bold uppercase tracking-wider bg-background hover:bg-[#0B1528] text-foreground-secondary hover:text-foreground transition-colors border border-[#1E293B]"
             >
               Return to Dashboard
             </Link>

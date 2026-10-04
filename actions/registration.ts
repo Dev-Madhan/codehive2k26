@@ -221,7 +221,11 @@ export async function createRegistration(
           data: {
             teamId: team.id,
             name,
+            email,
             phone,
+            college,
+            department,
+            year,
             collegeIdUrl: imageUrl || null,
             participantId: participant.id,
             transportOptIn: Boolean(transportOptIn),
@@ -250,7 +254,11 @@ export async function createRegistration(
             data: {
               teamId: team.id,
               name: member.name,
+              email: member.email,
               phone: member.phone,
+              college: member.college,
+              department: member.department,
+              year: member.year,
               collegeIdUrl: member.collegeIdUrl || imageUrl || null,
               transportOptIn: memberTransportOptIn,
               pickupRoute: memberRoute,

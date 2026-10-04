@@ -79,7 +79,7 @@ const accentMap = {
     iconColor: "text-blue-400",
     iconBg: "bg-blue-500/10 border border-blue-500/30",
     line: "bg-blue-500",
-    buttonBg: "bg-blue-600 hover:bg-blue-500 text-white border-blue-400/80",
+    buttonBg: "bg-blue-600 hover:bg-blue-500 text-foreground border-blue-400/80",
   },
   sky: {
     tagColor: "text-sky-400",
@@ -91,7 +91,7 @@ const accentMap = {
     iconColor: "text-sky-400",
     iconBg: "bg-sky-500/10 border border-sky-500/30",
     line: "bg-sky-500",
-    buttonBg: "bg-sky-600 hover:bg-sky-500 text-white border-sky-400/80",
+    buttonBg: "bg-sky-600 hover:bg-sky-500 text-foreground border-sky-400/80",
   },
 };
 
@@ -130,8 +130,9 @@ export function EventsSection({ initialEvents }: EventsSectionProps) {
 
   return (
     <section
+      id="events-section"
       ref={ref}
-      className="relative py-24 sm:py-32 bg-[#030712] border-t border-[#152A54]/60 overflow-hidden"
+      className="relative py-24 sm:py-32 bg-background border-t border-border/60 overflow-hidden"
     >
       {/* Grid background */}
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(21,42,84,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(21,42,84,0.05)_1px,transparent_1px)] bg-[size:60px_60px]" />
@@ -152,19 +153,19 @@ export function EventsSection({ initialEvents }: EventsSectionProps) {
           </div>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
-              <h2 className="font-mono text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-tight">
+              <h2 className="font-mono text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-foreground leading-tight">
                 CHOOSE YOUR{" "}
                 <span className="bg-gradient-to-r from-blue-400 to-sky-300 bg-clip-text text-transparent">
                   BATTLEFIELD
                 </span>
               </h2>
-              <p className="mt-2 text-xs sm:text-sm font-sans text-slate-400 max-w-xl">
+              <p className="mt-2 text-xs sm:text-sm font-sans text-muted-foreground max-w-xl">
                 Official 2-Day National Hackathon challenges of CodeHive 2K26 2.0. Entry is 100% Free with Certificates awarded to all participants.
               </p>
             </div>
             <Link
               href="/events"
-              className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-blue-400 hover:text-white border border-[#152A54] hover:border-blue-500/60 px-4 py-2 transition-all shrink-0"
+              className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-blue-400 hover:text-foreground border border-border hover:border-blue-500/60 px-4 py-2 transition-all shrink-0"
             >
               [ View Event Registry ] <ArrowRightIcon className="size-3" />
             </Link>
@@ -181,7 +182,7 @@ export function EventsSection({ initialEvents }: EventsSectionProps) {
               <div
                 key={event.id}
                 className={cn(
-                  "group relative flex flex-col p-6 sm:p-8 border bg-[#060D1A]/90 backdrop-blur-sm transition-all duration-500",
+                  "group relative flex flex-col p-6 sm:p-8 border bg-card/90 backdrop-blur-sm transition-all duration-500",
                   a.border,
                   a.glow,
                   inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
@@ -215,7 +216,7 @@ export function EventsSection({ initialEvents }: EventsSectionProps) {
                     <p className="font-mono text-[10px] uppercase tracking-wider text-slate-500 mb-0.5">
                       {event.category}
                     </p>
-                    <h3 className="font-mono text-2xl font-black uppercase text-white tracking-tight">
+                    <h3 className="font-mono text-2xl font-black uppercase text-foreground tracking-tight">
                       {event.name}
                     </h3>
                     <p className="font-mono text-xs text-blue-400 uppercase tracking-wide mt-0.5">
@@ -225,18 +226,18 @@ export function EventsSection({ initialEvents }: EventsSectionProps) {
                 </div>
 
                 {/* Description */}
-                <p className="text-sm text-slate-300 leading-relaxed flex-1 mb-6 font-sans">
+                <p className="text-sm text-foreground-secondary leading-relaxed flex-1 mb-6 font-sans">
                   {event.description}
                 </p>
 
                 {/* Telemetry / Metadata specs grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 border-y border-[#152A54]/80 py-4 mb-6 bg-black/40 px-3">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 border-y border-border/80 py-4 mb-6 bg-background/40 px-3">
                   <div>
                     <div className="flex items-center gap-1 text-slate-500 mb-0.5">
                       <AwardIcon className="size-3 text-blue-400" />
                       <span className="font-mono text-[9px] uppercase tracking-wider">FORMAT</span>
                     </div>
-                    <p className="font-mono text-xs font-bold text-white">
+                    <p className="font-mono text-xs font-bold text-foreground">
                       {event.rounds}
                     </p>
                   </div>
@@ -246,7 +247,7 @@ export function EventsSection({ initialEvents }: EventsSectionProps) {
                       <UsersIcon className="size-3 text-blue-400" />
                       <span className="font-mono text-[9px] uppercase tracking-wider">TEAM SIZE</span>
                     </div>
-                    <p className="font-mono text-xs font-bold text-white">
+                    <p className="font-mono text-xs font-bold text-foreground">
                       {event.teamSize}
                     </p>
                   </div>
@@ -256,7 +257,7 @@ export function EventsSection({ initialEvents }: EventsSectionProps) {
                       <CalendarIcon className="size-3 text-blue-400" />
                       <span className="font-mono text-[9px] uppercase tracking-wider">ENTRIES</span>
                     </div>
-                    <p className="font-mono text-xs font-bold text-white">
+                    <p className="font-mono text-xs font-bold text-foreground">
                       {event.entries}
                     </p>
                   </div>
@@ -266,7 +267,7 @@ export function EventsSection({ initialEvents }: EventsSectionProps) {
                       <MapPinIcon className="size-3 text-blue-400" />
                       <span className="font-mono text-[9px] uppercase tracking-wider">VENUE</span>
                     </div>
-                    <p className="font-mono text-xs font-bold text-white truncate" title={event.venue}>
+                    <p className="font-mono text-xs font-bold text-foreground truncate" title={event.venue}>
                       {event.venue.split("&")[0].trim()}
                     </p>
                   </div>

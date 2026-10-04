@@ -22,23 +22,23 @@ export function EventInstructions({ slug, eventName }: EventInstructionsProps) {
   const data: CleanEventInstructions = getEventInstructions(slug, eventName);
 
   return (
-    <div className="border border-[#152A54] bg-[#060D1A] font-sans space-y-6 p-4 sm:p-8">
+    <div className="border border-border bg-card font-sans space-y-6 p-4 sm:p-8">
       {/* Header & Badges */}
-      <div className="space-y-4 border-b border-[#152A54] pb-6">
+      <div className="space-y-4 border-b border-border pb-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="space-y-1">
-            <h2 className="text-xl sm:text-2xl font-bold font-sans tracking-tight text-white uppercase">
+            <h2 className="text-xl sm:text-2xl font-bold font-sans tracking-tight text-foreground uppercase">
               Event Instructions &amp; Rules
             </h2>
           </div>
 
           {/* Quick Metrics Pills */}
           <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
-            <div className="border border-[#152A54] bg-[#081224] px-3 py-1 text-slate-300">
+            <div className="border border-border bg-card px-3 py-1 text-foreground-secondary">
               <span className="text-slate-500 mr-1.5">FORMAT:</span>
               <span className="text-blue-400 font-bold">{data.totalRounds} ROUNDS</span>
             </div>
-            <div className="border border-[#152A54] bg-[#081224] px-3 py-1 text-slate-300">
+            <div className="border border-border bg-card px-3 py-1 text-foreground-secondary">
               <span className="text-slate-500 mr-1.5">SCORE:</span>
               <span className="text-emerald-400 font-bold">{data.totalMarks} MARKS</span>
             </div>
@@ -48,7 +48,7 @@ export function EventInstructions({ slug, eventName }: EventInstructionsProps) {
           </div>
         </div>
 
-        <p className="text-xs sm:text-sm font-sans text-slate-300 leading-relaxed max-w-3xl">
+        <p className="text-xs sm:text-sm font-sans text-foreground-secondary leading-relaxed max-w-3xl">
           {data.brief}
         </p>
       </div>
@@ -56,7 +56,7 @@ export function EventInstructions({ slug, eventName }: EventInstructionsProps) {
       {/* 4 Rounds Progression (Clean Grid) */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-xs uppercase font-mono font-bold text-slate-400 tracking-wider flex items-center gap-2">
+          <span className="text-xs uppercase font-mono font-bold text-muted-foreground tracking-wider flex items-center gap-2">
             <TerminalIcon className="size-3.5 text-blue-400" />
             Competition Rounds (Cumulative {data.totalMarks} Marks)
           </span>
@@ -69,7 +69,7 @@ export function EventInstructions({ slug, eventName }: EventInstructionsProps) {
           {data.rounds.map((round) => (
             <div
               key={round.roundNumber}
-              className="border border-[#152A54] bg-[#03060E] p-4 space-y-2 hover:border-blue-500/40 transition-colors flex flex-col justify-between"
+              className="border border-border bg-background p-4 space-y-2 hover:border-blue-500/40 transition-colors flex flex-col justify-between"
             >
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs font-mono">
@@ -87,11 +87,11 @@ export function EventInstructions({ slug, eventName }: EventInstructionsProps) {
                   </div>
                 </div>
 
-                <h4 className="text-sm font-sans font-bold text-white tracking-tight">
+                <h4 className="text-sm font-sans font-bold text-foreground tracking-tight">
                   {round.name}
                 </h4>
 
-                <p className="text-xs font-sans text-slate-300 leading-relaxed">
+                <p className="text-xs font-sans text-foreground-secondary leading-relaxed">
                   {round.summary}
                 </p>
               </div>
@@ -102,7 +102,7 @@ export function EventInstructions({ slug, eventName }: EventInstructionsProps) {
 
       {/* Essential Directives: AI, Continuity, Defense (3 Cards) */}
       <div className="space-y-3 pt-2">
-        <span className="text-xs uppercase font-mono font-bold text-slate-400 tracking-wider flex items-center gap-2">
+        <span className="text-xs uppercase font-mono font-bold text-muted-foreground tracking-wider flex items-center gap-2">
           <ShieldCheckIcon className="size-3.5 text-blue-400" />
           Key Competition Guidelines
         </span>
@@ -111,7 +111,7 @@ export function EventInstructions({ slug, eventName }: EventInstructionsProps) {
           {data.directives.map((dir, idx) => (
             <div
               key={idx}
-              className="border border-[#152A54] bg-[#03060E] p-4 space-y-2.5 hover:border-blue-500/40 transition-colors"
+              className="border border-border bg-background p-4 space-y-2.5 hover:border-blue-500/40 transition-colors"
             >
               <div className="flex items-center gap-2 text-xs font-sans font-bold text-blue-400 uppercase tracking-wide">
                 {dir.iconType === "ai" && <SparklesIcon className="size-3.5 text-blue-400 shrink-0" />}
@@ -120,11 +120,11 @@ export function EventInstructions({ slug, eventName }: EventInstructionsProps) {
                 <span>{dir.title}</span>
               </div>
 
-              <p className="text-xs font-sans text-slate-300 leading-relaxed">
+              <p className="text-xs font-sans text-foreground-secondary leading-relaxed">
                 {dir.description}
               </p>
 
-              <ul className="space-y-1 pt-1 border-t border-[#152A54]/60 text-xs font-sans text-slate-300">
+              <ul className="space-y-1 pt-1 border-t border-border/60 text-xs font-sans text-foreground-secondary">
                 {dir.highlights.map((h, hIdx) => (
                   <li key={hIdx} className="flex items-start gap-1.5">
                     <CheckIcon className="size-3 text-blue-400 shrink-0 mt-0.5" />

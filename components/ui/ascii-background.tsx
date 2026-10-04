@@ -155,8 +155,8 @@ export function AsciiBackground({
 
       time += 0.025 * speed;
 
-      // Deep obsidian pitch-black clearing
-      ctx.fillStyle = "#000000";
+      // Clear to the dark page canvas before drawing the animated glyphs.
+      ctx.fillStyle = "#080D18";
       ctx.fillRect(0, 0, width, height);
 
       // Set font styling for ASCII characters
@@ -261,11 +261,11 @@ export function AsciiBackground({
             ctx.shadowColor = "#2563eb";
           } else if (totalEnergy > 0.15) {
             // Low ambient energy: Deep Cyber Indigo
-            ctx.fillStyle = `rgba(30, 58, 138, ${Math.min(0.45, 0.12 + totalEnergy * 0.3)})`;
+            ctx.fillStyle = `rgba(59, 130, 246, ${Math.min(0.45, 0.12 + totalEnergy * 0.3)})`;
             ctx.shadowBlur = 0;
           } else {
             // Rest state: Subtle faint terminal ghost
-            ctx.fillStyle = "rgba(15, 23, 42, 0.18)";
+            ctx.fillStyle = "rgba(148, 163, 184, 0.22)";
             ctx.shadowBlur = 0;
           }
 
@@ -291,7 +291,7 @@ export function AsciiBackground({
     <div
       ref={containerRef}
       className={cn(
-        "relative w-full h-full min-h-screen overflow-hidden bg-black selection:bg-blue-600 selection:text-white",
+        "relative w-full h-full min-h-screen overflow-hidden bg-background selection:bg-blue-600 selection:text-foreground",
         className
       )}
     >
@@ -302,7 +302,7 @@ export function AsciiBackground({
       />
 
       {/* Cinematic Center & Radial Vignette to guarantee pristine text contrast */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.65)_0%,rgba(0,0,0,0.85)_65%,rgba(0,0,0,0.98)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(248,250,252,0.12)_0%,rgba(248,250,252,0.38)_65%,rgba(248,250,252,0.68)_100%)]" />
 
       {/* Top subtle blue laser bloom */}
       <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-gradient-to-b from-blue-600/15 via-blue-900/5 to-transparent blur-[120px]" />

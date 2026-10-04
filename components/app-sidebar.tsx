@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   Sidebar,
@@ -75,29 +76,32 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar
       collapsible="offcanvas"
-      className="rounded-none border-r border-[#152A54] bg-[#030712] text-white"
+      className="rounded-none border-r border-border bg-background text-foreground"
       {...props}
     >
       {/* Brand Header with Mobile Dismiss */}
-      <SidebarHeader className="border-b border-[#152A54] p-3 flex flex-row items-center justify-between">
+      <SidebarHeader className="border-b border-border p-3 flex flex-row items-center justify-between">
         <Link
           href="/dashboard"
           onClick={() => {
             if (isMobile) setOpenMobile(false);
           }}
-          className="flex items-center gap-1 font-mono p-1 hover:bg-[#0B162C] transition-colors"
+          className="flex items-center p-1 hover:bg-secondary transition-colors"
         >
-          <span className="text-blue-500 font-extrabold text-sm">&gt;</span>
-          <span className="font-bold text-white text-sm">code</span>
-          <span className="font-bold text-blue-400 text-sm">hive</span>
-          <span className="text-[10px] text-slate-500 ml-1">2K26</span>
+          <Image
+            src="/code%20hive%20logo.svg"
+            alt="CodeHive 2K26"
+            width={1825}
+            height={416}
+            className="h-6 w-auto max-w-[160px]"
+          />
         </Link>
 
         {isMobile && (
           <button
             type="button"
             onClick={() => setOpenMobile(false)}
-            className="p-1.5 text-slate-400 hover:text-white hover:bg-[#0B162C] border border-[#152A54] transition-colors cursor-pointer"
+            className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-secondary border border-border transition-colors cursor-pointer"
             aria-label="Close navigation menu"
           >
             <XIcon className="size-3.5" />
@@ -112,7 +116,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
 
       {/* Real Auth Profile in Footer */}
-      <SidebarFooter className="border-t border-[#152A54] p-2 bg-[#030712]">
+      <SidebarFooter className="border-t border-border p-2 bg-background">
         <NavUser />
       </SidebarFooter>
     </Sidebar>

@@ -56,7 +56,7 @@ export function DeleteEventDialog({
 
   return (
     <Dialog open={open} onOpenChange={isDeleting ? undefined : onOpenChange}>
-      <DialogContent className="max-w-md w-full bg-[#060D1A] border border-red-900/60 text-white p-0 overflow-hidden font-mono text-xs rounded-none shadow-2xl">
+      <DialogContent className="max-w-md w-full bg-card border border-red-900/60 text-foreground p-0 overflow-hidden font-mono text-xs rounded-none shadow-2xl">
         <DialogHeader className="p-4 sm:p-5 border-b border-red-900/40 bg-red-950/20 space-y-1">
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-bold text-red-400 bg-red-950/60 border border-red-500/40 px-2 py-0.5 uppercase tracking-wider inline-flex items-center gap-1.5">
@@ -64,7 +64,7 @@ export function DeleteEventDialog({
               CRITICAL PURGE ACTION
             </span>
           </div>
-          <DialogTitle className="text-sm sm:text-base font-bold text-white uppercase tracking-tight">
+          <DialogTitle className="text-sm sm:text-base font-bold text-foreground uppercase tracking-tight">
             Delete Event Track
           </DialogTitle>
           <DialogDescription className="text-xs text-red-400/90 leading-relaxed">
@@ -74,29 +74,29 @@ export function DeleteEventDialog({
 
         <div className="p-4 sm:p-5 space-y-3">
           <div className="border border-red-900/40 bg-red-950/10 p-3 space-y-1">
-            <p className="text-sm font-bold text-white uppercase">{eventName}</p>
+            <p className="text-sm font-bold text-foreground uppercase">{eventName}</p>
             {registrationsCount > 0 ? (
               <p className="text-xs text-amber-400 font-semibold mt-1">
                 ⚠️ Warning: {registrationsCount} candidate registration(s) are linked to this event.
               </p>
             ) : (
-              <p className="text-[11px] text-slate-400">
+              <p className="text-[11px] text-muted-foreground">
                 No active registrations linked to this event track.
               </p>
             )}
           </div>
-          <p className="text-[11px] text-slate-400 leading-relaxed">
+          <p className="text-[11px] text-muted-foreground leading-relaxed">
             This action cannot be undone. The track will be removed from the public catalogue and admin consoles immediately.
           </p>
         </div>
 
-        <DialogFooter className="p-4 border-t border-[#152A54] bg-[#03060E] flex flex-row items-center justify-end gap-2.5">
+        <DialogFooter className="p-4 border-t border-border bg-background flex flex-row items-center justify-end gap-2.5">
           <Button
             type="button"
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={isDeleting}
-            className="rounded-none border-[#152A54] bg-[#060D1A] text-slate-300 font-mono text-xs uppercase"
+            className="rounded-none border-border bg-card text-foreground-secondary font-mono text-xs uppercase"
           >
             Cancel
           </Button>
@@ -105,7 +105,7 @@ export function DeleteEventDialog({
             type="button"
             onClick={handleDelete}
             disabled={isDeleting}
-            className="rounded-none bg-red-700 hover:bg-red-600 text-white font-mono text-xs uppercase font-bold px-4 cursor-pointer"
+            className="rounded-none bg-red-700 hover:bg-red-600 text-foreground font-mono text-xs uppercase font-bold px-4 cursor-pointer"
           >
             {isDeleting ? (
               <>

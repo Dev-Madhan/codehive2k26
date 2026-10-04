@@ -49,7 +49,7 @@ export function TimelineSection() {
   return (
     <section
       ref={ref}
-      className="relative py-24 sm:py-32 bg-black border-t border-[#152A54]/60 overflow-hidden"
+      className="relative py-24 sm:py-32 bg-background border-t border-border/60 overflow-hidden"
     >
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(21,42,84,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(21,42,84,0.05)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
@@ -67,7 +67,7 @@ export function TimelineSection() {
               TIMELINE
             </span>
           </div>
-          <h2 className="font-mono text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-tight">
+          <h2 className="font-mono text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-foreground leading-tight">
             MARK YOUR{" "}
             <span className="bg-gradient-to-r from-blue-400 to-sky-300 bg-clip-text text-transparent">
               CALENDAR
@@ -78,7 +78,7 @@ export function TimelineSection() {
         {/* Timeline */}
         <div className="relative">
           {/* Vertical line */}
-          <div className="absolute left-[19px] sm:left-1/2 sm:-translate-x-px top-0 bottom-0 w-px bg-[#152A54]" />
+          <div className="absolute left-[19px] sm:left-1/2 sm:-translate-x-px top-0 bottom-0 w-px bg-secondary" />
 
           <div className="space-y-0">
             {timeline.map((item, i) => {
@@ -114,7 +114,7 @@ export function TimelineSection() {
                           ? "border-blue-500 bg-blue-500/20 text-blue-300"
                           : item.status === "active"
                           ? "border-emerald-500 bg-emerald-500/20 text-emerald-300 animate-[pulse_2s_infinite]"
-                          : "border-[#152A54] bg-[#060D1A] text-slate-600"
+                          : "border-border bg-card text-slate-600"
                       )}
                     >
                       {String(i + 1).padStart(2, "0")}
@@ -157,12 +157,12 @@ function TimelineCard({
   return (
     <div
       className={cn(
-        "p-4 border bg-[#060D1A]/80 max-w-sm",
+        "p-4 border bg-card/80 max-w-sm",
         item.status === "completed"
           ? "border-blue-500/30"
           : item.status === "active"
           ? "border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
-          : "border-[#152A54]/60",
+          : "border-border/60",
         align === "right" && "ml-auto"
       )}
     >
@@ -183,10 +183,10 @@ function TimelineCard({
           {item.status === "active" ? "● LIVE" : item.date}
         </span>
       </div>
-      <h3 className="font-mono text-sm font-bold uppercase text-white mb-1">
+      <h3 className="font-mono text-sm font-bold uppercase text-foreground mb-1">
         {item.title}
       </h3>
-      <p className="text-xs text-slate-400 leading-relaxed">{item.desc}</p>
+      <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
     </div>
   );
 }

@@ -151,7 +151,7 @@ export default async function DashboardPage() {
       }
     >
       <AppSidebar variant="inset" />
-      <SidebarInset className="max-w-full overflow-x-hidden bg-[#030712] min-h-screen">
+      <SidebarInset className="max-w-full overflow-x-hidden bg-background min-h-screen">
         <SiteHeader />
         <div className="flex flex-1 flex-col max-w-full">
           <div className="@container/main flex flex-1 flex-col gap-2 max-w-full">

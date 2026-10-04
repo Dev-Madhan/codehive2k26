@@ -22,7 +22,7 @@ function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
   return (
     <thead
       data-slot="table-header"
-      className={cn("[&_tr]:border-b [&_tr]:border-[#152A54] bg-[#03060E]", className)}
+      className={cn("[&_tr]:border-b [&_tr]:border-border bg-background", className)}
       {...props}
     />
   );
@@ -43,7 +43,7 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
     <tfoot
       data-slot="table-footer"
       className={cn(
-        "border-t border-[#152A54] bg-[#03060E] font-medium [&>tr]:last:border-b-0",
+        "border-t border-border bg-background font-medium [&>tr]:last:border-b-0",
         className
       )}
       {...props}
@@ -56,7 +56,7 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
     <tr
       data-slot="table-row"
       className={cn(
-        "border-b border-[#152A54] transition-colors hover:bg-[#0B162C] has-aria-expanded:bg-[#0B162C] data-[state=selected]:bg-[#0B162C]",
+        "border-b border-border transition-colors hover:bg-secondary has-aria-expanded:bg-secondary data-[state=selected]:bg-secondary",
         className
       )}
       {...props}
@@ -69,7 +69,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
     <th
       data-slot="table-head"
       className={cn(
-        "h-10 px-3 text-left align-middle font-mono text-[11px] font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap [&:has([role=checkbox])]:pr-0",
+        "h-10 px-3 text-left align-middle font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground whitespace-nowrap [&:has([role=checkbox])]:pr-0",
         className
       )}
       {...props}
@@ -82,7 +82,7 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
     <td
       data-slot="table-cell"
       className={cn(
-        "p-3 align-middle font-mono text-xs text-slate-300 whitespace-nowrap [&:has([role=checkbox])]:pr-0",
+        "p-3 align-middle font-mono text-xs text-foreground-secondary whitespace-nowrap [&:has([role=checkbox])]:pr-0",
         className
       )}
       {...props}

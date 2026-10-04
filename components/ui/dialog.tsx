@@ -29,7 +29,7 @@ function DialogOverlay({
     <DialogPrimitive.Backdrop
       data-slot="dialog-overlay"
       className={cn(
-        "fixed inset-0 z-50 bg-black/80 transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
+        "fixed inset-0 z-50 bg-background/80 transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
         className
       )}
       {...props}
@@ -40,6 +40,7 @@ function DialogOverlay({
 function DialogContent({
   className,
   children,
+  style,
   showCloseButton = true,
   ...props
 }: DialogPrimitive.Popup.Props & { showCloseButton?: boolean }) {
@@ -49,9 +50,20 @@ function DialogContent({
       <DialogPrimitive.Popup
         data-slot="dialog-content"
         className={cn(
-          "fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 bg-popover p-6 shadow-lg duration-200 data-ending-style:opacity-0 data-ending-style:scale-95 data-starting-style:opacity-0 data-starting-style:scale-95 sm:rounded-none",
+          "fixed left-1/2 top-1/2 z-50 flex h-fit max-h-[calc(100dvh-2rem)] w-[calc(100vw-2rem)] max-w-lg flex-col gap-4 overflow-y-auto overscroll-contain bg-popover p-6 shadow-lg duration-200 data-ending-style:opacity-0 data-ending-style:scale-95 data-starting-style:opacity-0 data-starting-style:scale-95 sm:rounded-none",
           className
         )}
+        style={{
+          ...style,
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          right: "auto",
+          bottom: "auto",
+          margin: 0,
+          transform: "translate(-50%, -50%)",
+          maxHeight: "calc(100dvh - 2rem)",
+        }}
         {...props}
       >
         {children}

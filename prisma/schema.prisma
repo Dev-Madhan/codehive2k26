@@ -13,6 +13,7 @@ generator client {
 // ----------------------------------------------------
 
 enum Role {
+  ADMIN
   SUPER_ADMIN
   ORGANIZER
   STAFF
@@ -200,7 +201,11 @@ model TeamMember {
   id            String       @id @default(cuid())
   teamId        String
   name          String
+  email         String?
   phone         String
+  college       String?
+  department    String?
+  year          String?
   collegeIdUrl  String?
   participantId String?
   transportOptIn Boolean      @default(false)

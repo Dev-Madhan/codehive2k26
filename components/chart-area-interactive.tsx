@@ -89,13 +89,13 @@ export function ChartAreaInteractive({
   }, [baseData, timeRange]);
 
   return (
-    <Card className="@container/card rounded-none border border-[#152A54] bg-[#060D1A] shadow-none max-w-full overflow-hidden">
+    <Card className="@container/card rounded-none border border-border bg-card shadow-none max-w-full overflow-hidden">
       <CardHeader className="p-3.5 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="space-y-1">
-          <CardTitle className="font-mono font-bold text-white text-sm sm:text-base flex items-center gap-2">
+          <CardTitle className="font-mono font-bold text-foreground text-sm sm:text-base flex items-center gap-2">
             <span>&gt; Registration Telemetry &amp; Gate Influx</span>
           </CardTitle>
-          <CardDescription className="font-mono text-[11px] sm:text-xs text-slate-400">
+          <CardDescription className="font-mono text-[11px] sm:text-xs text-muted-foreground">
             <span className="hidden @[540px]/card:block">
               Daily candidate registration velocity and verified gate admission flow
             </span>
@@ -117,8 +117,8 @@ export function ChartAreaInteractive({
                   onClick={() => setTimeRange(item.value)}
                   className={`px-2.5 py-1 text-xs font-mono uppercase tracking-wider transition-all cursor-pointer rounded-none border ${
                     isActive
-                      ? "bg-blue-600 text-white border-blue-500 font-bold shadow-sm shadow-blue-950/50"
-                      : "bg-[#03060E] text-slate-400 border-[#152A54] hover:bg-[#0B162C] hover:text-white"
+                      ? "bg-blue-600 text-foreground border-blue-500 font-bold shadow-sm shadow-blue-950/50"
+                      : "bg-background text-muted-foreground border-border hover:bg-secondary hover:text-foreground"
                   }`}
                 >
                   {item.label}
@@ -135,20 +135,20 @@ export function ChartAreaInteractive({
             }}
           >
             <SelectTrigger
-              className="flex w-32 sm:w-36 rounded-none border-[#152A54] bg-[#03060E] font-mono text-xs text-slate-300 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[640px]/card:hidden"
+              className="flex w-32 sm:w-36 rounded-none border-border bg-background font-mono text-xs text-foreground-secondary **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[640px]/card:hidden"
               size="sm"
               aria-label="Select a timeframe"
             >
               <SelectValue placeholder="Timeframe" />
             </SelectTrigger>
-            <SelectContent className="rounded-none border-[#152A54] bg-[#060D1A] font-mono text-xs text-slate-300">
-              <SelectItem value="90d" className="rounded-none hover:bg-[#0B162C]">
+            <SelectContent className="rounded-none border-border bg-card font-mono text-xs text-foreground-secondary">
+              <SelectItem value="90d" className="rounded-none hover:bg-secondary">
                 90 Days
               </SelectItem>
-              <SelectItem value="30d" className="rounded-none hover:bg-[#0B162C]">
+              <SelectItem value="30d" className="rounded-none hover:bg-secondary">
                 30 Days
               </SelectItem>
-              <SelectItem value="7d" className="rounded-none hover:bg-[#0B162C]">
+              <SelectItem value="7d" className="rounded-none hover:bg-secondary">
                 7 Days
               </SelectItem>
             </SelectContent>

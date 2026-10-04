@@ -1,27 +1,25 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Inter, Space_Grotesk } from "next/font/google";
+import { Geist, Outfit } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
+import { BeamsBackground } from "@/components/ui/beams-background";
 
-// Inter: Primary font for body, UI, descriptions, and components
-const inter = Inter({
+// Geist is used for body and UI text.
+const geist = Geist({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-geist",
+  display: "swap",
+  weight: "400",
 });
 
-// JetBrains Mono: Monospace display font for terminal headers, code, buttons, and metrics
-const jetbrainsMono = JetBrains_Mono({
+// Outfit is used for headings and display text.
+const outfit = Outfit({
   subsets: ["latin"],
-  variable: "--font-mono",
-});
-
-// Space Grotesk: High-impact display font for headlines, heroes, and prominent typography
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-outfit",
+  display: "swap",
+  weight: "700",
 });
 
 export const metadata: Metadata = {
@@ -39,20 +37,22 @@ export default function RootLayout({
     <html
       lang="en"
       className={cn(
-        "dark",
         "h-full",
+        "dark",
         "antialiased",
-        "bg-black",
-        "text-white",
-        inter.variable,
-        jetbrainsMono.variable,
-        spaceGrotesk.variable,
+        "bg-background",
+        "text-foreground",
+        geist.variable,
+        outfit.variable,
         "font-sans"
       )}
-      style={{ colorScheme: "dark" }}
+      style={{ colorScheme: "dark", backgroundColor: "#080D18" }}
     >
-      <body className="min-h-full flex flex-col font-sans bg-black text-white selection:bg-blue-600 selection:text-white">
-        <TooltipProvider>{children}</TooltipProvider>
+      <body className="relative isolate min-h-full flex flex-col font-sans bg-background text-foreground selection:bg-blue-600 selection:text-foreground">
+        <BeamsBackground />
+        <div className="relative z-10 flex min-h-full flex-1 flex-col">
+          <TooltipProvider>{children}</TooltipProvider>
+        </div>
         <Toaster />
       </body>
     </html>

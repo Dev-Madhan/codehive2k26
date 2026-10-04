@@ -105,7 +105,11 @@ export async function POST(req: NextRequest) {
                 select: {
                   id: true,
                   name: true,
+                  email: true,
                   phone: true,
+                  college: true,
+                  department: true,
+                  year: true,
                   transportOptIn: true,
                   pickupRoute: true,
                   pickupStop: true,

@@ -112,8 +112,9 @@ export function HowItWorksSection() {
 
   return (
     <section
+      id="how-it-works"
       ref={ref}
-      className="relative py-24 sm:py-32 bg-black border-t border-[#152A54]/60 overflow-hidden"
+      className="relative py-24 sm:py-32 bg-background border-t border-border/60 overflow-hidden"
     >
       {/* Cyber grid */}
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(21,42,84,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(21,42,84,0.05)_1px,transparent_1px)] bg-[size:60px_60px]" />
@@ -137,7 +138,7 @@ export function HowItWorksSection() {
             </span>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-            <h2 className="font-mono text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-tight">
+            <h2 className="font-mono text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-foreground leading-tight">
               FOUR STEPS TO{" "}
               <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-emerald-400 bg-clip-text text-transparent">
                 VICTORY
@@ -163,7 +164,7 @@ export function HowItWorksSection() {
               <div
                 key={step.step}
                 className={cn(
-                  "relative flex flex-col border bg-[#060D1A]/70 backdrop-blur-sm transition-all duration-500 group",
+                  "relative flex flex-col border bg-card/70 backdrop-blur-sm transition-all duration-500 group",
                   a.border,
                   a.glow,
                   inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
@@ -212,7 +213,7 @@ export function HowItWorksSection() {
 
                   {/* Title & subtitle */}
                   <div>
-                    <h3 className="font-mono text-2xl font-black uppercase text-white tracking-tight leading-none mb-1">
+                    <h3 className="font-mono text-2xl font-black uppercase text-foreground tracking-tight leading-none mb-1">
                       {step.title}
                     </h3>
                     <p className="font-mono text-xs text-slate-500 uppercase tracking-wide">
@@ -221,7 +222,7 @@ export function HowItWorksSection() {
                   </div>
 
                   {/* Description */}
-                  <p className="text-sm text-slate-400 leading-relaxed flex-1">
+                  <p className="text-sm text-muted-foreground leading-relaxed flex-1">
                     {step.desc}
                   </p>
 
@@ -243,7 +244,7 @@ export function HowItWorksSection() {
 
                 {/* Arrow connector (between cards on desktop) */}
                 {i < steps.length - 1 && (
-                  <div className="hidden xl:flex absolute -right-4 top-1/2 -translate-y-1/2 z-20 items-center justify-center w-8 h-8 bg-black border border-[#152A54]">
+                  <div className="hidden xl:flex absolute -right-4 top-1/2 -translate-y-1/2 z-20 items-center justify-center w-8 h-8 bg-background border border-border">
                     <ArrowRightIcon className="size-3 text-slate-600" />
                   </div>
                 )}
@@ -255,20 +256,20 @@ export function HowItWorksSection() {
         {/* Bottom callout strip */}
         <div
           className={cn(
-            "mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 border border-[#152A54]/60 bg-[#060D1A]/50 px-6 py-4 transition-all duration-700",
+            "mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 border border-border/60 bg-card/50 px-6 py-4 transition-all duration-700",
             inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           )}
           style={{ transitionDelay: "520ms" }}
         >
           <div className="flex items-center gap-3">
             <span className="w-1.5 h-1.5 bg-emerald-400 animate-pulse" />
-            <p className="font-mono text-xs uppercase tracking-wider text-slate-400">
+            <p className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
               Registrations are live — Open to all participants
             </p>
           </div>
           <Link
             href="/auth"
-            className="inline-flex items-center gap-2 px-5 py-2.5 font-mono text-xs uppercase tracking-wider font-bold bg-blue-600 hover:bg-blue-500 text-white border border-blue-400/80 transition-all shadow-[0_0_16px_rgba(37,99,235,0.3)] hover:shadow-[0_0_24px_rgba(59,130,246,0.5)] shrink-0"
+            className="inline-flex items-center gap-2 px-5 py-2.5 font-mono text-xs uppercase tracking-wider font-bold bg-blue-600 hover:bg-blue-500 text-foreground border border-blue-400/80 transition-all shadow-[0_0_16px_rgba(37,99,235,0.3)] hover:shadow-[0_0_24px_rgba(59,130,246,0.5)] shrink-0"
           >
             Register Now <ArrowRightIcon className="size-3" />
           </Link>

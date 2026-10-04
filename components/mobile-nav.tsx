@@ -20,7 +20,7 @@ export function MobileNav() {
         aria-controls="mobile-menu"
         aria-expanded={open}
         aria-label="Toggle menu"
-        className="size-9 flex items-center justify-center rounded-none border border-[#152A54] bg-[#060D1A] text-white hover:bg-[#0B162C] transition-colors"
+        className="size-9 flex items-center justify-center rounded-none border border-border bg-card text-foreground hover:bg-secondary transition-colors"
         onClick={() => setOpen(!open)}
       >
         {open ? (
@@ -35,12 +35,12 @@ export function MobileNav() {
           <div
             className={cn(
               "data-[slot=open]:zoom-in-97 ease-out data-[slot=open]:animate-in",
-              "size-full p-4 bg-black/95 border-b border-[#152A54]"
+              "size-full p-4 bg-background/95 border-b border-border"
             )}
             data-slot={open ? "open" : "closed"}
           >
             {session?.user && (
-              <div className="flex items-center gap-3 p-3 mb-4 rounded-none border border-[#152A54] bg-[#060D1A]">
+              <div className="flex items-center gap-3 p-3 mb-4 rounded-none border border-border bg-card">
                 <Avatar className="size-9 rounded-none border border-blue-500/60">
                   {session.user.image && (
                     <AvatarImage
@@ -49,15 +49,15 @@ export function MobileNav() {
                       className="rounded-none object-cover"
                     />
                   )}
-                  <AvatarFallback className="rounded-none bg-[#0E1B38] font-mono font-bold text-blue-400 text-xs">
+                  <AvatarFallback className="rounded-none bg-secondary font-mono font-bold text-blue-400 text-xs">
                     {session.user.name?.slice(0, 2).toUpperCase() || "U"}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-mono font-semibold text-white truncate">
+                  <p className="text-xs font-mono font-semibold text-foreground truncate">
                     {session.user.name || "Participant"}
                   </p>
-                  <p className="text-[11px] font-mono text-slate-400 truncate">{session.user.email}</p>
+                  <p className="text-[11px] font-mono text-muted-foreground truncate">{session.user.email}</p>
                 </div>
               </div>
             )}
@@ -68,7 +68,7 @@ export function MobileNav() {
                   key={link.label}
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className="px-3 py-2 font-mono text-xs uppercase tracking-wider text-slate-300 hover:text-white hover:bg-[#0B162C] border border-transparent hover:border-[#152A54] rounded-none transition-all"
+                  className="px-3 py-2 font-mono text-xs uppercase tracking-wider text-foreground-secondary hover:text-foreground hover:bg-secondary border border-transparent hover:border-border rounded-none transition-all"
                 >
                   &gt; {link.label}
                 </Link>
@@ -81,7 +81,7 @@ export function MobileNav() {
                   <Link
                     href="/dashboard"
                     onClick={() => setOpen(false)}
-                    className="w-full py-2.5 text-center font-mono text-xs uppercase tracking-wider font-semibold rounded-none bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 transition-colors"
+                    className="w-full py-2.5 text-center font-mono text-xs uppercase tracking-wider font-semibold rounded-none bg-blue-600 hover:bg-blue-700 text-foreground border border-blue-500 transition-colors"
                   >
                     [ Go to Dashboard ]
                   </Link>
@@ -100,7 +100,7 @@ export function MobileNav() {
                 <Link
                   href="/auth"
                   onClick={() => setOpen(false)}
-                  className="w-full py-2.5 text-center font-mono text-xs uppercase tracking-wider font-semibold rounded-none bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 transition-colors"
+                  className="w-full py-2.5 text-center font-mono text-xs uppercase tracking-wider font-semibold rounded-none bg-blue-600 hover:bg-blue-700 text-foreground border border-blue-500 transition-colors"
                 >
                   [ Sign In / Register ]
                 </Link>

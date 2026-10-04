@@ -173,26 +173,26 @@ function CollegeIdPreviewModal({
       {/* Dark overlay backdrop */}
       <div
         onClick={onClose}
-        className="absolute inset-0 bg-black/85 backdrop-blur-md transition-opacity duration-200 cursor-pointer"
+        className="absolute inset-0 bg-background/85 backdrop-blur-md transition-opacity duration-200 cursor-pointer"
       />
 
       {/* Cyber-Terminal Modal Box */}
       <div
-        className="relative z-10 flex flex-col w-full max-w-2xl max-h-[90vh] rounded-none border border-[#152A54] bg-[#060D1A] shadow-2xl shadow-blue-950/50 overflow-hidden"
+        className="relative z-10 flex flex-col w-full max-w-2xl max-h-[90vh] rounded-none border border-border bg-card shadow-2xl shadow-blue-950/50 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top glowing cyan/blue accent bar */}
         <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
 
         {/* Modal Header */}
-        <div className="flex items-center justify-between border-b border-[#152A54] bg-[#03060E] px-4 py-3">
+        <div className="flex items-center justify-between border-b border-border bg-background px-4 py-3">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="inline-flex size-7 items-center justify-center rounded-none border border-[#152A54] bg-[#060D1A] text-blue-400">
+            <div className="inline-flex size-7 items-center justify-center rounded-none border border-border bg-card text-blue-400">
               <EyeIcon className="size-3.5" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <span className="font-mono text-xs font-bold uppercase tracking-wider text-slate-200">
+                <span className="font-mono text-xs font-bold uppercase tracking-wider text-foreground">
                   College ID Preview
                 </span>
                 {memberLabel && (
@@ -214,7 +214,7 @@ function CollegeIdPreviewModal({
             type="button"
             onClick={onClose}
             aria-label="Close preview"
-            className="inline-flex items-center gap-1.5 px-2 py-1 font-mono text-[11px] text-slate-400 hover:text-slate-200 border border-[#152A54] hover:border-red-500/60 hover:bg-red-950/20 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-2 py-1 font-mono text-[11px] text-muted-foreground hover:text-foreground border border-border hover:border-red-500/60 hover:bg-red-950/20 transition-colors cursor-pointer"
           >
             <span className="hidden sm:inline text-[10px] text-slate-500">ESC</span>
             <XIcon className="size-3.5" />
@@ -222,7 +222,7 @@ function CollegeIdPreviewModal({
         </div>
 
         {/* Image Preview Body */}
-        <div className="relative flex-1 overflow-auto p-4 sm:p-6 bg-[#02040A] flex items-center justify-center min-h-[260px] max-h-[68vh]">
+        <div className="relative flex-1 overflow-auto p-4 sm:p-6 bg-background flex items-center justify-center min-h-[260px] max-h-[68vh]">
           {/* Cyber grid pattern */}
           <div
             className="pointer-events-none absolute inset-0 opacity-[0.04]"
@@ -235,9 +235,9 @@ function CollegeIdPreviewModal({
 
           {/* Loading Indicator */}
           {imageLoading && !imageError && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-[#02040A]/85 z-10">
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/85 z-10">
               <Loader2Icon className="size-6 animate-spin text-blue-400" />
-              <span className="font-mono text-[11px] uppercase tracking-wider text-slate-400">
+              <span className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
                 Loading ID Preview...
               </span>
             </div>
@@ -247,7 +247,7 @@ function CollegeIdPreviewModal({
           {imageError ? (
             <div className="flex flex-col items-center justify-center gap-2 p-6 text-center">
               <AlertTriangleIcon className="size-8 text-amber-400" />
-              <p className="font-mono text-xs text-slate-300">
+              <p className="font-mono text-xs text-foreground-secondary">
                 Unable to display ID preview
               </p>
               <p className="font-mono text-[10px] text-slate-500">
@@ -265,7 +265,7 @@ function CollegeIdPreviewModal({
               )}
             </div>
           ) : (
-            <div className="relative border border-[#152A54] bg-[#060D1A] p-2 max-w-full shadow-inner">
+            <div className="relative border border-border bg-card p-2 max-w-full shadow-inner">
               <img
                 src={imageUrl}
                 alt={fileName || "Uploaded College ID Card"}
@@ -283,7 +283,7 @@ function CollegeIdPreviewModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#152A54] bg-[#03060E] px-4 py-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border bg-background px-4 py-2.5">
           <div className="flex items-center gap-3 font-mono text-[10px] text-slate-500">
             <span className="inline-flex items-center gap-1 text-emerald-400">
               <CheckCircle2Icon className="size-3" />
@@ -300,7 +300,7 @@ function CollegeIdPreviewModal({
                 href={imageUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-blue-400 hover:text-blue-300 border border-[#152A54] hover:border-blue-500/60 bg-[#060D1A] transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-blue-400 hover:text-blue-300 border border-border hover:border-blue-500/60 bg-card transition-colors"
               >
                 <ExternalLinkIcon className="size-3" />
                 Raw Link
@@ -309,7 +309,7 @@ function CollegeIdPreviewModal({
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex items-center gap-1 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-slate-300 hover:text-white border border-[#152A54] hover:border-slate-500 bg-[#060D1A] transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-foreground-secondary hover:text-foreground border border-border hover:border-slate-500 bg-card transition-colors cursor-pointer"
             >
               Close
             </button>
@@ -403,10 +403,10 @@ export function CollegeIdUploader({
     : isDragReject
       ? "border-red-500 bg-red-950/20"
       : isDragActive
-        ? "border-blue-500 bg-[#0B162C]"
+        ? "border-blue-500 bg-secondary"
         : isFocused
           ? "border-blue-500/70"
-          : "border-[#152A54] hover:border-blue-500/50";
+          : "border-border hover:border-blue-500/50";
 
   // URL priority: uploaded Cloudinary URL > local blob preview > currentUrl
   const uploadedUrl = activeFile ? getUploadedUrl(activeFile) : null;
@@ -439,7 +439,7 @@ export function CollegeIdUploader({
           />
 
           <div className="relative flex flex-col items-center gap-2">
-            <div className="inline-flex size-9 items-center justify-center rounded-none border border-[#152A54] bg-[#03060E]">
+            <div className="inline-flex size-9 items-center justify-center rounded-none border border-border bg-background">
               <UploadCloudIcon
                 className={`size-5 transition-colors ${
                   isDragAccept
@@ -452,7 +452,7 @@ export function CollegeIdUploader({
             </div>
 
             <div>
-              <p className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-300">
+              <p className="text-[11px] font-mono font-bold uppercase tracking-wider text-foreground-secondary">
                 {isDragActive
                   ? isDragAccept
                     ? "Release to upload"
@@ -469,7 +469,7 @@ export function CollegeIdUploader({
 
             <button
               type="button"
-              className="mt-1 inline-flex items-center gap-1.5 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-blue-400 border border-[#152A54] bg-[#03060E] hover:border-blue-500/60 hover:text-blue-300 transition-colors cursor-pointer"
+              className="mt-1 inline-flex items-center gap-1.5 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-blue-400 border border-border bg-background hover:border-blue-500/60 hover:text-blue-300 transition-colors cursor-pointer"
             >
               <FileImageIcon className="size-3" />
               Browse Files
@@ -480,7 +480,7 @@ export function CollegeIdUploader({
 
       {/* ── File card for newly dropped/selected file ── */}
       {hasFile && activeFile && (
-        <div className="rounded-none border border-[#152A54] bg-[#03060E] px-4 py-3 space-y-2">
+        <div className="rounded-none border border-border bg-background px-4 py-3 space-y-2">
           {/* File meta row */}
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2.5 min-w-0">
@@ -489,7 +489,7 @@ export function CollegeIdUploader({
                 <button
                   type="button"
                   onClick={() => setIsPreviewOpen(true)}
-                  className="size-9 shrink-0 border border-[#152A54] hover:border-blue-500/70 overflow-hidden bg-[#060D1A] relative group cursor-pointer transition-colors"
+                  className="size-9 shrink-0 border border-border hover:border-blue-500/70 overflow-hidden bg-card relative group cursor-pointer transition-colors"
                   title="Click to preview ID card"
                 >
                   <img
@@ -502,13 +502,13 @@ export function CollegeIdUploader({
                   </div>
                 </button>
               ) : (
-                <div className="size-9 shrink-0 flex items-center justify-center border border-[#152A54] bg-[#060D1A] text-blue-400/70">
+                <div className="size-9 shrink-0 flex items-center justify-center border border-border bg-card text-blue-400/70">
                   <FileImageIcon className="size-4" />
                 </div>
               )}
 
               <div className="min-w-0">
-                <p className="truncate font-mono text-[11px] text-slate-300">
+                <p className="truncate font-mono text-[11px] text-foreground-secondary">
                   {activeFile.name}
                 </p>
                 <p className="font-mono text-[10px] text-slate-500">
@@ -563,7 +563,7 @@ export function CollegeIdUploader({
                   type="button"
                   aria-label="Cancel upload"
                   onClick={() => cancelUpload(activeFile.id)}
-                  className="size-6 inline-flex items-center justify-center border border-[#152A54] hover:border-red-500/60 text-slate-400 hover:text-red-400 transition-colors cursor-pointer"
+                  className="size-6 inline-flex items-center justify-center border border-border hover:border-red-500/60 text-muted-foreground hover:text-red-400 transition-colors cursor-pointer"
                 >
                   <XIcon className="size-3" />
                 </button>
@@ -575,7 +575,7 @@ export function CollegeIdUploader({
                   type="button"
                   aria-label="Retry upload"
                   onClick={() => retryUpload(activeFile.id)}
-                  className="size-6 inline-flex items-center justify-center border border-[#152A54] hover:border-blue-500/60 text-slate-400 hover:text-blue-400 transition-colors cursor-pointer"
+                  className="size-6 inline-flex items-center justify-center border border-border hover:border-blue-500/60 text-muted-foreground hover:text-blue-400 transition-colors cursor-pointer"
                 >
                   <RefreshCwIcon className="size-3" />
                 </button>
@@ -586,7 +586,7 @@ export function CollegeIdUploader({
                 type="button"
                 aria-label="Remove file"
                 onClick={() => handleRemove(activeFile.id)}
-                className="size-6 inline-flex items-center justify-center border border-[#152A54] hover:border-red-500/60 text-slate-400 hover:text-red-400 transition-colors cursor-pointer"
+                className="size-6 inline-flex items-center justify-center border border-border hover:border-red-500/60 text-muted-foreground hover:text-red-400 transition-colors cursor-pointer"
               >
                 <XIcon className="size-3" />
               </button>
@@ -596,7 +596,7 @@ export function CollegeIdUploader({
           {/* Slim progress bar */}
           {(activeFile.uploadStatus === "queued" ||
             activeFile.uploadStatus === "uploading") && (
-            <div className="h-[2px] w-full bg-[#152A54] overflow-hidden rounded-none">
+            <div className="h-[2px] w-full bg-secondary overflow-hidden rounded-none">
               <div
                 className="h-full bg-blue-500 transition-all duration-200"
                 style={{ width: `${getProgressPercent(activeFile)}%` }}
@@ -622,13 +622,13 @@ export function CollegeIdUploader({
 
       {/* ── Existing file card (when currentUrl is present and no new file dropped) ── */}
       {isExistingUploaded && currentUrl && (
-        <div className="rounded-none border border-[#152A54] bg-[#03060E] px-4 py-3 space-y-2">
+        <div className="rounded-none border border-border bg-background px-4 py-3 space-y-2">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2.5 min-w-0">
               <button
                 type="button"
                 onClick={() => setIsPreviewOpen(true)}
-                className="size-9 shrink-0 border border-[#152A54] hover:border-blue-500/70 overflow-hidden bg-[#060D1A] relative group cursor-pointer transition-colors"
+                className="size-9 shrink-0 border border-border hover:border-blue-500/70 overflow-hidden bg-card relative group cursor-pointer transition-colors"
                 title="Click to preview ID card"
               >
                 <img
@@ -642,7 +642,7 @@ export function CollegeIdUploader({
               </button>
 
               <div className="min-w-0">
-                <p className="truncate font-mono text-[11px] text-slate-300">
+                <p className="truncate font-mono text-[11px] text-foreground-secondary">
                   {memberLabel ? `${memberLabel} ID Card` : "College ID Card"}
                 </p>
                 <p className="font-mono text-[10px] text-emerald-400/80">
@@ -670,7 +670,7 @@ export function CollegeIdUploader({
                 type="button"
                 aria-label="Remove uploaded ID"
                 onClick={() => handleRemove()}
-                className="size-6 inline-flex items-center justify-center border border-[#152A54] hover:border-red-500/60 text-slate-400 hover:text-red-400 transition-colors cursor-pointer"
+                className="size-6 inline-flex items-center justify-center border border-border hover:border-red-500/60 text-muted-foreground hover:text-red-400 transition-colors cursor-pointer"
                 title="Remove and replace file"
               >
                 <XIcon className="size-3" />

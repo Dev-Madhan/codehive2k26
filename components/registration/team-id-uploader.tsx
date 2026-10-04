@@ -93,16 +93,16 @@ function PdfPreviewModal({ isOpen, onClose, file }: PdfPreviewModalProps) {
       {/* Backdrop */}
       <div
         onClick={onClose}
-        className="absolute inset-0 bg-black/85 backdrop-blur-md transition-opacity cursor-pointer"
+        className="absolute inset-0 bg-background/85 backdrop-blur-md transition-opacity cursor-pointer"
       />
 
       {/* Modal Dialog Card */}
-      <div className="relative z-10 w-full max-w-5xl h-[94dvh] sm:h-[88vh] flex flex-col rounded-none border border-[#152A54] bg-[#060D1A] shadow-2xl shadow-blue-950/40 overflow-hidden">
+      <div className="relative z-10 w-full max-w-5xl h-[94dvh] sm:h-[88vh] flex flex-col rounded-none border border-border bg-card shadow-2xl shadow-blue-950/40 overflow-hidden">
         {/* Top Glowing Accent Line */}
         <div className="h-[2px] w-full bg-gradient-to-r from-blue-600 via-sky-400 to-blue-600 shrink-0" />
 
         {/* Header */}
-        <div className="flex items-center justify-between px-3 sm:px-5 py-3 border-b border-[#152A54] bg-[#03060E] shrink-0">
+        <div className="flex items-center justify-between px-3 sm:px-5 py-3 border-b border-border bg-background shrink-0">
           <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
             <div className="size-8 rounded-none border border-rose-500/50 bg-rose-500/15 flex items-center justify-center text-rose-400 shrink-0 shadow-sm shadow-rose-950/40">
               <FileTextIcon className="size-4" />
@@ -111,7 +111,7 @@ function PdfPreviewModal({ isOpen, onClose, file }: PdfPreviewModalProps) {
               <div className="flex items-center gap-2">
                 <h3
                   id="pdf-preview-title"
-                  className="text-xs sm:text-sm font-mono font-bold text-white uppercase tracking-wider truncate max-w-[140px] xs:max-w-[200px] sm:max-w-md"
+                  className="text-xs sm:text-sm font-mono font-bold text-foreground uppercase tracking-wider truncate max-w-[140px] xs:max-w-[200px] sm:max-w-md"
                   title={file.name}
                 >
                   {file.name}
@@ -120,7 +120,7 @@ function PdfPreviewModal({ isOpen, onClose, file }: PdfPreviewModalProps) {
                   PDF
                 </span>
               </div>
-              <p className="text-[10px] sm:text-[11px] font-mono text-slate-400 flex items-center gap-1.5">
+              <p className="text-[10px] sm:text-[11px] font-mono text-muted-foreground flex items-center gap-1.5">
                 <span>{formatBytes(file.size)}</span>
                 <span className="text-slate-600">&bull;</span>
                 <span className="text-emerald-400 font-semibold">Local Document Preview</span>
@@ -144,16 +144,16 @@ function PdfPreviewModal({ isOpen, onClose, file }: PdfPreviewModalProps) {
             <a
               href={blobUrl}
               download={file.name}
-              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-slate-300 bg-[#0B162C] border border-[#152A54] hover:text-white hover:border-slate-500 transition-colors"
+              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-foreground-secondary bg-secondary border border-border hover:text-foreground hover:border-slate-500 transition-colors"
               title="Download local copy"
             >
-              <DownloadIcon className="size-3 text-slate-400" />
+              <DownloadIcon className="size-3 text-muted-foreground" />
               <span>Download</span>
             </a>
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex items-center gap-1 px-2 py-1.5 text-slate-400 hover:text-white border border-transparent hover:border-[#152A54] bg-transparent hover:bg-[#0B162C] transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 px-2 py-1.5 text-muted-foreground hover:text-foreground border border-transparent hover:border-border bg-transparent hover:bg-secondary transition-colors cursor-pointer"
               aria-label="Close Preview"
             >
               <span className="hidden sm:inline text-[10px] font-mono text-slate-500">ESC</span>
@@ -163,7 +163,7 @@ function PdfPreviewModal({ isOpen, onClose, file }: PdfPreviewModalProps) {
         </div>
 
         {/* Main Document Preview Area (Fixed 100% full flex height - no 150px collapsing!) */}
-        <div className="relative flex-1 min-h-0 w-full bg-[#02050E] overflow-hidden">
+        <div className="relative flex-1 min-h-0 w-full bg-background overflow-hidden">
           {/* Subtle cyber grid backdrop */}
           <div
             className="pointer-events-none absolute inset-0 opacity-[0.03]"
@@ -177,13 +177,13 @@ function PdfPreviewModal({ isOpen, onClose, file }: PdfPreviewModalProps) {
           <iframe
             src={`${blobUrl}#view=FitH&toolbar=1`}
             title={`PDF Preview: ${file.name}`}
-            className="absolute inset-0 w-full h-full border-0 bg-[#02050E]"
+            className="absolute inset-0 w-full h-full border-0 bg-background"
           />
         </div>
 
         {/* Mobile Quick Action Strip */}
-        <div className="flex sm:hidden items-center justify-between px-3.5 py-2 bg-[#03060E] border-t border-[#152A54] text-[11px] font-mono text-slate-400 shrink-0">
-          <span className="text-[10px] text-slate-400">Pinch or zoom limited?</span>
+        <div className="flex sm:hidden items-center justify-between px-3.5 py-2 bg-background border-t border-border text-[11px] font-mono text-muted-foreground shrink-0">
+          <span className="text-[10px] text-muted-foreground">Pinch or zoom limited?</span>
           <a
             href={blobUrl}
             target="_blank"
@@ -196,8 +196,8 @@ function PdfPreviewModal({ isOpen, onClose, file }: PdfPreviewModalProps) {
         </div>
 
         {/* Desktop / Global Footer */}
-        <div className="flex items-center justify-between px-3.5 sm:px-5 py-2.5 sm:py-3 border-t border-[#152A54] bg-[#03060E] text-[11px] font-mono text-slate-400 shrink-0">
-          <div className="flex items-center gap-2 text-slate-400 text-[10px] sm:text-[11px]">
+        <div className="flex items-center justify-between px-3.5 sm:px-5 py-2.5 sm:py-3 border-t border-border bg-background text-[11px] font-mono text-muted-foreground shrink-0">
+          <div className="flex items-center gap-2 text-muted-foreground text-[10px] sm:text-[11px]">
             <ShieldCheckIcon className="size-3.5 text-blue-400 shrink-0 hidden xs:block" />
             <span className="truncate max-w-[200px] sm:max-w-md">
               Single PDF document verified for team ID cards
@@ -209,7 +209,7 @@ function PdfPreviewModal({ isOpen, onClose, file }: PdfPreviewModalProps) {
               href={blobUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center gap-1 px-3 py-1 font-mono text-xs text-slate-400 hover:text-white border border-[#152A54] bg-[#0B162C] transition-colors"
+              className="hidden sm:inline-flex items-center gap-1 px-3 py-1 font-mono text-xs text-muted-foreground hover:text-foreground border border-border bg-secondary transition-colors"
             >
               <span>Full Tab</span>
               <ExternalLinkIcon className="size-3" />
@@ -217,7 +217,7 @@ function PdfPreviewModal({ isOpen, onClose, file }: PdfPreviewModalProps) {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-slate-300 bg-[#0B162C] border border-[#152A54] hover:text-white hover:border-blue-500 transition-colors cursor-pointer"
+              className="px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-foreground-secondary bg-secondary border border-border hover:text-foreground hover:border-blue-500 transition-colors cursor-pointer"
             >
               Close
             </button>
@@ -304,7 +304,7 @@ export function TeamIdUploader({
       {/* Case 1: A PDF is currently selected */}
       {selectedFile ? (
         <div className="space-y-3">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-none border border-blue-500/50 bg-[#03060E] shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-none border border-blue-500/50 bg-background shadow-sm">
             {/* File info */}
             <div className="flex items-center gap-3 min-w-0">
               <div className="size-11 rounded-none border border-rose-500/40 bg-rose-500/10 flex items-center justify-center text-rose-400 shrink-0">
@@ -312,7 +312,7 @@ export function TeamIdUploader({
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono font-bold text-white uppercase tracking-wider truncate max-w-[220px] sm:max-w-xs">
+                  <span className="text-xs font-mono font-bold text-foreground uppercase tracking-wider truncate max-w-[220px] sm:max-w-xs">
                     {selectedFile.name}
                   </span>
                   <span className="inline-flex items-center px-1.5 py-0.5 rounded-none border border-rose-500/40 bg-rose-500/15 text-[9px] font-mono font-bold text-rose-300">
@@ -320,7 +320,7 @@ export function TeamIdUploader({
                   </span>
                 </div>
                 <div className="flex items-center gap-2 mt-1">
-                  <span className="text-[10px] font-mono text-slate-400">
+                  <span className="text-[10px] font-mono text-muted-foreground">
                     {formatBytes(selectedFile.size)}
                   </span>
                   <span className="text-slate-600">•</span>
@@ -337,7 +337,7 @@ export function TeamIdUploader({
               <button
                 type="button"
                 onClick={() => setPreviewOpen(true)}
-                className="inline-flex items-center justify-center gap-1.5 h-10 px-3 font-mono text-xs font-bold uppercase tracking-wider text-blue-400 bg-[#0B162C] border border-[#152A54] hover:text-white hover:border-blue-500 transition-colors cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 h-10 px-3 font-mono text-xs font-bold uppercase tracking-wider text-blue-400 bg-secondary border border-border hover:text-foreground hover:border-blue-500 transition-colors cursor-pointer"
                 title="Preview PDF"
               >
                 <EyeIcon className="size-3.5" />
@@ -362,34 +362,41 @@ export function TeamIdUploader({
         <div className="space-y-2">
           <div
             {...getRootProps()}
-            className={`relative flex flex-col items-center justify-center p-5 sm:p-8 text-center border-2 border-dashed transition-all cursor-pointer select-none rounded-none ${
+            className={`relative flex min-h-56 flex-col items-center justify-center p-5 sm:p-8 text-center border-2 border-dashed transition-all cursor-pointer select-none rounded-xl ${
               isDragReject
                 ? "border-rose-500 bg-rose-950/20 text-rose-300"
                 : isDragActive
                 ? "border-blue-500 bg-blue-950/25 text-blue-300 shadow-[0_0_20px_rgba(59,130,246,0.15)]"
-                : "border-[#152A54] bg-[#03060E] text-slate-400 hover:border-blue-500/60 hover:bg-[#060D1A]"
+                : "border-blue-400/70 bg-blue-950/20 text-muted-foreground hover:border-blue-300 hover:bg-blue-950/35"
             } ${disabled ? "opacity-50 pointer-events-none" : ""}`}
           >
             <input {...getInputProps()} id={id} disabled={disabled} />
 
-            <div className="size-12 rounded-none border border-[#152A54] bg-[#060D1A] flex items-center justify-center text-blue-400 mb-3 group-hover:scale-105 transition-transform">
-              <UploadCloudIcon className="size-6" />
+            <div className="mb-3 flex size-14 items-center justify-center rounded-xl border border-blue-400/40 bg-blue-500/15 text-blue-300 shadow-[0_0_24px_rgba(59,130,246,0.18)]">
+              <UploadCloudIcon className="size-7" />
             </div>
 
-            <p className="text-xs font-mono font-bold text-white uppercase tracking-wider mb-1">
-              Drag & Drop Single PDF Here, or{" "}
-              <span className="text-blue-400 underline underline-offset-4">Browse</span>
+            <p className="mb-1 text-sm font-sans font-bold text-foreground">
+              Drag and drop your College ID PDF here
             </p>
 
-            <p className="text-[11px] font-mono text-slate-400 max-w-md mt-0.5">
-              The team leader must upload a single PDF containing the collection of ID cards of all team members
+            <p className="mt-0.5 max-w-md text-xs font-sans text-muted-foreground">
+              {teamSize > 1
+                ? "Combine every team member's College ID into one PDF before uploading."
+                : "Upload a clear scan or photo of your College ID as a PDF."}
             </p>
 
-            <div className="inline-flex items-center gap-2 mt-3 px-2 py-1 rounded-none border border-[#152A54] bg-[#060D1A] text-[10px] font-mono text-slate-400">
-              <span className="font-semibold text-rose-400">PDF FORMAT ONLY</span>
-              <span className="text-slate-600">•</span>
-              <span>MAX 10 MB</span>
-            </div>
+            <button
+              type="button"
+              className="mt-5 inline-flex h-11 items-center gap-2 rounded-lg bg-blue-600 px-5 text-sm font-semibold text-white shadow-lg shadow-blue-950/40 transition-colors hover:bg-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              <UploadCloudIcon className="size-4" />
+              Choose PDF file
+            </button>
+
+            <p className="mt-3 text-[11px] font-medium text-muted-foreground">
+              PDF only <span className="mx-1.5 text-border">•</span> Maximum file size: 10 MB
+            </p>
           </div>
 
           {/* Validation/Rejection Error */}

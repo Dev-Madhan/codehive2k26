@@ -94,13 +94,13 @@ function PasswordInput({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         autoComplete={autoComplete}
-        className="h-10 w-full rounded-none border border-[#152A54] bg-[#03060E] dark:bg-[#03060E] pl-10 pr-10 text-xs font-mono text-white placeholder:text-slate-600 shadow-none outline-none focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset-0 transition-colors"
+        className="h-10 w-full rounded-none border border-border bg-background dark:bg-background pl-10 pr-10 text-xs font-mono text-foreground placeholder:text-slate-600 shadow-none outline-none focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset-0 transition-colors"
         required
       />
       <button
         type="button"
         onClick={() => setVisible((v) => !v)}
-        className="text-slate-500 hover:text-white absolute top-1/2 right-3 -translate-y-1/2 transition-colors cursor-pointer"
+        className="text-slate-500 hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2 transition-colors cursor-pointer"
         aria-label={visible ? "Hide password" : "Show password"}
       >
         {visible ? (
@@ -165,28 +165,28 @@ export function Auth3({
       <div className="w-full max-w-[420px]">
         {/* Terminal Title Pill (Reference Image 2 Layout) */}
         <div className="flex flex-col items-center mb-6">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 font-mono text-xs font-bold text-white bg-blue-600 rounded-none border border-blue-500 shadow-sm">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 font-mono text-xs font-bold text-foreground bg-blue-600 rounded-none border border-blue-500 shadow-sm">
             &gt; access_portal
           </div>
-          <p className="text-xs font-mono text-slate-400 mt-2 text-center">
+          <p className="text-xs font-mono text-muted-foreground mt-2 text-center">
             A secure, unified entry point for CodeHive 2K26.
           </p>
         </div>
 
         {/* Centered Precision Terminal Card (Reference Image 2 Layout) */}
-        <div className="bg-[#060D1A] border border-[#152A54] rounded-none shadow-2xl overflow-hidden">
+        <div className="bg-card border border-border rounded-none shadow-2xl overflow-hidden">
           <Tabs defaultValue="signin" className="w-full">
             {/* Header Tab List */}
-            <TabsList className="bg-[#030712] border-b border-[#152A54] grid h-12 w-full grid-cols-2 rounded-none p-1 gap-1 border-x-0 border-t-0">
+            <TabsList className="bg-background border-b border-border grid h-12 w-full grid-cols-2 rounded-none p-1 gap-1 border-x-0 border-t-0">
               <TabsTrigger
                 value="signin"
-                className="h-full rounded-none border border-transparent font-mono text-xs uppercase tracking-wider font-semibold text-slate-400 hover:text-white transition-all shadow-none data-[state=active]:border-[#152A54] data-[state=active]:bg-[#0B162C] data-[state=active]:text-white"
+                className="h-full rounded-none border border-transparent font-mono text-xs uppercase tracking-wider font-semibold text-muted-foreground hover:text-foreground transition-all shadow-none data-[state=active]:border-border data-[state=active]:bg-secondary data-[state=active]:text-foreground"
               >
                 Sign In
               </TabsTrigger>
               <TabsTrigger
                 value="signup"
-                className="h-full rounded-none border border-transparent font-mono text-xs uppercase tracking-wider font-semibold text-slate-400 hover:text-white transition-all shadow-none data-[state=active]:border-[#152A54] data-[state=active]:bg-[#0B162C] data-[state=active]:text-white"
+                className="h-full rounded-none border border-transparent font-mono text-xs uppercase tracking-wider font-semibold text-muted-foreground hover:text-foreground transition-all shadow-none data-[state=active]:border-border data-[state=active]:bg-secondary data-[state=active]:text-foreground"
               >
                 Create Account
               </TabsTrigger>
@@ -202,7 +202,7 @@ export function Auth3({
                       key={provider.id}
                       variant="ghost"
                       type="button"
-                      className="h-10 w-full gap-2.5 rounded-none border border-[#152A54] bg-[#030712] hover:bg-[#0B162C] hover:border-blue-500/50 text-white text-xs font-mono font-medium shadow-none transition-colors cursor-pointer"
+                      className="h-10 w-full gap-2.5 rounded-none border border-border bg-background hover:bg-secondary hover:border-blue-500/50 text-foreground text-xs font-mono font-medium shadow-none transition-colors cursor-pointer"
                       onClick={provider.onClick || (() => handleSocialSignIn(provider.id))}
                     >
                       {provider.icon}
@@ -213,18 +213,18 @@ export function Auth3({
 
                 {/* Divider */}
                 <div className="flex items-center gap-3 py-1">
-                  <div className="flex-1 h-px bg-[#152A54]" />
+                  <div className="flex-1 h-px bg-secondary" />
                   <span className="text-slate-500 shrink-0 font-mono text-[11px] uppercase tracking-wider">
                     {dividerText}
                   </span>
-                  <div className="flex-1 h-px bg-[#152A54]" />
+                  <div className="flex-1 h-px bg-secondary" />
                 </div>
 
                 {/* Email Address */}
                 <div className="space-y-1.5">
                   <Label
                     htmlFor="auth3-si-email"
-                    className="font-mono text-[11px] uppercase tracking-wider text-slate-400 font-semibold block"
+                    className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground font-semibold block"
                   >
                     Email Address
                   </Label>
@@ -237,7 +237,7 @@ export function Auth3({
                       value={siEmail}
                       onChange={(e) => setSiEmail(e.target.value)}
                       autoComplete="email"
-                      className="h-10 w-full rounded-none border border-[#152A54] bg-[#03060E] dark:bg-[#03060E] pl-10 pr-3 text-xs font-mono text-white placeholder:text-slate-600 shadow-none outline-none focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset-0 transition-colors"
+                      className="h-10 w-full rounded-none border border-border bg-background dark:bg-background pl-10 pr-3 text-xs font-mono text-foreground placeholder:text-slate-600 shadow-none outline-none focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset-0 transition-colors"
                       required
                     />
                   </div>
@@ -248,7 +248,7 @@ export function Auth3({
                   <div className="flex items-center justify-between">
                     <Label
                       htmlFor="auth3-si-password"
-                      className="font-mono text-[11px] uppercase tracking-wider text-slate-400 font-semibold"
+                      className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground font-semibold"
                     >
                       Password
                     </Label>
@@ -272,7 +272,7 @@ export function Auth3({
                 {/* High-Contrast CTA Button (Reference Image 2 layout) */}
                 <Button
                   type="submit"
-                  className="h-11 w-full gap-2 rounded-none font-mono text-xs uppercase tracking-wider font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-950/50 transition-colors cursor-pointer border border-blue-500 mt-2"
+                  className="h-11 w-full gap-2 rounded-none font-mono text-xs uppercase tracking-wider font-bold text-foreground bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-950/50 transition-colors cursor-pointer border border-blue-500 mt-2"
                 >
                   {signInLabel}
                   <MdArrowForward className="h-4 w-4" />
@@ -289,7 +289,7 @@ export function Auth3({
                     key={provider.id}
                     variant="ghost"
                     type="button"
-                    className="h-10 w-full gap-2.5 rounded-none border border-[#152A54] bg-[#030712] hover:bg-[#0B162C] hover:border-blue-500/50 text-white text-xs font-mono font-medium shadow-none transition-colors cursor-pointer"
+                    className="h-10 w-full gap-2.5 rounded-none border border-border bg-background hover:bg-secondary hover:border-blue-500/50 text-foreground text-xs font-mono font-medium shadow-none transition-colors cursor-pointer"
                     onClick={provider.onClick}
                   >
                     {provider.icon}
@@ -300,11 +300,11 @@ export function Auth3({
 
               {/* Divider */}
               <div className="flex items-center gap-3 py-1">
-                <div className="flex-1 h-px bg-[#152A54]" />
+                <div className="flex-1 h-px bg-secondary" />
                 <span className="text-slate-500 shrink-0 font-mono text-[11px] uppercase tracking-wider">
                   {dividerText}
                 </span>
-                <div className="flex-1 h-px bg-[#152A54]" />
+                <div className="flex-1 h-px bg-secondary" />
               </div>
 
               <form onSubmit={handleSignUp} className="space-y-4">
@@ -312,7 +312,7 @@ export function Auth3({
                 <div className="space-y-1.5">
                   <Label
                     htmlFor="auth3-su-name"
-                    className="font-mono text-[11px] uppercase tracking-wider text-slate-400 font-semibold block"
+                    className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground font-semibold block"
                   >
                     Full Name
                   </Label>
@@ -325,7 +325,7 @@ export function Auth3({
                       value={suName}
                       onChange={(e) => setSuName(e.target.value)}
                       autoComplete="name"
-                      className="h-10 w-full rounded-none border border-[#152A54] bg-[#03060E] dark:bg-[#03060E] pl-10 pr-3 text-xs font-mono text-white placeholder:text-slate-600 shadow-none outline-none focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset-0 transition-colors"
+                      className="h-10 w-full rounded-none border border-border bg-background dark:bg-background pl-10 pr-3 text-xs font-mono text-foreground placeholder:text-slate-600 shadow-none outline-none focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset-0 transition-colors"
                       required
                     />
                   </div>
@@ -335,7 +335,7 @@ export function Auth3({
                 <div className="space-y-1.5">
                   <Label
                     htmlFor="auth3-su-email"
-                    className="font-mono text-[11px] uppercase tracking-wider text-slate-400 font-semibold block"
+                    className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground font-semibold block"
                   >
                     Email Address
                   </Label>
@@ -348,7 +348,7 @@ export function Auth3({
                       value={suEmail}
                       onChange={(e) => setSuEmail(e.target.value)}
                       autoComplete="email"
-                      className="h-10 w-full rounded-none border border-[#152A54] bg-[#03060E] dark:bg-[#03060E] pl-10 pr-3 text-xs font-mono text-white placeholder:text-slate-600 shadow-none outline-none focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset-0 transition-colors"
+                      className="h-10 w-full rounded-none border border-border bg-background dark:bg-background pl-10 pr-3 text-xs font-mono text-foreground placeholder:text-slate-600 shadow-none outline-none focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset-0 transition-colors"
                       required
                     />
                   </div>
@@ -358,7 +358,7 @@ export function Auth3({
                 <div className="space-y-1.5">
                   <Label
                     htmlFor="auth3-su-password"
-                    className="font-mono text-[11px] uppercase tracking-wider text-slate-400 font-semibold block"
+                    className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground font-semibold block"
                   >
                     Password
                   </Label>
@@ -374,7 +374,7 @@ export function Auth3({
                 {/* Submit Button */}
                 <Button
                   type="submit"
-                  className="h-11 w-full gap-2 rounded-none font-mono text-xs uppercase tracking-wider font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-950/50 transition-colors cursor-pointer border border-blue-500 mt-2"
+                  className="h-11 w-full gap-2 rounded-none font-mono text-xs uppercase tracking-wider font-bold text-foreground bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-950/50 transition-colors cursor-pointer border border-blue-500 mt-2"
                 >
                   {signUpLabel}
                   <MdArrowForward className="h-4 w-4" />

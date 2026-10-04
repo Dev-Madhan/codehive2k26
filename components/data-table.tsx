@@ -162,14 +162,14 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
         render={
           <Button
             variant="link"
-            className="w-fit px-0 text-left font-mono font-bold text-xs text-white hover:text-blue-400 transition-colors cursor-pointer"
+            className="w-fit px-0 text-left font-mono font-bold text-xs text-foreground hover:text-blue-400 transition-colors cursor-pointer"
           />
         }
       >
         {item.header}
       </DrawerTrigger>
-      <DrawerContent className="bg-[#060D1A] border-[#152A54] text-white font-mono rounded-none max-w-2xl mx-auto">
-        <DrawerHeader className="gap-1 border-b border-[#152A54] p-4 sm:p-5">
+      <DrawerContent className="bg-card border-border text-foreground font-mono rounded-none max-w-2xl mx-auto">
+        <DrawerHeader className="gap-1 border-b border-border p-4 sm:p-5">
           <div className="flex items-center gap-2 flex-wrap mb-1">
             <span className="text-[10px] font-bold text-blue-400 bg-blue-950/60 border border-blue-500/40 px-2 py-0.5 uppercase tracking-wider">
               {item.type}
@@ -181,11 +181,11 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
               {item.teamFormat}
             </span>
           </div>
-          <DrawerTitle className="text-base sm:text-xl font-bold text-white uppercase tracking-tight flex items-center gap-2">
+          <DrawerTitle className="text-base sm:text-xl font-bold text-foreground uppercase tracking-tight flex items-center gap-2">
             <SparklesIcon className="size-4 text-blue-400 shrink-0" />
             <span>{item.header}</span>
           </DrawerTitle>
-          <DrawerDescription className="text-xs text-slate-400 leading-relaxed">
+          <DrawerDescription className="text-xs text-muted-foreground leading-relaxed">
             {item.venue}
           </DrawerDescription>
         </DrawerHeader>
@@ -193,57 +193,57 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
         <div className="flex flex-col gap-3.5 overflow-y-auto p-4 sm:p-5 text-xs max-h-[65vh]">
           {/* Key Metrics Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-            <div className="border border-[#152A54] bg-[#03060E] p-3 space-y-1">
-              <span className="text-[10px] uppercase text-slate-400 font-semibold tracking-wider block">
+            <div className="border border-border bg-background p-3 space-y-1">
+              <span className="text-[10px] uppercase text-muted-foreground font-semibold tracking-wider block">
                 Total Registrations
               </span>
               <p className="text-2xl font-bold text-blue-400 tabular-nums">
                 {item.registrationsCount}
               </p>
             </div>
-            <div className="border border-[#152A54] bg-[#03060E] p-3 space-y-1">
-              <span className="text-[10px] uppercase text-slate-400 font-semibold tracking-wider block">
+            <div className="border border-border bg-background p-3 space-y-1">
+              <span className="text-[10px] uppercase text-muted-foreground font-semibold tracking-wider block">
                 Teams Formed
               </span>
               <p className="text-2xl font-bold text-purple-400 tabular-nums">
                 {item.teamsCount}
               </p>
             </div>
-            <div className="border border-[#152A54] bg-[#03060E] p-3 space-y-1 col-span-2 sm:col-span-1">
-              <span className="text-[10px] uppercase text-slate-400 font-semibold tracking-wider block">
+            <div className="border border-border bg-background p-3 space-y-1 col-span-2 sm:col-span-1">
+              <span className="text-[10px] uppercase text-muted-foreground font-semibold tracking-wider block">
                 Participation Mode
               </span>
-              <p className="text-xs font-bold text-white uppercase mt-1">
+              <p className="text-xs font-bold text-foreground uppercase mt-1">
                 {item.teamFormat}
               </p>
             </div>
           </div>
 
           {/* Description */}
-          <div className="border border-[#152A54] bg-[#03060E] p-3.5 space-y-2">
+          <div className="border border-border bg-background p-3.5 space-y-2">
             <span className="text-[10px] uppercase tracking-wider text-blue-400 font-bold block flex items-center gap-1.5">
               <span>Track Challenge Overview</span>
             </span>
-            <p className="text-xs text-slate-300 leading-relaxed whitespace-pre-line">
+            <p className="text-xs text-foreground-secondary leading-relaxed whitespace-pre-line">
               {item.description || "Official symposium challenge details and guidelines."}
             </p>
           </div>
 
           {/* Logistics & Timings */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <div className="border border-[#152A54] bg-[#03060E] p-3 space-y-1">
-              <div className="flex items-center gap-1.5 text-slate-400">
+            <div className="border border-border bg-background p-3 space-y-1">
+              <div className="flex items-center gap-1.5 text-muted-foreground">
                 <MapPinIcon className="size-3 text-slate-500" />
                 <span className="text-[10px] uppercase font-semibold tracking-wider">Venue</span>
               </div>
-              <p className="text-xs text-white font-semibold">{item.venue}</p>
+              <p className="text-xs text-foreground font-semibold">{item.venue}</p>
             </div>
-            <div className="border border-[#152A54] bg-[#03060E] p-3 space-y-1">
-              <div className="flex items-center gap-1.5 text-slate-400">
+            <div className="border border-border bg-background p-3 space-y-1">
+              <div className="flex items-center gap-1.5 text-muted-foreground">
                 <CalendarDaysIcon className="size-3 text-slate-500" />
                 <span className="text-[10px] uppercase font-semibold tracking-wider">Dates</span>
               </div>
-              <p className="text-xs text-white font-semibold">
+              <p className="text-xs text-foreground font-semibold">
                 {item.startAt
                   ? new Date(item.startAt).toLocaleDateString("en-IN", {
                       weekday: "short",
@@ -257,23 +257,23 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
           </div>
         </div>
 
-        <DrawerFooter className="border-t border-[#152A54] bg-[#03060E] flex flex-row items-center justify-between gap-3 p-4">
+        <DrawerFooter className="border-t border-border bg-background flex flex-row items-center justify-between gap-3 p-4">
           <div className="flex items-center gap-2">
             <Link
               href="/admin/registrations"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 border border-blue-400 transition-colors uppercase"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-foreground bg-blue-600 hover:bg-blue-500 border border-blue-400 transition-colors uppercase"
             >
               <UsersIcon className="size-3.5" />
               <span>View Attendees</span>
             </Link>
             <Link
               href="/admin/events"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-300 hover:text-white bg-[#060D1A] hover:bg-[#0B162C] border border-[#152A54] transition-colors uppercase"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-foreground-secondary hover:text-foreground bg-card hover:bg-secondary border border-border transition-colors uppercase"
             >
               <span>Manage Track</span>
             </Link>
           </div>
-          <DrawerClose render={<Button variant="outline" className="rounded-none border-[#152A54] bg-[#060D1A] text-slate-300 font-mono text-xs uppercase" />}>
+          <DrawerClose render={<Button variant="outline" className="rounded-none border-border bg-card text-foreground-secondary font-mono text-xs uppercase" />}>
             Close
           </DrawerClose>
         </DrawerFooter>
@@ -347,7 +347,7 @@ const columns = columnHelper.columns([
     cell: ({ row }) => (
       <Badge
         variant="outline"
-        className="px-1.5 font-mono text-[10px] rounded-none border-[#152A54] text-emerald-400 bg-emerald-950/20"
+        className="px-1.5 font-mono text-[10px] rounded-none border-border text-emerald-400 bg-emerald-950/20"
       >
         <CircleCheckIcon className="size-3 mr-1 text-emerald-400" />
         {row.original.status}
@@ -357,7 +357,7 @@ const columns = columnHelper.columns([
   columnHelper.accessor("registrationsCount", {
     header: () => <div className="w-full text-right font-mono">Registrations</div>,
     cell: ({ row }) => (
-      <div className="text-right font-mono text-xs font-bold text-white tabular-nums pr-2">
+      <div className="text-right font-mono text-xs font-bold text-foreground tabular-nums pr-2">
         {row.original.registrationsCount}
       </div>
     ),
@@ -365,7 +365,7 @@ const columns = columnHelper.columns([
   columnHelper.accessor("teamsCount", {
     header: () => <div className="w-full text-right font-mono">Teams</div>,
     cell: ({ row }) => (
-      <div className="text-right font-mono text-xs font-semibold text-slate-300 tabular-nums pr-2">
+      <div className="text-right font-mono text-xs font-semibold text-foreground-secondary tabular-nums pr-2">
         {row.original.teamsCount}
       </div>
     ),
@@ -374,7 +374,7 @@ const columns = columnHelper.columns([
     header: "Venue",
     cell: ({ row }) => (
       <span
-        className="font-mono text-xs text-slate-400 truncate max-w-[160px] block"
+        className="font-mono text-xs text-muted-foreground truncate max-w-[160px] block"
         title={row.original.venue}
       >
         {row.original.venue}
@@ -394,22 +394,22 @@ const columns = columnHelper.columns([
             />
           }
         >
-          <EllipsisVerticalIcon className="size-4 text-slate-400" />
+          <EllipsisVerticalIcon className="size-4 text-muted-foreground" />
           <span className="sr-only">Open menu</span>
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
-          className="w-44 font-mono text-xs bg-[#060D1A] border-[#152A54] text-slate-200 rounded-none"
+          className="w-44 font-mono text-xs bg-card border-border text-foreground rounded-none"
         >
           <DropdownMenuItem
             render={<Link href="/admin/registrations" />}
-            className="cursor-pointer hover:bg-[#0B162C]"
+            className="cursor-pointer hover:bg-secondary"
           >
             View Registrations
           </DropdownMenuItem>
           <DropdownMenuItem
             render={<Link href="/admin/events" />}
-            className="cursor-pointer hover:bg-[#0B162C]"
+            className="cursor-pointer hover:bg-secondary"
           >
             Event Settings
           </DropdownMenuItem>
@@ -570,14 +570,14 @@ export function DataTable({
           }}
         >
           <SelectTrigger
-            className="flex w-fit @4xl/main:hidden font-mono text-xs rounded-none border-[#152A54] bg-[#060D1A]"
+            className="flex w-fit @4xl/main:hidden font-mono text-xs rounded-none border-border bg-card"
             size="sm"
             id="view-selector"
           >
             <SelectValue placeholder="Filter Track" />
           </SelectTrigger>
           <SelectContent>
-            <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-[#152A54]/60 mb-1 flex items-center justify-between">
+            <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-border/60 mb-1 flex items-center justify-between">
               <span>// SYMPOSIUM TRACKS</span>
               <span className="text-blue-400 font-bold">{categoryStats.all} TOTAL</span>
             </div>
@@ -593,22 +593,22 @@ export function DataTable({
           </SelectContent>
         </Select>
 
-        <TabsList className="hidden font-mono text-xs rounded-none border border-[#152A54] bg-[#060D1A] **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-none **:data-[slot=badge]:bg-blue-600/20 **:data-[slot=badge]:text-blue-400 **:data-[slot=badge]:px-1 @4xl/main:flex">
+        <TabsList className="hidden font-mono text-xs rounded-none border border-border bg-card **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-none **:data-[slot=badge]:bg-blue-600/20 **:data-[slot=badge]:text-blue-400 **:data-[slot=badge]:px-1 @4xl/main:flex">
           <TabsTrigger
             value="all"
-            className="rounded-none data-[state=active]:bg-[#0B162C] data-[state=active]:text-white flex items-center gap-1.5"
+            className="rounded-none data-[state=active]:bg-secondary data-[state=active]:text-foreground flex items-center gap-1.5"
           >
             All Tracks <Badge variant="secondary">{categoryStats.all}</Badge>
           </TabsTrigger>
           <TabsTrigger
             value="technical"
-            className="rounded-none data-[state=active]:bg-[#0B162C] data-[state=active]:text-white flex items-center gap-1.5"
+            className="rounded-none data-[state=active]:bg-secondary data-[state=active]:text-foreground flex items-center gap-1.5"
           >
             Technical <Badge variant="secondary">{categoryStats.technical}</Badge>
           </TabsTrigger>
           <TabsTrigger
             value="non-technical"
-            className="rounded-none data-[state=active]:bg-[#0B162C] data-[state=active]:text-white flex items-center gap-1.5"
+            className="rounded-none data-[state=active]:bg-secondary data-[state=active]:text-foreground flex items-center gap-1.5"
           >
             Non-Technical <Badge variant="secondary">{categoryStats.nonTechnical}</Badge>
           </TabsTrigger>
@@ -621,19 +621,19 @@ export function DataTable({
                 <Button
                   variant="outline"
                   size="sm"
-                  className="rounded-none border-[#152A54] bg-[#060D1A] hover:bg-[#0B162C] text-slate-300 font-mono text-xs"
+                  className="rounded-none border-border bg-card hover:bg-secondary text-foreground-secondary font-mono text-xs"
                 />
               }
             >
-              <Columns3Icon className="size-3.5 mr-1 text-slate-400" />
+              <Columns3Icon className="size-3.5 mr-1 text-muted-foreground" />
               Columns
-              <ChevronDownIcon className="size-3.5 ml-1 text-slate-400" />
+              <ChevronDownIcon className="size-3.5 ml-1 text-muted-foreground" />
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
               className="w-44"
             >
-              <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-[#152A54]/60 mb-1 flex items-center justify-between">
+              <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-border/60 mb-1 flex items-center justify-between">
                 <span>// TOGGLE COLUMNS</span>
               </div>
               {table
@@ -646,7 +646,7 @@ export function DataTable({
                 .map((column) => (
                   <DropdownMenuCheckboxItem
                     key={column.id}
-                    className="capitalize rounded-none hover:bg-[#0B162C]"
+                    className="capitalize rounded-none hover:bg-secondary"
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) =>
                       column.toggleVisibility(!!value)
@@ -663,7 +663,7 @@ export function DataTable({
             nativeButton={false}
             variant="outline"
             size="sm"
-            className="rounded-none border-[#152A54] bg-[#060D1A] hover:bg-[#0B162C] text-slate-300 font-mono text-xs cursor-pointer"
+            className="rounded-none border-border bg-card hover:bg-secondary text-foreground-secondary font-mono text-xs cursor-pointer"
           >
             <PlusIcon className="size-3.5 mr-1 text-blue-400" />
             <span className="hidden sm:inline">Add Track</span>
@@ -672,7 +672,7 @@ export function DataTable({
       </div>
 
       <div className="relative flex flex-col gap-4 overflow-auto px-3 sm:px-4 lg:px-6 max-w-full">
-        <div className="overflow-x-auto rounded-none border border-[#152A54] bg-[#060D1A] max-w-full">
+        <div className="overflow-x-auto rounded-none border border-border bg-card max-w-full">
           <DndContext
             collisionDetection={closestCenter}
             modifiers={[restrictToVerticalAxis]}
@@ -681,7 +681,7 @@ export function DataTable({
             id={sortableId}
           >
             <Table>
-              <TableHeader className="sticky top-0 z-10 bg-[#03060E] border-b border-[#152A54]">
+              <TableHeader className="sticky top-0 z-10 bg-background border-b border-border">
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
@@ -727,7 +727,7 @@ export function DataTable({
           </div>
           <div className="flex w-full sm:w-auto items-center justify-between sm:justify-end gap-3 sm:gap-6">
             <div className="hidden items-center gap-2 lg:flex">
-              <Label htmlFor="rows-per-page" className="text-xs text-slate-400">
+              <Label htmlFor="rows-per-page" className="text-xs text-muted-foreground">
                 Rows per page
               </Label>
               <Select
@@ -738,21 +738,21 @@ export function DataTable({
               >
                 <SelectTrigger
                   size="sm"
-                  className="w-20 rounded-none border-[#152A54] bg-[#060D1A] font-mono text-xs text-slate-300"
+                  className="w-20 rounded-none border-border bg-card font-mono text-xs text-foreground-secondary"
                   id="rows-per-page"
                 >
                   <SelectValue placeholder={table.state.pagination.pageSize} />
                 </SelectTrigger>
                 <SelectContent
                   side="top"
-                  className="rounded-none border-[#152A54] bg-[#030712] font-mono text-xs text-slate-300"
+                  className="rounded-none border-border bg-background font-mono text-xs text-foreground-secondary"
                 >
                   <SelectGroup>
                     {[10, 20, 30, 40, 50].map((pageSize) => (
                       <SelectItem
                         key={pageSize}
                         value={`${pageSize}`}
-                        className="rounded-none hover:bg-[#0B162C]"
+                        className="rounded-none hover:bg-secondary"
                       >
                         {pageSize}
                       </SelectItem>
@@ -761,14 +761,14 @@ export function DataTable({
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex w-fit items-center justify-center text-xs text-slate-400">
+            <div className="flex w-fit items-center justify-center text-xs text-muted-foreground">
               Page {table.state.pagination.pageIndex + 1} of{" "}
               {Math.max(table.getPageCount(), 1)}
             </div>
             <div className="flex items-center gap-1.5">
               <Button
                 variant="outline"
-                className="hidden size-8 rounded-none border-[#152A54] bg-[#060D1A] hover:bg-[#0B162C] text-slate-300 p-0 lg:flex"
+                className="hidden size-8 rounded-none border-border bg-card hover:bg-secondary text-foreground-secondary p-0 lg:flex"
                 onClick={() => table.setPageIndex(0)}
                 disabled={!table.getCanPreviousPage()}
               >
@@ -777,7 +777,7 @@ export function DataTable({
               </Button>
               <Button
                 variant="outline"
-                className="size-8 rounded-none border-[#152A54] bg-[#060D1A] hover:bg-[#0B162C] text-slate-300"
+                className="size-8 rounded-none border-border bg-card hover:bg-secondary text-foreground-secondary"
                 size="icon"
                 onClick={() => table.previousPage()}
                 disabled={!table.getCanPreviousPage()}
@@ -787,7 +787,7 @@ export function DataTable({
               </Button>
               <Button
                 variant="outline"
-                className="size-8 rounded-none border-[#152A54] bg-[#060D1A] hover:bg-[#0B162C] text-slate-300"
+                className="size-8 rounded-none border-border bg-card hover:bg-secondary text-foreground-secondary"
                 size="icon"
                 onClick={() => table.nextPage()}
                 disabled={!table.getCanNextPage()}
@@ -797,7 +797,7 @@ export function DataTable({
               </Button>
               <Button
                 variant="outline"
-                className="hidden size-8 rounded-none border-[#152A54] bg-[#060D1A] hover:bg-[#0B162C] text-slate-300 lg:flex"
+                className="hidden size-8 rounded-none border-border bg-card hover:bg-secondary text-foreground-secondary lg:flex"
                 size="icon"
                 onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                 disabled={!table.getCanNextPage()}

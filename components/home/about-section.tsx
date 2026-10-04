@@ -65,8 +65,9 @@ export function AboutSection() {
 
   return (
     <section
+      id="about"
       ref={ref}
-      className="relative py-24 sm:py-32 bg-black border-t border-[#152A54]/60 overflow-hidden"
+      className="relative py-24 sm:py-32 bg-background border-t border-border/60 overflow-hidden"
     >
       {/* Subtle grid overlay */}
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(21,42,84,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(21,42,84,0.06)_1px,transparent_1px)] bg-[size:60px_60px]" />
@@ -88,13 +89,13 @@ export function AboutSection() {
               ABOUT CODEHIVE 2K26 2.0
             </span>
           </div>
-          <h2 className="font-mono text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-tight">
+          <h2 className="font-mono text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-foreground leading-tight">
             IDEAS × CODE ×{" "}
             <span className="bg-gradient-to-r from-blue-400 to-sky-300 bg-clip-text text-transparent">
               IMPACT
             </span>
           </h2>
-          <p className="mt-4 max-w-2xl text-slate-400 text-base leading-relaxed">
+          <p className="mt-4 max-w-2xl text-muted-foreground text-base leading-relaxed">
             CodeHive 2K26 2.0 is a flagship National Level Hackathon organized on 23 &amp; 24 October 2026 by the Department of Computer Science and Business Systems, Vel Tech Multi Tech Dr. Rangarajan Dr. Sakunthala Engineering College, in association with Sri Vensy Technologies Pvt Ltd &amp; Business Intelligence Club.
           </p>
         </div>
@@ -108,7 +109,7 @@ export function AboutSection() {
               <div
                 key={pillar.title}
                 className={cn(
-                  "relative group p-6 border border-[#152A54]/80 bg-[#060D1A]/60 backdrop-blur-sm transition-all duration-500",
+                  "relative group p-6 border border-border/80 bg-card/60 backdrop-blur-sm transition-all duration-500",
                   a.border,
                   a.glow,
                   inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
@@ -129,13 +130,13 @@ export function AboutSection() {
                   {pillar.tag}
                 </p>
 
-                <h3 className="font-mono text-lg font-black uppercase text-white mb-1 tracking-tight">
+                <h3 className="font-mono text-lg font-black uppercase text-foreground mb-1 tracking-tight">
                   {pillar.title}
                 </h3>
                 <p className="font-mono text-xs text-blue-400 mb-3 uppercase tracking-wide">
                   // {pillar.subtitle}
                 </p>
-                <p className="text-sm text-slate-400 leading-relaxed font-sans">
+                <p className="text-sm text-muted-foreground leading-relaxed font-sans">
                   {pillar.desc}
                 </p>
               </div>
@@ -159,9 +160,9 @@ export function AboutSection() {
           ].map((stat) => (
             <div
               key={stat.label}
-              className="p-4 border border-[#152A54]/60 bg-[#030712]/80 text-center"
+              className="p-4 border border-border/60 bg-background/80 text-center"
             >
-              <p className="font-mono text-2xl sm:text-3xl font-black text-white">
+              <p className="font-mono text-2xl sm:text-3xl font-black text-foreground">
                 {stat.val}
               </p>
               <p className="font-mono text-[11px] uppercase tracking-wider text-slate-500 mt-1">

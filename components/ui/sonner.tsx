@@ -57,25 +57,25 @@ const Toaster = ({ position, ...props }: ToasterProps) => {
       toastOptions={{
         classNames: {
           toast:
-            "group toast relative overflow-hidden rounded-none border border-[#152A54] bg-[#060D1A] text-white font-mono shadow-2xl shadow-blue-950/50 p-3.5 sm:p-4",
+            "group toast relative overflow-hidden rounded-none border border-border bg-card text-foreground font-mono shadow-2xl shadow-blue-950/50 p-3.5 sm:p-4",
           title: "!text-xs !font-bold !uppercase !tracking-wider text-sky-400 font-mono !leading-tight",
-          description: "!text-[11px] font-mono text-slate-300 !mt-0.5 !leading-relaxed",
+          description: "!text-[11px] font-mono text-foreground-secondary !mt-0.5 !leading-relaxed",
           actionButton:
-            "rounded-none bg-blue-600 hover:bg-blue-700 text-white font-mono text-xs uppercase px-3 py-1.5 font-bold border border-blue-500 transition-colors cursor-pointer",
+            "rounded-none bg-blue-600 hover:bg-blue-700 text-foreground font-mono text-xs uppercase px-3 py-1.5 font-bold border border-blue-500 transition-colors cursor-pointer",
           cancelButton:
-            "rounded-none bg-[#0B162C] hover:bg-[#102246] text-slate-300 font-mono text-xs uppercase px-3 py-1.5 border border-[#152A54] transition-colors cursor-pointer",
+            "rounded-none bg-secondary hover:bg-secondary text-foreground-secondary font-mono text-xs uppercase px-3 py-1.5 border border-border transition-colors cursor-pointer",
           closeButton:
-            "!top-2.5 !right-2.5 !left-auto !bottom-auto !translate-x-0 !translate-y-0 !w-5.5 !h-5.5 flex items-center justify-center !rounded-none !bg-[#03060E] hover:!bg-[#0B162C] !text-slate-400 hover:!text-white !border !border-[#152A54] hover:!border-sky-400 transition-colors cursor-pointer",
+            "!top-2.5 !right-2.5 !left-auto !bottom-auto !translate-x-0 !translate-y-0 !w-5.5 !h-5.5 flex items-center justify-center !rounded-none !bg-background hover:!bg-secondary !text-muted-foreground hover:!text-foreground !border !border-border hover:!border-sky-400 transition-colors cursor-pointer",
           success:
-            "!border-emerald-500/50 !bg-[#030B14] [&_[data-title]]:!text-emerald-400",
+            "!border-emerald-500/50 !bg-background [&_[data-title]]:!text-emerald-400",
           error:
-            "!border-rose-500/50 !bg-[#0B0408] [&_[data-title]]:!text-rose-400",
+            "!border-rose-500/50 !bg-card [&_[data-title]]:!text-rose-400",
           warning:
-            "!border-amber-500/50 !bg-[#0B0803] [&_[data-title]]:!text-amber-400",
+            "!border-amber-500/50 !bg-card [&_[data-title]]:!text-amber-400",
           info:
-            "!border-blue-500/50 !bg-[#040814] [&_[data-title]]:!text-sky-400",
+            "!border-blue-500/50 !bg-background [&_[data-title]]:!text-sky-400",
           loading:
-            "!border-sky-500/50 !bg-[#040814] [&_[data-title]]:!text-sky-400",
+            "!border-sky-500/50 !bg-background [&_[data-title]]:!text-sky-400",
         },
       }}
       {...props}

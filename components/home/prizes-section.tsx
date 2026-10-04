@@ -62,8 +62,9 @@ export function PrizesSection() {
 
   return (
     <section
+      id="prizes"
       ref={ref}
-      className="relative py-24 sm:py-32 bg-[#030712] border-t border-[#152A54]/60 overflow-hidden"
+      className="relative py-24 sm:py-32 bg-background border-t border-border/60 overflow-hidden"
     >
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(21,42,84,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(21,42,84,0.05)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
@@ -85,13 +86,13 @@ export function PrizesSection() {
             </span>
             <div className="h-px w-8 bg-blue-500" />
           </div>
-          <h2 className="font-mono text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-tight">
+          <h2 className="font-mono text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-foreground leading-tight">
             TOTAL PRIZE POOL{" "}
             <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">
               ₹20,000
             </span>
           </h2>
-          <p className="mt-3 text-slate-400 text-base max-w-xl mx-auto font-sans">
+          <p className="mt-3 text-muted-foreground text-base max-w-xl mx-auto font-sans">
             Cash awards for 1st, 2nd, and 3rd place winners across tracks, plus 100% Free Entry &amp; Certificates for all participants.
           </p>
         </div>
@@ -107,8 +108,8 @@ export function PrizesSection() {
                 className={cn(
                   "relative flex flex-col p-6 border transition-all duration-700",
                   isFeatured
-                    ? "border-blue-500/60 bg-[#060D1A] shadow-[0_0_40px_rgba(37,99,235,0.15)] md:-mt-4"
-                    : "border-[#152A54]/80 bg-[#060D1A]/60",
+                    ? "border-blue-500/60 bg-card shadow-[0_0_40px_rgba(37,99,235,0.15)] md:-mt-4"
+                    : "border-border/80 bg-card/60",
                   inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                 )}
                 style={{ transitionDelay: `${i * 100}ms` }}
@@ -123,14 +124,14 @@ export function PrizesSection() {
 
                 {/* Rank */}
                 <div className="flex items-start justify-between mb-4">
-                  <span className="font-mono text-5xl font-black text-[#152A54] leading-none select-none">
+                  <span className="font-mono text-5xl font-black text-foreground leading-none select-none">
                     {prize.rank}
                   </span>
                   <div className={cn(
                     "p-2.5",
-                    isFeatured ? "bg-blue-500/15" : "bg-[#0B162C]"
+                    isFeatured ? "bg-blue-500/15" : "bg-secondary"
                   )}>
-                    <Icon className={cn("size-5", isFeatured ? "text-blue-400" : "text-slate-400")} />
+                    <Icon className={cn("size-5", isFeatured ? "text-blue-400" : "text-muted-foreground")} />
                   </div>
                 </div>
 
@@ -144,7 +145,7 @@ export function PrizesSection() {
                   "font-mono text-3xl sm:text-4xl font-black mb-4 tracking-tight",
                   isFeatured
                     ? "bg-gradient-to-r from-blue-400 to-sky-300 bg-clip-text text-transparent"
-                    : "text-white"
+                    : "text-foreground"
                 )}>
                   {prize.amount}
                 </p>
@@ -152,8 +153,8 @@ export function PrizesSection() {
                 {/* Perks */}
                 <ul className="space-y-2 flex-1">
                   {prize.perks.map((perk) => (
-                    <li key={perk} className="flex items-center gap-2 text-sm text-slate-400">
-                      <span className={cn("w-1 h-1 shrink-0", isFeatured ? "bg-blue-400" : "bg-[#152A54]")} />
+                    <li key={perk} className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <span className={cn("w-1 h-1 shrink-0", isFeatured ? "bg-blue-400" : "bg-secondary")} />
                       {perk}
                     </li>
                   ))}
@@ -176,13 +177,13 @@ export function PrizesSection() {
             return (
               <div
                 key={perk.title}
-                className="flex items-start gap-3 p-4 border border-[#152A54]/60 bg-[#060D1A]/40"
+                className="flex items-start gap-3 p-4 border border-border/60 bg-card/40"
               >
-                <div className="p-2 bg-[#0B162C] shrink-0">
+                <div className="p-2 bg-secondary shrink-0">
                   <Icon className="size-4 text-blue-400" />
                 </div>
                 <div>
-                  <p className="font-mono text-xs font-bold uppercase tracking-wider text-white mb-1">
+                  <p className="font-mono text-xs font-bold uppercase tracking-wider text-foreground mb-1">
                     {perk.title}
                   </p>
                   <p className="text-xs text-slate-500 leading-relaxed">{perk.desc}</p>

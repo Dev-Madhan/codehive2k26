@@ -51,12 +51,12 @@ export function VelTechPickupSelector({
   const availableStops = currentRoute?.stops || [];
 
   return (
-    <div className="space-y-4 p-4 rounded-none border border-[#152A54] bg-[#03060E]">
+    <div className="space-y-4 p-4 rounded-none border border-border bg-background">
       {title && (
-        <div className="flex items-center justify-between border-b border-[#152A54]/80 pb-2.5">
+        <div className="flex items-center justify-between border-b border-border/80 pb-2.5">
           <div className="flex items-center gap-2">
             <BusIcon className="size-4 text-sky-400" />
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-200">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-foreground">
               {title}
             </span>
           </div>
@@ -72,7 +72,7 @@ export function VelTechPickupSelector({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
         {/* Tier 1: Route Corridor */}
         <div className="space-y-1.5">
-          <Label className="font-sans text-xs uppercase tracking-wider text-slate-300 font-semibold block">
+          <Label className="font-sans text-xs uppercase tracking-wider text-foreground-secondary font-semibold block">
             1. Vel Tech Route Corridor <span className="text-red-400">*</span>
           </Label>
           <Select
@@ -89,12 +89,12 @@ export function VelTechPickupSelector({
             }}
             disabled={disabled}
           >
-            <SelectTrigger className="h-11 sm:h-10 w-full rounded-none border border-[#152A54] bg-[#060D1A] px-3 text-white font-sans text-base sm:text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500 data-placeholder:text-slate-600">
+            <SelectTrigger className="h-11 sm:h-10 w-full rounded-none border border-border bg-card px-3 text-foreground font-sans text-base sm:text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500 data-placeholder:text-slate-600">
               <SelectValue placeholder="Select Vel Tech bus route corridor" />
             </SelectTrigger>
-            <SelectContent className="max-h-64">
-              <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-[#152A54]/60 mb-1 flex items-center justify-between font-mono">
-                <span>// VEL TECH CORRIDORS</span>
+            <SelectContent className="max-h-[min(var(--available-height),65dvh,32rem)] [scrollbar-color:var(--primary)_var(--background)] [scrollbar-width:thin]">
+              <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-border/60 mb-1 flex items-center justify-between font-mono">
+                <span>{"// VEL TECH CORRIDORS • SCROLL TO VIEW ALL"}</span>
                 <span className="text-blue-400 font-bold">{VELTECH_BUS_ROUTES.length} ROUTES</span>
               </div>
               <SelectGroup>
@@ -102,11 +102,11 @@ export function VelTechPickupSelector({
                   <SelectItem
                     key={route.id}
                     value={route.name}
-                    className="rounded-none hover:bg-[#0B162C] py-2 text-slate-200"
+                    className="rounded-none hover:bg-secondary py-2 text-foreground"
                   >
                     <div className="flex flex-col">
-                      <span className="font-semibold text-white">{route.name}</span>
-                      <span className="text-[10px] font-mono text-slate-400">
+                      <span className="font-semibold text-foreground">{route.name}</span>
+                      <span className="text-[10px] font-mono text-muted-foreground">
                         {route.corridor}
                       </span>
                     </div>
@@ -119,7 +119,7 @@ export function VelTechPickupSelector({
 
         {/* Tier 2: Designated Boarding Stop */}
         <div className="space-y-1.5">
-          <Label className="font-sans text-xs uppercase tracking-wider text-slate-300 font-semibold block">
+          <Label className="font-sans text-xs uppercase tracking-wider text-foreground-secondary font-semibold block">
             2. Designated Boarding Stop <span className="text-red-400">*</span>
           </Label>
           <Select
@@ -129,7 +129,7 @@ export function VelTechPickupSelector({
             }}
             disabled={disabled || !routeValue}
           >
-            <SelectTrigger className="h-11 sm:h-10 w-full rounded-none border border-[#152A54] bg-[#060D1A] px-3 text-white font-sans text-base sm:text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500 data-placeholder:text-slate-600 disabled:opacity-50">
+            <SelectTrigger className="h-11 sm:h-10 w-full rounded-none border border-border bg-card px-3 text-foreground font-sans text-base sm:text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500 data-placeholder:text-slate-600 disabled:opacity-50">
               <SelectValue
                 placeholder={
                   routeValue ? "Choose major boarding stop" : "First select route corridor"
@@ -137,8 +137,8 @@ export function VelTechPickupSelector({
               />
             </SelectTrigger>
             <SelectContent className="max-h-56">
-              <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-[#152A54]/60 mb-1 flex items-center justify-between font-mono">
-                <span>// BOARDING STOPS</span>
+              <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-border/60 mb-1 flex items-center justify-between font-mono">
+                <span>{"// BOARDING STOPS"}</span>
                 <span className="text-blue-400 font-bold">{availableStops.length} STOPS</span>
               </div>
               <SelectGroup>
@@ -146,7 +146,7 @@ export function VelTechPickupSelector({
                   <SelectItem
                     key={stop}
                     value={stop}
-                    className="rounded-none hover:bg-[#0B162C] py-1.5 text-slate-200"
+                    className="rounded-none hover:bg-secondary py-1.5 text-foreground"
                   >
                     {stop}
                   </SelectItem>
@@ -160,7 +160,7 @@ export function VelTechPickupSelector({
       {/* Tier 3: Precise Boarding Landmark / Reference Point */}
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
-          <Label className="font-sans text-xs uppercase tracking-wider text-slate-300 font-semibold block">
+          <Label className="font-sans text-xs uppercase tracking-wider text-foreground-secondary font-semibold block">
             3. Precise Landmark &amp; Boarding Point <span className="text-red-400">*</span>
           </Label>
           <span className="text-[10px] font-mono text-slate-500">
@@ -174,10 +174,10 @@ export function VelTechPickupSelector({
             onChange={(e) => onLandmarkChange(e.target.value)}
             disabled={disabled}
             placeholder="e.g. Exit Gate B, Opposite Rohini Theatre / Near Indian Bank ATM"
-            className="h-11 sm:h-10 pl-9 rounded-none border border-[#152A54] bg-[#060D1A] text-white font-sans text-base sm:text-xs placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="h-11 sm:h-10 pl-9 rounded-none border border-border bg-card text-foreground font-sans text-base sm:text-xs placeholder:text-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           />
         </div>
-        <p className="text-[10px] font-mono text-slate-400">
+        <p className="text-[10px] font-mono text-muted-foreground">
           Enter an easily recognizable spot (e.g. Metro gate, shop, pillar number, or ATM) where the bus captain can locate you.
         </p>
       </div>
@@ -189,9 +189,9 @@ export function VelTechPickupSelector({
             <ClockIcon className="size-3.5" />
             <span>Vel Tech Campus Transit Protocol • {VELTECH_DEPARTURE_TIME}</span>
           </div>
-          <p className="text-[11px] text-slate-300 leading-relaxed font-sans">
+          <p className="text-[11px] text-foreground-secondary leading-relaxed font-sans">
             Vel Tech campus buses commence pickup from designated city routes starting from{" "}
-            <strong className="text-white font-mono">6:00 AM onwards</strong>. Please be at your designated landmark by{" "}
+            <strong className="text-foreground font-mono">6:00 AM onwards</strong>. Please be at your designated landmark by{" "}
             <strong className="text-sky-400 font-mono">{VELTECH_REPORTING_TIME}</strong>. Our student transport coordinator and bus captain will coordinate via mobile.
           </p>
         </div>

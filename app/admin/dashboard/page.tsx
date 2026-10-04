@@ -68,12 +68,12 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="space-y-6 font-mono max-w-full">
-      <div className="border-b border-[#152A54] pb-3 sm:pb-4">
+      <div className="border-b border-border pb-3 sm:pb-4">
         <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[11px] font-bold text-blue-400 bg-blue-600/15 border border-blue-500/30 mb-2">
           &gt; admin / overview
         </div>
-        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white uppercase">Admin Console</h1>
-        <p className="text-xs text-slate-400 mt-1">Real-time statistics for CodeHive 2K26 symposium.</p>
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground uppercase">Admin Console</h1>
+        <p className="text-xs text-muted-foreground mt-1">Real-time statistics for CodeHive 2K26 symposium.</p>
       </div>
 
       {/* ── Stat Cards ── */}
@@ -83,22 +83,22 @@ export default async function AdminDashboardPage() {
           return (
             <div
               key={s.title}
-              className="rounded-none border border-[#152A54] bg-[#060D1A] p-3.5 sm:p-5 space-y-1.5 sm:space-y-2 hover:border-blue-500/40 transition-colors"
+              className="rounded-none border border-border bg-card p-3.5 sm:p-5 space-y-1.5 sm:space-y-2 hover:border-blue-500/40 transition-colors"
             >
-              <div className="flex items-center justify-between text-slate-400 text-xs">
+              <div className="flex items-center justify-between text-muted-foreground text-xs">
                 <span className="uppercase text-[10px] sm:text-[11px] tracking-wider truncate">{s.title}</span>
                 <Icon className={`size-3.5 sm:size-4 shrink-0 ${s.color}`} />
               </div>
-              <p className="text-2xl sm:text-3xl font-bold text-white tabular-nums">{s.value}</p>
+              <p className="text-2xl sm:text-3xl font-bold text-foreground tabular-nums">{s.value}</p>
             </div>
           );
         })}
       </div>
 
       {/* ── Mobile Fast Command Hub (Touch Quick Links) ── */}
-      <div className="border border-[#152A54] bg-[#060D1A] p-4 sm:p-6 space-y-3.5">
-        <div className="flex items-center justify-between border-b border-[#152A54] pb-3">
-          <h2 className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
+      <div className="border border-border bg-card p-4 sm:p-6 space-y-3.5">
+        <div className="flex items-center justify-between border-b border-border pb-3">
+          <h2 className="text-xs sm:text-sm font-bold text-foreground uppercase tracking-wider">
             &gt; Quick Operations Launchpad
           </h2>
           <span className="text-[10px] text-blue-400 font-mono">CONSOLE</span>
@@ -111,17 +111,17 @@ export default async function AdminDashboardPage() {
               <Link
                 key={qa.label}
                 href={qa.href}
-                className="flex items-center justify-between p-3.5 bg-[#03060E] border border-[#152A54] hover:border-blue-500/50 hover:bg-[#0B162C]/50 transition-all group cursor-pointer"
+                className="flex items-center justify-between p-3.5 bg-background border border-border hover:border-blue-500/50 hover:bg-secondary/50 transition-all group cursor-pointer"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className={`p-2 border bg-[#060D1A] ${qa.color} shrink-0`}>
+                  <div className={`p-2 border bg-card ${qa.color} shrink-0`}>
                     <Icon className="size-4" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs font-bold text-white group-hover:text-blue-400 transition-colors truncate">
+                    <p className="text-xs font-bold text-foreground group-hover:text-blue-400 transition-colors truncate">
                       {qa.label}
                     </p>
-                    <p className="text-[10px] text-slate-400 truncate">{qa.desc}</p>
+                    <p className="text-[10px] text-muted-foreground truncate">{qa.desc}</p>
                   </div>
                 </div>
                 <ArrowRightIcon className="size-4 text-slate-500 group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all shrink-0 ml-2" />

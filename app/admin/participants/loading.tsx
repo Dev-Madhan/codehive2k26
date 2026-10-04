@@ -4,16 +4,16 @@ export default function AdminParticipantsLoading() {
   return (
     <div className="space-y-6 font-mono">
       {/* Header */}
-      <div className="border-b border-[#152A54] pb-4 space-y-2">
+      <div className="border-b border-border pb-4 space-y-2">
         <Skeleton className="h-4 w-48" />
         <Skeleton className="h-8 w-64" />
         <Skeleton className="h-3.5 w-80" />
       </div>
 
       {/* Participants Table Container */}
-      <div className="rounded-none border border-[#152A54] bg-[#060D1A] overflow-hidden">
+      <div className="rounded-none border border-border bg-card overflow-hidden">
         {/* Table Head */}
-        <div className="bg-[#03060E] border-b border-[#152A54] px-4 py-3 grid grid-cols-5 gap-4">
+        <div className="bg-background border-b border-border px-4 py-3 grid grid-cols-5 gap-4">
           <Skeleton className="h-3 w-20" />
           <Skeleton className="h-3 w-28" />
           <Skeleton className="h-3 w-20" />

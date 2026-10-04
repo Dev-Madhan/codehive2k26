@@ -62,8 +62,8 @@ export function ReportsClient({
     <div className="space-y-5 font-mono max-w-full">
       {/* ── Metric Summary Cards (Mobile Responsive) ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
-        <div className="border border-[#152A54] bg-[#060D1A] p-3 sm:p-5 hover:border-blue-500/40 transition-colors">
-          <div className="flex items-center justify-between text-slate-400">
+        <div className="border border-border bg-card p-3 sm:p-5 hover:border-blue-500/40 transition-colors">
+          <div className="flex items-center justify-between text-muted-foreground">
             <span className="text-[10px] sm:text-[11px] uppercase tracking-wider">Total Regs</span>
             <UsersIcon className="size-3.5 text-blue-400" />
           </div>
@@ -73,12 +73,12 @@ export function ReportsClient({
           <p className="text-[10px] sm:text-[11px] text-slate-500 mt-1">100% recorded</p>
         </div>
 
-        <div className="border border-[#152A54] bg-[#060D1A] p-3 sm:p-5 hover:border-blue-500/40 transition-colors">
-          <div className="flex items-center justify-between text-slate-400">
+        <div className="border border-border bg-card p-3 sm:p-5 hover:border-blue-500/40 transition-colors">
+          <div className="flex items-center justify-between text-muted-foreground">
             <span className="text-[10px] sm:text-[11px] uppercase tracking-wider">Confirmed</span>
             <ShieldCheckIcon className="size-3.5 text-emerald-400" />
           </div>
-          <p className="text-xl sm:text-3xl font-bold text-white mt-2 tabular-nums">
+          <p className="text-xl sm:text-3xl font-bold text-foreground mt-2 tabular-nums">
             {confirmedRegistrations}
           </p>
           <p className="text-[10px] sm:text-[11px] text-emerald-400/80 mt-1">
@@ -86,21 +86,21 @@ export function ReportsClient({
           </p>
         </div>
 
-        <div className="border border-[#152A54] bg-[#060D1A] p-3 sm:p-5 hover:border-blue-500/40 transition-colors">
-          <div className="flex items-center justify-between text-slate-400">
+        <div className="border border-border bg-card p-3 sm:p-5 hover:border-blue-500/40 transition-colors">
+          <div className="flex items-center justify-between text-muted-foreground">
             <span className="text-[10px] sm:text-[11px] uppercase tracking-wider">Turnout Rate</span>
             <CheckCircle2Icon className="size-3.5 text-emerald-400" />
           </div>
           <p className="text-xl sm:text-3xl font-bold text-emerald-400 mt-2 tabular-nums">
             {attendanceRate}%
           </p>
-          <p className="text-[10px] sm:text-[11px] text-slate-400 mt-1">
+          <p className="text-[10px] sm:text-[11px] text-muted-foreground mt-1">
             {totalCheckIns} gate check-ins
           </p>
         </div>
 
-        <div className="border border-[#152A54] bg-[#060D1A] p-3 sm:p-5 hover:border-blue-500/40 transition-colors">
-          <div className="flex items-center justify-between text-slate-400">
+        <div className="border border-border bg-card p-3 sm:p-5 hover:border-blue-500/40 transition-colors">
+          <div className="flex items-center justify-between text-muted-foreground">
             <span className="text-[10px] sm:text-[11px] uppercase tracking-wider">Bus Transit</span>
             <BusIcon className="size-3.5 text-sky-400" />
           </div>
@@ -112,9 +112,9 @@ export function ReportsClient({
       </div>
 
       {/* ── Attendance Velocity Progress Bar ── */}
-      <div className="border border-[#152A54] bg-[#060D1A] p-4 sm:p-5 space-y-2.5">
+      <div className="border border-border bg-card p-4 sm:p-5 space-y-2.5">
         <div className="flex items-center justify-between text-xs">
-          <span className="text-slate-300 font-bold uppercase flex items-center gap-1.5">
+          <span className="text-foreground-secondary font-bold uppercase flex items-center gap-1.5">
             <TrendingUpIcon className="size-3.5 text-emerald-400" />
             Gate Attendance Inflow
           </span>
@@ -122,7 +122,7 @@ export function ReportsClient({
             {totalCheckIns} of {totalRegistrations} checked in ({attendanceRate}%)
           </span>
         </div>
-        <div className="w-full h-2.5 bg-[#03060E] border border-[#152A54] overflow-hidden">
+        <div className="w-full h-2.5 bg-background border border-border overflow-hidden">
           <div
             className="h-full bg-linear-to-r from-blue-600 via-blue-500 to-emerald-400 transition-all duration-500"
             style={{ width: `${Math.min(100, attendanceRate)}%` }}
@@ -131,13 +131,13 @@ export function ReportsClient({
       </div>
 
       {/* ── Event Breakdown Section ── */}
-      <div className="border border-[#152A54] bg-[#060D1A] p-4 sm:p-6 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[#152A54] pb-4">
+      <div className="border border-border bg-card p-4 sm:p-6 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-border pb-4">
           <div>
-            <h2 className="text-sm sm:text-base font-bold text-white uppercase tracking-wider">
+            <h2 className="text-sm sm:text-base font-bold text-foreground uppercase tracking-wider">
               &gt; Event Registrations Breakdown
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">Registration breakdown per symposium track.</p>
+            <p className="text-xs text-muted-foreground mt-0.5">Registration breakdown per symposium track.</p>
           </div>
 
           <div className="flex items-center gap-2">
@@ -148,13 +148,13 @@ export function ReportsClient({
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Filter events..."
-                className="w-full bg-[#03060E] border border-[#152A54] pl-7 pr-2 py-1 text-xs text-white placeholder:text-slate-600 focus:outline-hidden focus:border-blue-500 rounded-none"
+                className="w-full bg-background border border-border pl-7 pr-2 py-1 text-xs text-foreground placeholder:text-slate-600 focus:outline-hidden focus:border-blue-500 rounded-none"
               />
             </div>
             <button
               type="button"
               onClick={() => setExportDialogOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1 font-mono text-xs uppercase font-semibold text-white bg-blue-600 hover:bg-blue-500 border border-blue-500 transition-colors cursor-pointer shrink-0"
+              className="inline-flex items-center gap-1.5 px-3 py-1 font-mono text-xs uppercase font-semibold text-foreground bg-blue-600 hover:bg-blue-500 border border-blue-500 transition-colors cursor-pointer shrink-0"
             >
               <DownloadIcon className="size-3" />
               <span className="hidden sm:inline">[ Export Data / CSV ]</span>
@@ -172,14 +172,14 @@ export function ReportsClient({
               return (
                 <div
                   key={ev.id}
-                  className="bg-[#03060E] border border-[#152A54] p-3 space-y-2 hover:border-blue-500/40 transition-colors"
+                  className="bg-background border border-border p-3 space-y-2 hover:border-blue-500/40 transition-colors"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <span className="text-[10px] text-blue-400 font-bold uppercase bg-blue-950/40 border border-blue-500/30 px-1.5 py-0.5 inline-block mb-1">
                         {ev.category?.name || "General"}
                       </span>
-                      <h3 className="text-xs font-bold text-white leading-snug">{ev.name}</h3>
+                      <h3 className="text-xs font-bold text-foreground leading-snug">{ev.name}</h3>
                     </div>
                     <span
                       className="text-[10px] font-bold uppercase px-1.5 py-0.5 shrink-0 border border-blue-500/40 bg-blue-950/40 text-blue-300"
@@ -188,8 +188,8 @@ export function ReportsClient({
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-between text-xs pt-1 border-t border-[#152A54]/60">
-                    <span className="text-slate-400 text-[10px] uppercase">Registrations:</span>
+                  <div className="flex items-center justify-between text-xs pt-1 border-t border-border/60">
+                    <span className="text-muted-foreground text-[10px] uppercase">Registrations:</span>
                     <span className="font-bold text-blue-400 tabular-nums">
                       {ev._count.registrations} (Unlimited)
                     </span>
@@ -207,19 +207,19 @@ export function ReportsClient({
           ) : (
             filteredEvents.map((ev) => {
               return (
-                <div key={ev.id} className="py-3 flex items-center justify-between text-xs gap-4 hover:bg-[#0B162C]/40 px-2 transition-colors">
+                <div key={ev.id} className="py-3 flex items-center justify-between text-xs gap-4 hover:bg-secondary/40 px-2 transition-colors">
                   <div className="flex items-center gap-3 min-w-0">
                     <span className="text-[10px] font-mono text-blue-400 uppercase bg-blue-950/30 border border-blue-500/30 px-2 py-0.5 shrink-0">
                       {ev.category?.name || "General"}
                     </span>
-                    <span className="font-semibold text-white truncate">{ev.name}</span>
+                    <span className="font-semibold text-foreground truncate">{ev.name}</span>
                   </div>
 
                   <div className="flex items-center gap-3 shrink-0">
                     <span className="text-blue-400 font-bold min-w-[120px] text-right font-mono">
                       {ev._count.registrations} Registrations
                     </span>
-                    <span className="text-[10px] text-slate-400 font-mono">
+                    <span className="text-[10px] text-muted-foreground font-mono">
                       [ Unlimited ]
                     </span>
                   </div>

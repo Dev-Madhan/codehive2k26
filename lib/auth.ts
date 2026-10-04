@@ -16,6 +16,9 @@ export const auth = betterAuth({
     "https://codehive2k26.vercel.app",
     env.NEXT_PUBLIC_APP_URL,
   ],
+  emailAndPassword: {
+    enabled: true,
+  },
   socialProviders: {
     google: {
       clientId: env.GOOGLE_CLIENT_ID,
@@ -38,6 +41,7 @@ export const auth = betterAuth({
 });
 
 export const ROLES = {
+  ADMIN: "ADMIN" as Role,
   SUPER_ADMIN: "SUPER_ADMIN" as Role,
   ORGANIZER: "ORGANIZER" as Role,
   STAFF: "STAFF" as Role,
@@ -45,6 +49,6 @@ export const ROLES = {
 };
 
 export function hasRole(userRole: Role, allowedRoles: Role[]): boolean {
-  if (userRole === "SUPER_ADMIN") return true;
+  if (userRole === "SUPER_ADMIN" || userRole === "ADMIN") return true;
   return allowedRoles.includes(userRole);
 }

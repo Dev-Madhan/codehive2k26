@@ -3,11 +3,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function EventsLoading() {
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-8 font-mono">
         {/* Terminal Header & Status Strip */}
-        <div className="border-b border-[#152A54] pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div className="border-b border-border pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div className="space-y-2">
             <Skeleton className="h-5 w-36" />
             <Skeleton className="h-10 w-64 sm:w-80" />
@@ -25,10 +25,10 @@ export default function EventsLoading() {
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div
               key={i}
-              className="border border-[#152A54] bg-[#060D1A] flex flex-col justify-between overflow-hidden"
+              className="border border-border bg-card flex flex-col justify-between overflow-hidden"
             >
               {/* Event Poster / Banner Placeholder */}
-              <div className="relative h-44 sm:h-48 w-full bg-[#03060E] border-b border-[#152A54] flex items-center justify-center">
+              <div className="relative h-44 sm:h-48 w-full bg-background border-b border-border flex items-center justify-center">
                 <Skeleton className="h-full w-full" />
               </div>
 
@@ -43,7 +43,7 @@ export default function EventsLoading() {
                   <Skeleton className="h-10 w-full" />
                 </div>
 
-                <div className="space-y-3 pt-3 border-t border-[#152A54]">
+                <div className="space-y-3 pt-3 border-t border-border">
                   <div className="flex items-center justify-between">
                     <Skeleton className="h-4 w-28" />
                     <Skeleton className="h-4 w-24" />

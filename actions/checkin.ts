@@ -29,11 +29,11 @@ export async function checkInParticipant(
 
     if (
       !staff ||
-      (staff.role !== "STAFF" && staff.role !== "ORGANIZER" && staff.role !== "SUPER_ADMIN")
+      (staff.role !== "STAFF" && staff.role !== "ORGANIZER" && staff.role !== "SUPER_ADMIN" && (staff.role as string) !== "ADMIN")
     ) {
       staff = await prisma.user.findFirst({
         where: {
-          role: { in: ["SUPER_ADMIN", "ORGANIZER", "STAFF"] },
+          role: { in: ["ADMIN", "SUPER_ADMIN", "ORGANIZER", "STAFF"] },
         },
       });
 

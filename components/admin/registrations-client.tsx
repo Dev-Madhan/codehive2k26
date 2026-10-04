@@ -89,7 +89,11 @@ export interface RegistrationItem {
     members?: {
       id: string;
       name: string;
+      email?: string | null;
       phone: string;
+      college?: string | null;
+      department?: string | null;
+      year?: string | null;
       transportOptIn: boolean;
       pickupStop?: string | null;
     }[];
@@ -156,11 +160,12 @@ function ParticipantDetailDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="max-w-2xl w-full bg-[#060D1A] border border-[#152A54] text-white p-0 overflow-hidden font-mono max-h-[90vh] flex flex-col no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        className="w-[calc(100vw-2rem)] max-w-2xl bg-card border border-border text-foreground p-0 overflow-hidden font-mono max-h-[calc(100dvh-2rem)] flex flex-col"
+        style={{ display: "flex", flexDirection: "column" }}
         showCloseButton={false}
       >
         {/* ── Header Banner ── */}
-        <div className="relative bg-gradient-to-r from-[#0B162C] to-[#060D1A] border-b border-[#152A54] p-5 shrink-0">
+        <div className="relative bg-gradient-to-r from-[#0B162C] to-[#060D1A] border-b border-border p-5 shrink-0">
           {/* Terminal breadcrumb */}
           <div className="flex items-center justify-between mb-4">
             <div className="inline-flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-bold text-blue-400 bg-blue-600/15 border border-blue-500/30 tracking-wider">
@@ -168,7 +173,7 @@ function ParticipantDetailDialog({
             </div>
             <button
               onClick={() => onOpenChange(false)}
-              className="text-slate-500 hover:text-white transition-colors p-1 border border-transparent hover:border-[#152A54] hover:bg-[#0B162C] cursor-pointer"
+              className="text-slate-500 hover:text-foreground transition-colors p-1 border border-transparent hover:border-border hover:bg-secondary cursor-pointer"
             >
               <XIcon className="size-4" />
               <span className="sr-only">Close</span>
@@ -185,15 +190,15 @@ function ParticipantDetailDialog({
                 className="size-14 object-cover border-2 border-blue-500/60 shrink-0"
               />
             ) : (
-              <div className="size-14 rounded-none bg-[#0E1B38] border-2 border-blue-500/60 text-blue-400 font-bold text-lg flex items-center justify-center shrink-0">
+              <div className="size-14 rounded-none bg-secondary border-2 border-blue-500/60 text-blue-400 font-bold text-lg flex items-center justify-center shrink-0">
                 {initials}
               </div>
             )}
             <div className="min-w-0 flex-1">
-              <h2 className="text-lg font-bold text-white tracking-tight truncate">
+              <h2 className="text-lg font-bold text-foreground tracking-tight truncate">
                 {participant.name}
               </h2>
-              <p className="text-xs text-slate-400 truncate">{participant.email}</p>
+              <p className="text-xs text-muted-foreground truncate">{participant.email}</p>
               <div className="flex items-center gap-2 mt-2 flex-wrap">
                 {/* Registration Status Badge */}
                 <span
@@ -221,10 +226,10 @@ function ParticipantDetailDialog({
                   className={`inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 border ${
                     team 
                       ? "border-purple-500/40 bg-purple-500/15 text-purple-400"
-                      : "border-slate-500/40 bg-slate-500/15 text-slate-300"
+                      : "border-slate-500/40 bg-slate-500/15 text-foreground-secondary"
                   }`}
                 >
-                  <UsersIcon className={`size-3 shrink-0 ${team ? "text-purple-400" : "text-slate-400"}`} />
+                  <UsersIcon className={`size-3 shrink-0 ${team ? "text-purple-400" : "text-muted-foreground"}`} />
                   <span>{team ? "TEAM ENTRY" : "SOLO ENTRY"}</span>
                 </span>
 
@@ -248,8 +253,8 @@ function ParticipantDetailDialog({
           </div>
         </div>
 
-        {/* ── Scrollable Content (Scrollbar Hidden, Full Scroll Functionality Retained) ── */}
-        <div className="overflow-y-auto flex-1 p-5 space-y-5 no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        {/* ── Scrollable Content ── */}
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-5 space-y-5 [scrollbar-color:var(--border)_transparent] [scrollbar-width:thin]">
 
           {/* ── Section: Personal Information ── */}
           <div>
@@ -293,7 +298,7 @@ function ParticipantDetailDialog({
             </div>
           </div>
 
-          <div className="border-t border-[#152A54]" />
+          <div className="border-t border-border" />
 
           {/* ── Section: Registration Details ── */}
           <div>
@@ -346,8 +351,8 @@ function ParticipantDetailDialog({
                   })}
                 />
               )}
-              <div className="flex flex-col gap-0.5 bg-[#03060E] border border-[#152A54] p-2.5">
-                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">
+              <div className="flex flex-col gap-0.5 bg-background border border-border p-2.5">
+                <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
                   CHECK-IN STATUS
                 </span>
                 <div className="flex items-center gap-1.5 mt-0.5">
@@ -357,7 +362,7 @@ function ParticipantDetailDialog({
                       <span className="text-[11px] font-bold uppercase text-emerald-400">
                         VERIFIED{" "}
                         {checkedInAt && (
-                          <span className="text-slate-400 font-normal lowercase tracking-normal">
+                          <span className="text-muted-foreground font-normal lowercase tracking-normal">
                             · {checkedInAt}
                           </span>
                         )}
@@ -379,7 +384,7 @@ function ParticipantDetailDialog({
           {/* ── Section: Transport Details ── */}
           {registration.transportOptIn && (
             <>
-              <div className="border-t border-[#152A54]" />
+              <div className="border-t border-border" />
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <BusIcon className="size-3.5 text-sky-400" />
@@ -387,7 +392,7 @@ function ParticipantDetailDialog({
                     TRANSPORT DETAILS
                   </h3>
                 </div>
-                <div className="bg-[#03060E] border border-sky-500/30 p-3 space-y-2">
+                <div className="bg-background border border-sky-500/30 p-3 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-sky-400 uppercase tracking-wider">
                       <BusIcon className="size-3 shrink-0" />
@@ -428,7 +433,7 @@ function ParticipantDetailDialog({
           {/* ── Section: Team Members ── */}
           {team && team.members && team.members.length > 0 && (
             <>
-              <div className="border-t border-[#152A54]" />
+              <div className="border-t border-border" />
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <UsersIcon className="size-3.5 text-purple-400" />
@@ -440,24 +445,59 @@ function ParticipantDetailDialog({
                   {team.members.map((member, idx) => (
                     <div
                       key={member.id}
-                      className="flex items-center justify-between gap-2 bg-[#03060E] border border-[#152A54] px-3 py-2"
+                      className="space-y-2.5 border border-border bg-background p-3"
                     >
-                      <div className="flex items-center gap-2 min-w-0">
-                        <span className="text-[10px] text-slate-500 shrink-0 font-bold">
-                          #{idx + 1}
-                        </span>
-                        <span className="text-xs text-white font-semibold truncate">
-                          {member.name}
-                        </span>
-                        <span className="text-[10px] text-slate-400 truncate hidden sm:inline font-mono">
-                          {member.phone}
-                        </span>
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex min-w-0 items-center gap-2">
+                          <span className="shrink-0 text-[10px] font-bold text-slate-500">
+                            #{idx + 1}
+                          </span>
+                          <span className="truncate text-xs font-semibold text-foreground">
+                            {member.name}
+                          </span>
+                        </div>
+                        {member.transportOptIn && (
+                          <span className="shrink-0 border border-sky-500/30 bg-sky-950/30 px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-sky-400">
+                            BUS PASS
+                          </span>
+                        )}
                       </div>
-                      {member.transportOptIn && (
-                        <span className="text-[9px] text-sky-400 font-bold border border-sky-500/30 bg-sky-950/30 px-1.5 py-0.5 shrink-0 tracking-wider">
-                          BUS PASS
-                        </span>
-                      )}
+                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                        {member.email && (
+                          <InfoField
+                            icon={<MailIcon className="size-3 text-slate-500" />}
+                            label="EMAIL ADDRESS"
+                            value={member.email}
+                            mono
+                          />
+                        )}
+                        <InfoField
+                          icon={<PhoneIcon className="size-3 text-slate-500" />}
+                          label="PHONE NUMBER"
+                          value={member.phone}
+                        />
+                        {member.college && (
+                          <InfoField
+                            icon={<Building2Icon className="size-3 text-slate-500" />}
+                            label="COLLEGE / INSTITUTION"
+                            value={member.college}
+                          />
+                        )}
+                        {member.department && (
+                          <InfoField
+                            icon={<BookOpenIcon className="size-3 text-slate-500" />}
+                            label="DEPARTMENT"
+                            value={member.department}
+                          />
+                        )}
+                        {member.year && (
+                          <InfoField
+                            icon={<GraduationCapIcon className="size-3 text-slate-500" />}
+                            label="ACADEMIC YEAR"
+                            value={member.year}
+                          />
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -467,7 +507,7 @@ function ParticipantDetailDialog({
         </div>
 
         {/* ── Footer Actions ── */}
-        <div className="shrink-0 border-t border-[#152A54] bg-[#03060E] px-5 py-3 flex items-center justify-between gap-3">
+        <div className="shrink-0 border-t border-border bg-background px-5 py-3 flex items-center justify-between gap-3">
           <button
             onClick={onRemove}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] uppercase tracking-wider font-bold text-red-400 border border-red-900/60 bg-red-950/30 hover:bg-red-950/60 hover:text-red-300 transition-colors cursor-pointer"
@@ -477,7 +517,7 @@ function ParticipantDetailDialog({
           </button>
           <button
             onClick={() => onOpenChange(false)}
-            className="inline-flex items-center gap-1.5 px-4 py-1.5 text-[11px] uppercase tracking-wider font-bold text-slate-300 border border-[#152A54] bg-[#060D1A] hover:bg-[#0B162C] hover:text-white transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 text-[11px] uppercase tracking-wider font-bold text-foreground-secondary border border-border bg-card hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
           >
             <span>CLOSE</span>
           </button>
@@ -503,14 +543,14 @@ function InfoField({
   highlight?: boolean;
 }) {
   return (
-    <div className="flex flex-col gap-0.5 bg-[#03060E] border border-[#152A54] p-2.5">
+    <div className="flex flex-col gap-0.5 bg-background border border-border p-2.5">
       <div className="flex items-center gap-1.5">
         {icon}
-        <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">{label}</span>
+        <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">{label}</span>
       </div>
       <span
         className={`text-[11px] font-semibold truncate ${
-          highlight ? "text-blue-400 font-mono font-bold" : "text-white"
+          highlight ? "text-blue-400 font-mono font-bold" : "text-foreground"
         } ${mono ? "font-mono" : ""}`}
         title={value}
       >
@@ -538,7 +578,7 @@ function RemoveCandidateDialog({
   return (
     <Dialog open={open} onOpenChange={isRemoving ? undefined : onOpenChange}>
       <DialogContent
-        className="max-w-md w-full bg-[#060D1A] border border-red-900/60 text-white p-0 overflow-hidden font-mono no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        className="max-w-md w-full bg-card border border-red-900/60 text-foreground p-0 overflow-hidden font-mono no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         showCloseButton={false}
       >
         {/* Danger header */}
@@ -548,7 +588,7 @@ function RemoveCandidateDialog({
               <ShieldAlertIcon className="size-5" />
             </div>
             <div>
-              <DialogTitle className="text-sm font-bold text-white uppercase tracking-wider">
+              <DialogTitle className="text-sm font-bold text-foreground uppercase tracking-wider">
                 REMOVE CANDIDATE
               </DialogTitle>
               <DialogDescription className="text-[11px] text-red-400 mt-0.5">
@@ -560,33 +600,33 @@ function RemoveCandidateDialog({
 
         {/* Confirmation body */}
         <div className="px-5 py-4 space-y-4 max-h-[75vh] overflow-y-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          <p className="text-xs text-slate-300 leading-relaxed">
+          <p className="text-xs text-foreground-secondary leading-relaxed">
             You are about to permanently delete the registration record for:
           </p>
 
           {/* Candidate card */}
           <div className="border border-red-900/50 bg-red-950/10 p-3 space-y-1.5">
-            <p className="text-sm font-bold text-white">{registration.participant.name}</p>
-            <p className="text-[11px] text-slate-400 font-mono">{registration.participant.email}</p>
+            <p className="text-sm font-bold text-foreground">{registration.participant.name}</p>
+            <p className="text-[11px] text-muted-foreground font-mono">{registration.participant.email}</p>
             <div className="flex items-center gap-2 pt-0.5">
               <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-400 bg-blue-950/40 border border-blue-500/30 px-2 py-0.5 font-mono">
                 <TicketIcon className="size-2.5" />
                 <span>{registration.registrationNumber}</span>
               </span>
               <span className="text-[10px] text-slate-500">•</span>
-              <span className="text-[10px] text-slate-300 uppercase tracking-wider font-semibold">
+              <span className="text-[10px] text-foreground-secondary uppercase tracking-wider font-semibold">
                 {registration.event.name}
               </span>
             </div>
           </div>
 
           {/* Warning list */}
-          <div className="bg-[#03060E] border border-red-900/40 p-3 space-y-2">
+          <div className="bg-background border border-red-900/40 p-3 space-y-2">
             <p className="text-[10px] font-bold uppercase tracking-wider text-red-400 flex items-center gap-1.5">
               <ShieldAlertIcon className="size-3.5 shrink-0" />
               <span>CRITICAL ACTION WARNING:</span>
             </p>
-            <ul className="space-y-1.5 text-[11px] text-slate-300">
+            <ul className="space-y-1.5 text-[11px] text-foreground-secondary">
               <li className="flex items-start gap-2">
                 <XCircleIcon className="size-3.5 text-red-400 shrink-0 mt-0.5" />
                 <span>Permanent deletion of participant registration record</span>
@@ -604,18 +644,18 @@ function RemoveCandidateDialog({
         </div>
 
         {/* Action buttons */}
-        <div className="border-t border-[#152A54] bg-[#03060E] px-5 py-3 flex items-center justify-end gap-2">
+        <div className="border-t border-border bg-background px-5 py-3 flex items-center justify-end gap-2">
           <button
             onClick={() => onOpenChange(false)}
             disabled={isRemoving}
-            className="px-4 py-1.5 text-[11px] uppercase tracking-wider font-bold text-slate-300 border border-[#152A54] bg-[#060D1A] hover:bg-[#0B162C] hover:text-white transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-1.5 text-[11px] uppercase tracking-wider font-bold text-foreground-secondary border border-border bg-card hover:bg-secondary hover:text-foreground transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             CANCEL
           </button>
           <button
             onClick={onConfirm}
             disabled={isRemoving}
-            className="inline-flex items-center gap-1.5 px-4 py-1.5 text-[11px] uppercase tracking-wider font-bold text-white border border-red-600 bg-red-700 hover:bg-red-600 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 text-[11px] uppercase tracking-wider font-bold text-foreground border border-red-600 bg-red-700 hover:bg-red-600 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isRemoving ? (
               <>
@@ -930,7 +970,7 @@ export function RegistrationsClient({
       )}
 
       {/* ── Real-Time Status & Live Sync Control Strip ── */}
-      <div className="flex flex-wrap items-center justify-between gap-2.5 border border-[#152A54] bg-[#060D1A] px-3 py-2 text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-2.5 border border-border bg-card px-3 py-2 text-xs">
         <div className="flex items-center gap-2.5">
           <div className="flex items-center gap-1.5">
             <span
@@ -944,7 +984,7 @@ export function RegistrationsClient({
             />
             <span
               className={`text-[11px] font-bold uppercase tracking-wider ${
-                autoSync ? "text-emerald-400" : "text-slate-400"
+                autoSync ? "text-emerald-400" : "text-muted-foreground"
               }`}
             >
               {autoSync ? (isSyncing ? "SYNCING..." : "LIVE SYNC ACTIVE") : "SYNC PAUSED"}
@@ -953,15 +993,15 @@ export function RegistrationsClient({
 
           <span className="text-slate-600 hidden sm:inline">&bull;</span>
 
-          <span className="text-[11px] text-slate-400 hidden sm:inline">
+          <span className="text-[11px] text-muted-foreground hidden sm:inline">
             Auto-refresh (5s)
           </span>
 
           <span className="text-slate-600 hidden md:inline">&bull;</span>
 
-          <span className="text-[10px] sm:text-[11px] text-slate-400">
+          <span className="text-[10px] sm:text-[11px] text-muted-foreground">
             Last update:{" "}
-            <strong className="text-slate-200" suppressHydrationWarning>
+            <strong className="text-foreground" suppressHydrationWarning>
               {lastSyncedAt.toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
@@ -989,7 +1029,7 @@ export function RegistrationsClient({
             className={`p-1.5 border transition-colors cursor-pointer ${
               soundEnabled
                 ? "bg-blue-600/20 text-blue-400 border-blue-500/40"
-                : "bg-[#03060E] text-slate-500 border-[#152A54] hover:text-slate-300"
+                : "bg-background text-slate-500 border-border hover:text-foreground-secondary"
             }`}
           >
             {soundEnabled ? <BellIcon className="size-3.5" /> : <BellOffIcon className="size-3.5" />}
@@ -1002,7 +1042,7 @@ export function RegistrationsClient({
             className={`px-2 py-1 text-[10px] uppercase tracking-wider font-semibold border transition-colors cursor-pointer ${
               autoSync
                 ? "bg-emerald-950/40 text-emerald-400 border-emerald-500/40"
-                : "bg-[#03060E] text-slate-400 border-[#152A54] hover:text-white"
+                : "bg-background text-muted-foreground border-border hover:text-foreground"
             }`}
           >
             {autoSync ? "AUTO: ON" : "AUTO: OFF"}
@@ -1013,7 +1053,7 @@ export function RegistrationsClient({
             type="button"
             onClick={() => fetchLiveRegistrations(true)}
             disabled={isSyncing}
-            className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] uppercase tracking-wider font-bold bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white border border-blue-500 cursor-pointer transition-colors"
+            className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] uppercase tracking-wider font-bold bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-foreground border border-blue-500 cursor-pointer transition-colors"
           >
             <RefreshCwIcon className={`size-3 ${isSyncing ? "animate-spin" : ""}`} />
             <span>Sync</span>
@@ -1023,27 +1063,27 @@ export function RegistrationsClient({
 
       {/* ── Top Metric Cards (Dynamically Live Updated) ── */}
       <div className="grid grid-cols-3 gap-2 sm:gap-4">
-        <div className="border border-[#152A54] bg-[#060D1A] p-2.5 sm:p-4">
-          <p className="text-[10px] sm:text-[11px] uppercase tracking-wider text-slate-400">Total Registered</p>
-          <p className="text-lg sm:text-2xl font-bold text-white mt-0.5 tabular-nums">{totalCount}</p>
+        <div className="border border-border bg-card p-2.5 sm:p-4">
+          <p className="text-[10px] sm:text-[11px] uppercase tracking-wider text-muted-foreground">Total Registered</p>
+          <p className="text-lg sm:text-2xl font-bold text-foreground mt-0.5 tabular-nums">{totalCount}</p>
         </div>
-        <div className="border border-[#152A54] bg-[#060D1A] p-2.5 sm:p-4">
+        <div className="border border-border bg-card p-2.5 sm:p-4">
           <p className="text-[10px] sm:text-[11px] uppercase tracking-wider text-emerald-400">Verified</p>
           <p className="text-lg sm:text-2xl font-bold text-emerald-400 mt-0.5 tabular-nums">
             {checkedInCount}
-            <span className="text-[10px] sm:text-xs text-slate-400 font-normal ml-1">
+            <span className="text-[10px] sm:text-xs text-muted-foreground font-normal ml-1">
               ({totalCount > 0 ? Math.round((checkedInCount / totalCount) * 100) : 0}%)
             </span>
           </p>
         </div>
-        <div className="border border-[#152A54] bg-[#060D1A] p-2.5 sm:p-4">
+        <div className="border border-border bg-card p-2.5 sm:p-4">
           <p className="text-[10px] sm:text-[11px] uppercase tracking-wider text-sky-400">Bus Opt-in</p>
           <p className="text-lg sm:text-2xl font-bold text-sky-400 mt-0.5 tabular-nums">{busCount}</p>
         </div>
       </div>
 
       {/* ── Search & Filter Controls ── */}
-      <div className="flex flex-col gap-2.5 border border-[#152A54] bg-[#060D1A] p-3">
+      <div className="flex flex-col gap-2.5 border border-border bg-card p-3">
         {/* Search Input */}
         <div className="relative w-full">
           <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-slate-500" />
@@ -1052,12 +1092,12 @@ export function RegistrationsClient({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by attendee name, email, pass code, event, college..."
-            className="w-full bg-[#03060E] border border-[#152A54] pl-9 pr-8 py-2 text-xs text-white placeholder:text-slate-600 focus:outline-hidden focus:border-blue-500 rounded-none"
+            className="w-full bg-background border border-border pl-9 pr-8 py-2 text-xs text-foreground placeholder:text-slate-600 focus:outline-hidden focus:border-blue-500 rounded-none"
           />
           {search && (
             <button
               onClick={() => setSearch("")}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white p-0.5 cursor-pointer"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-foreground p-0.5 cursor-pointer"
             >
               <XIcon className="size-3.5" />
             </button>
@@ -1082,8 +1122,8 @@ export function RegistrationsClient({
                   onClick={() => setFilter(tab.id as typeof filter)}
                   className={`px-2.5 py-1 text-[11px] uppercase tracking-wider font-semibold whitespace-nowrap transition-colors cursor-pointer border ${
                     isActive
-                      ? "bg-blue-600 text-white border-blue-500 shadow-xs"
-                      : "bg-[#03060E] text-slate-400 border-[#152A54] hover:bg-[#0B162C] hover:text-slate-200"
+                      ? "bg-blue-600 text-foreground border-blue-500 shadow-xs"
+                      : "bg-background text-muted-foreground border-border hover:bg-secondary hover:text-foreground"
                   }`}
                 >
                   {tab.label}
@@ -1095,7 +1135,7 @@ export function RegistrationsClient({
           {/* Event Filter Dropdown */}
           {availableEvents.length > 0 && (
             <div className="flex items-center gap-2 shrink-0 text-xs">
-              <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider font-mono">
+              <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider font-mono">
                 EVENT:
               </span>
               <Select
@@ -1106,7 +1146,7 @@ export function RegistrationsClient({
               >
                 <SelectTrigger
                   size="sm"
-                  className="h-7 w-auto min-w-[180px] max-w-[260px] rounded-none border border-[#152A54] bg-[#03060E] text-white font-mono text-xs px-2.5 py-1 hover:border-blue-500/50 hover:bg-[#0B162C] focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500/40 shadow-none transition-colors cursor-pointer [&_svg]:text-blue-400 gap-2"
+                  className="h-7 w-auto min-w-[180px] max-w-[260px] rounded-none border border-border bg-background text-foreground font-mono text-xs px-2.5 py-1 hover:border-blue-500/50 hover:bg-secondary focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500/40 shadow-none transition-colors cursor-pointer [&_svg]:text-blue-400 gap-2"
                   aria-label="Filter by Event"
                 >
                   <SelectValue placeholder="All Hosted Events" />
@@ -1116,15 +1156,15 @@ export function RegistrationsClient({
                   side="bottom"
                   sideOffset={4}
                   alignItemWithTrigger={false}
-                  className="rounded-none border border-[#152A54] bg-[#060D1A] font-mono text-xs text-white shadow-2xl p-1 no-scrollbar min-w-[210px] ring-1 ring-blue-500/20 z-50 animate-in fade-in-0 zoom-in-95 duration-100"
+                  className="rounded-none border border-border bg-card font-mono text-xs text-foreground shadow-2xl p-1 no-scrollbar min-w-[210px] ring-1 ring-blue-500/20 z-50 animate-in fade-in-0 zoom-in-95 duration-100"
                 >
-                  <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-[#152A54]/60 mb-1 flex items-center justify-between">
+                  <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-border/60 mb-1 flex items-center justify-between">
                     <span>// HOSTED EVENTS</span>
                     <span className="text-blue-400 font-bold">{availableEvents.length} TOTAL</span>
                   </div>
                   <SelectItem
                     value="ALL"
-                    className="rounded-none font-mono text-xs text-slate-300 hover:bg-[#0B162C] hover:text-white data-[highlighted]:bg-[#0B162C] data-[highlighted]:text-white data-[selected]:text-blue-400 data-[selected]:bg-blue-950/40 data-[selected]:font-bold cursor-pointer py-1.5 px-2.5 transition-colors [&_svg]:text-blue-400"
+                    className="rounded-none font-mono text-xs text-foreground-secondary hover:bg-secondary hover:text-foreground data-[highlighted]:bg-secondary data-[highlighted]:text-foreground data-[selected]:text-blue-400 data-[selected]:bg-blue-950/40 data-[selected]:font-bold cursor-pointer py-1.5 px-2.5 transition-colors [&_svg]:text-blue-400"
                   >
                     All Hosted Events ({availableEvents.length})
                   </SelectItem>
@@ -1132,7 +1172,7 @@ export function RegistrationsClient({
                     <SelectItem
                       key={evtName}
                       value={evtName}
-                      className="rounded-none font-mono text-xs text-slate-300 hover:bg-[#0B162C] hover:text-white data-[highlighted]:bg-[#0B162C] data-[highlighted]:text-white data-[selected]:text-blue-400 data-[selected]:bg-blue-950/40 data-[selected]:font-bold cursor-pointer py-1.5 px-2.5 transition-colors [&_svg]:text-blue-400"
+                      className="rounded-none font-mono text-xs text-foreground-secondary hover:bg-secondary hover:text-foreground data-[highlighted]:bg-secondary data-[highlighted]:text-foreground data-[selected]:text-blue-400 data-[selected]:bg-blue-950/40 data-[selected]:font-bold cursor-pointer py-1.5 px-2.5 transition-colors [&_svg]:text-blue-400"
                     >
                       {evtName}
                     </SelectItem>
@@ -1145,9 +1185,9 @@ export function RegistrationsClient({
       </div>
 
       {/* ── Results Count Bar ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-slate-400 px-1">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-muted-foreground px-1">
         <span>
-          Showing <strong className="text-white">{filteredRegistrations.length}</strong> of {totalCount} registrations
+          Showing <strong className="text-foreground">{filteredRegistrations.length}</strong> of {totalCount} registrations
           {newlyAddedIds.size > 0 && (
             <span className="ml-2 px-1.5 py-0.5 text-[10px] bg-blue-600/30 text-blue-300 border border-blue-500/40">
               +{newlyAddedIds.size} NEW
@@ -1170,7 +1210,7 @@ export function RegistrationsClient({
           <button
             type="button"
             onClick={() => setExportDialogOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-1 font-mono text-xs uppercase font-semibold text-white bg-blue-600 hover:bg-blue-500 border border-blue-500 transition-colors cursor-pointer shrink-0 shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3 py-1 font-mono text-xs uppercase font-semibold text-foreground bg-blue-600 hover:bg-blue-500 border border-blue-500 transition-colors cursor-pointer shrink-0 shadow-xs"
           >
             <DownloadIcon className="size-3" />
             <span>[ Export Data ]</span>
@@ -1181,7 +1221,7 @@ export function RegistrationsClient({
       {/* ── Mobile Card View (< md) ── */}
       <div className="block md:hidden space-y-3">
         {filteredRegistrations.length === 0 ? (
-          <div className="border border-[#152A54] bg-[#060D1A] p-8 text-center text-xs text-slate-500">
+          <div className="border border-border bg-card p-8 text-center text-xs text-slate-500">
             No registrations match your search criteria.
           </div>
         ) : (
@@ -1193,11 +1233,11 @@ export function RegistrationsClient({
                 className={`border p-3.5 space-y-2.5 transition-all relative ${
                   isNew
                     ? "border-blue-400 bg-blue-950/40 shadow-md shadow-blue-500/20"
-                    : "border-[#152A54] bg-[#060D1A] hover:border-blue-500/40"
+                    : "border-border bg-card hover:border-blue-500/40"
                 }`}
               >
                 {/* Card Header: Reg ID + Status Badges */}
-                <div className="flex items-center justify-between gap-2 border-b border-[#152A54] pb-2">
+                <div className="flex items-center justify-between gap-2 border-b border-border pb-2">
                   <div className="flex items-center gap-1.5">
                     <button
                       type="button"
@@ -1214,7 +1254,7 @@ export function RegistrationsClient({
                     </button>
 
                     {isNew && (
-                      <span className="px-1.5 py-0.5 text-[9px] font-bold bg-blue-500 text-white animate-pulse">
+                      <span className="px-1.5 py-0.5 text-[9px] font-bold bg-blue-500 text-foreground animate-pulse">
                         NEW
                       </span>
                     )}
@@ -1248,14 +1288,14 @@ export function RegistrationsClient({
                   <button
                     type="button"
                     onClick={() => handleOpenDetail(r)}
-                    className="text-sm font-bold text-white hover:text-blue-400 transition-colors text-left cursor-pointer group flex items-center gap-1.5"
+                    className="text-sm font-bold text-foreground hover:text-blue-400 transition-colors text-left cursor-pointer group flex items-center gap-1.5"
                     title="Click to view full candidate details"
                   >
                     <span>{r.participant.name}</span>
                     <UserIcon className="size-3 text-slate-600 group-hover:text-blue-400 transition-colors shrink-0" />
                   </button>
-                  <p className="text-xs text-slate-400 truncate">{r.participant.email}</p>
-                  <div className="flex items-center gap-1.5 text-xs text-slate-400 truncate">
+                  <p className="text-xs text-muted-foreground truncate">{r.participant.email}</p>
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground truncate">
                     <Building2Icon className="size-3 text-slate-500 shrink-0" />
                     <span className="truncate">{r.participant.college}</span>
                   </div>
@@ -1263,16 +1303,16 @@ export function RegistrationsClient({
 
                 {/* Event Info */}
                 <div className="flex items-center justify-between gap-2 text-xs pt-1">
-                  <span className="text-slate-400 text-[11px] uppercase">Event:</span>
-                  <span className="text-slate-200 font-semibold truncate text-right">
+                  <span className="text-muted-foreground text-[11px] uppercase">Event:</span>
+                  <span className="text-foreground font-semibold truncate text-right">
                     {r.event.name}
                   </span>
                 </div>
 
                 {/* Transport Details (Crucial for Mobile) */}
-                <div className="pt-2 border-t border-[#152A54]/60">
+                <div className="pt-2 border-t border-border/60">
                   {r.transportOptIn ? (
-                    <div className="bg-[#03060E] border border-sky-500/30 p-2 space-y-1 text-xs">
+                    <div className="bg-background border border-sky-500/30 p-2 space-y-1 text-xs">
                       <div className="flex items-center justify-between">
                         <span className="inline-flex items-center gap-1 text-[10px] font-bold text-sky-400 uppercase tracking-wider">
                           <BusIcon className="size-3" />
@@ -1281,12 +1321,12 @@ export function RegistrationsClient({
                         <span className="text-[10px] text-amber-400 font-bold">DEP: 6:00 AM</span>
                       </div>
                       {r.pickupStop && (
-                        <p className="text-white text-[11px] font-semibold truncate">
+                        <p className="text-foreground text-[11px] font-semibold truncate">
                           Stop: {r.pickupStop}
                         </p>
                       )}
                       {r.pickupLandmark && (
-                        <p className="text-slate-400 text-[10px] truncate">
+                        <p className="text-muted-foreground text-[10px] truncate">
                           Landmark: {r.pickupLandmark}
                         </p>
                       )}
@@ -1294,7 +1334,7 @@ export function RegistrationsClient({
                   ) : (
                     <div className="flex items-center justify-between text-[11px] text-slate-500">
                       <span>Commute Mode:</span>
-                      <span className="px-1.5 py-0.5 border border-[#152A54] bg-[#03060E] text-[10px] text-slate-400">
+                      <span className="px-1.5 py-0.5 border border-border bg-background text-[10px] text-muted-foreground">
                         SELF TRANSPORT
                       </span>
                     </div>
@@ -1307,9 +1347,9 @@ export function RegistrationsClient({
       </div>
 
       {/* ── Desktop Table View (>= md) ── */}
-      <div className="hidden md:block rounded-none border border-[#152A54] bg-[#060D1A] overflow-x-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+      <div className="hidden md:block rounded-none border border-border bg-card overflow-x-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         <table className="w-full text-left text-xs">
-          <thead className="bg-[#03060E] text-[11px] uppercase tracking-wider text-slate-400 border-b border-[#152A54]">
+          <thead className="bg-background text-[11px] uppercase tracking-wider text-muted-foreground border-b border-border">
             <tr>
               <th className="px-4 py-3">Reg ID</th>
               <th className="px-4 py-3">Participant</th>
@@ -1336,7 +1376,7 @@ export function RegistrationsClient({
                     className={`transition-colors ${
                       isNew
                         ? "bg-blue-950/40 border-l-2 border-l-blue-400"
-                        : "hover:bg-[#0B162C]"
+                        : "hover:bg-secondary"
                     }`}
                   >
                     <td className="px-4 py-3">
@@ -1355,7 +1395,7 @@ export function RegistrationsClient({
                           )}
                         </button>
                         {isNew && (
-                          <span className="px-1.5 py-0.2 text-[9px] font-bold bg-blue-500 text-white rounded-none animate-pulse">
+                          <span className="px-1.5 py-0.2 text-[9px] font-bold bg-blue-500 text-foreground rounded-none animate-pulse">
                             NEW
                           </span>
                         )}
@@ -1370,12 +1410,12 @@ export function RegistrationsClient({
                         title="Click to view full candidate details"
                       >
                         <div>
-                          <p className="font-semibold text-white group-hover:text-blue-400 transition-colors flex items-center gap-1">
+                          <p className="font-semibold text-foreground group-hover:text-blue-400 transition-colors flex items-center gap-1">
                             {r.participant.name}
                             <UserIcon className="size-3 text-slate-600 group-hover:text-blue-400 transition-colors shrink-0 opacity-0 group-hover:opacity-100" />
                           </p>
                           <p
-                            className="text-[10px] text-slate-400 truncate max-w-[170px]"
+                            className="text-[10px] text-muted-foreground truncate max-w-[170px]"
                             title={r.participant.email}
                           >
                             {r.participant.email}
@@ -1383,9 +1423,9 @@ export function RegistrationsClient({
                         </div>
                       </button>
                     </td>
-                    <td className="px-4 py-3 text-slate-300 font-semibold">{r.event.name}</td>
+                    <td className="px-4 py-3 text-foreground-secondary font-semibold">{r.event.name}</td>
                     <td
-                      className="px-4 py-3 text-slate-400 truncate max-w-[180px]"
+                      className="px-4 py-3 text-muted-foreground truncate max-w-[180px]"
                       title={r.participant.college}
                     >
                       {r.participant.college}
@@ -1397,20 +1437,20 @@ export function RegistrationsClient({
                             BUS • {r.passengersCount} SEAT{r.passengersCount > 1 ? "S" : ""}
                           </span>
                           <span
-                            className="text-[11px] text-white font-semibold truncate max-w-[160px]"
+                            className="text-[11px] text-foreground font-semibold truncate max-w-[160px]"
                             title={r.pickupStop || ""}
                           >
                             {r.pickupStop}
                           </span>
                           <span
-                            className="text-[10px] text-slate-400 truncate max-w-[160px]"
+                            className="text-[10px] text-muted-foreground truncate max-w-[160px]"
                             title={r.pickupLandmark || ""}
                           >
                             {r.pickupLandmark}
                           </span>
                         </div>
                       ) : (
-                        <span className="text-[10px] uppercase font-mono text-slate-500 px-1.5 py-0.5 border border-[#152A54] bg-[#03060E]">
+                        <span className="text-[10px] uppercase font-mono text-slate-500 px-1.5 py-0.5 border border-border bg-background">
                           SELF
                         </span>
                       )}

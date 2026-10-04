@@ -542,7 +542,7 @@ export function WaveGridBackground({
   }, [gridSize, vignette]);
 
   return (
-    <div ref={containerRef} className={cn("relative h-full w-full overflow-hidden bg-black", className)}>
+    <div ref={containerRef} className={cn("relative h-full w-full overflow-hidden bg-background", className)}>
       <canvas ref={canvasRef} className="block h-full w-full" />
       {/* Semi-transparent dark vignette mask to blend edges into background */}
       <div className="pointer-events-none absolute inset-0 bg-radial from-transparent via-black/40 to-black/80" />

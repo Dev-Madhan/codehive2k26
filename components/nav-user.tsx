@@ -52,10 +52,10 @@ export function NavUser({
       <SidebarMenu>
         <SidebarMenuItem>
           <div className="flex items-center gap-2 p-1.5 animate-pulse">
-            <div className="size-7 bg-[#152A54]" />
+            <div className="size-7 bg-secondary" />
             <div className="flex-1 space-y-1">
-              <div className="h-3 w-16 bg-[#152A54]" />
-              <div className="h-2 w-24 bg-[#152A54]/60" />
+              <div className="h-3 w-16 bg-secondary" />
+              <div className="h-2 w-24 bg-secondary/60" />
             </div>
           </div>
         </SidebarMenuItem>
@@ -103,22 +103,22 @@ export function NavUser({
             render={
               <SidebarMenuButton
                 size="lg"
-                className="rounded-none border border-transparent hover:border-[#152A54] hover:bg-[#060D1A] transition-all aria-expanded:bg-[#0B162C] p-2"
+                className="rounded-none border border-transparent hover:border-border hover:bg-card transition-all aria-expanded:bg-secondary p-2"
               />
             }
           >
-            <Avatar className="size-7 rounded-none border border-[#152A54] bg-[#060D1A]">
+            <Avatar className="size-7 rounded-none border border-border bg-card">
               {userImage && <AvatarImage src={userImage} alt={userName} className="object-cover" />}
-              <AvatarFallback className="rounded-none bg-[#0B162C] text-blue-400 font-mono font-bold text-[11px]">
+              <AvatarFallback className="rounded-none bg-secondary text-blue-400 font-mono font-bold text-[11px]">
                 {initials}
               </AvatarFallback>
             </Avatar>
 
             <div className="grid flex-1 text-left font-mono leading-none gap-1 ml-1">
-              <span className="truncate text-xs font-semibold text-white">
+              <span className="truncate text-xs font-semibold text-foreground">
                 {userName}
               </span>
-              <span className="truncate text-[10px] text-slate-400">
+              <span className="truncate text-[10px] text-muted-foreground">
                 {userEmail || userRole}
               </span>
             </div>
@@ -127,7 +127,7 @@ export function NavUser({
           </DropdownMenuTrigger>
 
           <DropdownMenuContent
-            className="min-w-56 rounded-none border border-[#152A54] bg-[#030712] p-1 font-mono text-xs shadow-xl text-slate-200"
+            className="min-w-56 rounded-none border border-border bg-background p-1 font-mono text-xs shadow-xl text-foreground"
             side={isMobile ? "bottom" : "right"}
             align="end"
             sideOffset={4}
@@ -135,8 +135,8 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuLabel className="p-2 font-normal">
                 <div className="flex flex-col gap-0.5">
-                  <span className="font-semibold text-white text-xs">{userName}</span>
-                  <span className="text-[10px] text-slate-400 truncate">{userEmail}</span>
+                  <span className="font-semibold text-foreground text-xs">{userName}</span>
+                  <span className="text-[10px] text-muted-foreground truncate">{userEmail}</span>
                   <span className="text-[9px] uppercase tracking-wider text-blue-400 font-bold mt-1">
                     ROLE: {userRole}
                   </span>
@@ -144,27 +144,27 @@ export function NavUser({
               </DropdownMenuLabel>
             </DropdownMenuGroup>
 
-            <DropdownMenuSeparator className="bg-[#152A54]" />
+            <DropdownMenuSeparator className="bg-secondary" />
 
             <DropdownMenuGroup>
               <DropdownMenuItem
-                className="cursor-pointer rounded-none hover:bg-[#0B162C] hover:text-white"
+                className="cursor-pointer rounded-none hover:bg-secondary hover:text-foreground"
                 render={<Link href="/admin/settings" />}
               >
-                <Settings2Icon className="size-3.5 text-slate-400 mr-2" />
+                <Settings2Icon className="size-3.5 text-muted-foreground mr-2" />
                 <span>Settings</span>
               </DropdownMenuItem>
 
               <DropdownMenuItem
-                className="cursor-pointer rounded-none hover:bg-[#0B162C] hover:text-white"
+                className="cursor-pointer rounded-none hover:bg-secondary hover:text-foreground"
                 render={<Link href="/events" />}
               >
-                <ExternalLinkIcon className="size-3.5 text-slate-400 mr-2" />
+                <ExternalLinkIcon className="size-3.5 text-muted-foreground mr-2" />
                 <span>Public Portal</span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
 
-            <DropdownMenuSeparator className="bg-[#152A54]" />
+            <DropdownMenuSeparator className="bg-secondary" />
 
             {isAuthenticated ? (
               <DropdownMenuItem
