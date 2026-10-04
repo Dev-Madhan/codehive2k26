@@ -9,7 +9,6 @@ const footerLinks = [
     links: [
       { label: "Home", href: "/" },
       { label: "Events Registry", href: "/events" },
-      { label: "Dashboard", href: "/dashboard" },
     ],
   },
   {

@@ -336,7 +336,7 @@ export function RegistrationForm({
           phone: m.phone,
           college: m.college,
           department: m.department,
-          year: m.year,
+          year: m.year as any,
           collegeIdUrl: uploadedPdfUrl, // All team members reference the team's combined PDF
           transportOptIn: samePickupForTeam ? transportOptIn : Boolean(m.transportOptIn),
           pickupRoute: samePickupForTeam ? (transportOptIn ? leaderPickupRoute : undefined) : m.pickupRoute,

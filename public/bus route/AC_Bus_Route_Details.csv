@@ -1,0 +1,380 @@
+﻿Route,S.No,Pickup Point,Road,Morning Pickup
+KOTTIVAKKAM VAC 201,1,Kottivakkam,Bus Stand,L.B. Road
+KOTTIVAKKAM VAC 201,2,Thiruvanmiyur,RTO,L.B. Road
+KOTTIVAKKAM VAC 201,3,Adyar Signal,Junction,Sardar Patel Road
+KOTTIVAKKAM VAC 201,3,CLRI & IIT,CLRI & IIT,Sardar Patel Road
+KOTTIVAKKAM VAC 201,4,Kotturpuram,Veltech Office,Gandhi Mandapam Road
+KOTTIVAKKAM VAC 201,5,Nandanam Extn.,Devar Statue,Chamiers Road
+KOTTIVAKKAM VAC 201,6,Nadanam Arts College.,Nadanam Arts College.,Mount Road
+KOTTIVAKKAM VAC 201,7,CIT Nagar,Bus Stop,South Usman Road
+KOTTIVAKKAM VAC 201,8,Aranganathan Subway,Aranganathan Subway,New Boag Road
+KOTTIVAKKAM VAC 201,9,Govindan Road,Govindan Road Junction,Govindan Road
+KOTTIVAKKAM VAC 201,10,Ashok Nagar,KFC,10th Avenue
+KOTTIVAKKAM VAC 201,11,Udayam Complex,Fire Station,Anna Main Road
+KOTTIVAKKAM VAC 201,12,Vadapalani,Laksman Sruthi,Javaharlal Nehru Road
+KOTTIVAKKAM VAC 201,13,M.M.D.A,Metro,Javaharlal Nehru Road
+KOTTIVAKKAM VAC 201,14,CMBT,Bus Stand,poonamallee High road
+KOTTIVAKKAM VAC 201,15,Thirumangalam,Bus Stop,Bazar Road
+KOTTIVAKKAM VAC 201,16,Collectror Nagar,Bus Stop,Bazar Road
+KOTTIVAKKAM VAC 201,17,Ambatur Tele.Exchange,Ambatur Tele.Exchange,C.T.H. Road
+KOTTIVAKKAM VAC 201,18,Dunlop,Bus Stop,C.T.H. Road
+KOTTIVAKKAM VAC 201,19,Ambattur OT,Bus Stop,C.T.H. Road
+KOTTIVAKKAM VAC 201,20,Thirumullaivoyal,Bus Stop,C.T.H. Road
+KOTTIVAKKAM VAC 201,21,Vel Tech Univ,,Veltech - Alamathi Road
+KOTTIVAKKAM VAC 201,22,Vel Tech Anna campus,,Veltech - Alamathi Road
+ENNORE VAC 202,1,Ennore,Muneeswarar Koil,Ennore High Road
+ENNORE VAC 202,2,Thiruvottriyur,Metro,Thiruvottriyur High Road
+ENNORE VAC 202,3,Theradi,Metro,Thiruvottriyur High Road
+ENNORE VAC 202,4,Ellaiamman Koil,Ellaiamman Koil,Thiruvottriyur High Road
+ENNORE VAC 202,5,Kaladipet,Metro,Thiruvottriyur High Road
+ENNORE VAC 202,6,Rajakadai,Bus Stop,Thiruvottriyur High Road
+ENNORE VAC 202,7,Thangal,Bus Stop,Thiruvottriyur High Road
+ENNORE VAC 202,8,Toll gate,Bus Stop,Thiruvottriyur High Road
+ENNORE VAC 202,9,Lakshmi Koil,Lakshmi Koil,Thiruvottriyur High Road
+ENNORE VAC 202,10,Thandaiyarpet depot,Thandaiyarpet depot,Thiruvottriyur High Road
+ENNORE VAC 202,11,Appollo,Bus Stop,Thiruvottriyur High Road
+ENNORE VAC 202,12,Old Wahermenpet,Metro,Thiruvottriyur High Road
+ENNORE VAC 202,13,Manikoondu,Manikoondu,Thiruvottriyur High Road
+ENNORE VAC 202,14,Maharani,Bus Stop,Thiruvottriyur High Road
+ENNORE VAC 202,15,Thyagaraja College,Thyagaraja College,Thiruvottriyur High Road
+ENNORE VAC 202,16,Veltech Univ,,Veltech-Alamathi Road
+ENNORE VAC 202,17,Vel Tech Anna campus,,Veltech - Alamathi Road
+Meenambakkam VAC 203,1,Meenambakkam,Metro,Jawaharlal Nehru Road
+Meenambakkam VAC 203,3,Guindy,Alandur Metro,Jawaharlal Nehru Road
+Meenambakkam VAC 203,4,Ambal Nagar-Ekattuthangal,Bus Stop,Jawaharlal Nehru Road
+Meenambakkam VAC 203,5,Jafferkhanpet,Bus Stop,Jawaharlal Nehru Road
+Meenambakkam VAC 203,6,Kasi Theatre,Kasi Theatre,Jawaharlal Nehru Road
+Meenambakkam VAC 203,7,K.K. Nagar,Depo,East Vannier Street
+Meenambakkam VAC 203,8,Pondichery House,Pondichery House,Vannier Street
+Meenambakkam VAC 203,9,Virugambakkam Avichi,School,Arcot Road
+Meenambakkam VAC 203,10,Elango Nagar,Bus Stop,Kaliamman Koil Street
+Meenambakkam VAC 203,11,Sai Nagar,Bus Stop,Kaliamman Koil Street
+Meenambakkam VAC 203,12,Sri Ayyappan Nagar,Bus Stop,Kaliamman Koil Street
+Meenambakkam VAC 203,13,Chinmaya Nagar,Bus Stop,Kaliamman Koil Street
+Meenambakkam VAC 203,14,Koyambedu Rountana,Roundana,Poonamallee High Road
+Meenambakkam VAC 203,15,Thirumangalam,Bus Stop,Bazar Road
+Meenambakkam VAC 203,16,Collectror Nagar,Bus Stop,Bazar Road
+Meenambakkam VAC 203,17,Ambattur Estate,Bus Stop,C.T.H. Road
+Meenambakkam VAC 203,18,Ambattur OT,Bus Stop,C.T.H. Road
+Meenambakkam VAC 203,19,Thirumullaivoyal,Bus Stop,C.T.H. Road
+Meenambakkam VAC 203,20,Veltech Univ,,Veltech-Alamathi Road
+Meenambakkam VAC 203,21,Vel Tech Anna campus,,Veltech - Alamathi Road
+MANALI NEW TOWN VAC 204,1,Manali N.T Market,Bus Stop,Kamarajar Salai
+MANALI NEW TOWN VAC 204,2,SADIYAKUPPAM,Bus Stop,Ponneri Road
+MANALI NEW TOWN VAC 204,3,Milk Booth,Milk Booth,Milk Colony Road
+MANALI NEW TOWN VAC 204,4,Rajivgandhi Nagar,Rajivgandhi Nagar,Rizwan Road
+MANALI NEW TOWN VAC 204,5,Andarkuppam,Bus Stop,Kamarajar Salai
+MANALI NEW TOWN VAC 204,6,SRF company,Entrance,Kamarajar Salai
+MANALI NEW TOWN VAC 204,7,MMDA,3rd Main Road Junction,Kamarajar Salai
+MANALI NEW TOWN VAC 204,8,Mathur,Gate,Kamarajar Salai
+MANALI NEW TOWN VAC 204,9,veterinary College,veterinary College,Milk Colony Road
+MANALI NEW TOWN VAC 204,10,Main Gate,Main Gate,Milk Colony Road
+MANALI NEW TOWN VAC 204,11,Arul nagar,Bus Stop,Milk Colony Road
+MANALI NEW TOWN VAC 204,12,Medimix,Bus Stop,Kamaraj Road
+MANALI NEW TOWN VAC 204,13,ThapalPetti,Arul Chruch,Madhavaram High Road
+MANALI NEW TOWN VAC 204,14,Madhavaram B.T.,Madhavaram B.T.,Madhavaram High Road
+MANALI NEW TOWN VAC 204,15,Madhavaram Ring Road,Relaince,G.N.T. Road
+MANALI NEW TOWN VAC 204,16,Veltech Univ,,Veltech-Alamathi Road
+MANALI NEW TOWN VAC 204,17,Vel Tech Anna campus,,Veltech - Alamathi Road
+MELUR-MINJUR-PONNERI VAC 206,1,MKB Nagar,Depo,G.N.T. Road
+MELUR-MINJUR-PONNERI VAC 206,2,Ambedhkar college,Ambedhkar college,Melapati-Ponnappa Street
+MELUR-MINJUR-PONNERI VAC 206,3,Vyasarpadi,Railway Station,Perambur Main Road
+MELUR-MINJUR-PONNERI VAC 206,4,Perambur B.P. Road,Junction,B.P. Road
+MELUR-MINJUR-PONNERI VAC 206,5,Perambur Church,Perambur Church,B.P. Road
+MELUR-MINJUR-PONNERI VAC 206,6,Peravllur,Bus Stop,Paper Mills Road
+MELUR-MINJUR-PONNERI VAC 206,7,Periyar Nagar,Bus Stop,Paper Mills Road
+MELUR-MINJUR-PONNERI VAC 206,8,Kolathur Welding shop,Kolathur Welding shop,Paper Mills Road
+MELUR-MINJUR-PONNERI VAC 206,9,Kolathur Moogambiga,Kolathur Moogambiga,Paper Mills Road
+MELUR-MINJUR-PONNERI VAC 206,10,Ganga Cuavery,Theater,60 Ft.Road
+MELUR-MINJUR-PONNERI VAC 206,11,Poombokar Nagar,Bus Stop,1 st Main Road
+MELUR-MINJUR-PONNERI VAC 206,12,Don Bosco school,Don Bosco school,Kolathur road
+MELUR-MINJUR-PONNERI VAC 206,13,Rajamangalam Police Station,Rajamangalam Police Station,Kolathur road
+MELUR-MINJUR-PONNERI VAC 206,14,Senthil Nagar,Bus Stop,Kolathur road
+MELUR-MINJUR-PONNERI VAC 206,15,Veltech Univ,,Veltech-Alamathi Road
+MELUR-MINJUR-PONNERI VAC 206,16,Vel Tech Anna campus,,Veltech - Alamathi Road
+MELUR-MINJUR-PONNERI VAC 206,1,Athipattu,Bus Stop,Ponneri Road
+MELUR-MINJUR-PONNERI VAC 206,2,Pudhunagar,Bus Stop,Ponneri Road
+MELUR-MINJUR-PONNERI VAC 206,3,Melur,Bus Stop,Ponneri Road
+MELUR-MINJUR-PONNERI VAC 206,4,Nandhiyambakkam,Bus Stop,Ponneri Road
+MELUR-MINJUR-PONNERI VAC 206,5,B.D.O Office,B.D.O Office,Ponneri Road
+MELUR-MINJUR-PONNERI VAC 206,6,Minjur Rly.Station,Minjur Rly.Station,Ponneri Road
+MELUR-MINJUR-PONNERI VAC 206,7,Minjur,Bus Stop,Ponneri Road
+MELUR-MINJUR-PONNERI VAC 206,8,Padianallur,Bus Stop,G.N.T. Road
+MELUR-MINJUR-PONNERI VAC 206,9,Redhills Gandhi Nagar,,Thiruvallur Redhills Road
+MELUR-MINJUR-PONNERI VAC 206,10,Veltech Univ,,Veltech-Alamathi Road
+MELUR-MINJUR-PONNERI VAC 206,11,Vel Tech Anna campus,,Veltech - Alamathi Road
+PATTINAPAKKAM - BROADWAY VAC 208,1,Arambakkam,Bus Stop,G.N.T. Road
+PATTINAPAKKAM - BROADWAY VAC 208,2,ELAVUR,Bus Stop,G.N.T. Road
+PATTINAPAKKAM - BROADWAY VAC 208,3,Gummidipoondi,Junction,G.N.T. Road
+PATTINAPAKKAM - BROADWAY VAC 208,4,Bazar,Bazar,G.N.T. Road
+PATTINAPAKKAM - BROADWAY VAC 208,5,Kanniputhur,Bus Stop,Redhills - Peryapalyam Road
+PATTINAPAKKAM - BROADWAY VAC 208,6,Veltech Univ,,Veltech-Alamathi Road
+PATTINAPAKKAM - BROADWAY VAC 208,7,Vel Tech Anna campus,,Veltech - Alamathi Road
+PATTINAPAKKAM - BROADWAY VAC 208,1,PATTINAPAKKAM,Depo,Annasalai
+PATTINAPAKKAM - BROADWAY VAC 208,2,Broadway,Parrys Corner,"Poonamallee High Rd,"
+PATTINAPAKKAM - BROADWAY VAC 208,3,Central,Metro,"Poonamallee High Rd,"
+PATTINAPAKKAM - BROADWAY VAC 208,4,KMC,Metro,"Poonamallee High Rd,"
+PATTINAPAKKAM - BROADWAY VAC 208,5,Aminjikarai,Market,"Poonamallee High Rd,"
+PATTINAPAKKAM - BROADWAY VAC 208,6,Skywalk,Skywalk,"Poonamallee High Rd,"
+PATTINAPAKKAM - BROADWAY VAC 208,7,Anna Arch,Anna Arch,2nd Avenue
+PATTINAPAKKAM - BROADWAY VAC 208,8,Anna Nagar Roundana,Anna Nagar Roundana,2nd Avenue
+PATTINAPAKKAM - BROADWAY VAC 208,9,Thirumangalam,Bus Stop,100ft. Road
+PATTINAPAKKAM - BROADWAY VAC 208,10,Collector Nagar,Bus Stop,Ambattur Estate Road
+PATTINAPAKKAM - BROADWAY VAC 208,17,Ambatuur Telephone Exchange,Ambatuur Telephone Exchange,C.T.H. Road
+PATTINAPAKKAM - BROADWAY VAC 208,18,Ambattur O.T.,Bus Stand,C.T.H. Road
+PATTINAPAKKAM - BROADWAY VAC 208,19,Thirumullaivoyal,Bus Stop,C.T.H. Road
+PATTINAPAKKAM - BROADWAY VAC 208,20,Veltech Univ,,Veltech-Alamathi Road
+PATTINAPAKKAM - BROADWAY VAC 208,21,Vel Tech Anna campus,,Veltech - Alamathi Road
+Vysarpadi VAC 210,1,Kasimedu,Signal,Mannarsamy Koil Street
+Vysarpadi VAC 210,2,Kalmandapam,Kalmandapam,Mannarsamy Koil Street
+Vysarpadi VAC 210,3,Royapuram,Signal,Mannarsamy Koil Street
+Vysarpadi VAC 210,4,Stanely,Hospital,Old Jail Road
+Vysarpadi VAC 210,5,Mint,Depo,Thiruvottriyur High Road
+Vysarpadi VAC 210,6,Basinbridge,Railway Station Entrancel,Main road
+Vysarpadi VAC 210,7,Sharma nagar,Bus Stop,G.N.T. Road
+Vysarpadi VAC 210,8,Erukkancherry,Bus Stop,G.N.T. Road
+Vysarpadi VAC 210,9,Moolakadai,Junction,G.N.T. Road
+Vysarpadi VAC 210,10,Madhavaram Ring Road,Reliance,100 Ft. Road
+Vysarpadi VAC 210,11,Puzhal,Jail Bus Stop,G.N.T. Road
+Vysarpadi VAC 210,12,Kavangarai,Bus Stop,G.N.T. Road
+Vysarpadi VAC 210,13,Veltech Univ,,Veltech-Alamathi Road
+Vysarpadi VAC 210,14,Vel Tech Anna campus,,Veltech - Alamathi Road
+Vysarpadi VAC 210,1,Vyasarpadi,Bus Stand,Erukanchery High Road
+Vysarpadi VAC 210,2,Perambur B.P. Road,Junction,B.P. Road
+Vysarpadi VAC 210,3,Perambur Church,Perambur Church,B.P. Road
+Vysarpadi VAC 210,4,Jamaliya,Bus Stop,Perambur High Road
+Vysarpadi VAC 210,5,Binny Mills,Binny Mills,Cooks Road
+Vysarpadi VAC 210,6,Otteri,Bus Stop,Perambur Barracks Road
+Vysarpadi VAC 210,7,Podikadai,Bus Stop,
+Vysarpadi VAC 210,8,Ayanavaram Signal,Ayanavaram Signal,Perambur High Road
+Vysarpadi VAC 210,9,Ayanavaram Joint Office,Bus Stop,Konnur High Road
+Vysarpadi VAC 210,10,ICF East Colony,Depo,Konnur High Road
+Vysarpadi VAC 210,11,Villivakkam Nathamuni,Theater,Konnur High Road
+Vysarpadi VAC 210,12,Avadi,HVF Arch,C.T.H. Road
+Vysarpadi VAC 210,13,Vel Junction (North),,Avadi - Veltech Road
+Vysarpadi VAC 210,14,Veltech Univ,,Veltech-Alamathi Road
+Vysarpadi VAC 210,15,Vel Tech Anna campus,,Veltech - Alamathi Road
+GUDUVANCHERI VAC 212,1,Kanadhasan nagar,Bus Stop,Kamaraj Road
+GUDUVANCHERI VAC 212,2,Muthamizh nagar,Bus Stop,Kamaraj Road
+GUDUVANCHERI VAC 212,3,kanadhasan nagar depo,kanadhasan nagar depo,Meenammal Road
+GUDUVANCHERI VAC 212,4,Muthukumaraswamy college,Muthukumaraswamy college,Kamaraj Road
+GUDUVANCHERI VAC 212,5,M.R Nagar,Signal,Kamaraj Road
+GUDUVANCHERI VAC 212,6,Pavithra Hospital,Pavithra Hospital,Kamaraj Road
+GUDUVANCHERI VAC 212,7,Erruckancherry,Signal,Kamaraj Road
+GUDUVANCHERI VAC 212,8,Moolakadai P.O.,Moolakadai P.O.,Madhavaram High Road
+GUDUVANCHERI VAC 212,9,Donbosco Schools,Donbosco Schools,Ottraivaadai Street
+GUDUVANCHERI VAC 212,10,Kennedy Square,Bus Stop,Ottraivaadai Street
+GUDUVANCHERI VAC 212,11,Thiru Vi ka Nagar,Depo,S.P.Koil Street
+GUDUVANCHERI VAC 212,12,Agaram,Junction,Paper Mills Road
+GUDUVANCHERI VAC 212,13,DonBosco Church,DonBosco Church,Paper Mills Road
+GUDUVANCHERI VAC 212,14,Peravallur,Bus Stop,Paper Mills Road
+GUDUVANCHERI VAC 212,15,Welding shop,Bus Stop,Paper Mills Road
+GUDUVANCHERI VAC 212,16,Kolathur Mookambiga,Bus Stop,Paper Mills Road
+GUDUVANCHERI VAC 212,17,Vel Junction,,Avadi - Veltech Road
+GUDUVANCHERI VAC 212,18,Veltech Univ,,Veltech-Alamathi Road
+GUDUVANCHERI VAC 212,19,Vel Tech Anna campus,,Veltech - Alamathi Road
+GUDUVANCHERI VAC 212,1,Guduvancheri,Bus Stop,GST Road
+GUDUVANCHERI VAC 212,3,Perungalathur,Bus Stop,GST Road
+GUDUVANCHERI VAC 212,4,Tambaram,Bus Stop,GST Road
+GUDUVANCHERI VAC 212,5,Chrompet,Bus Stop,GST Road
+GUDUVANCHERI VAC 212,6,Pallavaram,Bus Stop,GST Road
+GUDUVANCHERI VAC 212,7,Pammal,Bus Stop,Kundrathur Road
+GUDUVANCHERI VAC 212,8,Kundrathur,Bus Stop,Kundrathur Road
+GUDUVANCHERI VAC 212,9,Mangadu,Pattu Koot Road,Mangadu Road
+GUDUVANCHERI VAC 212,10,Mangadu,Temple,
+GUDUVANCHERI VAC 212,11,Karaiyanchavadi,Bus Stop,
+GUDUVANCHERI VAC 212,12,Parivakkam Signal,Signal,Poonamallee High Road
+GUDUVANCHERI VAC 212,13,Poonamalle Depot,Bus Stop,Poonamallee High Road
+GUDUVANCHERI VAC 212,14,Mittanamalle,Byepass,Outer Ring Road
+GUDUVANCHERI VAC 212,15,Veltech Univ,,Veltech-Alamathi Road
+GUDUVANCHERI VAC 212,16,Vel Tech Anna campus,,Veltech - Alamathi Road
+Sriperumpudur VAC 214,1,Mel Thiruttani,Bus Stand,Chittor Road
+Sriperumpudur VAC 214,2,Thiruttani,old Bus Stand,Kancheepuram Road
+Sriperumpudur VAC 214,4,Kanagamachattiram,Junction,Thiruvallur Road
+Sriperumpudur VAC 214,5,Thiruvazhangadu,Bus Stop,
+Sriperumpudur VAC 214,6,Thiruvallur,Bus Stand,
+Sriperumpudur VAC 214,7,Manaval Nagar,Bus Stop,Poonamallee Road
+Sriperumpudur VAC 214,8,Pudhuchattiram,Byepass,Poonamallee Road
+Sriperumpudur VAC 214,9,Thiruninravur,Bus Stop,
+Sriperumpudur VAC 214,10,Vel Junction,,Avadi - Veltech Road
+Sriperumpudur VAC 214,11,Veltech Univ,,Veltech-Alamathi Road
+Sriperumpudur VAC 214,12,Vel Tech Anna campus,,Veltech - Alamathi Road
+Sriperumpudur VAC 214,1,Sriperumpudur,Bus Stand,
+Sriperumpudur VAC 214,2,Thadalam,Bus Stop,Chennai - Bangalore Road
+Sriperumpudur VAC 214,3,Queensland,Bus Stop,Chennai - Bangalore Road
+Sriperumpudur VAC 214,4,Thirumazhisai,Bus Stop,Poonamalle - Thiruvallur Road
+Sriperumpudur VAC 214,5,Vellavedu,Bus Stop,Poonamalle - Thiruvallur Road
+Sriperumpudur VAC 214,6,Pudhuchatram,Bus Stop,Poonamalle - Thiruvallur Road
+Sriperumpudur VAC 214,7,Pattabhiram,Hindu College,
+Sriperumpudur VAC 214,8,Vel Junction,,Avadi - Veltech Road
+Sriperumpudur VAC 214,9,Veltech Univ,,Veltech-Alamathi Road
+Sriperumpudur VAC 214,10,Vel Tech Anna campus,,Veltech - Alamathi Road
+Kodungaiyur VAC 216,1,Medavakkam,Kamarajar Puram,Velachery - Tambaram Main Road
+Kodungaiyur VAC 216,2,Medavakkam,Junction,Velachery - Tambaram Main Road
+Kodungaiyur VAC 216,3,Keelkattalai,Bus Stop,Madipakkam Road
+Kodungaiyur VAC 216,4,Madipakkam,Bus Stop,Madipakkam Road
+Kodungaiyur VAC 216,5,Velachery,Vijayanagar Bus stop,Taramani Link Road
+Kodungaiyur VAC 216,6,Guindy,Bus Stop,Mount Road
+Kodungaiyur VAC 216,7,Manapakkam,Bus Stop,Mount Poonamallee Road
+Kodungaiyur VAC 216,8,Porur Junction,Bus Stop,Mount Poonamallee Road
+Kodungaiyur VAC 216,9,Bhai Kadai,JUnction,Kundrathur Road
+Kodungaiyur VAC 216,10,Kovur,Bus Stand,Kundrathur Road
+Kodungaiyur VAC 216,11,Kundrathur,D Mart,Kundrathur Road
+Kodungaiyur VAC 216,12,Veltech Univ,,Veltech-Alamathi Road
+Kodungaiyur VAC 216,13,Vel Tech Anna campus,,Veltech - Alamathi Road
+Kodungaiyur VAC 216,1,Kodungaiyur,Bus Stop,Arumandai Road
+Kodungaiyur VAC 216,11,Arul nagar,Bus Stop,Milk Colony Road
+Kodungaiyur VAC 216,2,Madhavaram,Bus Stop,Arumandai Road
+Kodungaiyur VAC 216,3,Vadaperumbakkam,Bus Stop,Redhills Road
+Kodungaiyur VAC 216,4,Vadakarai,Bus Stop,Redhills Road
+Kodungaiyur VAC 216,5,Redhills,Revathy Stores,
+Kodungaiyur VAC 216,6,Veltech Univ,,Veltech-Alamathi Road
+Kodungaiyur VAC 216,7,Vel Tech Anna campus,,Veltech - Alamathi Road
+CMBT VAC 218,1,Thalankuppam,Bus Stop,Ennore High Road
+CMBT VAC 218,2,Ennore,Bus Stop,Ennore High Road
+CMBT VAC 218,3,Ernavur,Bus Stop,
+CMBT VAC 218,4,Mullainagar,Bus Stop,Thiruvottriyur High Road
+CMBT VAC 218,5,Lift gate,Lift gate,Thiruvottriyur High Road
+CMBT VAC 218,6,Wimco,Metro,Thiruvottriyur High Road
+CMBT VAC 218,7,Ajax,Bus Stop,Thiruvottriyur High Road
+CMBT VAC 218,8,Periyar Nagar,Junction,Thiruvottriyur High Road
+CMBT VAC 218,9,Thiruvottriyur,Metro,Thiruvottriyur High Road
+CMBT VAC 218,10,Sathyamoorthy Nagar,Bus Stop,
+CMBT VAC 218,11,Madhavaram Rountana,Bus Terminus,
+CMBT VAC 218,12,Redhills,,
+CMBT VAC 218,13,Veltech Univ,,Veltech-Alamathi Road
+CMBT VAC 218,14,Vel Tech Anna campus,,Veltech - Alamathi Road
+CMBT VAC 218,1,CMBT,Bus Stand,100 Ft Road
+CMBT VAC 218,2,Nerkundram,Bus Stop,Poonamallee High Road
+CMBT VAC 218,3,Madhuravoyal,Bus Stop,Poonamallee High Road
+CMBT VAC 218,4,Vanagaram,Bus Stop,Poonamallee High Road
+CMBT VAC 218,5,Kumar Theater,Bus Stop,Poonamallee High Road
+CMBT VAC 218,6,Vellappanchavadi,Bus Stop,Poonamallee High Road
+CMBT VAC 218,7,Thiruverkadu,Bus Stop,Avadi-Poonamallee Road
+CMBT VAC 218,8,Paruthipattu,Bus Stop,Avadi-Poonamallee Road
+CMBT VAC 218,9,Govardhanagiri,Bus Stop,Avadi-Poonamallee Road
+CMBT VAC 218,10,Veltech Univ,,Veltech-Alamathi Road
+CMBT VAC 218,11,Vel Tech Anna campus,,Veltech - Alamathi Road
+Minjur - Kesavapuram VAC 220,1,Retteri,Junction,Redhills Road
+Minjur - Kesavapuram VAC 220,2,Vinayagapuram,Bus Stop,Redhills Road
+Minjur - Kesavapuram VAC 220,3,Lakshmipuram,Bus Stop,Redhills Road
+Minjur - Kesavapuram VAC 220,4,Surapet,Bus Stop,Redhills Road
+Minjur - Kesavapuram VAC 220,5,Kallikuppam,Bus Stop,Redhills Road
+Minjur - Kesavapuram VAC 220,6,Pudhur,Bus Stop,Redhills Road
+Minjur - Kesavapuram VAC 220,7,Oragadam,Bus Stop,Redhills Road
+Minjur - Kesavapuram VAC 220,8,Singapore complex,Singapore complex,C.T.H Road
+Minjur - Kesavapuram VAC 220,9,Vel Junction (North),,Avadi - Veltech Road
+Minjur - Kesavapuram VAC 220,10,Veltech Univ,,Veltech-Alamathi Road
+Minjur - Kesavapuram VAC 220,11,Vel Tech Anna campus,,Veltech - Alamathi Road
+Minjur - Kesavapuram VAC 220,1,Kesavapuram,Bus Stop,Ponneri Road
+Minjur - Kesavapuram VAC 220,2,Nalur,Bus Stop,Ponneri Road
+Minjur - Kesavapuram VAC 220,3,Mettupalayam,Bus Stop,Ponneri Road
+Minjur - Kesavapuram VAC 220,4,Pulikulam,Bus Stop,Ponneri Road
+Minjur - Kesavapuram VAC 220,5,Vembakkam,Bus Stop,Ponneri Road
+Minjur - Kesavapuram VAC 220,6,Ponneri,Junction,Thatchur Road
+Minjur - Kesavapuram VAC 220,7,Krishnapuram,Bus Stop,Thatchur Road
+Minjur - Kesavapuram VAC 220,8,Andarkuppam,Bus Stop,Thatchur Road
+Minjur - Kesavapuram VAC 220,9,Thatchur,Bus Stop,G.N.T. Road
+Minjur - Kesavapuram VAC 220,10,Thatchur Koot Road,Thatchur Koot Road,G.N.T. Road
+Minjur - Kesavapuram VAC 220,11,Pancheti,Bus Stop,G.N.T. Road
+Minjur - Kesavapuram VAC 220,12,Karanodai,Junction,G.N.T. Road
+Minjur - Kesavapuram VAC 220,13,Redhills Gandhi Nagar,,Thiruvallur Redhills Road
+Minjur - Kesavapuram VAC 220,14,Veltech Univ,,Veltech-Alamathi Road
+Minjur - Kesavapuram VAC 220,15,Vel Tech Anna campus,,Veltech - Alamathi Road
+Kolathur VAC 223,1,Uthukottai,Junction,
+Kolathur VAC 223,2,Periyapalayam,Bus stop,
+Kolathur VAC 223,3,Vadamathurai,Bus Stop,Peryapalyam -Thiruvallur Road
+Kolathur VAC 223,4,Vengal,Bus Stop,Peryapalyam -Thiruvallur Road
+Kolathur VAC 223,5,Vengal X Road,Vengal X Road,Peryapalyam -Thiruvallur Road
+Kolathur VAC 223,6,Thamaraipakkam X Road,Thamaraipakkam X Road,Peryapalyam -Thiruvallur Road
+Kolathur VAC 223,7,Magalgandigai,Bus Stop,Redhills -Thiruvallur Road
+Kolathur VAC 223,8,Koduvalli,Bus Stop,Redhills -Thiruvallur Road
+Kolathur VAC 223,9,Poochiatthipedu,Bus Stop,Redhills -Thiruvallur Road
+Kolathur VAC 223,10,Bangarupettai,Bus Stop,Avadi-veerapuram Road
+Kolathur VAC 223,11,Veerapuram,Bus Stop,Vel Tech Alamathi Road
+Kolathur VAC 223,12,Veltech Univ,,Veltech-Alamathi Road
+Kolathur VAC 223,13,Vel Tech Anna campus,,Veltech - Alamathi Road
+Kolathur VAC 223,1,Manali Bus stand,Manali Bus stand,Kamarajar Salai
+Kolathur VAC 223,2,Manali Market,Manali Market,Kamarajar Salai
+Kolathur VAC 223,3,Manjambakkam,Toll Gate,
+Kolathur VAC 223,4,Madhavaram Rountana,Bus Terminus,
+Kolathur VAC 223,5,Redhills,,
+Kolathur VAC 223,6,Veltech Univ,,Veltech-Alamathi Road
+Kolathur VAC 223,7,Vel Tech Anna campus,,Veltech - Alamathi Road
+Kolathur VAC 223,1,Kolathur,Junction,100ft. Road
+Kolathur VAC 223,2,Senthil nagar,Bus Stop,100 ft Road
+Kolathur VAC 223,3,D.R.G.Hospital,D.R.G.Hospital,100 ft Road
+Kolathur VAC 223,4,Thathankuppam,Bus Stop,100 ft Road
+Kolathur VAC 223,5,TVS Lucas,Saravana Stores,100 feet road
+Kolathur VAC 223,6,Padi,Mannurpet,C.T.H. Road
+Kolathur VAC 223,7,Korattur,Bakthavachalam Collage,Main road
+Kolathur VAC 223,8,Telephone Exchange,Telephone Exchange,C.T.H Road
+Kolathur VAC 223,9,Ayapakkam,Annanur Road,C.T.H Road
+Kolathur VAC 223,10,Annanur,Annanur Road,C.T.H Road
+Kolathur VAC 223,11,Thirumullaivoyal,Bus Stop,C.T.H Road
+Kolathur VAC 223,12,Murugappa Polytechnic,Murugappa Polytechnic,C.T.H Road
+Kolathur VAC 223,13,Vel Junction,,Avadi - Veltech Road
+Kolathur VAC 223,14,Veltech Univ,,Veltech-Alamathi Road
+Kolathur VAC 223,15,Vel Tech Anna campus,,Veltech - Alamathi Road
+Arakkonam VAC 225,1,Triplicane,D1 Police Station,Wallajah Road
+Arakkonam VAC 225,2,Ratna Café Junction,Junction,Triplicane Road
+Arakkonam VAC 225,3,Royapet,Hospital,
+Arakkonam VAC 225,4,Thousand Lights,Bus Stop,Mount Road
+Arakkonam VAC 225,5,Panagal Park,Bus Stop,GN Chetty Road
+Arakkonam VAC 225,6,Valluvar Kottam,Bus Stop,Kodambakkam High Road
+Arakkonam VAC 225,7,Kodambakkam,Liberty Bus Stop,Kodambakkam High Road
+Arakkonam VAC 225,8,Porur,Junction,Arcot Road
+Arakkonam VAC 225,9,Iyyappanthangal,Bus Depot,Mount Poonamallee Road
+Arakkonam VAC 225,10,Poonamalle Bus Stop,Bus Stop,Mount Poonamallee Road
+Arakkonam VAC 225,11,Nazarathpettai,Outer Ring Road,
+Arakkonam VAC 225,12,Veltech Univ,,Veltech-Alamathi Road
+Arakkonam VAC 225,13,Vel Tech Anna campus,,Veltech - Alamathi Road
+Arakkonam VAC 225,1,Thanigaipolur,Bus Stop,Sholingar Road
+Arakkonam VAC 225,2,Arakkonam,Bus Stand,Kanchipuram Road
+Arakkonam VAC 225,3,Thakkolam,kootroad,Kanchipuram Road
+Arakkonam VAC 225,4,Perambakkam,Bus Stop,
+Arakkonam VAC 225,5,Kadambathur,Bus Stop,
+Arakkonam VAC 225,6,Thiruvallur,Bus Stand,Thiruninravur Road
+Arakkonam VAC 225,7,Kakkalur,Bus Stop,Thiruninravur Road
+Arakkonam VAC 225,8,Sevvapet,Byepass,Thiruninravur Road
+Arakkonam VAC 225,9,Veppampattu,Byepass,Thiruninravur Road
+Arakkonam VAC 225,10,Thiruninravur,Bus Stop,
+Arakkonam VAC 225,11,Avadi Depot,Bus Stop,C.T.H Road
+Arakkonam VAC 225,12,Vel Junction,,Avadi - Veltech Road
+Arakkonam VAC 225,13,Veltech Univ,,Veltech-Alamathi Road
+Arakkonam VAC 225,14,Vel Tech Anna campus,,Veltech - Alamathi Road
+TONDIARPET VAC 228,1,Madharapakkam,Junction,Sathyavedu Road
+TONDIARPET VAC 228,2,Kavarapettai,Bus Stop,G.N.T. Road
+TONDIARPET VAC 228,3,Gummudipoondi,Junction,G.N.T. Road
+TONDIARPET VAC 228,4,Pudhuvoyal,Bus Stop,G.N.T. Road
+TONDIARPET VAC 228,5,Thatchur Koot Road,Thatchur Koot Road,G.N.T. Road
+TONDIARPET VAC 228,6,Janapanchatram X Road,Janapanchatram X Road,G.N.T. Road
+TONDIARPET VAC 228,7,Veltech Univ,,Veltech-Alamathi Road
+TONDIARPET VAC 228,8,Vel Tech Anna campus,,Veltech - Alamathi Road
+TONDIARPET VAC 228,1,Ayanavaram Signal,Ayanavaram Signal,Perambur High Road
+TONDIARPET VAC 228,2,Ayanavaram Joint Office,Bus Stop,Konnur High Road
+TONDIARPET VAC 228,3,ICF East Colony,Depo,Konnur High Road
+TONDIARPET VAC 228,4,Villivakkam Nathamuni,Theater,Konnur High Road
+TONDIARPET VAC 228,5,J.J. Nagar P.S,J.J. Nagar P.S,Valaiyapathi Road
+TONDIARPET VAC 228,6,Mugapper East T.N.H.B,Mugapper East T.N.H.B,Parl Road
+TONDIARPET VAC 228,7,J.J. Nagar B.T,J.J. Nagar B.T,Thiruvalluvar Road
+TONDIARPET VAC 228,8,7H Bus stand,7H Bus stand,Thiruvalluvar Road
+TONDIARPET VAC 228,9,Velammal School,Velammal School,Valaiyapathi Road
+TONDIARPET VAC 228,10,Mugapper West Depo,Mugapper West Depo,Main Road
+TONDIARPET VAC 228,11,Ambatuur Telephone Exchange,Ambatuur Telephone Exchange,C.T.H. Road
+TONDIARPET VAC 228,12,Ambattur O.T.,Bus Stand,C.T.H. Road
+TONDIARPET VAC 228,13,Thirumullaivoyal,Bus Stop,C.T.H. Road
+TONDIARPET VAC 228,14,Veltech Univ,,Veltech-Alamathi Road
+TONDIARPET VAC 228,15,Vel Tech Anna campus,,Veltech - Alamathi Road
+TONDIARPET VAC 228,1,Thandaiyarpet depot,Thandaiyarpet depot,Thiruvottriyur High Road
+TONDIARPET VAC 228,2,Appollo,Bus Stop,Thiruvottriyur High Road
+TONDIARPET VAC 228,3,Old Wahermenpet,Metro,Thiruvottriyur High Road
+TONDIARPET VAC 228,4,Manikoondu,Manikoondu,Thiruvottriyur High Road
+TONDIARPET VAC 228,5,Maharani,Bus Stop,Thiruvottriyur High Road
+TONDIARPET VAC 228,6,Thyagaraja College,Thyagaraja College,Thiruvottriyur High Road
+TONDIARPET VAC 228,7,Pulianthope,Bus Stop,Elephant Gate St
+TONDIARPET VAC 228,8,Purasaiwakkam,Saravana Stores,Vepery Church Road
+TONDIARPET VAC 228,9,Kilpauk,Water Tank,New Avadi Road
+TONDIARPET VAC 228,10,Nathamuni,Theater,New Avadi Road
+TONDIARPET VAC 228,11,Veltech Univ,,Veltech-Alamathi Road
+TONDIARPET VAC 228,12,Vel Tech Anna campus,,Veltech - Alamathi Road

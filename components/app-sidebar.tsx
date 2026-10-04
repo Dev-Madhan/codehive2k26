@@ -60,7 +60,7 @@ const navItems: NavMainItem[] = [
 const secondaryItems: NavSecondaryItem[] = [
   {
     title: "Public Site",
-    url: "/events",
+    url: "/",
     icon: <ExternalLinkIcon className="size-3.5" />,
   },
   {

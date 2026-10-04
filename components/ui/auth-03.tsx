@@ -135,10 +135,18 @@ export function Auth3({
   const handleSocialSignIn = async (providerId: string) => {
     if (providerId === "google" || providerId === "github") {
       try {
+        let targetPath = "/events";
+        if (typeof window !== "undefined") {
+          const params = new URLSearchParams(window.location.search);
+          const requested = params.get("callbackUrl");
+          if (requested && requested.startsWith("/")) {
+            targetPath = requested;
+          }
+        }
         const callbackURL =
           typeof window !== "undefined"
-            ? `${window.location.origin}/dashboard`
-            : "/dashboard";
+            ? `${window.location.origin}${targetPath}`
+            : targetPath;
 
         await authClient.signIn.social({
           provider: providerId,

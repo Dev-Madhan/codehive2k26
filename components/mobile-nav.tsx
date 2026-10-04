@@ -78,13 +78,15 @@ export function MobileNav() {
             <div className="mt-6 flex flex-col gap-2">
               {session?.user ? (
                 <>
-                  <Link
-                    href="/dashboard"
-                    onClick={() => setOpen(false)}
-                    className="w-full py-2.5 text-center font-mono text-xs uppercase tracking-wider font-semibold rounded-none bg-blue-600 hover:bg-blue-700 text-foreground border border-blue-500 transition-colors"
-                  >
-                    [ Go to Dashboard ]
-                  </Link>
+                  {((session.user as { role?: string })?.role || "").toUpperCase() === "ADMIN" && (
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setOpen(false)}
+                      className="w-full py-2.5 text-center font-mono text-xs uppercase tracking-wider font-semibold rounded-none bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 transition-colors"
+                    >
+                      [ Go to Dashboard ]
+                    </Link>
+                  )}
                   <button
                     className="w-full flex items-center justify-center gap-2 py-2 font-mono text-xs uppercase tracking-wider text-red-400 border border-red-900/40 bg-red-950/20 hover:bg-red-950/40 rounded-none transition-colors"
                     onClick={async () => {
