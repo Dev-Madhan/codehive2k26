@@ -2,27 +2,439 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { RegistrationSuccessPayload } from "@/types/registration";
 import {
-  CheckCircle2Icon,
-  CopyIcon,
-  CheckIcon,
-  PrinterIcon,
-  CalendarIcon,
-  MapPinIcon,
-  UsersIcon,
-  UserIcon,
-  BuildingIcon,
   ArrowRightIcon,
-  ShieldCheckIcon,
-  SparklesIcon,
   BusIcon,
+  CalendarDaysIcon,
+  CheckIcon,
+  CopyIcon,
+  MapPinIcon,
+  PlaneIcon,
+  PrinterIcon,
+  ShieldCheckIcon,
 } from "lucide-react";
+import type { RegistrationSuccessPayload } from "@/types/registration";
 
 interface DigitalEventPassProps {
   ticket: RegistrationSuccessPayload;
   onRegisterAnother?: () => void;
+}
+
+const PASS_STYLES = `
+  * { box-sizing: border-box; }
+  .pass-page {
+    color: #111827;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .pass-shell {
+    width: min(100%, 480px);
+    margin: 0 auto;
+    padding: 22px;
+    color: #111827;
+    background: #05060a;
+  }
+  .event-ticket {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: 24px;
+    border: 1px solid rgb(255 255 255 / 48%);
+    border-radius: 28px;
+    background:
+      radial-gradient(ellipse at 8% 12%, rgb(255 255 255 / 46%), transparent 22%),
+      radial-gradient(ellipse at 94% 82%, rgb(255 240 86 / 80%), transparent 30%),
+      radial-gradient(ellipse at 72% 40%, rgb(64 230 255 / 88%), transparent 42%),
+      linear-gradient(145deg, #ff3e98 0%, #ef31b4 27%, #a331f5 48%, #32d9f2 73%, #6ff3de 100%);
+    color: #11111a;
+    box-shadow: 0 22px 60px rgb(0 0 0 / 42%), inset 0 1px 0 rgb(255 255 255 / 65%);
+  }
+  .event-ticket::before,
+  .event-ticket::after {
+    position: absolute;
+    z-index: 2;
+    top: 48%;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #05060a;
+    content: "";
+  }
+  .event-ticket::before { left: -16px; }
+  .event-ticket::after { right: -16px; }
+  .ticket-content { position: relative; z-index: 1; }
+  .ticket-top,
+  .ticket-top-brand,
+  .ticket-confirmed,
+  .ticket-facts,
+  .ticket-fact,
+  .ticket-code-row,
+  .ticket-person-row,
+  .ticket-transport-heading,
+  .ticket-footer,
+  .ticket-actions,
+  .ticket-action-group {
+    display: flex;
+    align-items: center;
+  }
+  .ticket-top,
+  .ticket-code-row,
+  .ticket-person-row,
+  .ticket-transport-heading,
+  .ticket-footer,
+  .ticket-actions {
+    justify-content: space-between;
+  }
+  .ticket-top {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgb(17 17 26 / 32%);
+  }
+  .ticket-top-brand {
+    flex-direction: column;
+    gap: 5px;
+    text-align: center;
+  }
+  .ticket-logo {
+    display: block;
+    width: 220px;
+    height: 52px;
+    filter: brightness(0);
+    object-fit: contain;
+  }
+  .ticket-edition {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .ticket-confirmed {
+    gap: 5px;
+    padding: 6px 8px;
+    border: 1px solid rgb(17 17 26 / 38%);
+    border-radius: 99px;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    white-space: nowrap;
+  }
+  .ticket-event {
+    padding: 22px 0 16px;
+  }
+  .ticket-eyebrow,
+  .ticket-label {
+    display: block;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+  .ticket-event-title {
+    margin: 8px 0 0;
+    font-size: clamp(30px, 8vw, 46px);
+    font-weight: 950;
+    letter-spacing: -.055em;
+    line-height: .98;
+    overflow-wrap: anywhere;
+    text-transform: uppercase;
+  }
+  .ticket-event-subtitle {
+    margin-top: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .ticket-facts {
+    gap: 0;
+    padding: 12px 0;
+    border-top: 1px solid rgb(17 17 26 / 28%);
+    border-bottom: 1px solid rgb(17 17 26 / 28%);
+  }
+  .ticket-fact {
+    min-width: 0;
+    flex: 1;
+    gap: 8px;
+  }
+  .ticket-fact + .ticket-fact {
+    margin-left: 12px;
+    padding-left: 12px;
+    border-left: 1px solid rgb(17 17 26 / 28%);
+  }
+  .ticket-fact-icon { flex: 0 0 auto; }
+  .ticket-fact-value {
+    display: block;
+    margin-top: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+  .ticket-pass-code {
+    margin-top: 17px;
+    padding: 12px 14px;
+    border: 1px solid rgb(17 17 26 / 42%);
+    border-radius: 12px;
+    background: rgb(255 255 255 / 72%);
+  }
+  .ticket-code-row { gap: 12px; }
+  .ticket-code {
+    display: block;
+    margin-top: 4px;
+    font-size: clamp(21px, 6vw, 30px);
+    font-weight: 950;
+    letter-spacing: .035em;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+  }
+  .ticket-qr-area {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed rgb(17 17 26 / 50%);
+  }
+  .ticket-scan-copy { max-width: 150px; }
+  .ticket-scan-title {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .ticket-scan-note {
+    margin-top: 5px;
+    font-size: 9px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .ticket-qr-frame {
+    display: grid;
+    width: 112px;
+    height: 112px;
+    flex: 0 0 auto;
+    place-items: center;
+    padding: 6px;
+    border: 2px solid #16131c;
+    border-radius: 8px;
+    background: #ffffff;
+  }
+  .ticket-qr-frame img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .ticket-qr-fallback {
+    font-size: 9px;
+    font-weight: 800;
+    text-align: center;
+  }
+  .ticket-divider {
+    position: relative;
+    height: 1px;
+    margin: 17px -24px 13px;
+    border-top: 1px dashed rgb(17 17 26 / 55%);
+  }
+  .ticket-details-title {
+    margin: 0 0 10px;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .ticket-person-row {
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .ticket-person-row > div { min-width: 0; }
+  .ticket-person-name {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: 900;
+    overflow-wrap: anywhere;
+  }
+  .ticket-person-meta {
+    display: block;
+    margin-top: 3px;
+    font-size: 9px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+  .ticket-team {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgb(17 17 26 / 28%);
+  }
+  .ticket-team-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ticket-team-member {
+    padding: 6px 8px;
+    border: 1px solid rgb(17 17 26 / 26%);
+    border-radius: 7px;
+    font-size: 9px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+  .ticket-transport {
+    margin-top: 13px;
+    padding-top: 11px;
+    border-top: 1px solid rgb(17 17 26 / 28%);
+  }
+  .ticket-transport-heading {
+    gap: 8px;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .ticket-transport-detail {
+    margin-top: 6px;
+    font-size: 9px;
+    font-weight: 650;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+  .ticket-footer {
+    gap: 12px;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid rgb(17 17 26 / 28%);
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .ticket-flight-icon {
+    width: 30px;
+    height: 30px;
+    flex: 0 0 auto;
+  }
+  .ticket-actions {
+    gap: 12px;
+    width: min(100%, 480px);
+    margin: 0 auto;
+    padding: 0 22px 22px;
+  }
+  .ticket-action-group { gap: 8px; }
+  .ticket-action,
+  .ticket-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 42px;
+    padding: 0 14px;
+    border: 1px solid #34445b;
+    border-radius: 8px;
+    background: #111b2c;
+    color: #f1f5f9;
+    cursor: pointer;
+    font: 700 10px Arial, sans-serif;
+    letter-spacing: .06em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .ticket-action-primary {
+    border-color: #3b82f6;
+    background: #2563eb;
+  }
+  .ticket-link { border-color: transparent; background: transparent; color: #93c5fd; }
+  @media (max-width: 480px) {
+    .pass-shell { padding: 12px; }
+    .event-ticket { padding: 19px; border-radius: 23px; }
+    .ticket-divider { margin-right: -19px; margin-left: -19px; }
+    .ticket-actions { align-items: stretch; flex-direction: column; padding: 0 12px 12px; }
+    .ticket-action-group { width: 100%; }
+    .ticket-action { flex: 1; padding: 0 8px; }
+    .ticket-link { align-self: flex-end; }
+  }
+  @media print {
+    @page { size: A4 portrait; margin: 0; }
+    html, body {
+      width: 210mm;
+      height: 297mm;
+      min-height: 297mm;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #ffffff;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+    .pass-page {
+      display: flex;
+      width: 210mm;
+      height: 297mm;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #ffffff;
+    }
+    .pass-shell {
+      width: 200mm;
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+    }
+    .event-ticket {
+      width: 200mm;
+      height: 287mm;
+      max-height: 287mm;
+      padding: 10mm;
+      border-radius: 8mm;
+      box-shadow: none;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+    .ticket-content {
+      display: flex;
+      height: 100%;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .ticket-logo {
+      width: 80mm;
+      height: 19mm;
+    }
+    .ticket-top { padding-bottom: 5mm; }
+    .ticket-divider { margin-right: -10mm; margin-left: -10mm; }
+    .event-ticket::before,
+    .event-ticket::after {
+      background: #ffffff;
+    }
+    .ticket-confirmed { font-size: 7pt; }
+    .ticket-event { padding-top: 6mm; padding-bottom: 5mm; }
+    .ticket-event-title { font-size: 28pt; }
+    .ticket-qr-frame { width: 30mm; height: 30mm; }
+    .ticket-pass-code { margin-top: 5mm; padding: 4mm; }
+    .ticket-qr-area { margin-top: 4mm; padding-top: 4mm; }
+    .ticket-person-name { font-size: 10pt; }
+    .ticket-details-title { margin-bottom: 2mm; }
+    .ticket-team { margin-top: 3mm; padding-top: 3mm; }
+    .ticket-transport { margin-top: 3mm; padding-top: 3mm; }
+    .ticket-footer { margin-top: 4mm; padding-top: 3mm; }
+    .ticket-print-hide { display: none !important; }
+    .ticket-actions { display: none !important; }
+  }
+`;
+
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
 export function DigitalEventPass({
@@ -30,391 +442,238 @@ export function DigitalEventPass({
   onRegisterAnother,
 }: DigitalEventPassProps) {
   const [copied, setCopied] = useState(false);
+  const hasTeam =
+    Boolean(ticket.teamName) || ticket.teamMembers.length > 0;
 
   const handleCopyCode = async () => {
     try {
       await navigator.clipboard.writeText(ticket.registrationNumber);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Clipboard copy failed", err);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      console.error("Clipboard copy failed", error);
     }
   };
 
   const handlePrint = () => {
-    window.print();
+    const printWindow = window.open("", "_blank", "popup,width=900,height=1100");
+    if (!printWindow) {
+      window.alert("Allow pop-ups for this site to print your event pass.");
+      return;
+    }
+
+    const ticketElement = document.getElementById("codehive-digital-pass");
+    if (!ticketElement) {
+      printWindow.close();
+      window.alert("The event pass could not be found. Please reload and try again.");
+      return;
+    }
+
+    const printableTicket = ticketElement.outerHTML;
+    const printTitle = escapeHtml(`${ticket.eventName} - ${ticket.registrationNumber}`);
+    printWindow.document.open();
+    printWindow.document.write(`<!doctype html>
+      <html lang="en">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>${printTitle}</title>
+          <style>${PASS_STYLES}</style>
+        </head>
+        <body>
+          <main class="pass-page">
+            <div class="pass-shell">${printableTicket}</div>
+          </main>
+          <script>
+            window.addEventListener("load", async () => {
+              if (document.fonts && document.fonts.ready) await document.fonts.ready;
+              await Promise.all(Array.from(document.images, (image) => image.decode().catch(() => undefined)));
+              window.focus();
+              window.print();
+            }, { once: true });
+            window.addEventListener("afterprint", () => window.close(), { once: true });
+          </script>
+        </body>
+      </html>`);
+    printWindow.document.close();
   };
 
-  const hasTeam =
-    Boolean(ticket.teamName) || (ticket.teamMembers && ticket.teamMembers.length > 0);
+  const leaderRole = hasTeam ? "Team leader" : "Participant";
+  const pickupDetails = ticket.pickupStop
+    ? `${ticket.pickupStop}${ticket.pickupLandmark ? ` · ${ticket.pickupLandmark}` : ""}`
+    : "Pickup details confirmed by the transport coordinator";
 
   return (
-    <div className="space-y-6 font-mono">
-      {/* ─────────────────────────────────────────────────
-          PRINT STYLES: Isolates the ticket when printing
-          ───────────────────────────────────────────────── */}
-      <style dangerouslySetInnerHTML={{ __html: `
-        @media print {
-          body * {
-            visibility: hidden !important;
-          }
-          #codehive-digital-pass,
-          #codehive-digital-pass * {
-            visibility: visible !important;
-          }
-          #codehive-digital-pass {
-            position: absolute !important;
-            left: 0 !important;
-            top: 0 !important;
-            width: 100% !important;
-            margin: 0 !important;
-            padding: 20px !important;
-            background: #ffffff !important;
-            color: #000000 !important;
-            border: 2px solid #000000 !important;
-            box-shadow: none !important;
-          }
-          .no-print {
-            display: none !important;
-          }
-        }
-      ` }} />
-
-      {/* Main Ticket Container */}
-      <div
-        id="codehive-digital-pass"
-        className="relative overflow-hidden rounded-none border-2 border-blue-500/70 bg-background shadow-2xl shadow-blue-950/60 p-5 sm:p-8"
-      >
-        {/* Futuristic Cyber Scanlines / Glow Accent */}
-        <div className="absolute top-0 right-0 size-48 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 size-48 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
-
-        {/* ── Top Bar ── */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4 mb-6">
-          <div className="flex items-center gap-2">
-            <span className="text-blue-500 font-extrabold text-base">&gt;</span>
-            <span className="font-mono font-bold text-foreground text-sm sm:text-base tracking-tight">
-              code<span className="text-blue-400">hive</span>_2k26
-            </span>
-            <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest ml-1 border-l border-border pl-2">
-              DIGITAL EVENT PASS
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-none border border-emerald-500/40 bg-emerald-950/30 text-emerald-400 text-[10px] font-mono font-bold uppercase tracking-wider">
-              <ShieldCheckIcon className="size-3.5 text-emerald-400" />
-              <span>ENTRY PASS CONFIRMED</span>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Event Title & Core Meta ── */}
-        <div className="space-y-4 mb-6">
-          <div className="space-y-1">
-            <span className="text-[10px] uppercase font-mono tracking-widest text-blue-400 font-semibold block">
-              OFFICIAL PARTICIPATION PASS
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold font-sans text-foreground tracking-tight uppercase">
-              {ticket.eventName}
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-none border border-border bg-background text-xs">
-            <div className="flex items-center gap-2.5 text-foreground-secondary">
-              <CalendarIcon className="size-4 text-blue-400 shrink-0" />
-              <div>
-                <span className="text-[10px] text-slate-500 uppercase block font-mono">Date</span>
-                <span className="font-semibold text-foreground">{ticket.date}</span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2.5 text-foreground-secondary">
-              <MapPinIcon className="size-4 text-blue-400 shrink-0" />
-              <div>
-                <span className="text-[10px] text-slate-500 uppercase block font-mono">Venue</span>
-                <span className="font-semibold text-foreground">{ticket.venue}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Verification Block: Pass Code & QR Code ── */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 sm:p-5 rounded-none border-2 border-blue-500/40 bg-card mb-6">
-          {/* Pass Code (3 Columns on Desktop) */}
-          <div className="md:col-span-3 flex flex-col justify-between space-y-4">
-            <div>
-              <div className="flex items-center gap-2 mb-1.5">
-                <SparklesIcon className="size-3.5 text-blue-400" />
-                <span className="text-[11px] font-mono text-blue-400 font-bold uppercase tracking-widest">
-                  GATE PASS VERIFICATION CODE
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                Present this code or show the scannable QR pass at the entrance desk on event day.
-              </p>
-            </div>
-
-            <div className="p-3.5 rounded-none border border-border bg-background flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <span className="text-[9px] uppercase font-mono text-slate-500 block">
-                  PASS CODE / TICKET ID
-                </span>
-                <span className="text-xl sm:text-2xl font-mono font-extrabold text-blue-400 tracking-wider">
-                  {ticket.registrationNumber}
-                </span>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleCopyCode}
-                className="inline-flex items-center justify-center gap-1.5 h-10 px-4 font-mono text-xs font-bold uppercase tracking-wider text-foreground bg-blue-600 hover:bg-blue-700 active:scale-95 border border-blue-500 transition-all cursor-pointer shrink-0"
-              >
-                {copied ? (
-                  <>
-                    <CheckIcon className="size-3.5 text-foreground" />
-                    <span>COPIED</span>
-                  </>
-                ) : (
-                  <>
-                    <CopyIcon className="size-3.5 text-foreground" />
-                    <span>COPY CODE</span>
-                  </>
-                )}
-              </button>
-            </div>
-
-            <div className="text-[11px] font-mono text-slate-500 flex items-center gap-2">
-              <CheckCircle2Icon className="size-3.5 text-emerald-400" />
-              <span>Full pass details dispatched to: {ticket.leaderEmail}</span>
-            </div>
-          </div>
-
-          {/* Scannable QR Code (2 Columns on Desktop) */}
-          <div className="md:col-span-2 flex flex-col items-center justify-center p-3 rounded-none border border-border bg-background text-center">
-            {ticket.qrDataUrl ? (
-              <div className="p-2 bg-white rounded-none border-2 border-blue-500/80 shadow-md shadow-blue-500/20">
+    <div className="pass-page">
+      <style>{PASS_STYLES}</style>
+      <main className="pass-shell">
+        <article id="codehive-digital-pass" className="event-ticket">
+          <div className="ticket-content">
+            <header className="ticket-top">
+              <div className="ticket-top-brand">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={ticket.qrDataUrl}
-                  alt={`QR Code Pass for ${ticket.registrationNumber}`}
-                  className="size-36 sm:size-40 object-contain block"
+                  className="ticket-logo"
+                  src="/code%20hive%20logo.svg"
+                  alt="CodeHive"
+                  width="106"
+                  height="25"
                 />
+                <div className="ticket-edition">2K26 · Official event pass</div>
               </div>
-            ) : (
-              <div className="size-36 flex items-center justify-center border border-dashed border-slate-700 text-slate-500 text-xs">
-                QR Unavailable
+              <div className="ticket-confirmed">
+                <ShieldCheckIcon size={13} />
+                <span>CONFIRMED</span>
               </div>
-            )}
-            <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest mt-2 block">
-              OFFICIAL SCAN PASS
-            </span>
-          </div>
-        </div>
+            </header>
 
-        {/* ── Attendee & Team Credentials ── */}
-        <div className="space-y-3 border-t border-border pt-5">
-          <div className="flex items-center justify-between text-xs text-muted-foreground uppercase">
-            <span className="flex items-center gap-1.5 font-bold text-foreground-secondary">
-              <UserIcon className="size-3.5 text-blue-400" />
-              Attendee Credentials
-            </span>
-            {hasTeam && ticket.teamName && (
-              <span className="font-mono text-blue-400 font-bold">
-                TEAM: {ticket.teamName.toUpperCase()}
-              </span>
-            )}
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs bg-background p-3.5 border border-border">
-            <div>
-              <span className="text-[10px] text-slate-500 block uppercase font-mono">
-                {hasTeam ? "Team Leader" : "Participant"}
-              </span>
-              <span className="font-bold text-foreground font-sans">{ticket.leaderName}</span>
-              <span className="text-[11px] text-muted-foreground block font-mono mt-0.5">
-                {ticket.leaderPhone}
-              </span>
-            </div>
-
-            <div>
-              <span className="text-[10px] text-slate-500 block uppercase font-mono">Institution</span>
-              <span className="font-semibold text-foreground font-sans">{ticket.college}</span>
-              <span className="text-[11px] text-muted-foreground block font-sans mt-0.5">
-                {ticket.department}
-              </span>
-            </div>
-
-            <div>
-              <span className="text-[10px] text-slate-500 block uppercase font-mono">Year</span>
-              <span className="font-semibold text-foreground font-mono">Year {ticket.year}</span>
-            </div>
-          </div>
-
-          {/* Team Members Roster (if applicable) */}
-          {hasTeam && ticket.teamMembers && ticket.teamMembers.length > 0 && (
-            <div className="space-y-2 pt-2">
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <UsersIcon className="size-3.5 text-blue-400" />
-                <span className="font-bold uppercase text-[11px] tracking-wider text-foreground-secondary">
-                  Registered Team Roster ({ticket.teamMembers.length + 1} Members)
-                </span>
+            <section className="ticket-event">
+              <span className="ticket-eyebrow">Your entry pass</span>
+              <h1 className="ticket-event-title">{ticket.eventName}</h1>
+              <div className="ticket-event-subtitle">
+                {ticket.teamName ? `TEAM · ${ticket.teamName}` : "Hackathon participant"}
               </div>
+            </section>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                {/* Leader entry */}
-                <div className="p-2.5 rounded-none border border-blue-500/30 bg-blue-950/15 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="inline-flex size-5 items-center justify-center text-[9px] font-bold text-blue-400 bg-blue-600/20 border border-blue-500/40">
-                      01
-                    </span>
-                    <span className="font-semibold text-foreground">{ticket.leaderName}</span>
-                  </div>
-                  <span className="text-[10px] font-mono text-blue-400 uppercase font-bold">
-                    Leader
+            <section className="ticket-facts" aria-label="Event details">
+              <div className="ticket-fact">
+                <CalendarDaysIcon className="ticket-fact-icon" size={17} />
+                <div>
+                  <span className="ticket-label">Date</span>
+                  <span className="ticket-fact-value">{ticket.date}</span>
+                </div>
+              </div>
+              <div className="ticket-fact">
+                <MapPinIcon className="ticket-fact-icon" size={17} />
+                <div>
+                  <span className="ticket-label">Venue</span>
+                  <span className="ticket-fact-value">{ticket.venue}</span>
+                </div>
+              </div>
+            </section>
+
+            <section className="ticket-pass-code" aria-label="Pass code and QR code">
+              <div className="ticket-code-row">
+                <div>
+                  <span className="ticket-label">Registration code</span>
+                  <span className="ticket-code">{ticket.registrationNumber}</span>
+                </div>
+                <PlaneIcon className="ticket-flight-icon" />
+              </div>
+              <div className="ticket-qr-area">
+                <div className="ticket-scan-copy">
+                  <div className="ticket-scan-title">Scan for entry</div>
+                  <p className="ticket-scan-note">
+                    Show this QR code at the event check-in desk.
+                  </p>
+                </div>
+                <div className="ticket-qr-frame">
+                  {ticket.qrDataUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={ticket.qrDataUrl}
+                      alt={`Entry QR code for ${ticket.registrationNumber}`}
+                    />
+                  ) : (
+                    <span className="ticket-qr-fallback">QR unavailable</span>
+                  )}
+                </div>
+              </div>
+            </section>
+
+            <div className="ticket-divider" />
+
+            <section aria-label="Participant details">
+              <h2 className="ticket-details-title">
+                {hasTeam ? "Attendee & team" : "Attendee"}
+              </h2>
+              <div className="ticket-person-row">
+                <div>
+                  <span className="ticket-label">{leaderRole}</span>
+                  <span className="ticket-person-name">{ticket.leaderName}</span>
+                  <span className="ticket-person-meta">{ticket.leaderPhone}</span>
+                </div>
+                <div>
+                  <span className="ticket-label">Institution</span>
+                  <span className="ticket-person-name">{ticket.college}</span>
+                  <span className="ticket-person-meta">
+                    {ticket.department} · Year {ticket.year}
                   </span>
                 </div>
-
-                {/* Team members */}
-                {ticket.teamMembers.map((member, idx) => (
-                  <div
-                    key={idx}
-                    className="p-2.5 rounded-none border border-border bg-background flex items-center justify-between"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="inline-flex size-5 items-center justify-center text-[9px] font-bold text-muted-foreground bg-slate-800 border border-border">
-                        {String(idx + 2).padStart(2, "0")}
-                      </span>
-                      <span className="font-semibold text-foreground">{member.name}</span>
-                    </div>
-                    <span className="text-[10px] font-mono text-slate-500">
-                      {member.phone}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* ── Vel Tech Campus Transportation Details ── */}
-        <div className="space-y-2 border-t border-border pt-5">
-          <div className="flex items-center justify-between text-xs text-muted-foreground uppercase">
-            <span className="flex items-center gap-1.5 font-bold text-foreground-secondary">
-              <BusIcon className="size-3.5 text-sky-400" />
-              Vel Tech Campus Transportation
-            </span>
-            <span className="font-mono text-sky-400 font-bold text-[10px]">
-              {ticket.transportOptIn ? "6:00 AM ONWARDS" : "SELF-COMMUTE"}
-            </span>
-          </div>
-
-          {ticket.transportOptIn ? (
-            <div className="p-3.5 rounded-none border border-sky-500/40 bg-sky-950/20 space-y-2 text-xs">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-border/80 pb-2">
-                <span className="font-mono font-bold text-sky-300 uppercase tracking-wider text-[11px]">
-                  [ OFFICIAL VEL TECH BUS PASS ]
-                </span>
-                <span className="text-[10px] font-mono text-muted-foreground">
-                  {ticket.passengersCount} Seat{ticket.passengersCount > 1 ? "s" : ""} Reserved • Report by 06:00 AM
-                </span>
               </div>
 
-              {ticket.samePickupForTeam || !ticket.teamMembers || ticket.teamMembers.length === 0 ? (
-                <div className="space-y-1 text-foreground-secondary">
-                  <div className="flex items-start gap-2">
-                    <span className="text-[10px] font-mono text-slate-500 uppercase shrink-0 mt-0.5">Route:</span>
-                    <span className="font-bold text-foreground">{ticket.pickupRoute}</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <span className="text-[10px] font-mono text-slate-500 uppercase shrink-0 mt-0.5">Boarding Stop:</span>
-                    <span className="font-semibold text-sky-300">{ticket.pickupStop}</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <span className="text-[10px] font-mono text-slate-500 uppercase shrink-0 mt-0.5">Landmark:</span>
-                    <span className="text-foreground">{ticket.pickupLandmark}</span>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-2 divide-y divide-[#152A54]/60 pt-1">
-                  <div className="text-[11px] space-y-0.5">
-                    <span className="font-bold text-sky-400">Leader ({ticket.leaderName}):</span>
-                    <p className="text-foreground">{ticket.pickupRoute} &gt; {ticket.pickupStop}</p>
-                    <p className="text-[10px] font-mono text-muted-foreground">Landmark: {ticket.pickupLandmark}</p>
-                  </div>
-                  {ticket.teamMembers.map((m, idx) => (
-                    <div key={idx} className="text-[11px] pt-1.5 space-y-0.5">
-                      <span className="font-bold text-foreground-secondary">Member {idx + 2} ({m.name}):</span>
-                      {m.transportOptIn ? (
-                        <>
-                          <p className="text-foreground">{m.pickupRoute} &gt; {m.pickupStop}</p>
-                          <p className="text-[10px] font-mono text-muted-foreground">Landmark: {m.pickupLandmark}</p>
-                        </>
-                      ) : (
-                        <p className="text-slate-500 italic">Self-Arranged Transportation</p>
-                      )}
-                    </div>
-                  ))}
+              {ticket.teamMembers.length > 0 && (
+                <div className="ticket-team">
+                  <span className="ticket-label">
+                    Team roster · {ticket.teamMembers.length + 1} members
+                  </span>
+                  <ul className="ticket-team-list">
+                    {ticket.teamMembers.map((member, index) => (
+                      <li className="ticket-team-member" key={`${member.name}-${index}`}>
+                        {String(index + 2).padStart(2, "0")} · {member.name}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
-            </div>
-          ) : (
-            <div className="p-3 rounded-none border border-border bg-background text-xs text-muted-foreground">
-              Participant has opted for Self-Arranged Commute directly to Vel Tech campus.
-            </div>
-          )}
-        </div>
+            </section>
 
-        {/* ── Footer Notice ── */}
-        <div className="mt-6 pt-4 border-t border-border flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[10px] font-mono text-slate-500">
-          <span>CODEHIVE 2K26 ORGANIZING COMMITTEE &bull; GATE VERIFICATION</span>
-          <span>ISSUED: {new Date(ticket.confirmedAt).toLocaleDateString("en-IN")}</span>
-        </div>
-      </div>
+            <section className="ticket-transport" aria-label="Transportation">
+              <div className="ticket-transport-heading">
+                <span>
+                  <BusIcon
+                    aria-hidden="true"
+                    size={14}
+                    style={{ display: "inline", marginRight: 5, verticalAlign: "middle" }}
+                  />
+                  Transportation
+                </span>
+                <span>{ticket.transportOptIn ? "BUS PASS" : "SELF ARRANGED"}</span>
+              </div>
+              <p className="ticket-transport-detail">
+                {ticket.transportOptIn
+                  ? `${ticket.pickupRoute || "Vel Tech bus"} · ${pickupDetails}`
+                  : "Direct travel to the event venue"}
+              </p>
+            </section>
 
-      {/* ── Action Buttons Toolbar (Hidden on Print) ── */}
-      <div className="no-print flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
-        <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full sm:w-auto">
+            <footer className="ticket-footer">
+              <span>CODEHIVE · 2K26</span>
+              <span>PASS · {ticket.registrationNumber}</span>
+            </footer>
+          </div>
+        </article>
+      </main>
+
+      <nav className="ticket-actions ticket-print-hide" aria-label="Pass actions">
+        <div className="ticket-action-group">
           <button
             type="button"
             onClick={handlePrint}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-11 px-5 font-mono text-xs font-bold uppercase tracking-wider text-foreground bg-blue-600 hover:bg-blue-700 active:scale-95 border border-blue-500 transition-all cursor-pointer shadow-lg shadow-blue-950/60"
+            className="ticket-action ticket-action-primary"
           >
-            <PrinterIcon className="size-3.5" />
-            <span>Print / Save Ticket</span>
+            <PrinterIcon size={15} />
+            <span>Print / Save pass</span>
           </button>
-
+          <button type="button" onClick={handleCopyCode} className="ticket-action">
+            {copied ? <CheckIcon size={15} /> : <CopyIcon size={15} />}
+            <span>{copied ? "Copied" : "Copy code"}</span>
+          </button>
+        </div>
+        {onRegisterAnother ? (
           <button
             type="button"
-            onClick={handleCopyCode}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-11 px-5 font-mono text-xs font-bold uppercase tracking-wider text-foreground-secondary bg-secondary hover:bg-secondary hover:text-foreground border border-border hover:border-blue-500/60 transition-colors cursor-pointer"
+            onClick={onRegisterAnother}
+            className="ticket-link"
           >
-            <CopyIcon className="size-3.5 text-blue-400" />
-            <span>{copied ? "Pass Code Copied!" : "Copy Pass Code"}</span>
+            Register another <ArrowRightIcon size={14} />
           </button>
-        </div>
-
-        <div className="w-full sm:w-auto text-right">
-          {onRegisterAnother ? (
-            <button
-              type="button"
-              onClick={onRegisterAnother}
-              className="inline-flex items-center gap-1.5 text-xs font-mono text-blue-400 hover:text-blue-300 uppercase tracking-wider underline underline-offset-4 cursor-pointer"
-            >
-              <span>Register for Another Event</span>
-              <ArrowRightIcon className="size-3" />
-            </button>
-          ) : (
-            <Link
-              href="/events"
-              className="inline-flex items-center gap-1.5 text-xs font-mono text-blue-400 hover:text-blue-300 uppercase tracking-wider underline underline-offset-4"
-            >
-              <span>Explore More Events</span>
-              <ArrowRightIcon className="size-3" />
-            </Link>
-          )}
-        </div>
-      </div>
+        ) : (
+          <Link href="/events" className="ticket-link">
+            Explore events <ArrowRightIcon size={14} />
+          </Link>
+        )}
+      </nav>
     </div>
   );
 }

@@ -150,7 +150,7 @@ export default async function RegistrationViewPage({ params }: Props) {
                   <span>Vel Tech Bus Transit Pass</span>
                 </div>
                 <span className="text-[10px] font-bold text-sky-400 px-2 py-0.5 border border-sky-500/30 bg-sky-500/10">
-                  6:00 AM ONWARDS
+                  AC / NON-AC BUS SERVICE
                 </span>
               </div>
 
@@ -165,7 +165,7 @@ export default async function RegistrationViewPage({ params }: Props) {
                   <span className="text-foreground-secondary"> &bull; {registration.pickupLandmark}</span>
                 </div>
                 <p className="text-[10px] text-muted-foreground pt-1 leading-relaxed border-t border-[#1E293B]/60 mt-1">
-                  Advisory: Vel Tech buses operate from 6:00 AM onwards. Report to your boarding landmark by 06:00 AM sharp.
+                  Use the selected route and stop details above, and confirm exact pickup time with the transport coordinator.
                 </p>
               </div>
             </div>

@@ -352,7 +352,7 @@ export async function sendRegistrationConfirmationEmail(
                   <tr>
                     <td style="padding: 18px 20px;">
                       <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; border-bottom: 1px solid #1e3a5f; padding-bottom: 6px;">
-                        🚌 VEL TECH CAMPUS TRANSPORTATION PASS (6:00 AM ONWARDS)
+                        🚌 VEL TECH CAMPUS TRANSPORTATION PASS (AC / NON-AC)
                       </div>
                       <p style="margin: 0 0 10px 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #cbd5e1; line-height: 1.5;">
                         Complimentary campus bus service reserved for <strong style="color: #ffffff;">${params.passengersCount || 1} passenger(s)</strong>.
@@ -371,12 +371,12 @@ export async function sendRegistrationConfirmationEmail(
                           <td style="padding: 4px 0; font-family: 'Inter', sans-serif; color: #f1f5f9;">${params.pickupLandmark || "Not Specified"}</td>
                         </tr>
                         <tr>
-                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b; text-transform: uppercase;">Reporting Time:</td>
-                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #fbbf24;">06:00 AM Sharp (Buses operate from 6:00 AM onwards)</td>
+                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b; text-transform: uppercase;">Pickup Time:</td>
+                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #fbbf24;">Confirm exact timing with the transport coordinator</td>
                         </tr>
                       </table>
                       <div style="margin-top: 10px; padding: 8px 12px; background-color: #02122c; border-left: 3px solid #38bdf8; font-family: 'Inter', sans-serif; font-size: 11px; color: #94a3b8; line-height: 1.4;">
-                        Note: The student transport coordinator and bus captain will coordinate with the team leader via mobile. Please be at your landmark by 6:00 AM.
+                        Note: The student transport coordinator and bus captain will confirm exact pickup timing with the team leader via mobile. Use the route, stop, and landmark above to identify your boarding point.
                       </div>
                     </td>
                   </tr>

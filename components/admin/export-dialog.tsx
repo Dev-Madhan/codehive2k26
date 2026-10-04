@@ -17,7 +17,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { VELTECH_BUS_ROUTES } from "@/lib/constants/transport";
+import {
+  getVelTechBusRoutes,
+  type VelTechRoute,
+} from "@/lib/constants/transport";
 import { generateExportFile, ExportOptions, ExportColumnOptions } from "@/lib/export-excel";
 import { toast } from "sonner";
 import {
@@ -55,6 +58,8 @@ export function ExportDataDialog({
   const [eventId, setEventId] = useState<string>("ALL");
   const [transportFilter, setTransportFilter] = useState<"ALL" | "BUS_ONLY" | "SELF">("ALL");
   const [routeFilter, setRouteFilter] = useState<string>("ALL");
+  const [busRoutes, setBusRoutes] = useState<VelTechRoute[]>([]);
+  const [routeLoadError, setRouteLoadError] = useState<string | null>(null);
   const [checkInFilter, setCheckInFilter] = useState<"ALL" | "CHECKED_IN" | "PENDING">("ALL");
   const [formatFilter, setFormatFilter] = useState<"ALL" | "TEAM" | "SOLO">("ALL");
 
@@ -78,6 +83,30 @@ export function ExportDataDialog({
       setScope(defaultScope);
     }
   }, [open, defaultScope]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    let isMounted = true;
+    getVelTechBusRoutes()
+      .then((routes) => {
+        if (isMounted) {
+          setBusRoutes(routes);
+          setRouteLoadError(null);
+        }
+      })
+      .catch((error: unknown) => {
+        if (isMounted) {
+          setRouteLoadError(
+            error instanceof Error ? error.message : "Unable to load bus route data."
+          );
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [open]);
 
   // Live matching records prediction
   useEffect(() => {
@@ -444,19 +473,24 @@ export function ExportDataDialog({
                     <SelectTrigger className="w-full h-9">
                       <SelectValue placeholder="[ ALL BUS ROUTES & CORRIDORS ]" />
                     </SelectTrigger>
-                    <SelectContent className="max-h-60">
+                    <SelectContent className="max-h-[min(var(--available-height),65dvh,32rem)] [scrollbar-color:var(--primary)_var(--background)] [scrollbar-width:thin]">
                       <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-border/60 mb-1 flex items-center justify-between">
-                        <span>// VEL TECH BUS CORRIDORS</span>
-                        <span className="text-blue-400 font-bold">{VELTECH_BUS_ROUTES.length} ROUTES</span>
+                        <span>// AC & NON-AC ROUTES</span>
+                        <span className="text-blue-400 font-bold">{busRoutes.length} ROUTES</span>
                       </div>
                       <SelectItem value="ALL">[ ALL BUS ROUTES &amp; CORRIDORS ]</SelectItem>
-                      {VELTECH_BUS_ROUTES.map((r) => (
+                      {busRoutes.map((r) => (
                         <SelectItem key={r.id} value={r.name}>
                           {r.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
+                  {routeLoadError && (
+                    <p role="alert" className="text-xs text-rose-400">
+                    {routeLoadError}
+                    </p>
+                  )}
                 </div>
               )}
             </div>

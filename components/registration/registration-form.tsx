@@ -897,7 +897,7 @@ export function RegistrationForm({
       )}
 
       {/* ═══════════════════════════════════════════════
-          SECTION: VEL TECH CAMPUS TRANSPORTATION (6:00 AM ONWARDS)
+          SECTION: VEL TECH CAMPUS TRANSPORTATION
           ═══════════════════════════════════════════════ */}
       <div className="rounded-none border border-border bg-card p-4 sm:p-5 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2 border-b border-border pb-3">
@@ -910,13 +910,12 @@ export function RegistrationForm({
             </h3>
           </div>
           <span className="self-start sm:self-auto text-[10px] font-mono text-sky-400 font-semibold border border-sky-500/30 bg-sky-500/10 px-2 py-0.5">
-            FREE SERVICE • 6:00 AM ONWARDS
+            FREE SERVICE • AC & NON-AC ROUTES
           </span>
         </div>
 
         <p className="text-xs font-sans text-foreground-secondary leading-relaxed">
-          Vel Tech provides complimentary campus bus transportation for all registered participants across major city corridors starting from{" "}
-          <strong className="text-foreground font-mono">6:00 AM onwards</strong>.
+          Vel Tech provides complimentary campus bus transportation for registered participants. Route-specific pickup points and road details are listed below; contact the transport coordinator to confirm exact pickup times.
         </p>
 
         {/* Transportation Mode Toggle */}
@@ -961,7 +960,7 @@ export function RegistrationForm({
               )}
             </div>
             <span className="text-[11px] text-muted-foreground font-sans">
-              Avail free Vel Tech bus pickup from designated city stops from 6:00 AM onwards.
+              Avail free Vel Tech bus pickup from designated city stops on the selected route.
             </span>
           </button>
         </div>
