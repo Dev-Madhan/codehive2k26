@@ -27,24 +27,21 @@ export async function checkInParticipant(
       where: { id: staffUserId },
     });
 
-    if (
-      !staff ||
-      (staff.role !== "STAFF" && staff.role !== "ORGANIZER" && staff.role !== "SUPER_ADMIN")
-    ) {
+    if (!staff || staff.role !== "ADMIN") {
       staff = await prisma.user.findFirst({
         where: {
-          role: { in: ["SUPER_ADMIN", "ORGANIZER", "STAFF"] },
+          role: "ADMIN",
         },
       });
 
       if (!staff) {
         staff = await prisma.user.upsert({
           where: { email: "admin@codehive.org" },
-          update: { role: "SUPER_ADMIN" },
+          update: { role: "ADMIN" },
           create: {
             name: "System Admin",
             email: "admin@codehive.org",
-            role: "SUPER_ADMIN",
+            role: "ADMIN",
           },
         });
       }

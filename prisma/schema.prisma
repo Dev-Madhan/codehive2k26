@@ -13,9 +13,7 @@ generator client {
 // ----------------------------------------------------
 
 enum Role {
-  SUPER_ADMIN
-  ORGANIZER
-  STAFF
+  ADMIN
   PARTICIPANT
 }
 

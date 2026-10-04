@@ -38,13 +38,11 @@ export const auth = betterAuth({
 });
 
 export const ROLES = {
-  SUPER_ADMIN: "SUPER_ADMIN" as Role,
-  ORGANIZER: "ORGANIZER" as Role,
-  STAFF: "STAFF" as Role,
+  ADMIN: "ADMIN" as Role,
   PARTICIPANT: "PARTICIPANT" as Role,
 };
 
 export function hasRole(userRole: Role, allowedRoles: Role[]): boolean {
-  if (userRole === "SUPER_ADMIN") return true;
+  if (userRole === "ADMIN") return true;
   return allowedRoles.includes(userRole);
 }

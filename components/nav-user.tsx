@@ -69,7 +69,7 @@ export function NavUser({
   const userName = user?.name || (isAuthenticated ? "Operator" : "Guest");
   const userEmail = user?.email || (isAuthenticated ? "" : "Sign in");
   const userImage = session?.user?.image || (initialUser as { avatar?: string })?.avatar || "";
-  const userRole = ((session?.user as { role?: string })?.role || "OPERATOR").toUpperCase();
+  const userRole = ((session?.user as { role?: string })?.role || "ADMIN").toUpperCase();
 
   const initials = userName
     .split(" ")

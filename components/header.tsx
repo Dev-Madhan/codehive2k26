@@ -13,10 +13,6 @@ export const navLinks = [
     label: "Events",
     href: "/events",
   },
-  {
-    label: "Dashboard",
-    href: "/dashboard",
-  },
 ];
 
 export function Header() {
