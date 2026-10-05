@@ -85,7 +85,7 @@ export function NavUser({
         fetchOptions: {
           onSuccess: () => {
             toast.success("Signed out");
-            router.push("/auth/signin");
+            router.push("/auth");
             router.refresh();
           },
         },
@@ -177,7 +177,7 @@ export function NavUser({
             ) : (
               <DropdownMenuItem
                 className="cursor-pointer rounded-none text-blue-400 hover:text-blue-300 hover:bg-blue-950/40 font-bold"
-                render={<Link href="/auth/signin" />}
+                render={<Link href="/auth" />}
               >
                 <LogInIcon className="size-3.5 mr-2" />
                 <span>Sign in</span>
