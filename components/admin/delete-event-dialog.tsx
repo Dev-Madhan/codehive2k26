@@ -56,7 +56,7 @@ export function DeleteEventDialog({
 
   return (
     <Dialog open={open} onOpenChange={isDeleting ? undefined : onOpenChange}>
-      <DialogContent className="max-w-md w-full bg-[#060D1A] border border-red-900/60 text-white p-0 overflow-hidden font-mono text-xs rounded-none shadow-2xl">
+      <DialogContent className="max-w-md w-full bg-[#0F0F0F] border border-red-900/60 text-white p-0 overflow-hidden font-mono text-xs rounded-none shadow-2xl">
         <DialogHeader className="p-4 sm:p-5 border-b border-red-900/40 bg-red-950/20 space-y-1">
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-bold text-red-400 bg-red-950/60 border border-red-500/40 px-2 py-0.5 uppercase tracking-wider inline-flex items-center gap-1.5">
@@ -90,13 +90,13 @@ export function DeleteEventDialog({
           </p>
         </div>
 
-        <DialogFooter className="p-4 border-t border-[#152A54] bg-[#03060E] flex flex-row items-center justify-end gap-2.5">
+        <DialogFooter className="p-4 border-t border-[#262626] bg-[#080808] flex flex-row items-center justify-end gap-2.5">
           <Button
             type="button"
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={isDeleting}
-            className="rounded-none border-[#152A54] bg-[#060D1A] text-slate-300 font-mono text-xs uppercase"
+            className="rounded-none border-[#262626] bg-[#0F0F0F] text-[#E5E5E5] font-mono text-xs uppercase"
           >
             Cancel
           </Button>

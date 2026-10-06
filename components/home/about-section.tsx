@@ -32,31 +32,13 @@ const pillars = [
   },
 ];
 
-const accentMap = {
-  blue: {
-    border: "hover:border-blue-500/60",
-    iconBg: "bg-blue-500/10",
-    iconColor: "text-blue-400",
-    tagColor: "text-blue-500",
-    glow: "hover:shadow-[0_0_24px_rgba(37,99,235,0.2)]",
-    corner: "border-blue-400/80",
-  },
-  sky: {
-    border: "hover:border-sky-500/60",
-    iconBg: "bg-sky-500/10",
-    iconColor: "text-sky-400",
-    tagColor: "text-sky-500",
-    glow: "hover:shadow-[0_0_24px_rgba(14,165,233,0.2)]",
-    corner: "border-sky-400/80",
-  },
-  indigo: {
-    border: "hover:border-indigo-500/60",
-    iconBg: "bg-indigo-500/10",
-    iconColor: "text-indigo-400",
-    tagColor: "text-indigo-400",
-    glow: "hover:shadow-[0_0_24px_rgba(99,102,241,0.2)]",
-    corner: "border-indigo-400/80",
-  },
+const monochromeCardStyle = {
+  border: "hover:border-[#404040]",
+  iconBg: "bg-[#161616] border border-[#262626]",
+  iconColor: "text-white",
+  tagColor: "text-[#737373]",
+  glow: "hover:shadow-[0_0_24px_rgba(255,255,255,0.05)]",
+  corner: "border-[#404040] group-hover:border-white transition-colors",
 };
 
 export function AboutSection() {
@@ -66,13 +48,13 @@ export function AboutSection() {
   return (
     <section
       ref={ref}
-      className="relative py-24 sm:py-32 bg-black border-t border-[#152A54]/60 overflow-hidden"
+      className="relative py-24 sm:py-32 bg-black border-t border-[#262626] overflow-hidden"
     >
       {/* Subtle grid overlay */}
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(21,42,84,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(21,42,84,0.06)_1px,transparent_1px)] bg-[size:60px_60px]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
       {/* Top accent blur */}
-      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-gradient-to-b from-blue-900/20 to-transparent blur-[80px]" />
+      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-gradient-to-b from-white/5 to-transparent blur-[80px]" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
@@ -83,18 +65,15 @@ export function AboutSection() {
           )}
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-8 bg-blue-500" />
-            <span className="font-mono text-[11px] uppercase tracking-widest text-blue-500">
+            <div className="h-px w-8 bg-white" />
+            <span className="font-mono text-[11px] uppercase tracking-widest text-[#737373]">
               ABOUT CODEHIVE 2K26 2.0
             </span>
           </div>
           <h2 className="font-mono text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-tight">
-            IDEAS × CODE ×{" "}
-            <span className="bg-gradient-to-r from-blue-400 to-sky-300 bg-clip-text text-transparent">
-              IMPACT
-            </span>
+            IDEAS × CODE × <span className="text-white">IMPACT</span>
           </h2>
-          <p className="mt-4 max-w-2xl text-slate-400 text-base leading-relaxed">
+          <p className="mt-4 max-w-2xl text-neutral-400 text-base leading-relaxed">
             CodeHive 2K26 2.0 is a flagship National Level Hackathon organized on 23 &amp; 24 October 2026 by the Department of Computer Science and Business Systems, Vel Tech Multi Tech Dr. Rangarajan Dr. Sakunthala Engineering College, in association with Sri Vensy Technologies Pvt Ltd &amp; Business Intelligence Club.
           </p>
         </div>
@@ -102,40 +81,39 @@ export function AboutSection() {
         {/* Pillar cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {pillars.map((pillar, i) => {
-            const a = accentMap[pillar.accent as keyof typeof accentMap];
             const Icon = pillar.icon;
             return (
               <div
                 key={pillar.title}
                 className={cn(
-                  "relative group p-6 border border-[#152A54]/80 bg-[#060D1A]/60 backdrop-blur-sm transition-all duration-500",
-                  a.border,
-                  a.glow,
+                  "relative group p-6 border border-[#262626] bg-[#0F0F0F]/80 backdrop-blur-sm transition-all duration-500",
+                  monochromeCardStyle.border,
+                  monochromeCardStyle.glow,
                   inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                 )}
                 style={{ transitionDelay: `${i * 120}ms` }}
               >
                 {/* Corner accent */}
-                <div className={cn("absolute top-0 right-0 w-3 h-3 border-t border-r", a.corner)} />
-                <div className={cn("absolute bottom-0 left-0 w-3 h-3 border-b border-l", a.corner)} />
+                <div className={cn("absolute top-0 right-0 w-3 h-3 border-t border-r", monochromeCardStyle.corner)} />
+                <div className={cn("absolute bottom-0 left-0 w-3 h-3 border-b border-l", monochromeCardStyle.corner)} />
 
                 {/* Icon */}
-                <div className={cn("inline-flex p-2.5 mb-4", a.iconBg)}>
-                  <Icon className={cn("size-5", a.iconColor)} />
+                <div className={cn("inline-flex p-2.5 mb-4", monochromeCardStyle.iconBg)}>
+                  <Icon className={cn("size-5", monochromeCardStyle.iconColor)} />
                 </div>
 
                 {/* Tag */}
-                <p className={cn("font-mono text-[10px] uppercase tracking-widest mb-2", a.tagColor)}>
+                <p className={cn("font-mono text-[10px] uppercase tracking-widest mb-2", monochromeCardStyle.tagColor)}>
                   {pillar.tag}
                 </p>
 
                 <h3 className="font-mono text-lg font-black uppercase text-white mb-1 tracking-tight">
                   {pillar.title}
                 </h3>
-                <p className="font-mono text-xs text-blue-400 mb-3 uppercase tracking-wide">
+                <p className="font-mono text-xs text-neutral-300 mb-3 uppercase tracking-wide">
                   // {pillar.subtitle}
                 </p>
-                <p className="text-sm text-slate-400 leading-relaxed font-sans">
+                <p className="text-sm text-neutral-400 leading-relaxed font-sans">
                   {pillar.desc}
                 </p>
               </div>
@@ -159,12 +137,12 @@ export function AboutSection() {
           ].map((stat) => (
             <div
               key={stat.label}
-              className="p-4 border border-[#152A54]/60 bg-[#030712]/80 text-center"
+              className="p-4 border border-[#262626] bg-[#080808] text-center"
             >
               <p className="font-mono text-2xl sm:text-3xl font-black text-white">
                 {stat.val}
               </p>
-              <p className="font-mono text-[11px] uppercase tracking-wider text-slate-500 mt-1">
+              <p className="font-mono text-[11px] uppercase tracking-wider text-[#737373] mt-1">
                 {stat.label}
               </p>
             </div>

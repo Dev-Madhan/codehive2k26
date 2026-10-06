@@ -44,9 +44,9 @@ export function FaqSection() {
   return (
     <section
       ref={ref}
-      className="relative py-24 sm:py-32 bg-[#030712] border-t border-[#152A54]/60 overflow-hidden"
+      className="relative py-24 sm:py-32 bg-black border-t border-[#262626] overflow-hidden"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(21,42,84,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(21,42,84,0.05)_1px,transparent_1px)] bg-[size:60px_60px]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
@@ -57,16 +57,13 @@ export function FaqSection() {
           )}
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-8 bg-blue-500" />
-            <span className="font-mono text-[11px] uppercase tracking-widest text-blue-500">
+            <div className="h-px w-8 bg-white" />
+            <span className="font-mono text-[11px] uppercase tracking-widest text-[#737373]">
               FAQ
             </span>
           </div>
           <h2 className="font-mono text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-tight">
-            FREQUENTLY{" "}
-            <span className="bg-gradient-to-r from-blue-400 to-sky-300 bg-clip-text text-transparent">
-              ASKED
-            </span>
+            FREQUENTLY <span className="text-white">ASKED</span>
           </h2>
         </div>
 
@@ -80,8 +77,8 @@ export function FaqSection() {
                 className={cn(
                   "border transition-all duration-700",
                   isOpen
-                    ? "border-blue-500/50 bg-[#060D1A]"
-                    : "border-[#152A54]/60 bg-[#060D1A]/40 hover:border-[#152A54]",
+                    ? "border-[#404040] bg-[#0F0F0F]"
+                    : "border-[#262626] bg-[#0F0F0F] hover:border-[#404040]",
                   inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                 )}
                 style={{ transitionDelay: `${i * 50}ms` }}
@@ -91,18 +88,18 @@ export function FaqSection() {
                   onClick={() => setOpenIndex(isOpen ? null : i)}
                 >
                   <div className="flex items-start gap-3">
-                    <span className="font-mono text-[10px] text-slate-600 uppercase tracking-widest shrink-0 mt-0.5">
+                    <span className="font-mono text-[10px] text-[#737373] uppercase tracking-widest shrink-0 mt-0.5">
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <span className="font-mono text-sm font-semibold uppercase tracking-wide text-white group-hover:text-blue-300 transition-colors">
+                    <span className="font-mono text-sm font-semibold uppercase tracking-wide text-white group-hover:text-neutral-200 transition-colors">
                       {faq.q}
                     </span>
                   </div>
-                  <div className="shrink-0 p-1 border border-[#152A54] group-hover:border-blue-500/40 transition-colors">
+                  <div className="shrink-0 p-1 border border-[#262626] bg-[#161616] group-hover:border-[#404040] transition-colors">
                     {isOpen ? (
-                      <MinusIcon className="size-3 text-blue-400" />
+                      <MinusIcon className="size-3 text-white" />
                     ) : (
-                      <PlusIcon className="size-3 text-slate-400 group-hover:text-blue-400 transition-colors" />
+                      <PlusIcon className="size-3 text-neutral-400 group-hover:text-white transition-colors" />
                     )}
                   </div>
                 </button>
@@ -112,7 +109,7 @@ export function FaqSection() {
                     isOpen ? "max-h-48 pb-5" : "max-h-0"
                   )}
                 >
-                  <p className="px-5 pl-[3.25rem] text-sm text-slate-400 leading-relaxed">
+                  <p className="px-5 pl-[3.25rem] text-sm text-neutral-400 leading-relaxed">
                     {faq.a}
                   </p>
                 </div>

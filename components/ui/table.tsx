@@ -22,7 +22,7 @@ function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
   return (
     <thead
       data-slot="table-header"
-      className={cn("[&_tr]:border-b [&_tr]:border-[#152A54] bg-[#03060E]", className)}
+      className={cn("[&_tr]:border-b [&_tr]:border-[#262626] bg-[#080808]", className)}
       {...props}
     />
   );
@@ -32,7 +32,7 @@ function TableBody({ className, ...props }: React.ComponentProps<"tbody">) {
   return (
     <tbody
       data-slot="table-body"
-      className={cn("[&_tr:last-child]:border-0 divide-y divide-[#152A54]", className)}
+      className={cn("[&_tr:last-child]:border-0 divide-y divide-[#262626]", className)}
       {...props}
     />
   );
@@ -43,7 +43,7 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
     <tfoot
       data-slot="table-footer"
       className={cn(
-        "border-t border-[#152A54] bg-[#03060E] font-medium [&>tr]:last:border-b-0",
+        "border-t border-[#262626] bg-[#080808] font-medium [&>tr]:last:border-b-0",
         className
       )}
       {...props}
@@ -56,7 +56,7 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
     <tr
       data-slot="table-row"
       className={cn(
-        "border-b border-[#152A54] transition-colors hover:bg-[#0B162C] has-aria-expanded:bg-[#0B162C] data-[state=selected]:bg-[#0B162C]",
+        "border-b border-[#262626] transition-colors hover:bg-[#161616] has-aria-expanded:bg-[#161616] data-[state=selected]:bg-[#1F1F1F]",
         className
       )}
       {...props}

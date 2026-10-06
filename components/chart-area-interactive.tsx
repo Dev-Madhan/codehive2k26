@@ -32,11 +32,11 @@ export const description = "Interactive CodeHive registration telemetry area cha
 const chartConfig = {
   registrations: {
     label: "Registrations",
-    color: "#3B82F6",
+    color: "#FFFFFF",
   },
   checkIns: {
     label: "Gate Check-Ins",
-    color: "#10B981",
+    color: "#737373",
   },
 } satisfies ChartConfig;
 
@@ -89,13 +89,13 @@ export function ChartAreaInteractive({
   }, [baseData, timeRange]);
 
   return (
-    <Card className="@container/card rounded-none border border-[#152A54] bg-[#060D1A] shadow-none max-w-full overflow-hidden">
+    <Card className="@container/card rounded-none border border-[#262626] bg-[#0F0F0F] shadow-none max-w-full overflow-hidden">
       <CardHeader className="p-3.5 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="space-y-1">
           <CardTitle className="font-mono font-bold text-white text-sm sm:text-base flex items-center gap-2">
             <span>&gt; Registration Telemetry &amp; Gate Influx</span>
           </CardTitle>
-          <CardDescription className="font-mono text-[11px] sm:text-xs text-slate-400">
+          <CardDescription className="font-mono text-[11px] sm:text-xs text-[#A3A3A3]">
             <span className="hidden @[540px]/card:block">
               Daily candidate registration velocity and verified gate admission flow
             </span>
@@ -117,8 +117,8 @@ export function ChartAreaInteractive({
                   onClick={() => setTimeRange(item.value)}
                   className={`px-2.5 py-1 text-xs font-mono uppercase tracking-wider transition-all cursor-pointer rounded-none border ${
                     isActive
-                      ? "bg-blue-600 text-white border-blue-500 font-bold shadow-sm shadow-blue-950/50"
-                      : "bg-[#03060E] text-slate-400 border-[#152A54] hover:bg-[#0B162C] hover:text-white"
+                      ? "bg-white text-black border-white font-bold shadow-sm"
+                      : "bg-[#080808] text-[#A3A3A3] border-[#262626] hover:bg-[#161616] hover:text-white"
                   }`}
                 >
                   {item.label}
@@ -135,20 +135,20 @@ export function ChartAreaInteractive({
             }}
           >
             <SelectTrigger
-              className="flex w-32 sm:w-36 rounded-none border-[#152A54] bg-[#03060E] font-mono text-xs text-slate-300 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[640px]/card:hidden"
+              className="flex w-32 sm:w-36 rounded-none border-[#262626] bg-[#080808] font-mono text-xs text-[#E5E5E5] **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[640px]/card:hidden"
               size="sm"
               aria-label="Select a timeframe"
             >
               <SelectValue placeholder="Timeframe" />
             </SelectTrigger>
-            <SelectContent className="rounded-none border-[#152A54] bg-[#060D1A] font-mono text-xs text-slate-300">
-              <SelectItem value="90d" className="rounded-none hover:bg-[#0B162C]">
+            <SelectContent className="rounded-none border-[#262626] bg-[#0F0F0F] font-mono text-xs text-[#E5E5E5]">
+              <SelectItem value="90d" className="rounded-none hover:bg-[#161616]">
                 90 Days
               </SelectItem>
-              <SelectItem value="30d" className="rounded-none hover:bg-[#0B162C]">
+              <SelectItem value="30d" className="rounded-none hover:bg-[#161616]">
                 30 Days
               </SelectItem>
-              <SelectItem value="7d" className="rounded-none hover:bg-[#0B162C]">
+              <SelectItem value="7d" className="rounded-none hover:bg-[#161616]">
                 7 Days
               </SelectItem>
             </SelectContent>
@@ -165,36 +165,36 @@ export function ChartAreaInteractive({
               <linearGradient id="fillRegistrations" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="#3B82F6"
-                  stopOpacity={0.9}
+                  stopColor="#FFFFFF"
+                  stopOpacity={0.45}
                 />
                 <stop
                   offset="95%"
-                  stopColor="#3B82F6"
-                  stopOpacity={0.05}
+                  stopColor="#FFFFFF"
+                  stopOpacity={0.02}
                 />
               </linearGradient>
               <linearGradient id="fillCheckIns" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="#10B981"
-                  stopOpacity={0.8}
+                  stopColor="#737373"
+                  stopOpacity={0.35}
                 />
                 <stop
                   offset="95%"
-                  stopColor="#10B981"
-                  stopOpacity={0.05}
+                  stopColor="#737373"
+                  stopOpacity={0.02}
                 />
               </linearGradient>
             </defs>
-            <CartesianGrid vertical={false} stroke="#152A54" strokeDasharray="3 3" />
+            <CartesianGrid vertical={false} stroke="#262626" strokeDasharray="3 3" />
             <XAxis
               dataKey="date"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
               minTickGap={28}
-              stroke="#64748B"
+              stroke="#737373"
               tickFormatter={(value) => {
                 const date = new Date(value);
                 return date.toLocaleDateString("en-US", {
@@ -204,7 +204,7 @@ export function ChartAreaInteractive({
               }}
             />
             <ChartTooltip
-              cursor={{ stroke: "#3B82F6", strokeWidth: 1 }}
+              cursor={{ stroke: "#FFFFFF", strokeWidth: 1, strokeDasharray: "2 2" }}
               content={
                 <ChartTooltipContent
                   labelFormatter={(value) => {
@@ -223,15 +223,15 @@ export function ChartAreaInteractive({
               dataKey="checkIns"
               type="monotone"
               fill="url(#fillCheckIns)"
-              stroke="#10B981"
-              strokeWidth={2}
+              stroke="#737373"
+              strokeWidth={1.5}
               stackId="a"
             />
             <Area
               dataKey="registrations"
               type="monotone"
               fill="url(#fillRegistrations)"
-              stroke="#3B82F6"
+              stroke="#FFFFFF"
               strokeWidth={2}
               stackId="b"
             />

@@ -13,5 +13,5 @@ export const REGISTRATION_STATUS_BADGES = {
   PENDING: "bg-warning/10 text-warning border-warning/30",
   CONFIRMED: "bg-success/10 text-success border-success/30",
   CANCELLED: "bg-error/10 text-error border-error/30",
-  ATTENDED: "bg-blue-600/15 text-blue-400 border-blue-500/40",
+  ATTENDED: "bg-white/10 text-white border-white/40",
 } as const;

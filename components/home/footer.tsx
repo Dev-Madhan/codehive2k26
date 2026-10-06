@@ -36,27 +36,27 @@ const coordinators = [
 
 export function Footer() {
   return (
-    <footer className="relative bg-black border-t border-[#152A54]/80 overflow-hidden">
+    <footer className="relative bg-black border-t border-[#262626] overflow-hidden">
       {/* Grid bg */}
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(21,42,84,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(21,42,84,0.04)_1px,transparent_1px)] bg-[size:60px_60px]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
       {/* CTA Banner */}
-      <div className="relative border-b border-[#152A54]/60">
+      <div className="relative border-b border-[#262626]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-widest text-blue-500 mb-1">
+            <p className="font-mono text-[11px] uppercase tracking-widest text-[#737373] mb-1">
               NATIONAL LEVEL HACKATHON // 23 &amp; 24 OCT 2026
             </p>
             <h3 className="font-mono text-2xl sm:text-3xl font-black uppercase text-white tracking-tight">
               READY TO FORGE YOUR CODE?
             </h3>
-            <p className="text-xs text-slate-400 mt-1 font-sans">
+            <p className="text-xs text-neutral-400 mt-1 font-sans">
               100% Free Entry • ₹20,000 Prize Pool • Certificates for all participants
             </p>
           </div>
           <Link
             href="/events"
-            className="inline-flex items-center gap-2 px-6 py-3 font-mono text-xs uppercase tracking-wider font-bold bg-blue-600 hover:bg-blue-500 text-white border border-blue-400/80 transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_28px_rgba(59,130,246,0.6)] shrink-0"
+            className="inline-flex items-center gap-2 px-6 py-3 font-mono text-xs uppercase tracking-wider font-bold bg-white hover:bg-[#E5E5E5] text-black border border-white transition-all shadow-[0_0_20px_rgba(255,255,255,0.15)] shrink-0"
           >
             Register Now <ArrowRightIcon className="size-3.5" />
           </Link>
@@ -69,15 +69,15 @@ export function Footer() {
           {/* Brand & Department */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-flex items-center gap-1.5 font-mono font-bold text-base tracking-tight text-white hover:opacity-90 transition-opacity mb-3">
-              <span className="text-blue-500 font-extrabold">&gt;</span>
+              <span className="text-white font-extrabold">&gt;</span>
               <span>code</span>
-              <span className="text-blue-400">hive</span>
-              <span className="text-[11px] text-sky-400 font-mono">_2k26 2.0</span>
+              <span className="text-white">hive</span>
+              <span className="text-[11px] text-[#737373] font-mono">_2k26 2.0</span>
             </Link>
-            <p className="text-xs text-slate-400 leading-relaxed mb-3 max-w-sm font-sans">
+            <p className="text-xs text-neutral-400 leading-relaxed mb-3 max-w-sm font-sans">
               Department of Computer Science and Business Systems, Vel Tech Multi Tech Dr. Rangarajan Dr. Sakunthala Engineering College (Autonomous, NBA &amp; NAAC &apos;A&apos; Grade).
             </p>
-            <p className="font-mono text-[11px] text-slate-500 uppercase tracking-wider mb-4">
+            <p className="font-mono text-[11px] text-[#737373] uppercase tracking-wider mb-4">
               In association with Sri Vensy Technologies Pvt Ltd &amp; Business Intelligence Club
             </p>
 
@@ -85,26 +85,26 @@ export function Footer() {
               href="https://instagram.com/codehive_2k26"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-3 py-1.5 border border-[#152A54] hover:border-pink-500/50 bg-[#060D1A] text-slate-400 hover:text-white font-mono text-xs transition-colors"
+              className="inline-flex items-center gap-2 px-3 py-1.5 border border-[#262626] hover:border-white bg-[#0F0F0F] text-neutral-300 hover:text-white font-mono text-xs transition-colors"
             >
-              <Share2Icon className="size-3.5 text-pink-400" />
+              <Share2Icon className="size-3.5 text-white" />
               <span>@codehive_2k26</span>
-              <ExternalLinkIcon className="size-3 text-slate-500" />
+              <ExternalLinkIcon className="size-3 text-[#737373]" />
             </a>
           </div>
 
           {/* Contact Coordinators Column */}
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-widest text-blue-400 mb-3 font-bold">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-[#737373] mb-3 font-bold">
               CONTACT COORDINATORS
             </p>
             <div className="space-y-3">
               {coordinators.map((c) => (
-                <div key={c.name} className="border-l-2 border-blue-500/60 pl-2.5 py-0.5">
+                <div key={c.name} className="border-l-2 border-white pl-2.5 py-0.5">
                   <p className="font-mono text-xs font-bold text-white uppercase">{c.name}</p>
                   <a
                     href={`tel:${c.tel}`}
-                    className="font-mono text-xs text-blue-400 hover:text-white transition-colors"
+                    className="font-mono text-xs text-neutral-300 hover:text-white transition-colors"
                   >
                     {c.phone}
                   </a>
@@ -116,7 +116,7 @@ export function Footer() {
           {/* Nav columns */}
           {footerLinks.slice(0, 2).map((col) => (
             <div key={col.label}>
-              <p className="font-mono text-[10px] uppercase tracking-widest text-slate-500 mb-3 font-bold">
+              <p className="font-mono text-[10px] uppercase tracking-widest text-[#737373] mb-3 font-bold">
                 {col.label}
               </p>
               <ul className="space-y-2">
@@ -124,7 +124,7 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="font-mono text-xs text-slate-400 hover:text-white transition-colors"
+                      className="font-mono text-xs text-neutral-400 hover:text-white transition-colors"
                     >
                       {link.label}
                     </Link>
@@ -136,11 +136,11 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 pt-6 border-t border-[#152A54]/40 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="font-mono text-[10px] uppercase tracking-widest text-slate-600">
+        <div className="mt-12 pt-6 border-t border-[#262626] flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-[#737373]">
             © 2026 CODEHIVE 2K26 2.0 • VEL TECH MULTI TECH (CSBS). ALL RIGHTS RESERVED.
           </p>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-slate-600">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-[#737373]">
             IDEAS × CODE × IMPACT
           </p>
         </div>

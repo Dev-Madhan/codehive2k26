@@ -169,16 +169,16 @@ export async function sendRegistrationConfirmationEmail(
   <title>Official Event Pass - ${params.eventName} | CodeHive 2K26</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
   <style type="text/css">
     body {
       margin: 0;
       padding: 0;
-      background-color: #030712;
+      background-color: #000000;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      color: #e2e8f0;
+      color: #E5E5E5;
     }
     table {
       border-collapse: collapse;
@@ -193,8 +193,23 @@ export async function sendRegistrationConfirmationEmail(
       text-decoration: none;
     }
     a {
-      color: #38bdf8;
-      text-decoration: none;
+      color: #FFFFFF;
+      text-decoration: underline;
+    }
+    /* Neutralize email client auto-link styling (dates, addresses, phone numbers) */
+    a[x-apple-data-detectors],
+    .no-link-style a,
+    span.MsoHyperlink {
+      color: inherit !important;
+      text-decoration: none !important;
+      font-size: inherit !important;
+      font-family: inherit !important;
+      font-weight: inherit !important;
+      line-height: inherit !important;
+    }
+    u + #body a {
+      color: inherit !important;
+      text-decoration: none !important;
     }
     @media only screen and (max-width: 620px) {
       .email-wrapper {
@@ -211,37 +226,37 @@ export async function sendRegistrationConfirmationEmail(
     }
   </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #030712; color: #e2e8f0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
-  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #030712; padding: 24px 12px;">
+<body id="body" style="margin: 0; padding: 0; background-color: #000000; color: #E5E5E5; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #000000; padding: 24px 12px;">
     <tr>
       <td align="center">
         <!-- Main Email Container -->
-        <table role="presentation" class="email-wrapper" border="0" cellpadding="0" cellspacing="0" width="600" style="max-width: 600px; width: 100%; background-color: #080f1e; border: 1px solid #1e293b; border-collapse: collapse; box-shadow: 0 20px 40px rgba(0,0,0,0.6);">
+        <table role="presentation" class="email-wrapper" border="0" cellpadding="0" cellspacing="0" width="600" style="max-width: 600px; width: 100%; background-color: #0F0F0F; border: 1px solid #262626; border-collapse: collapse;">
           
           <!-- Top Accent Bar -->
           <tr>
-            <td height="4" style="background: linear-gradient(90deg, #2563eb, #38bdf8, #2563eb); font-size: 0; line-height: 0;">&nbsp;</td>
+            <td height="3" style="background: #FFFFFF; font-size: 0; line-height: 0;">&nbsp;</td>
           </tr>
 
           <!-- Header Section -->
           <tr>
-            <td align="center" style="padding: 32px 24px 20px 24px; border-bottom: 1px solid #1e293b; text-align: center;">
+            <td align="center" style="padding: 32px 24px 20px 24px; border-bottom: 1px solid #262626; text-align: center;">
               <!-- Verification Pill Badge -->
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto 14px auto;">
                 <tr>
-                  <td style="background-color: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.35); padding: 5px 14px; border-radius: 9999px;">
-                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 1.5px; display: inline-flex; align-items: center;">
-                      <span style="color: #10b981; margin-right: 6px;">&#9679;</span> OFFICIAL ENTRY PASS // VERIFIED
+                  <td style="background-color: #161616; border: 1px solid #404040; padding: 5px 14px; border-radius: 0px;">
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 1.5px; display: inline-flex; align-items: center;">
+                      <span style="color: #FFFFFF; margin-right: 6px;">&#9679;</span> OFFICIAL ENTRY PASS // VERIFIED
                     </span>
                   </td>
                 </tr>
               </table>
 
               <!-- Main Brand Title -->
-              <h1 style="margin: 0 0 6px 0; font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 800; color: #ffffff; letter-spacing: 1.5px; text-transform: uppercase;">
+              <h1 style="margin: 0 0 6px 0; font-family: 'Space Grotesk', 'Inter', sans-serif; font-size: 26px; font-weight: 800; color: #FFFFFF; letter-spacing: 1.5px; text-transform: uppercase;">
                 CODEHIVE 2K26
               </h1>
-              <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase;">
+              <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; color: #737373; letter-spacing: 1px; text-transform: uppercase;">
                 National Level Technical Symposium &amp; Hackathon
               </p>
             </td>
@@ -252,39 +267,47 @@ export async function sendRegistrationConfirmationEmail(
             <td class="content-container" style="padding: 28px 24px;">
 
               <!-- Event Details Spotlight Card -->
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #040914; border: 1px solid #1e293b; margin-bottom: 24px;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 24px;">
                 <tr>
                   <td style="padding: 20px;">
-                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #A3A3A3; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;">
                       &gt; REGISTERED EVENT
                     </div>
-                    <h2 style="margin: 0 0 16px 0; font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 700; color: #ffffff; letter-spacing: -0.3px;">
+                    <h2 style="margin: 0 0 16px 0; font-family: 'Space Grotesk', 'Inter', sans-serif; font-size: 22px; font-weight: 700; color: #FFFFFF; letter-spacing: -0.3px;">
                       ${params.eventName}
                     </h2>
 
                     <!-- Event Metadata Table -->
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 13px;">
                       <tr>
-                        <td width="90" style="padding: 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase;">DATE:</td>
-                        <td style="padding: 6px 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #f8fafc;">${params.date}</td>
+                        <td width="90" style="padding: 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase;">DATE:</td>
+                        <td style="padding: 6px 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #FFFFFF !important;">
+                          <span style="color: #FFFFFF !important; text-decoration: none !important;">${params.date}</span>
+                        </td>
                       </tr>
                       <tr>
-                        <td style="padding: 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase;">VENUE:</td>
-                        <td style="padding: 6px 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #38bdf8;">${params.venue}</td>
+                        <td style="padding: 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase;">VENUE:</td>
+                        <td style="padding: 6px 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #FFFFFF !important;">
+                          <span style="color: #FFFFFF !important; text-decoration: none !important;">${params.venue}</span>
+                        </td>
                       </tr>
                       ${
                         params.college
                           ? `<tr>
-                              <td style="padding: 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase;">COLLEGE:</td>
-                              <td style="padding: 6px 0; font-family: 'Inter', sans-serif; color: #cbd5e1;">${params.college}</td>
+                              <td style="padding: 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase;">COLLEGE:</td>
+                              <td style="padding: 6px 0; font-family: 'Inter', sans-serif; color: #E5E5E5 !important;">
+                                <span style="color: #E5E5E5 !important; text-decoration: none !important;">${params.college}</span>
+                              </td>
                             </tr>`
                           : ""
                       }
                       ${
                         params.department
                           ? `<tr>
-                              <td style="padding: 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase;">DEPT:</td>
-                              <td style="padding: 6px 0; font-family: 'Inter', sans-serif; color: #cbd5e1;">${params.department}</td>
+                              <td style="padding: 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase;">DEPT:</td>
+                              <td style="padding: 6px 0; font-family: 'Inter', sans-serif; color: #E5E5E5 !important;">
+                                <span style="color: #E5E5E5 !important; text-decoration: none !important;">${params.department}</span>
+                              </td>
                             </tr>`
                           : ""
                       }
@@ -294,16 +317,16 @@ export async function sendRegistrationConfirmationEmail(
               </table>
 
               <!-- Pass Code Highlight Card -->
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #050e24; border: 2px solid #2563eb; margin-bottom: 24px; text-align: center;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 2px solid #FFFFFF; margin-bottom: 24px; text-align: center;">
                 <tr>
                   <td style="padding: 24px 18px;">
-                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #60a5fa; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">
                       [ OFFICIAL EVENT PASS CODE ]
                     </div>
-                    <div class="pass-code-text" style="font-family: 'JetBrains Mono', monospace; font-size: 34px; font-weight: 800; letter-spacing: 6px; color: #38bdf8; margin: 8px 0;">
+                    <div class="pass-code-text" style="font-family: 'JetBrains Mono', monospace; font-size: 34px; font-weight: 800; letter-spacing: 6px; color: #FFFFFF; margin: 8px 0;">
                       ${params.registrationNumber}
                     </div>
-                    <p style="margin: 8px 0 0 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #94a3b8; line-height: 1.5;">
+                    <p style="margin: 8px 0 0 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #A3A3A3; line-height: 1.5;">
                       Quote this 6-character pass code at the registration desk or present the QR code below for gate authorization.
                     </p>
                   </td>
@@ -311,18 +334,18 @@ export async function sendRegistrationConfirmationEmail(
               </table>
 
               <!-- Scannable Real-Time QR Gate Pass Box -->
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #040914; border: 1px solid #1e293b; margin-bottom: 24px; text-align: center;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 24px; text-align: center;">
                 <tr>
                   <td style="padding: 26px 20px;">
-                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #f8fafc; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px;">
-                      REAL-TIME GATE SCANNER PASS
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px;">
+                      [ REAL-TIME GATE SCANNER PASS ]
                     </div>
-                    <p style="margin: 0 0 16px 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #64748b;">
+                    <p style="margin: 0 0 16px 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #737373;">
                       Scan with any smartphone camera or gate optical scanner for real-time live pass verification.
                     </p>
 
                     <!-- Pure White QR Frame for 100% Optical Scanning Reliability -->
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto; background-color: #ffffff; border: 2px solid #38bdf8; border-radius: 4px;">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto; background-color: #FFFFFF; border: 2px solid #262626; border-radius: 0px;">
                       <tr>
                         <td align="center" style="padding: 14px;">
                           ${qrImageMarkup}
@@ -330,52 +353,52 @@ export async function sendRegistrationConfirmationEmail(
                       </tr>
                     </table>
 
-                    <div style="margin-top: 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b;">
-                      Pass ID: <span style="color: #94a3b8; font-weight: 600;">${params.registrationNumber}</span> &bull; Status: <span style="color: #10b981; font-weight: 600;">ACTIVE</span>
+                    <div style="margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #737373;">
+                      PASS ID: <span style="color: #FFFFFF; font-weight: 600;">${params.registrationNumber}</span> &bull; STATUS: <span style="color: #FFFFFF; font-weight: 700;">ACTIVE // VERIFIED</span>
                     </div>
 
                     <!-- Direct Real-Time Pass Link Button -->
                     <div style="margin-top: 18px;">
-                      <a href="${livePassUrl}" target="_blank" style="display: inline-block; background-color: #2563eb; color: #ffffff; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 11px 24px; border-radius: 2px; border: 1px solid #38bdf8; text-decoration: none; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);">
-                        View Live Digital Pass &rarr;
+                      <a href="${livePassUrl}" target="_blank" style="display: inline-block; background-color: #FFFFFF; color: #000000; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; padding: 12px 26px; border-radius: 0px; border: 1px solid #FFFFFF; text-decoration: none;">
+                        [ VIEW LIVE PASS ] &rarr;
                       </a>
                     </div>
                   </td>
                 </tr>
               </table>
 
-              <!-- Vel Tech Campus Transportation Details -->
+              <!-- Campus Transportation Details -->
               ${
                 params.transportOptIn
                   ? `
-                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #040d21; border: 1px solid #0284c7; margin-bottom: 24px;">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 24px;">
                   <tr>
                     <td style="padding: 18px 20px;">
-                      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; border-bottom: 1px solid #1e3a5f; padding-bottom: 6px;">
-                        🚌 VEL TECH CAMPUS TRANSPORTATION PASS (6:00 AM ONWARDS)
+                      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; border-bottom: 1px solid #262626; padding-bottom: 6px;">
+                        [ CAMPUS TRANSPORTATION PASS // 6:00 AM ONWARDS ]
                       </div>
-                      <p style="margin: 0 0 10px 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #cbd5e1; line-height: 1.5;">
-                        Complimentary campus bus service reserved for <strong style="color: #ffffff;">${params.passengersCount || 1} passenger(s)</strong>.
+                      <p style="margin: 0 0 10px 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #E5E5E5; line-height: 1.5;">
+                        Complimentary campus bus service reserved for <strong style="color: #FFFFFF;">${params.passengersCount || 1} passenger(s)</strong>.
                       </p>
-                      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+                      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 12px; color: #E5E5E5; line-height: 1.6;">
                         <tr>
-                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b; width: 140px; text-transform: uppercase;">Route Corridor:</td>
-                          <td style="padding: 4px 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #ffffff;">${params.pickupRoute || "Vel Tech Bus Network"}</td>
+                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #737373; width: 140px; text-transform: uppercase;">Route Corridor:</td>
+                          <td style="padding: 4px 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #FFFFFF;">${params.pickupRoute || "Bus Network"}</td>
                         </tr>
                         <tr>
-                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b; text-transform: uppercase;">Boarding Stop:</td>
-                          <td style="padding: 4px 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #38bdf8;">${params.pickupStop || "Designated Stop"}</td>
+                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #737373; text-transform: uppercase;">Boarding Stop:</td>
+                          <td style="padding: 4px 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #FFFFFF;">${params.pickupStop || "Designated Stop"}</td>
                         </tr>
                         <tr>
-                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b; text-transform: uppercase;">Exact Landmark:</td>
-                          <td style="padding: 4px 0; font-family: 'Inter', sans-serif; color: #f1f5f9;">${params.pickupLandmark || "Not Specified"}</td>
+                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #737373; text-transform: uppercase;">Exact Landmark:</td>
+                          <td style="padding: 4px 0; font-family: 'Inter', sans-serif; color: #E5E5E5;">${params.pickupLandmark || "Not Specified"}</td>
                         </tr>
                         <tr>
-                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b; text-transform: uppercase;">Reporting Time:</td>
-                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #fbbf24;">06:00 AM Sharp (Buses operate from 6:00 AM onwards)</td>
+                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #737373; text-transform: uppercase;">Reporting Time:</td>
+                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF;">06:00 AM Sharp (Buses operate from 6:00 AM onwards)</td>
                         </tr>
                       </table>
-                      <div style="margin-top: 10px; padding: 8px 12px; background-color: #02122c; border-left: 3px solid #38bdf8; font-family: 'Inter', sans-serif; font-size: 11px; color: #94a3b8; line-height: 1.4;">
+                      <div style="margin-top: 10px; padding: 8px 12px; background-color: #161616; border-left: 3px solid #FFFFFF; font-family: 'Inter', sans-serif; font-size: 11px; color: #A3A3A3; line-height: 1.4;">
                         Note: The student transport coordinator and bus captain will coordinate with the team leader via mobile. Please be at your landmark by 6:00 AM.
                       </div>
                     </td>
@@ -383,10 +406,10 @@ export async function sendRegistrationConfirmationEmail(
                 </table>
               `
                   : `
-                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #040914; border: 1px solid #1e293b; margin-bottom: 24px;">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 24px;">
                   <tr>
-                    <td style="padding: 12px 18px; font-family: 'Inter', sans-serif; font-size: 12px; color: #94a3b8;">
-                      <strong style="color: #cbd5e1;">Transportation:</strong> Self-Arranged Commute directly to Vel Tech campus.
+                    <td style="padding: 12px 18px; font-family: 'Inter', sans-serif; font-size: 12px; color: #737373;">
+                      <strong style="color: #E5E5E5;">Transportation:</strong> Self-Arranged Commute directly to campus.
                     </td>
                   </tr>
                 </table>
@@ -397,31 +420,31 @@ export async function sendRegistrationConfirmationEmail(
               ${
                 isTeam
                   ? `
-                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #040914; border: 1px solid #1e293b; margin-bottom: 24px;">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 24px;">
                   <tr>
                     <td style="padding: 18px 20px;">
-                      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; border-bottom: 1px solid #1e293b; padding-bottom: 6px;">
+                      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; border-bottom: 1px solid #262626; padding-bottom: 6px;">
                         TEAM CREDENTIALS: ${params.teamName ? params.teamName.toUpperCase() : "CONFIRMED SQUAD"}
                       </div>
-                      <p style="margin: 0 0 8px 0; font-family: 'Inter', sans-serif; font-size: 13px; color: #e2e8f0;">
-                        <strong style="color: #ffffff;">Team Leader:</strong> ${params.participantName}
+                      <p style="margin: 0 0 8px 0; font-family: 'Inter', sans-serif; font-size: 13px; color: #E2E8F0;">
+                        <strong style="color: #FFFFFF;">Team Leader:</strong> ${params.participantName}
                       </p>
                       ${
                         params.members && params.members.length > 0
                           ? `
                         <div style="margin-top: 12px;">
-                          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; margin-bottom: 6px;">
+                          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase; margin-bottom: 6px;">
                             Team Members:
                           </div>
-                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 12px; color: #cbd5e1;">
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 12px; color: #CBD5E1;">
                             ${params.members
                               .map(
                                 (m, idx) => `
                               <tr>
                                 <td style="padding: 3px 0; font-family: 'Inter', sans-serif;">
-                                  <span style="color: #38bdf8; font-family: 'JetBrains Mono', monospace; margin-right: 6px;">[0${idx + 1}]</span>
-                                  <strong style="color: #ffffff;">${m.name}</strong>
-                                  <span style="color: #64748b; margin-left: 4px;">(${m.phone})</span>
+                                  <span style="color: #737373; font-family: 'JetBrains Mono', monospace; margin-right: 6px;">[0${idx + 1}]</span>
+                                  <strong style="color: #FFFFFF;">${m.name}</strong>
+                                  <span style="color: #737373; margin-left: 4px;">(${m.phone})</span>
                                 </td>
                               </tr>
                             `
@@ -437,12 +460,12 @@ export async function sendRegistrationConfirmationEmail(
                 </table>
               `
                   : `
-                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #040914; border: 1px solid #1e293b; margin-bottom: 24px;">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 24px;">
                   <tr>
                     <td style="padding: 16px 20px;">
-                      <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 13px; color: #cbd5e1;">
-                        <span style="color: #64748b; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; font-size: 11px; margin-right: 8px;">ATTENDEE:</span>
-                        <strong style="color: #ffffff;">${params.participantName}</strong>
+                      <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 13px; color: #E5E5E5;">
+                        <span style="color: #737373; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; font-size: 11px; margin-right: 8px;">ATTENDEE:</span>
+                        <strong style="color: #FFFFFF;">${params.participantName}</strong>
                       </p>
                     </td>
                   </tr>
@@ -451,27 +474,27 @@ export async function sendRegistrationConfirmationEmail(
               }
 
               <!-- Gate Entry Instructions -->
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #040914; border-left: 4px solid #38bdf8; border-top: 1px solid #1e293b; border-right: 1px solid #1e293b; border-bottom: 1px solid #1e293b; margin-bottom: 24px;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border-left: 4px solid #FFFFFF; border-top: 1px solid #262626; border-right: 1px solid #262626; border-bottom: 1px solid #262626; margin-bottom: 24px;">
                 <tr>
                   <td style="padding: 18px 20px;">
-                    <div style="font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; color: #ffffff; margin-bottom: 8px;">
-                      Event Day Instructions
+                    <div style="font-family: 'Space Grotesk', 'Inter', sans-serif; font-size: 13px; font-weight: 700; color: #FFFFFF; margin-bottom: 8px;">
+                      EVENT DAY INSTRUCTIONS
                     </div>
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: 'Inter', sans-serif; font-size: 12px; color: #94a3b8; line-height: 1.6;">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: 'Inter', sans-serif; font-size: 12px; color: #A3A3A3; line-height: 1.6;">
                       <tr>
-                        <td width="16" valign="top" style="color: #38bdf8; font-weight: bold;">&bull;</td>
+                        <td width="16" valign="top" style="color: #FFFFFF; font-weight: bold;">&bull;</td>
                         <td style="padding-bottom: 6px;">Bring your physical college ID card and this digital entry pass.</td>
                       </tr>
                       <tr>
-                        <td width="16" valign="top" style="color: #38bdf8; font-weight: bold;">&bull;</td>
+                        <td width="16" valign="top" style="color: #FFFFFF; font-weight: bold;">&bull;</td>
                         <td style="padding-bottom: 6px;">Present the Pass Code or QR code at the registration desk for on-site gate check-in.</td>
                       </tr>
                       <tr>
-                        <td width="16" valign="top" style="color: #38bdf8; font-weight: bold;">&bull;</td>
+                        <td width="16" valign="top" style="color: #FFFFFF; font-weight: bold;">&bull;</td>
                         <td style="padding-bottom: 6px;">Please report 30 minutes prior to event commencement.</td>
                       </tr>
                       <tr>
-                        <td width="16" valign="top" style="color: #38bdf8; font-weight: bold;">&bull;</td>
+                        <td width="16" valign="top" style="color: #FFFFFF; font-weight: bold;">&bull;</td>
                         <td>This pass is non-transferable and valid exclusively for registered participants.</td>
                       </tr>
                     </table>
@@ -484,11 +507,11 @@ export async function sendRegistrationConfirmationEmail(
 
           <!-- Footer Section -->
           <tr>
-            <td style="border-top: 1px solid #1e293b; padding: 24px 20px; text-align: center; background-color: #030712;">
-              <p style="margin: 0 0 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">
+            <td style="border-top: 1px solid #262626; padding: 24px 20px; text-align: center; background-color: #080808;">
+              <p style="margin: 0 0 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #737373; text-transform: uppercase; letter-spacing: 1px;">
                 CODEHIVE 2K26 ORGANIZING COMMITTEE &bull; SECURE GATE VERIFICATION SYSTEM
               </p>
-              <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 11px; color: #475569;">
+              <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 11px; color: #404040;">
                 Department of Computer Science &amp; Engineering &bull; Official Digital Verification Service
               </p>
             </td>
@@ -511,7 +534,7 @@ export async function sendRegistrationConfirmationEmail(
 }
 
 // ---------------------------------------------------------------------------
-// Email OTP verification (Inter Font, High-Tech Verification Design)
+// Email OTP verification (Monochrome / B&W Edition, Space Grotesk + JetBrains Mono)
 // ---------------------------------------------------------------------------
 
 export interface SendOtpEmailParams {
@@ -534,58 +557,134 @@ export async function sendOtpEmail(params: SendOtpEmailParams) {
   <title>Verification Code - CodeHive 2K26</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <style type="text/css">
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000000;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      color: #E5E5E5;
+    }
+    table {
+      border-collapse: collapse;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+    a[x-apple-data-detectors],
+    .no-link-style a {
+      color: inherit !important;
+      text-decoration: none !important;
+      font-size: inherit !important;
+      font-family: inherit !important;
+      font-weight: inherit !important;
+      line-height: inherit !important;
+    }
+    u + #body a {
+      color: inherit !important;
+      text-decoration: none !important;
+    }
+    @media only screen and (max-width: 600px) {
+      .email-wrapper {
+        width: 100% !important;
+        padding: 12px !important;
+      }
+      .otp-code-text {
+        font-size: 28px !important;
+        letter-spacing: 6px !important;
+      }
+    }
+  </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #030712; color: #e2e8f0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
-  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #030712; padding: 32px 12px;">
+<body id="body" style="margin: 0; padding: 0; background-color: #000000; color: #E5E5E5; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #000000; padding: 32px 12px;">
     <tr>
       <td align="center">
-        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="560" style="max-width: 560px; width: 100%; background-color: #080f1e; border: 1px solid #1e293b; box-shadow: 0 20px 40px rgba(0,0,0,0.6);">
+        <!-- Main Email Frame -->
+        <table role="presentation" class="email-wrapper" border="0" cellpadding="0" cellspacing="0" width="560" style="max-width: 560px; width: 100%; background-color: #0F0F0F; border: 1px solid #262626; border-collapse: collapse;">
+          
+          <!-- Top Pure White Accent Bar -->
           <tr>
-            <td height="4" style="background: linear-gradient(90deg, #2563eb, #38bdf8, #2563eb); font-size: 0; line-height: 0;">&nbsp;</td>
+            <td height="3" style="background: #FFFFFF; font-size: 0; line-height: 0;">&nbsp;</td>
           </tr>
-          <tr>
-            <td style="padding: 32px 24px 20px 24px; text-align: center; border-bottom: 1px solid #1e293b;">
-              <h1 style="margin: 0 0 6px 0; font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 800; color: #38bdf8; letter-spacing: 2px; text-transform: uppercase;">
-                CODEHIVE 2K26
-              </h1>
-              <p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #64748b; letter-spacing: 1.5px; text-transform: uppercase;">
-                &gt; Identity Authorization System
-              </p>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding: 32px 24px;">
-              <p style="margin: 0 0 16px 0; font-family: 'Inter', sans-serif; font-size: 14px; color: #94a3b8;">
-                Hello,
-              </p>
-              <p style="margin: 0 0 24px 0; font-family: 'Inter', sans-serif; font-size: 14px; color: #cbd5e1; line-height: 1.6;">
-                Use the verification code below to authorize your email address ${eventContext}. This code is valid for <strong>5 minutes</strong>.
-              </p>
 
-              <!-- OTP Code Display Card -->
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #040914; border: 1px solid #2563eb; text-align: center; margin: 24px 0;">
+          <!-- Header -->
+          <tr>
+            <td style="padding: 32px 24px 22px 24px; text-align: center; border-bottom: 1px solid #262626;">
+              <!-- Monospaced Badge -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto 12px auto;">
                 <tr>
-                  <td style="padding: 24px 16px;">
-                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #60a5fa; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">
-                      [ ONE-TIME PASSCODE ]
-                    </div>
-                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 38px; font-weight: 800; letter-spacing: 10px; color: #38bdf8; padding-left: 10px;">
-                      ${params.otp}
-                    </div>
+                  <td style="background-color: #161616; border: 1px solid #404040; padding: 5px 14px;">
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 1.5px;">
+                      [ IDENTITY VERIFICATION // SECURE GATEWAY ]
+                    </span>
                   </td>
                 </tr>
               </table>
 
-              <p style="margin: 20px 0 0 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #64748b; line-height: 1.5;">
-                If you did not initiate this request, you can safely ignore this email. Never share your verification code with anyone.
+              <h1 style="margin: 0 0 6px 0; font-family: 'Space Grotesk', 'Inter', sans-serif; font-size: 26px; font-weight: 800; color: #FFFFFF; letter-spacing: 1.5px; text-transform: uppercase;">
+                CODEHIVE 2K26
+              </h1>
+              <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; color: #737373; letter-spacing: 1.5px; text-transform: uppercase;">
+                &gt; Automated Identity Authorization System
               </p>
             </td>
           </tr>
+
+          <!-- Body -->
           <tr>
-            <td style="border-top: 1px solid #1e293b; padding: 20px; text-align: center; background-color: #030712;">
-              <p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #475569; letter-spacing: 1px;">
-                SECURE ACCESS // CODEHIVE 2K26 ORGANIZING COMMITTEE
+            <td style="padding: 32px 24px;">
+              <p style="margin: 0 0 16px 0; font-family: 'Inter', sans-serif; font-size: 14px; color: #A3A3A3;">
+                Hello,
+              </p>
+              <p style="margin: 0 0 24px 0; font-family: 'Inter', sans-serif; font-size: 14px; color: #E5E5E5; line-height: 1.6;">
+                Use the verification code below to authorize your email address ${eventContext}. This code is valid for <strong style="color: #FFFFFF;">5 minutes</strong>.
+              </p>
+
+              <!-- OTP Code Display Card -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 2px solid #FFFFFF; text-align: center; margin: 26px 0;">
+                <tr>
+                  <td style="padding: 26px 16px;">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+                      [ ONE-TIME PASSCODE ]
+                    </div>
+                    <div class="otp-code-text" style="font-family: 'JetBrains Mono', monospace; font-size: 38px; font-weight: 800; letter-spacing: 10px; color: #FFFFFF; padding-left: 10px;">
+                      ${params.otp}
+                    </div>
+                    <p style="margin: 12px 0 0 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #737373; letter-spacing: 1px;">
+                      DO NOT SHARE THIS CODE WITH ANYONE
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Security Notice -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border-left: 3px solid #FFFFFF; border-top: 1px solid #262626; border-right: 1px solid #262626; border-bottom: 1px solid #262626; margin: 24px 0;">
+                <tr>
+                  <td style="padding: 14px 16px;">
+                    <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #D4D4D4; line-height: 1.5;">
+                      <strong style="color: #FFFFFF; font-family: 'JetBrains Mono', monospace;">// NOTE:</strong> If you did not initiate this request, you can safely ignore this email. The CodeHive team will never ask for your verification code.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin: 20px 0 0 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #737373; line-height: 1.5;">
+                This is an automated system transmission. Please do not reply directly to this email.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="border-top: 1px solid #262626; padding: 22px 20px; text-align: center; background-color: #080808;">
+              <p style="margin: 0 0 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #737373; text-transform: uppercase; letter-spacing: 1px;">
+                CODEHIVE 2K26 ORGANIZING COMMITTEE &bull; SECURE GATEWAY
+              </p>
+              <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 11px; color: #404040;">
+                Department of Computer Science &amp; Engineering &bull; All Rights Reserved
               </p>
             </td>
           </tr>
@@ -603,3 +702,436 @@ export async function sendOtpEmail(params: SendOtpEmailParams) {
     html: htmlContent,
   });
 }
+
+
+export async function sendEventPostponedEmail(
+  params: SendRegistrationEmailParams
+) {
+  const isTeam = Boolean(params.teamName || (params.members && params.members.length > 0));
+  const livePassUrl = params.passUrl || getLivePassUrl(params.registrationNumber);
+
+  // Generate QR buffer if not explicitly passed
+  let qrBuffer = params.qrBuffer;
+  if (!qrBuffer) {
+    try {
+      // The QR code encodes the live digital pass verification URL.
+      // When scanned with any smartphone camera, it opens the attendee's live verified pass in real time.
+      qrBuffer = await generateQrBuffer(livePassUrl);
+    } catch (err) {
+      console.error("QR Code Buffer generation fallback error:", err);
+    }
+  }
+
+  const attachments: MailAttachment[] = [];
+  let qrImageMarkup = "";
+
+  if (qrBuffer) {
+    const qrCid = `pass-qr-${params.registrationNumber}@codehive`;
+    attachments.push({
+      filename: `codehive-pass-${params.registrationNumber}.png`,
+      content: qrBuffer,
+      cid: qrCid,
+      contentType: "image/png",
+    });
+
+    qrImageMarkup = `
+      <img
+        src="cid:${qrCid}"
+        alt="Pass QR Code ${params.registrationNumber}"
+        width="170"
+        height="170"
+        style="display: block; width: 170px; height: 170px; margin: 0 auto; border: 0; outline: none; text-decoration: none;"
+      />
+    `;
+  } else if (params.qrCodeUrl && !params.qrCodeUrl.startsWith("data:")) {
+    // Hosted external HTTPS URL
+    qrImageMarkup = `
+      <img
+        src="${params.qrCodeUrl}"
+        alt="Pass QR Code ${params.registrationNumber}"
+        width="170"
+        height="170"
+        style="display: block; width: 170px; height: 170px; margin: 0 auto; border: 0;"
+      />
+    `;
+  }
+
+  const htmlContent = `
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UPDATED EVENT PASS - POSTPONED - ${params.eventName} | CodeHive 2K26</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <style type="text/css">
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000000;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      color: #E5E5E5;
+    }
+    table {
+      border-collapse: collapse;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+    img {
+      border: 0;
+      height: auto;
+      line-height: 100%;
+      outline: none;
+      text-decoration: none;
+    }
+    a {
+      color: #FFFFFF;
+      text-decoration: underline;
+    }
+    /* Neutralize email client auto-link styling (dates, addresses, phone numbers) */
+    a[x-apple-data-detectors],
+    .no-link-style a,
+    span.MsoHyperlink {
+      color: inherit !important;
+      text-decoration: none !important;
+      font-size: inherit !important;
+      font-family: inherit !important;
+      font-weight: inherit !important;
+      line-height: inherit !important;
+    }
+    u + #body a {
+      color: inherit !important;
+      text-decoration: none !important;
+    }
+    @media only screen and (max-width: 620px) {
+      .email-wrapper {
+        width: 100% !important;
+        padding: 12px !important;
+      }
+      .content-container {
+        padding: 20px 16px !important;
+      }
+      .pass-code-text {
+        font-size: 26px !important;
+        letter-spacing: 4px !important;
+      }
+    }
+  </style>
+</head>
+<body id="body" style="margin: 0; padding: 0; background-color: #000000; color: #E5E5E5; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #000000; padding: 24px 12px;">
+    <tr>
+      <td align="center">
+        <!-- Main Email Container -->
+        <table role="presentation" class="email-wrapper" border="0" cellpadding="0" cellspacing="0" width="600" style="max-width: 600px; width: 100%; background-color: #0F0F0F; border: 1px solid #262626; border-collapse: collapse;">
+          
+          <!-- Top Accent Bar -->
+          <tr>
+            <td height="3" style="background: #FFFFFF; font-size: 0; line-height: 0;">&nbsp;</td>
+          </tr>
+
+          <!-- Header Section -->
+          <tr>
+            <td align="center" style="padding: 32px 24px 20px 24px; border-bottom: 1px solid #262626; text-align: center;">
+              <!-- Verification Pill Badge -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto 14px auto;">
+                <tr>
+                  <td style="background-color: #161616; border: 1px solid #404040; padding: 5px 14px; border-radius: 0px;">
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 1.5px; display: inline-flex; align-items: center;">
+                      <span style="color: #FFFFFF; margin-right: 6px;">&#9679;</span> OFFICIAL ENTRY PASS // VERIFIED
+                    </span>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Postponed Banner -->
+<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #FFFFFF; margin-bottom: 20px;"><tr><td align="center" style="padding: 12px; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; letter-spacing: 2px;">IMPORTANT NOTICE: EVENT POSTPONED TO OCT 23</td></tr></table>
+<!-- Main Brand Title -->
+              <h1 style="margin: 0 0 6px 0; font-family: 'Space Grotesk', 'Inter', sans-serif; font-size: 26px; font-weight: 800; color: #FFFFFF; letter-spacing: 1.5px; text-transform: uppercase;">
+                CODEHIVE 2K26
+              </h1>
+              <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; color: #737373; letter-spacing: 1px; text-transform: uppercase;">
+                National Level Technical Symposium &amp; Hackathon
+              </p>
+            </td>
+          </tr>
+
+          <!-- Body Container -->
+          <tr>
+            <td class="content-container" style="padding: 28px 24px;">
+
+              <!-- Event Details Spotlight Card -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 20px;">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #A3A3A3; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;">
+                      &gt; REGISTERED EVENT
+                    </div>
+                    <h2 style="margin: 0 0 16px 0; font-family: 'Space Grotesk', 'Inter', sans-serif; font-size: 22px; font-weight: 700; color: #FFFFFF; letter-spacing: -0.3px;">
+                      ${params.eventName}
+                    </h2>
+
+                    <!-- Event Metadata Table -->
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 13px;">
+                      <tr>
+                        <td width="90" style="padding: 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase;">DATE:</td>
+                        <td style="padding: 6px 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #FFFFFF !important;">
+                          <span style="color: #FFFFFF !important; text-decoration: none !important;">${params.date}</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase;">VENUE:</td>
+                        <td style="padding: 6px 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #FFFFFF !important;">
+                          <span style="color: #FFFFFF !important; text-decoration: none !important;">${params.venue}</span>
+                        </td>
+                      </tr>
+                      ${
+                        params.college
+                          ? `<tr>
+                              <td style="padding: 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase;">COLLEGE:</td>
+                              <td style="padding: 6px 0; font-family: 'Inter', sans-serif; color: #E5E5E5 !important;">
+                                <span style="color: #E5E5E5 !important; text-decoration: none !important;">${params.college}</span>
+                              </td>
+                            </tr>`
+                          : ""
+                      }
+                      ${
+                        params.department
+                          ? `<tr>
+                              <td style="padding: 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase;">DEPT:</td>
+                              <td style="padding: 6px 0; font-family: 'Inter', sans-serif; color: #E5E5E5 !important;">
+                                <span style="color: #E5E5E5 !important; text-decoration: none !important;">${params.department}</span>
+                              </td>
+                            </tr>`
+                          : ""
+                      }
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Pass Code Highlight Card -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 2px solid #FFFFFF; margin-bottom: 24px; text-align: center;">
+                <tr>
+                  <td style="padding: 24px 18px;">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">
+                      [ OFFICIAL EVENT PASS CODE ]
+                    </div>
+                    <div class="pass-code-text" style="font-family: 'JetBrains Mono', monospace; font-size: 34px; font-weight: 800; letter-spacing: 6px; color: #FFFFFF; margin: 8px 0;">
+                      ${params.registrationNumber}
+                    </div>
+                    <p style="margin: 8px 0 0 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #A3A3A3; line-height: 1.5;">
+                      Quote this 6-character pass code at the registration desk or present the QR code below for gate authorization.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Scannable Real-Time QR Gate Pass Box -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 24px; text-align: center;">
+                <tr>
+                  <td style="padding: 26px 20px;">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px;">
+                      [ REAL-TIME GATE SCANNER PASS ]
+                    </div>
+                    <p style="margin: 0 0 16px 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #737373;">
+                      Scan with any smartphone camera or gate optical scanner for real-time live pass verification.
+                    </p>
+
+                    <!-- Pure White QR Frame for 100% Optical Scanning Reliability -->
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto; background-color: #FFFFFF; border: 2px solid #262626; border-radius: 0px;">
+                      <tr>
+                        <td align="center" style="padding: 14px;">
+                          ${qrImageMarkup}
+                        </td>
+                      </tr>
+                    </table>
+
+                    <div style="margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #737373;">
+                      PASS ID: <span style="color: #FFFFFF; font-weight: 600;">${params.registrationNumber}</span> &bull; STATUS: <span style="color: #FFFFFF; font-weight: 700;">ACTIVE // VERIFIED</span>
+                    </div>
+
+                    <!-- Direct Real-Time Pass Link Button -->
+                    <div style="margin-top: 18px;">
+                      <a href="${livePassUrl}" target="_blank" style="display: inline-block; background-color: #FFFFFF; color: #000000; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; padding: 12px 26px; border-radius: 0px; border: 1px solid #FFFFFF; text-decoration: none;">
+                        [ VIEW LIVE PASS ] &rarr;
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Campus Transportation Details -->
+              ${
+                params.transportOptIn
+                  ? `
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 24px;">
+                  <tr>
+                    <td style="padding: 18px 20px;">
+                      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; border-bottom: 1px solid #262626; padding-bottom: 6px;">
+                        [ CAMPUS TRANSPORTATION PASS // 6:00 AM ONWARDS ]
+                      </div>
+                      <p style="margin: 0 0 10px 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #E5E5E5; line-height: 1.5;">
+                        Complimentary campus bus service reserved for <strong style="color: #FFFFFF;">${params.passengersCount || 1} passenger(s)</strong>.
+                      </p>
+                      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 12px; color: #E5E5E5; line-height: 1.6;">
+                        <tr>
+                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #737373; width: 140px; text-transform: uppercase;">Route Corridor:</td>
+                          <td style="padding: 4px 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #FFFFFF;">${params.pickupRoute || "Bus Network"}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #737373; text-transform: uppercase;">Boarding Stop:</td>
+                          <td style="padding: 4px 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #FFFFFF;">${params.pickupStop || "Designated Stop"}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #737373; text-transform: uppercase;">Exact Landmark:</td>
+                          <td style="padding: 4px 0; font-family: 'Inter', sans-serif; color: #E5E5E5;">${params.pickupLandmark || "Not Specified"}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #737373; text-transform: uppercase;">Reporting Time:</td>
+                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF;">06:00 AM Sharp (Buses operate from 6:00 AM onwards)</td>
+                        </tr>
+                      </table>
+                      <div style="margin-top: 10px; padding: 8px 12px; background-color: #161616; border-left: 3px solid #FFFFFF; font-family: 'Inter', sans-serif; font-size: 11px; color: #A3A3A3; line-height: 1.4;">
+                        Note: The student transport coordinator and bus captain will coordinate with the team leader via mobile. Please be at your landmark by 6:00 AM.
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              `
+                  : `
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 24px;">
+                  <tr>
+                    <td style="padding: 12px 18px; font-family: 'Inter', sans-serif; font-size: 12px; color: #737373;">
+                      <strong style="color: #E5E5E5;">Transportation:</strong> Self-Arranged Commute directly to campus.
+                    </td>
+                  </tr>
+                </table>
+              `
+              }
+
+              <!-- Participant & Team Details -->
+              ${
+                isTeam
+                  ? `
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 24px;">
+                  <tr>
+                    <td style="padding: 18px 20px;">
+                      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; border-bottom: 1px solid #262626; padding-bottom: 6px;">
+                        TEAM CREDENTIALS: ${params.teamName ? params.teamName.toUpperCase() : "CONFIRMED SQUAD"}
+                      </div>
+                      <p style="margin: 0 0 8px 0; font-family: 'Inter', sans-serif; font-size: 13px; color: #E2E8F0;">
+                        <strong style="color: #FFFFFF;">Team Leader:</strong> ${params.participantName}
+                      </p>
+                      ${
+                        params.members && params.members.length > 0
+                          ? `
+                        <div style="margin-top: 12px;">
+                          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase; margin-bottom: 6px;">
+                            Team Members:
+                          </div>
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 12px; color: #CBD5E1;">
+                            ${params.members
+                              .map(
+                                (m, idx) => `
+                              <tr>
+                                <td style="padding: 3px 0; font-family: 'Inter', sans-serif;">
+                                  <span style="color: #737373; font-family: 'JetBrains Mono', monospace; margin-right: 6px;">[0${idx + 1}]</span>
+                                  <strong style="color: #FFFFFF;">${m.name}</strong>
+                                  <span style="color: #737373; margin-left: 4px;">(${m.phone})</span>
+                                </td>
+                              </tr>
+                            `
+                              )
+                              .join("")}
+                          </table>
+                        </div>
+                      `
+                          : ""
+                      }
+                    </td>
+                  </tr>
+                </table>
+              `
+                  : `
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 24px;">
+                  <tr>
+                    <td style="padding: 16px 20px;">
+                      <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 13px; color: #E5E5E5;">
+                        <span style="color: #737373; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; font-size: 11px; margin-right: 8px;">ATTENDEE:</span>
+                        <strong style="color: #FFFFFF;">${params.participantName}</strong>
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              `
+              }
+
+              <!-- Gate Entry Instructions -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border-left: 4px solid #FFFFFF; border-top: 1px solid #262626; border-right: 1px solid #262626; border-bottom: 1px solid #262626; margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 18px 20px;">
+                    <div style="font-family: 'Space Grotesk', 'Inter', sans-serif; font-size: 13px; font-weight: 700; color: #FFFFFF; margin-bottom: 8px;">
+                      EVENT DAY INSTRUCTIONS
+                    </div>
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: 'Inter', sans-serif; font-size: 12px; color: #A3A3A3; line-height: 1.6;">
+                      <tr>
+                        <td width="16" valign="top" style="color: #FFFFFF; font-weight: bold;">&bull;</td>
+                        <td style="padding-bottom: 6px;">Bring your physical college ID card and this digital entry pass.</td>
+                      </tr>
+                      <tr>
+                        <td width="16" valign="top" style="color: #FFFFFF; font-weight: bold;">&bull;</td>
+                        <td style="padding-bottom: 6px;">Present the Pass Code or QR code at the registration desk for on-site gate check-in.</td>
+                      </tr>
+                      <tr>
+                        <td width="16" valign="top" style="color: #FFFFFF; font-weight: bold;">&bull;</td>
+                        <td style="padding-bottom: 6px;">Please report 30 minutes prior to event commencement.</td>
+                      </tr>
+                      <tr>
+                        <td width="16" valign="top" style="color: #FFFFFF; font-weight: bold;">&bull;</td>
+                        <td>This pass is non-transferable and valid exclusively for registered participants.</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- Footer Section -->
+          <tr>
+            <td style="border-top: 1px solid #262626; padding: 24px 20px; text-align: center; background-color: #080808;">
+              <p style="margin: 0 0 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #737373; text-transform: uppercase; letter-spacing: 1px;">
+                CODEHIVE 2K26 ORGANIZING COMMITTEE &bull; SECURE GATE VERIFICATION SYSTEM
+              </p>
+              <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 11px; color: #404040;">
+                Department of Computer Science &amp; Engineering &bull; Official Digital Verification Service
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `;
+
+  return sendMail({
+    to: params.to,
+    subject: `Official Event Pass [${params.registrationNumber}] — ${params.eventName} | CodeHive 2K26`,
+    html: htmlContent,
+    attachments,
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Email OTP verification (Monochrome / B&W Edition, Space Grotesk + JetBrains Mono)
+// ---------------------------------------------------------------------------
+

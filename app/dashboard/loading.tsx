@@ -14,7 +14,7 @@ export default function DashboardLoading() {
       }
     >
       <AppSidebar variant="inset" />
-      <SidebarInset className="bg-[#030712] min-h-screen flex flex-col font-mono text-white">
+      <SidebarInset className="bg-black min-h-screen flex flex-col font-mono text-white">
         <SiteHeader />
         <div className="flex flex-1 flex-col p-4 md:p-6 space-y-6">
           {/* KPI Section Cards Skeleton */}
@@ -22,7 +22,7 @@ export default function DashboardLoading() {
             {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
-                className="border border-[#152A54] bg-[#060D1A] p-4 space-y-3"
+                className="border border-[#262626] bg-[#0F0F0F] p-4 space-y-3"
               >
                 <div className="flex items-center justify-between">
                   <Skeleton className="h-3.5 w-24" />
@@ -35,8 +35,8 @@ export default function DashboardLoading() {
           </div>
 
           {/* Interactive Chart Container Skeleton */}
-          <div className="border border-[#152A54] bg-[#060D1A] p-5 space-y-4">
-            <div className="flex items-center justify-between border-b border-[#152A54] pb-3">
+          <div className="border border-[#262626] bg-[#0F0F0F] p-5 space-y-4">
+            <div className="flex items-center justify-between border-b border-[#262626] pb-3">
               <div className="space-y-1">
                 <Skeleton className="h-5 w-44" />
                 <Skeleton className="h-3.5 w-60" />
@@ -47,7 +47,7 @@ export default function DashboardLoading() {
               {[40, 65, 30, 85, 55, 90, 45, 75, 60, 95, 70, 80].map((h, idx) => (
                 <div
                   key={idx}
-                  className="flex-1 bg-[#081224] border border-[#152A54]/40"
+                  className="flex-1 bg-[#161616] border border-[#262626]"
                   style={{ height: `${h}%` }}
                 />
               ))}
@@ -55,12 +55,12 @@ export default function DashboardLoading() {
           </div>
 
           {/* Data Table Skeleton */}
-          <div className="border border-[#152A54] bg-[#060D1A] overflow-hidden">
-            <div className="p-4 border-b border-[#152A54] flex justify-between items-center">
+          <div className="border border-[#262626] bg-[#0F0F0F] overflow-hidden">
+            <div className="p-4 border-b border-[#262626] flex justify-between items-center">
               <Skeleton className="h-5 w-48" />
               <Skeleton className="h-9 w-32" />
             </div>
-            <div className="divide-y divide-[#152A54]">
+            <div className="divide-y divide-[#262626]">
               {[1, 2, 3, 4, 5].map((row) => (
                 <div key={row} className="p-4 flex items-center justify-between gap-4">
                   <Skeleton className="h-4 w-28" />

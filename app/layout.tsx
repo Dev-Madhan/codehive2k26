@@ -51,7 +51,7 @@ export default function RootLayout({
       )}
       style={{ colorScheme: "dark" }}
     >
-      <body className="min-h-full flex flex-col font-sans bg-black text-white selection:bg-blue-600 selection:text-white">
+      <body className="min-h-full flex flex-col font-sans bg-black text-white selection:bg-white selection:text-black">
         <TooltipProvider>{children}</TooltipProvider>
         <Toaster />
       </body>

@@ -72,10 +72,10 @@ export function DropdownMenuAvatar({ variant = "pill" }: DropdownMenuAvatarProps
           variant === "pill" ? (
             <button
               type="button"
-              className="flex items-center gap-2 p-1 sm:py-1 sm:pl-1.5 sm:pr-3 rounded-none border border-[#152A54] bg-[#060D1A] hover:bg-[#0B162C] hover:border-blue-500/60 transition-all duration-200 group cursor-pointer shadow-xs focus:outline-none"
+              className="flex items-center gap-2 p-1 sm:py-1 sm:pl-1.5 sm:pr-3 rounded-none border border-[#262626] bg-[#0F0F0F] hover:bg-[#161616] hover:border-[#404040] transition-all duration-200 group cursor-pointer shadow-xs focus:outline-none"
               title={`Signed in as ${userName}`}
             >
-              <Avatar className="size-7 rounded-none border border-blue-500/80 group-hover:border-blue-400 transition-colors shrink-0">
+              <Avatar className="size-7 rounded-none border border-[#404040] group-hover:border-white transition-colors shrink-0">
                 {userImage && (
                   <AvatarImage
                     src={userImage}
@@ -83,7 +83,7 @@ export function DropdownMenuAvatar({ variant = "pill" }: DropdownMenuAvatarProps
                     className="rounded-none object-cover"
                   />
                 )}
-                <AvatarFallback className="rounded-none bg-[#0E1B38] text-[11px] font-mono font-bold text-blue-400">
+                <AvatarFallback className="rounded-none bg-[#161616] text-[11px] font-mono font-bold text-white">
                   {initials}
                 </AvatarFallback>
               </Avatar>
@@ -95,11 +95,11 @@ export function DropdownMenuAvatar({ variant = "pill" }: DropdownMenuAvatarProps
             <Button
               variant="ghost"
               size="icon"
-              className="rounded-none cursor-pointer hover:bg-[#0B162C] border border-[#152A54] hover:border-blue-500/50 transition-colors"
+              className="rounded-none cursor-pointer hover:bg-[#161616] border border-[#262626] hover:border-[#404040] transition-colors"
             >
-              <Avatar className="size-7 rounded-none border border-blue-500/80 hover:border-blue-400 transition-colors">
+              <Avatar className="size-7 rounded-none border border-[#404040] hover:border-white transition-colors">
                 {userImage && <AvatarImage src={userImage} alt={userName} className="rounded-none object-cover" />}
-                <AvatarFallback className="rounded-none bg-[#0E1B38] text-[11px] font-mono font-bold text-blue-400">
+                <AvatarFallback className="rounded-none bg-[#161616] text-[11px] font-mono font-bold text-white">
                   {initials}
                 </AvatarFallback>
               </Avatar>
@@ -107,18 +107,18 @@ export function DropdownMenuAvatar({ variant = "pill" }: DropdownMenuAvatarProps
           )
         }
       />
-      <DropdownMenuContent align="end" className="w-64 p-1.5 bg-[#060D1A] border-[#152A54] shadow-2xl rounded-none">
+      <DropdownMenuContent align="end" className="w-64 p-1.5 bg-[#0F0F0F] border-[#262626] shadow-2xl rounded-none">
         {/* User Identity Header */}
-        <div className="px-3 py-2.5 flex items-center justify-between gap-2 border-b border-[#152A54]">
+        <div className="px-3 py-2.5 flex items-center justify-between gap-2 border-b border-[#262626]">
           <div className="flex flex-col min-w-0">
             <p className="text-xs font-mono font-bold text-white truncate">{userName}</p>
             {userEmail && (
-              <p className="text-[11px] font-mono text-slate-400 truncate mt-0.5">{userEmail}</p>
+              <p className="text-[11px] font-mono text-neutral-400 truncate mt-0.5">{userEmail}</p>
             )}
           </div>
           <Badge
             variant="outline"
-            className="capitalize shrink-0 font-mono text-[10px] rounded-none border-blue-500/40 text-blue-400 bg-blue-500/10 px-1.5 py-0.5"
+            className="capitalize shrink-0 font-mono text-[10px] rounded-none border-[#404040] text-neutral-300 bg-[#161616] px-1.5 py-0.5"
           >
             {roleLabel}
           </Badge>
@@ -127,15 +127,15 @@ export function DropdownMenuAvatar({ variant = "pill" }: DropdownMenuAvatarProps
         {/* Participant Navigation Section */}
         <DropdownMenuGroup className="py-1">
           <DropdownMenuItem
-            className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-[#0B162C] focus:bg-[#0B162C] text-slate-200 hover:text-white transition-colors"
+            className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-[#161616] focus:bg-[#161616] text-neutral-300 hover:text-white transition-colors"
             onClick={() => router.push("/events")}
           >
-            <div className="p-1 rounded-none bg-blue-600/15 text-blue-400">
+            <div className="p-1 rounded-none bg-[#161616] text-white border border-[#262626]">
               <CalendarIcon className="size-4" />
             </div>
             <div className="flex flex-col">
               <span className="text-xs font-mono font-medium">Browse Events</span>
-              <span className="text-[10px] text-slate-400">Hackathons & workshops</span>
+              <span className="text-[10px] text-[#737373]">Hackathons & workshops</span>
             </div>
           </DropdownMenuItem>
         </DropdownMenuGroup>
@@ -143,47 +143,47 @@ export function DropdownMenuAvatar({ variant = "pill" }: DropdownMenuAvatarProps
         {/* Admin Console Section */}
         {isAdmin && (
           <>
-            <DropdownMenuSeparator className="bg-[#152A54]" />
-            <div className="px-3 py-1 text-[10px] font-mono font-semibold text-slate-400 tracking-wider uppercase">
+            <DropdownMenuSeparator className="bg-[#262626]" />
+            <div className="px-3 py-1 text-[10px] font-mono font-semibold text-[#737373] tracking-wider uppercase">
               Admin Portal
             </div>
             <DropdownMenuGroup>
               <DropdownMenuItem
-                className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-[#0B162C] focus:bg-[#0B162C] text-slate-200 hover:text-white transition-colors"
+                className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-[#161616] focus:bg-[#161616] text-neutral-300 hover:text-white transition-colors"
                 onClick={() => router.push("/dashboard")}
               >
-                <div className="p-1 rounded-none bg-blue-600/15 text-blue-400">
+                <div className="p-1 rounded-none bg-[#161616] text-white border border-[#262626]">
                   <LayoutDashboardIcon className="size-4" />
                 </div>
                 <div className="flex flex-col">
                   <span className="text-xs font-mono font-medium">Live Dashboard</span>
-                  <span className="text-[10px] text-slate-400">Operations & analytics</span>
+                  <span className="text-[10px] text-[#737373]">Operations & analytics</span>
                 </div>
               </DropdownMenuItem>
 
               <DropdownMenuItem
-                className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-[#0B162C] focus:bg-[#0B162C] text-slate-200 hover:text-white transition-colors"
+                className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-[#161616] focus:bg-[#161616] text-neutral-300 hover:text-white transition-colors"
                 onClick={() => router.push("/admin/dashboard")}
               >
-                <div className="p-1 rounded-none bg-blue-600/15 text-blue-400">
+                <div className="p-1 rounded-none bg-[#161616] text-white border border-[#262626]">
                   <ShieldCheckIcon className="size-4" />
                 </div>
                 <div className="flex flex-col">
                   <span className="text-xs font-mono font-medium">Admin Management</span>
-                  <span className="text-[10px] text-slate-400">Manage events & attendees</span>
+                  <span className="text-[10px] text-[#737373]">Manage events & attendees</span>
                 </div>
               </DropdownMenuItem>
 
               <DropdownMenuItem
-                className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-[#0B162C] focus:bg-[#0B162C] text-slate-200 hover:text-white transition-colors"
+                className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-[#161616] focus:bg-[#161616] text-neutral-300 hover:text-white transition-colors"
                 onClick={() => router.push("/admin/check-in")}
               >
-                <div className="p-1 rounded-none bg-blue-600/15 text-blue-400">
+                <div className="p-1 rounded-none bg-[#161616] text-white border border-[#262626]">
                   <QrCodeIcon className="size-4" />
                 </div>
                 <div className="flex flex-col">
                   <span className="text-xs font-mono font-medium">Live Scanner</span>
-                  <span className="text-[10px] text-slate-400">Scan attendee passes</span>
+                  <span className="text-[10px] text-[#737373]">Scan attendee passes</span>
                 </div>
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -191,7 +191,7 @@ export function DropdownMenuAvatar({ variant = "pill" }: DropdownMenuAvatarProps
         )}
 
         {/* Sign Out */}
-        <DropdownMenuSeparator className="bg-[#152A54]" />
+        <DropdownMenuSeparator className="bg-[#262626]" />
         <DropdownMenuItem
           variant="destructive"
           className="cursor-pointer gap-2.5 px-3 py-2 rounded-none hover:bg-red-950/30 text-red-400 focus:text-red-400 transition-colors mt-0.5"

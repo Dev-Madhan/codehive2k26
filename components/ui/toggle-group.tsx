@@ -72,7 +72,7 @@ function ToggleGroupItem({
       data-size={context.size || size}
       data-spacing={context.spacing}
       className={cn(
-        "shrink-0 rounded-none border border-[#152A54] bg-[#03060E] text-slate-400 font-mono text-xs uppercase tracking-wider transition-colors cursor-pointer hover:bg-[#0B162C] hover:text-white focus:z-10 focus-visible:z-10 data-[state=on]:bg-blue-600 data-[state=on]:text-white data-[state=on]:border-blue-500 data-pressed:bg-blue-600 data-pressed:text-white data-pressed:border-blue-500 aria-pressed:bg-blue-600 aria-pressed:text-white aria-pressed:border-blue-500",
+        "shrink-0 rounded-none border border-[#262626] bg-[#080808] text-neutral-400 font-mono text-xs uppercase tracking-wider transition-colors cursor-pointer hover:bg-[#161616] hover:text-white focus:z-10 focus-visible:z-10 data-[state=on]:bg-white data-[state=on]:text-black data-[state=on]:border-white data-pressed:bg-white data-pressed:text-black data-pressed:border-white aria-pressed:bg-white aria-pressed:text-black aria-pressed:border-white",
         toggleVariants({
           variant: context.variant || variant,
           size: context.size || size,

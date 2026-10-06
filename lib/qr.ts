@@ -68,7 +68,7 @@ export async function generateQrBuffer(content: string): Promise<Buffer> {
       width: 320,
       margin: 1,
       color: {
-        dark: "#03060E",
+        dark: "#000000",
         light: "#FFFFFF",
       },
       errorCorrectionLevel: "H",

@@ -4,7 +4,7 @@ export default function AdminSettingsLoading() {
   return (
     <div className="space-y-8 font-mono">
       {/* Header */}
-      <div className="border-b border-[#152A54] pb-4 space-y-2">
+      <div className="border-b border-[#262626] pb-4 space-y-2">
         <Skeleton className="h-4 w-48" />
         <Skeleton className="h-8 w-64" />
         <Skeleton className="h-3.5 w-full max-w-xl" />
@@ -15,9 +15,9 @@ export default function AdminSettingsLoading() {
         {[1, 2, 3, 4].map((i) => (
           <div
             key={i}
-            className="rounded-none border border-[#152A54] bg-[#060D1A] p-5 space-y-4"
+            className="rounded-none border border-[#262626] bg-[#0F0F0F] p-5 space-y-4"
           >
-            <div className="flex items-center justify-between border-b border-[#152A54] pb-3">
+            <div className="flex items-center justify-between border-b border-[#262626] pb-3">
               <Skeleton className="h-4 w-32" />
               <Skeleton className="h-4 w-16" />
             </div>
@@ -26,7 +26,7 @@ export default function AdminSettingsLoading() {
               {[1, 2, 3].map((row) => (
                 <div
                   key={row}
-                  className="flex items-center justify-between py-2 border-b border-[#152A54]/40"
+                  className="flex items-center justify-between py-2 border-b border-[#262626]/40"
                 >
                   <div className="space-y-1">
                     <Skeleton className="h-4 w-36" />
