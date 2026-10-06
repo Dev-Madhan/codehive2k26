@@ -39,9 +39,7 @@ import { RegistrationSuccessPayload } from "@/types/registration";
 // ─────────────────────────────────────────────────
 
 const TEAM_SIZE_OPTIONS = [
-  { value: "1", label: "Individual" },
-  { value: "2", label: "2 Members" },
-  { value: "3", label: "3 Members" },
+  { value: "3", label: "Team of 3 (Required)" },
 ];
 
 const YEAR_OPTIONS = [
@@ -84,13 +82,11 @@ export function RegistrationForm({
   eventId,
   eventName,
   userId = "user_placeholder_session_id",
-  minTeamSize = 1,
+  minTeamSize = 3,
   maxTeamSize = 3,
 }: Props) {
-  // Core form state
-  const [teamSize, setTeamSize] = useState<string>(
-    minTeamSize > 1 ? String(minTeamSize) : "1"
-  );
+  // Core form state - Fixed strictly to 3 members
+  const [teamSize, setTeamSize] = useState<string>("3");
   const [teamName, setTeamName] = useState("");
   const [leaderName, setLeaderName] = useState("");
   const [leaderPhone, setLeaderPhone] = useState("");
@@ -98,7 +94,26 @@ export function RegistrationForm({
   const [college, setCollege] = useState("");
   const [department, setDepartment] = useState("");
   const [year, setYear] = useState<string>("");
-  const [members, setMembers] = useState<TeamMember[]>([]);
+  const [members, setMembers] = useState<TeamMember[]>([
+    {
+      name: "",
+      phone: "",
+      collegeIdUrl: "",
+      transportOptIn: false,
+      pickupRoute: "",
+      pickupStop: "",
+      pickupLandmark: "",
+    },
+    {
+      name: "",
+      phone: "",
+      collegeIdUrl: "",
+      transportOptIn: false,
+      pickupRoute: "",
+      pickupStop: "",
+      pickupLandmark: "",
+    },
+  ]);
   const [idCardPdf, setIdCardPdf] = useState<File | null>(null);
 
   // Vel Tech Campus Transportation state
@@ -237,12 +252,39 @@ export function RegistrationForm({
     setError(null);
     setUploadStep(null);
 
+    // Validate Team Name
+    if (!teamName.trim()) {
+      setError("Please provide a team name for your 3-member squad.");
+      setLoading(false);
+      return;
+    }
+
+    // Validate Member 02 and Member 03 fields
+    if (
+      members.length !== 2 ||
+      members.some((m) => !m.name.trim() || !m.phone.trim())
+    ) {
+      setError(
+        "Please provide full name and mobile number for both Member 02 and Member 03."
+      );
+      setLoading(false);
+      return;
+    }
+
+    // Validate unique phones across all 3 members
+    const allPhones = [leaderPhone.trim(), ...members.map((m) => m.phone.trim())];
+    if (new Set(allPhones).size !== 3) {
+      setError(
+        "All 3 team members (Leader, Member 02, and Member 03) must have distinct mobile numbers."
+      );
+      setLoading(false);
+      return;
+    }
+
     // Validate that the mandatory ID cards PDF is selected
     if (!idCardPdf) {
       setError(
-        teamSizeNum > 1
-          ? `Please upload a single PDF containing the collection of ID cards of all ${teamSizeNum} team members.`
-          : "Please upload your College ID card PDF document before registering."
+        "Please upload a single merged PDF containing the College ID cards of all 3 team members."
       );
       setLoading(false);
       return;
@@ -252,7 +294,7 @@ export function RegistrationForm({
     if (transportOptIn) {
       if (!leaderPickupRoute || !leaderPickupStop || !leaderPickupLandmark.trim()) {
         setError(
-          teamSizeNum > 1 && !samePickupForTeam
+          !samePickupForTeam
             ? "Please complete the Team Leader's Vel Tech bus pickup details (Route, Stop, and Landmark)."
             : "Please complete all Vel Tech bus pickup details (Route, Stop, and Landmark)."
         );
@@ -260,7 +302,7 @@ export function RegistrationForm({
         return;
       }
 
-      if (!samePickupForTeam && teamSizeNum > 1) {
+      if (!samePickupForTeam) {
         for (let i = 0; i < members.length; i++) {
           const m = members[i];
           if (m.transportOptIn && (!m.pickupRoute || !m.pickupStop || !m.pickupLandmark?.trim())) {
@@ -275,7 +317,6 @@ export function RegistrationForm({
     try {
       // ─────────────────────────────────────────────────────────────
       // STEP 1: Upload the single PDF to Tigris Storage
-      // (This only executes on full form submission; nothing is uploaded before)
       // ─────────────────────────────────────────────────────────────
       setUploadStep("Uploading ID cards document...");
 
@@ -307,8 +348,8 @@ export function RegistrationForm({
       const effectiveUserId = session?.user?.id || userId;
       const res = await createRegistration(effectiveUserId, {
         eventId,
-        teamSize: teamSize as "1" | "2" | "3",
-        teamName: parseInt(teamSize) > 1 ? teamName : undefined,
+        teamSize: "3",
+        teamName: teamName.trim(),
         name: leaderName,
         email: leaderEmail,
         phone: leaderPhone,
@@ -318,13 +359,13 @@ export function RegistrationForm({
         imageUrl: uploadedPdfUrl,
         emailVerificationToken: verificationToken,
         transportOptIn,
-        samePickupForTeam: teamSizeNum > 1 ? samePickupForTeam : true,
+        samePickupForTeam,
         pickupRoute: transportOptIn ? leaderPickupRoute : undefined,
         pickupStop: transportOptIn ? leaderPickupStop : undefined,
         pickupLandmark: transportOptIn ? leaderPickupLandmark : undefined,
         members: members.map((m) => ({
-          name: m.name,
-          phone: m.phone,
+          name: m.name.trim(),
+          phone: m.phone.trim(),
           collegeIdUrl: uploadedPdfUrl, // All team members reference the team's combined PDF
           transportOptIn: samePickupForTeam ? transportOptIn : Boolean(m.transportOptIn),
           pickupRoute: samePickupForTeam ? (transportOptIn ? leaderPickupRoute : undefined) : m.pickupRoute,
@@ -379,7 +420,26 @@ export function RegistrationForm({
           setYear("");
           setTeamName("");
           setIdCardPdf(null);
-          setMembers([]);
+          setMembers([
+            {
+              name: "",
+              phone: "",
+              collegeIdUrl: "",
+              transportOptIn: false,
+              pickupRoute: "",
+              pickupStop: "",
+              pickupLandmark: "",
+            },
+            {
+              name: "",
+              phone: "",
+              collegeIdUrl: "",
+              transportOptIn: false,
+              pickupRoute: "",
+              pickupStop: "",
+              pickupLandmark: "",
+            },
+          ]);
           setTransportOptIn(false);
           setSamePickupForTeam(true);
           setLeaderPickupRoute("");
@@ -416,11 +476,22 @@ export function RegistrationForm({
           SECTION 01: TEAM CONFIGURATION
           ═══════════════════════════════════════════════ */}
       <div className="rounded-none border border-[#262626] bg-[#0F0F0F] p-4 sm:p-5 space-y-4">
-        <div className="flex items-center gap-2 border-b border-[#262626] pb-3">
-          <UsersIcon className="size-4 text-white" />
-          <h3 className="text-[11px] font-mono font-bold text-white uppercase tracking-wider">
-            Section 01: Team Configuration
-          </h3>
+        <div className="flex items-center justify-between border-b border-[#262626] pb-3">
+          <div className="flex items-center gap-2">
+            <UsersIcon className="size-4 text-white" />
+            <h3 className="text-[11px] font-mono font-bold text-white uppercase tracking-wider">
+              Section 01: Team Configuration
+            </h3>
+          </div>
+          <span className="text-[10px] font-mono font-bold uppercase px-2 py-0.5 border border-[#383838] bg-[#141414] text-neutral-300">
+            Strictly 3 Members
+          </span>
+        </div>
+
+        {/* Rule Policy Banner */}
+        <div className="flex items-center gap-2 p-2.5 bg-[#121212] border border-[#262626] font-mono text-[11px] text-neutral-300">
+          <span className="text-white font-bold">// ENTRY POLICY:</span>
+          <span>Each team must have exactly 3 builders (1 Leader + 2 Members). Solo &amp; dual entries are disabled.</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
@@ -429,7 +500,7 @@ export function RegistrationForm({
               htmlFor="reg-team-size"
               className="font-sans text-xs uppercase tracking-wider text-neutral-300 font-semibold block"
             >
-              Team Size
+              Team Size <span className="text-red-400">*</span>
             </Label>
             <Select
               value={teamSize}
@@ -441,11 +512,11 @@ export function RegistrationForm({
                 id="reg-team-size"
                 className="h-11 sm:h-10 w-full rounded-none border border-[#262626] bg-[#080808] px-3 text-white font-sans text-base sm:text-sm focus:border-white focus:ring-1 focus:ring-white data-placeholder:text-neutral-500"
               >
-                <SelectValue placeholder="Select team size" />
+                <SelectValue placeholder="Team of 3 (Required)" />
               </SelectTrigger>
               <SelectContent className="border-[#262626] bg-[#0F0F0F] text-white">
                 <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-[#737373] border-b border-[#262626] mb-1 flex items-center justify-between font-mono">
-                  <span>// TEAM COMPOSITION</span>
+                  <span>// SQUAD SIZE</span>
                 </div>
                 <SelectGroup>
                   {teamOptions.map((opt) => (
@@ -462,23 +533,22 @@ export function RegistrationForm({
             </Select>
           </div>
 
-          {teamSizeNum > 1 && (
-            <div className="space-y-1.5">
-              <Label
-                htmlFor="reg-team-name"
-                className="font-sans text-xs uppercase tracking-wider text-neutral-300 font-semibold block"
-              >
-                Team Name
-              </Label>
-              <Input
-                id="reg-team-name"
-                value={teamName}
-                onChange={(e) => setTeamName(e.target.value)}
-                placeholder="e.g. CyberHive"
-                className="h-11 sm:h-10 rounded-none border border-[#262626] bg-[#080808] text-white font-sans text-base sm:text-sm placeholder:text-neutral-500 focus:border-white focus:ring-1 focus:ring-white"
-              />
-            </div>
-          )}
+          <div className="space-y-1.5">
+            <Label
+              htmlFor="reg-team-name"
+              className="font-sans text-xs uppercase tracking-wider text-neutral-300 font-semibold block"
+            >
+              Team Name <span className="text-red-400">*</span>
+            </Label>
+            <Input
+              id="reg-team-name"
+              required
+              value={teamName}
+              onChange={(e) => setTeamName(e.target.value)}
+              placeholder="e.g. CodeHive Trio"
+              className="h-11 sm:h-10 rounded-none border border-[#262626] bg-[#080808] text-white font-sans text-base sm:text-sm placeholder:text-neutral-500 focus:border-white focus:ring-1 focus:ring-white"
+            />
+          </div>
         </div>
       </div>
 
@@ -486,11 +556,16 @@ export function RegistrationForm({
           SECTION 02: TEAM LEADER
           ═══════════════════════════════════════════════ */}
       <div className="rounded-none border border-[#262626] bg-[#0F0F0F] p-4 sm:p-5 space-y-4">
-        <div className="flex items-center gap-2 border-b border-[#262626] pb-3">
-          <UserIcon className="size-4 text-white" />
-          <h3 className="text-[11px] font-mono font-bold text-white uppercase tracking-wider">
-            Section 02: Team Leader
-          </h3>
+        <div className="flex items-center justify-between border-b border-[#262626] pb-3">
+          <div className="flex items-center gap-2">
+            <UserIcon className="size-4 text-white" />
+            <h3 className="text-[11px] font-mono font-bold text-white uppercase tracking-wider">
+              Section 02: Team Leader
+            </h3>
+          </div>
+          <span className="text-[10px] font-mono text-[#737373]">
+            Member 01 • Primary Contact
+          </span>
         </div>
 
         {/* Leader Name */}
@@ -738,15 +813,15 @@ export function RegistrationForm({
       </div>
 
       {/* ═══════════════════════════════════════════════
-          SECTION 03: TEAM ROSTER (Only for teamSize > 1)
+          SECTION 03: TEAM ROSTER (MEMBER 02 & MEMBER 03)
           ═══════════════════════════════════════════════ */}
-      {teamSizeNum > 1 && members.length > 0 && (
+      {members.length > 0 && (
         <div className="rounded-none border border-[#262626] bg-[#0F0F0F] p-4 sm:p-5 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-b border-[#262626] pb-3">
             <div className="flex items-center gap-2">
               <UsersIcon className="size-4 text-white" />
               <h3 className="text-[11px] font-mono font-bold text-white uppercase tracking-wider">
-                Section 03: Team Roster
+                Section 03: Team Roster (Members 02 &amp; 03)
               </h3>
             </div>
             <span className="text-[10px] font-mono text-[#737373]">
@@ -998,9 +1073,7 @@ export function RegistrationForm({
           <div className="flex items-center gap-2">
             <IdCardIcon className="size-4 text-white shrink-0" />
             <h3 className="text-[11px] font-mono font-bold text-white uppercase tracking-wider">
-              {teamSizeNum > 1
-                ? "Section 05: Team College ID Cards (Single PDF)"
-                : "Section 04: College ID Card (PDF)"}
+              Section 05: Team College ID Cards (Single PDF)
             </h3>
           </div>
           <span className="self-start sm:self-auto text-[10px] font-mono text-[#E5E5E5] font-semibold border border-[#404040] bg-[#161616] px-2 py-0.5">
@@ -1009,12 +1082,12 @@ export function RegistrationForm({
         </div>
 
         <p className="text-xs font-mono text-neutral-300 leading-relaxed">
-          The team leader must upload a single PDF containing the collection of ID cards of all team members.
+          The team leader must upload a single merged PDF containing the College ID cards of all 3 team members (Leader + Member 02 + Member 03).
         </p>
 
         <TeamIdUploader
           id="team-ids-pdf"
-          teamSize={teamSizeNum}
+          teamSize={3}
           onFileChange={setIdCardPdf}
           disabled={loading}
         />

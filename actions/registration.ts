@@ -89,18 +89,27 @@ export async function createRegistration(
       };
     }
 
-    // 3. Validate team size against event constraints
-    const teamSizeNum = parseInt(teamSize);
-    if (event.isTeamEvent) {
-      if (teamSizeNum < event.minTeamSize || teamSizeNum > event.maxTeamSize) {
-        return {
-          success: false,
-          error: {
-            code: "INVALID_INPUT",
-            message: `Team size must be between ${event.minTeamSize} and ${event.maxTeamSize} for this event.`,
-          },
-        };
-      }
+    // 3. Strict 3-member team validation (No solo, No dual entries)
+    const teamSizeNum = parseInt(teamSize, 10);
+    if (teamSizeNum !== 3 || members.length !== 2) {
+      return {
+        success: false,
+        error: {
+          code: "INVALID_INPUT",
+          message: "Event entries are strictly limited to teams of exactly 3 members (Leader + 2 Members). Solo and dual entries are not permitted.",
+        },
+      };
+    }
+
+    const memberPhones = members.map((m) => m.phone);
+    if (memberPhones.includes(phone) || memberPhones[0] === memberPhones[1]) {
+      return {
+        success: false,
+        error: {
+          code: "INVALID_INPUT",
+          message: "All 3 team members must have distinct mobile numbers.",
+        },
+      };
     }
 
     // 4. Database Transaction: Create/Update Participant + Team + Registration

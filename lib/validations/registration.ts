@@ -19,10 +19,15 @@ const teamMemberSchema = z.object({
 export const registrationSchema = z
   .object({
     eventId: z.string().min(1, "Event is required"),
-    // Team configuration
-    teamSize: z.enum(["1", "2", "3"]),
-    teamName: z.string().min(2, "Team name must be at least 2 characters").max(50).optional(),
-    // Leader details
+    // Team configuration - Strictly team of 3 builders
+    teamSize: z.enum(["3"], {
+      message: "Event registration requires a team of exactly 3 members. Solo and dual entries are not permitted.",
+    }),
+    teamName: z
+      .string()
+      .min(2, "Team name must be at least 2 characters")
+      .max(50, "Team name cannot exceed 50 characters"),
+    // Leader details (Member 01)
     name: z.string().min(2, "Name must be at least 2 characters").max(100),
     email: z.string().email("Invalid email address"),
     phone: z
@@ -34,8 +39,10 @@ export const registrationSchema = z
     imageUrl: z.string().url("College ID document (PDF) is required"),
     // OTP verification token (cryptographic proof that leader's email is verified)
     emailVerificationToken: z.string().min(1, "Email verification is required"),
-    // Additional team members (excluding leader)
-    members: z.array(teamMemberSchema).optional().default([]),
+    // Exactly 2 additional team members (Leader + 2 Members = 3 total builders)
+    members: z
+      .array(teamMemberSchema)
+      .length(2, "Exactly 2 additional team members are required (3 members total including leader)."),
     // Vel Tech Campus Transportation
     transportOptIn: z.boolean().default(false),
     samePickupForTeam: z.boolean().default(true),
@@ -44,20 +51,35 @@ export const registrationSchema = z
     pickupLandmark: z.string().optional(),
   })
   .superRefine((data, ctx) => {
-    // 1. Verify expected members count
-    const expectedMembers = parseInt(data.teamSize) - 1;
-    if (data.members.length !== expectedMembers) {
+    // 1. Verify that all 3 members have unique phone numbers
+    const allPhones = [data.phone, ...data.members.map((m) => m.phone)];
+    const uniquePhones = new Set(allPhones);
+    if (uniquePhones.size !== 3) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Number of team members must match selected team size",
+        message: "All 3 team members (Leader, Member 02, and Member 03) must have distinct mobile numbers.",
         path: ["members"],
       });
     }
 
-    // 2. Vel Tech Transport validation
+    // 2. Verify that all 3 members have distinct names
+    const allNames = [
+      data.name.trim().toLowerCase(),
+      ...data.members.map((m) => m.name.trim().toLowerCase()),
+    ];
+    const uniqueNames = new Set(allNames);
+    if (uniqueNames.size !== 3) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Team member names cannot be identical.",
+        path: ["members"],
+      });
+    }
+
+    // 3. Vel Tech Transport validation
     if (data.transportOptIn) {
-      // If team size is 1 or team boards together
-      if (data.samePickupForTeam || parseInt(data.teamSize) === 1) {
+      // If team boards together
+      if (data.samePickupForTeam) {
         if (!data.pickupRoute || data.pickupRoute.trim().length < 2) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,

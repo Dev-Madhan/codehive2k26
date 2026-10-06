@@ -31,8 +31,9 @@ async function main() {
     where: { slug: "techforge-2026" },
     update: {
       name: "TECH FORGE",
-      minTeamSize: 1,
+      minTeamSize: 3,
       maxTeamSize: 3,
+      isTeamEvent: true,
       venue: "Main Auditorium & Computing Center",
       startAt: new Date("2026-10-23T08:30:00Z"),
       endAt: new Date("2026-10-24T15:30:00Z"),
@@ -54,7 +55,7 @@ async function main() {
       status: "PUBLISHED",
       categoryId: technicalCategory.id,
       isTeamEvent: true,
-      minTeamSize: 1,
+      minTeamSize: 3,
       maxTeamSize: 3,
     },
   });
@@ -64,8 +65,9 @@ async function main() {
     where: { slug: "agentvibe-2026" },
     update: {
       name: "AGENT VIBE",
-      minTeamSize: 1,
+      minTeamSize: 3,
       maxTeamSize: 3,
+      isTeamEvent: true,
       venue: "AI Innovation Lab & Tech Center",
       startAt: new Date("2026-10-23T08:30:00Z"),
       endAt: new Date("2026-10-24T15:30:00Z"),
@@ -87,7 +89,7 @@ async function main() {
       status: "PUBLISHED",
       categoryId: technicalCategory.id,
       isTeamEvent: true,
-      minTeamSize: 1,
+      minTeamSize: 3,
       maxTeamSize: 3,
     },
   });

@@ -11,7 +11,7 @@ import {
   CalendarIcon,
   MapPinIcon,
   UsersIcon,
-  AwardIcon,
+  LayersIcon,
 } from "lucide-react";
 
 interface RealEventItem {
@@ -24,10 +24,8 @@ interface RealEventItem {
   description: string;
   rounds: string;
   teamSize: string;
-  entries: string;
   venue: string;
   status: string;
-  accent: "blue" | "sky";
   href: string;
 }
 
@@ -36,50 +34,33 @@ const REAL_EVENTS: RealEventItem[] = [
     id: "techforge-2026",
     slug: "techforge-2026",
     name: "TECH FORGE",
-    tag: "EVENT 1 // TECHNICAL",
-    category: "2-DAY TECHNICAL // 4 ROUNDS",
-    subtitle: "One Problem. Four Rounds. One Champion.",
+    tag: "EVENT 01 // TECHNICAL",
+    category: "2-DAY CODING // 4 ROUNDS",
+    subtitle: "Analyze. Build. Adapt. Defend.",
     description:
-      "TECHFORGE is a 2-day technical challenge where you Analyze, Build, Adapt & Defend. Solve a real-world problem, develop your solution, and face a surprise technical challenge that will test your coding, problem-solving, and innovation skills.",
-    rounds: "4 Rounds (200 Pts)",
-    teamSize: "1–3 Builders",
-    entries: "Unlimited",
-    venue: "Palani Murugan Hall of Fame, Vel Tech Multi Tech",
+      "A 2-day technical challenge where teams solve real-world problems through coding, system design, and surprise constraints across 4 progressive rounds.",
+    rounds: "4 Rounds // 200 Pts",
+    teamSize: "Team of 3",
+    venue: "Palani Murugan Hall of Fame",
     status: "OPEN",
-    accent: "blue",
     href: "/events/techforge-2026",
   },
   {
     id: "agentvibe-2026",
     slug: "agentvibe-2026",
     name: "AGENT VIBE",
-    tag: "EVENT 2 // AI AGENT",
+    tag: "EVENT 02 // AI AGENT",
     category: "2-DAY AI // 4 ROUNDS",
-    subtitle: "One Idea. Four Rounds. One AI Champion.",
+    subtitle: "Imagine. Build. Adapt. Deploy.",
     description:
-      "AGENT VIBE is a 2-day AI challenge where you Imagine, Build, Adapt & Deploy. Design and develop intelligent AI agents to solve real-world problems, then tackle surprise challenges that will test your creativity, AI skills, and ability to innovate using LLMs, APIs, and modern AI tools.",
-    rounds: "4 Rounds (200 Pts)",
-    teamSize: "1–3 Builders",
-    entries: "Unlimited",
-    venue: "Palani Murugan Hall of Fame, Vel Tech Multi Tech",
+      "A 2-day AI challenge where teams design, build, and deploy autonomous AI agents and intelligent workflows across 4 progressive rounds.",
+    rounds: "4 Rounds // 200 Pts",
+    teamSize: "Team of 3",
+    venue: "Palani Murugan Hall of Fame",
     status: "OPEN",
-    accent: "sky",
     href: "/events/agentvibe-2026",
   },
 ];
-
-const monochromeEventCard = {
-  tagColor: "text-white",
-  border: "border-[#262626] hover:border-[#404040]",
-  prizeBg: "bg-[#161616] text-[#E5E5E5] border-[#262626]",
-  statusColor: "text-white",
-  glow: "shadow-[inset_0_0_40px_rgba(255,255,255,0.02)] hover:shadow-[0_0_35px_rgba(255,255,255,0.06)]",
-  cornerColor: "border-[#404040] group-hover:border-white transition-colors",
-  iconColor: "text-white",
-  iconBg: "bg-[#161616] border border-[#262626]",
-  line: "bg-white",
-  buttonBg: "bg-white hover:bg-[#E5E5E5] text-black border border-white",
-};
 
 interface EventsSectionProps {
   initialEvents?: any[];
@@ -89,76 +70,88 @@ export function EventsSection({ initialEvents }: EventsSectionProps) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { threshold: 0.05, once: true });
 
-  // Map database events if provided, else use the real static definitions
-  const displayEvents: RealEventItem[] =
-    initialEvents && initialEvents.length > 0
-      ? initialEvents.map((ev, idx) => {
-          const isTechforge = ev.slug?.includes("techforge");
-          const defaultRef = isTechforge ? REAL_EVENTS[0] : REAL_EVENTS[1] || REAL_EVENTS[0];
-          return {
-            id: ev.id || defaultRef.id,
-            slug: ev.slug || defaultRef.slug,
-            name: defaultRef.name,
-            tag: isTechforge ? "EVENT 1 // TECHNICAL" : "EVENT 2 // AI AGENT",
-            category: isTechforge ? "2-DAY TECHNICAL // 4 ROUNDS" : "2-DAY AI // 4 ROUNDS",
-            subtitle: defaultRef.subtitle,
-            description: defaultRef.description,
-            rounds: defaultRef.rounds,
-            teamSize: `${ev.minTeamSize || 1}–${ev.maxTeamSize || 3} Builders`,
-            entries: "Unlimited",
-            venue: "Palani Murugan Hall of Fame, Vel Tech Multi Tech",
-            status: ev.registrationOpen ? "OPEN" : "CLOSED",
-            accent: (idx % 2 === 0 ? "blue" : "sky") as "blue" | "sky",
-            href: `/events/${ev.slug}`,
-          };
-        })
-      : REAL_EVENTS;
+  // Map and sort so TECH FORGE is first, then AGENT VIBE, with balanced descriptions
+  const displayEvents: RealEventItem[] = (() => {
+    if (!initialEvents || initialEvents.length === 0) return REAL_EVENTS;
+
+    const sorted = [...initialEvents].sort((a, b) => {
+      if (a.slug?.includes("techforge")) return -1;
+      if (b.slug?.includes("techforge")) return 1;
+      return 0;
+    });
+
+    return sorted.map((ev) => {
+      const isTechforge = ev.slug?.includes("techforge");
+      const defaultRef = isTechforge ? REAL_EVENTS[0] : REAL_EVENTS[1];
+
+      return {
+        id: ev.id || defaultRef.id,
+        slug: ev.slug || defaultRef.slug,
+        name: ev.name || defaultRef.name,
+        tag: isTechforge ? "EVENT 01 // TECHNICAL" : "EVENT 02 // AI AGENT",
+        category: isTechforge ? "2-DAY CODING // 4 ROUNDS" : "2-DAY AI // 4 ROUNDS",
+        subtitle: defaultRef.subtitle,
+        description: defaultRef.description,
+        rounds: "4 Rounds // 200 Pts",
+        teamSize:
+          ev.minTeamSize && ev.maxTeamSize && ev.minTeamSize === ev.maxTeamSize
+            ? `Team of ${ev.minTeamSize}`
+            : "Team of 3",
+        venue: ev.venue || defaultRef.venue,
+        status: "OPEN",
+        href: `/events/${ev.slug || defaultRef.slug}`,
+      };
+    });
+  })();
 
   return (
     <section
       ref={ref}
-      className="relative py-24 sm:py-32 bg-black border-t border-[#262626] overflow-hidden"
+      id="events"
+      className="relative py-20 sm:py-28 bg-black border-t border-[#262626] overflow-hidden"
     >
-      {/* Grid background */}
+      {/* Subtle grid background */}
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header - No section numbers */}
+      {/* Top ambient glow */}
+      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[250px] bg-gradient-to-b from-white/5 to-transparent blur-[90px]" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-12">
+        {/* Section Header - 100% flush aligned with cards below and entire website */}
         <div
           className={cn(
-            "mb-16 transition-all duration-700",
+            "flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-2 transition-all duration-700",
             inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           )}
         >
-          <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-8 bg-white" />
-            <span className="font-mono text-[11px] uppercase tracking-widest text-[#737373]">
-              EVENTS
-            </span>
-          </div>
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-            <div>
-              <h2 className="font-mono text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-tight">
-                CHOOSE YOUR{" "}
-                <span className="text-white">
-                  BATTLEFIELD
-                </span>
-              </h2>
-              <p className="mt-2 text-xs sm:text-sm font-sans text-neutral-400 max-w-xl">
-                Official 2-Day National Hackathon challenges of CodeHive 2K26 2.0. Entry is 100% Free with Certificates awarded to all participants.
-              </p>
+          <div className="space-y-3 max-w-2xl">
+            <div className="flex items-center gap-3">
+              <div className="h-px w-8 bg-white" />
+              <span className="font-mono text-[11px] uppercase tracking-widest text-[#737373]">
+                // COMPETITION TRACKS
+              </span>
             </div>
-            <Link
-              href="/events"
-              className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-white hover:text-white border border-[#262626] hover:border-[#404040] bg-[#0F0F0F] hover:bg-[#161616] px-4 py-2 transition-all shrink-0"
-            >
-              [ View Event Registry ] <ArrowRightIcon className="size-3" />
-            </Link>
+
+            <h2 className="font-mono text-3xl sm:text-5xl font-black uppercase tracking-tight text-white leading-tight">
+              CHOOSE YOUR TRACK<span className="inline-block animate-pulse text-white">_</span>
+            </h2>
+
+            <p className="text-xs sm:text-sm font-sans text-neutral-400 leading-relaxed">
+              Two flagship hackathon tracks at CodeHive 2K26. 100% Free entry, 4 progressive rounds, and ₹20,000 in prizes.
+            </p>
           </div>
+
+          <Link
+            href="/events"
+            className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-white border border-[#262626] hover:border-white bg-[#0A0A0A] hover:bg-[#141414] px-5 py-3 transition-all shrink-0 self-start sm:self-end"
+          >
+            <span>[ View All Tracks ]</span>
+            <ArrowRightIcon className="size-3.5" />
+          </Link>
         </div>
 
-        {/* Real Event Cards - 2-Column Balanced Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
+        {/* 2-Column Balanced Grid - Exact equal heights & horizontal baseline alignment */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch">
           {displayEvents.map((event, i) => {
             const Icon = event.slug.includes("agentvibe") ? BrainCircuitIcon : CpuIcon;
 
@@ -166,108 +159,122 @@ export function EventsSection({ initialEvents }: EventsSectionProps) {
               <div
                 key={event.id}
                 className={cn(
-                  "group relative flex flex-col p-6 sm:p-8 border bg-[#0F0F0F] backdrop-blur-sm transition-all duration-500",
-                  monochromeEventCard.border,
-                  monochromeEventCard.glow,
+                  "group relative flex flex-col justify-between p-6 sm:p-8 border border-[#262626] bg-[#0A0A0A] backdrop-blur-sm h-full",
+                  "hover:border-[#404040] hover:bg-[#0D0D0D] active:border-white transition-colors duration-150",
                   inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                 )}
                 style={{ transitionDelay: `${i * 120}ms` }}
               >
-                {/* Top accent line */}
-                <div className={cn("absolute top-0 left-0 right-0 h-[2px]", monochromeEventCard.line)} />
+                {/* Corner accent brackets */}
+                <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r border-[#333333] group-hover:border-white transition-colors duration-200" />
+                <div className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b border-l border-[#333333] group-hover:border-white transition-colors duration-200" />
 
-                {/* Sharp Corner brackets */}
-                <div className={cn("absolute top-2 right-2 w-3.5 h-3.5 border-t border-r", monochromeEventCard.cornerColor)} />
-                <div className={cn("absolute bottom-2 left-2 w-3.5 h-3.5 border-b border-l", monochromeEventCard.cornerColor)} />
-
-                {/* Status & Tag bar */}
-                <div className="flex items-center justify-between mb-6">
-                  <span className={cn("font-mono text-[11px] uppercase font-bold tracking-widest px-2.5 py-0.5 bg-[#161616] border border-[#262626]", monochromeEventCard.tagColor)}>
-                    [ {event.tag} ]
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 font-mono text-[11px] text-white uppercase tracking-wider font-semibold">
-                    <span className="w-1.5 h-1.5 rounded-none bg-white animate-pulse" />
-                    REGISTRATION {event.status}
-                  </span>
-                </div>
-
-                {/* Header info */}
-                <div className="flex items-start gap-4 mb-4">
-                  <div className={cn("p-3 shrink-0", monochromeEventCard.iconBg)}>
-                    <Icon className={cn("size-6", monochromeEventCard.iconColor)} />
+                <div className="flex flex-col flex-1 space-y-6">
+                  {/* Status & Tag Bar */}
+                  <div className="flex items-center justify-between pb-4 border-b border-[#1c1c1c]">
+                    <span className="font-mono text-[11px] uppercase tracking-wider px-2.5 py-1 bg-[#121212] text-neutral-300 border border-[#262626] leading-normal">
+                      [ {event.tag} ]
+                    </span>
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-emerald-400 font-bold flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      REGISTRATION OPEN
+                    </span>
                   </div>
-                  <div>
-                    <p className="font-mono text-[10px] uppercase tracking-wider text-[#737373] mb-0.5">
-                      {event.category}
-                    </p>
-                    <h3 className="font-mono text-2xl font-black uppercase text-white tracking-tight">
-                      {event.name}
-                    </h3>
-                    <p className="font-mono text-xs text-neutral-300 uppercase tracking-wide mt-0.5">
-                      // {event.subtitle}
-                    </p>
-                  </div>
-                </div>
 
-                {/* Description */}
-                <p className="text-sm text-neutral-400 leading-relaxed flex-1 mb-6 font-sans">
-                  {event.description}
-                </p>
-
-                {/* Telemetry / Metadata specs grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 border-y border-[#262626] py-4 mb-6 bg-[#080808] px-3">
-                  <div>
-                    <div className="flex items-center gap-1 text-[#737373] mb-0.5">
-                      <AwardIcon className="size-3 text-white" />
-                      <span className="font-mono text-[9px] uppercase tracking-wider">FORMAT</span>
+                  {/* Header info */}
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-[#121212] border border-[#262626] group-hover:border-[#383838] transition-colors shrink-0">
+                      <Icon className="size-5 sm:size-6 text-white" />
                     </div>
-                    <p className="font-mono text-xs font-bold text-white">
-                      {event.rounds}
-                    </p>
+                    <div>
+                      <h3 className="font-mono text-2xl sm:text-3xl font-black uppercase text-white tracking-tight group-hover:text-neutral-100 transition-colors leading-tight">
+                        {event.name}
+                      </h3>
+                      <p className="font-mono text-xs text-neutral-400 uppercase tracking-wide mt-1">
+                        // {event.subtitle}
+                      </p>
+                    </div>
                   </div>
 
-                  <div>
-                    <div className="flex items-center gap-1 text-[#737373] mb-0.5">
-                      <UsersIcon className="size-3 text-white" />
-                      <span className="font-mono text-[9px] uppercase tracking-wider">TEAM SIZE</span>
-                    </div>
-                    <p className="font-mono text-xs font-bold text-white">
-                      {event.teamSize}
-                    </p>
-                  </div>
+                  {/* Description - Equal height calibrated */}
+                  <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed font-sans min-h-[3.5rem] flex items-center">
+                    {event.description}
+                  </p>
 
-                  <div>
-                    <div className="flex items-center gap-1 text-[#737373] mb-0.5">
-                      <CalendarIcon className="size-3 text-white" />
-                      <span className="font-mono text-[9px] uppercase tracking-wider">ENTRIES</span>
-                    </div>
-                    <p className="font-mono text-xs font-bold text-white">
-                      {event.entries}
-                    </p>
-                  </div>
+                  {/* 4-Cell Partitioned Telemetry Spec Block */}
+                  <div className="border border-[#222222] bg-[#080808] divide-y divide-[#222222] font-mono mt-auto">
+                    {/* Row 1 */}
+                    <div className="grid grid-cols-2 divide-x divide-[#222222]">
+                      <div className="p-3 sm:p-3.5 flex items-center gap-2.5">
+                        <div className="p-1.5 bg-[#141414] border border-[#262626] shrink-0">
+                          <LayersIcon className="size-3.5 text-neutral-300" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-[10px] uppercase tracking-widest text-[#737373]">
+                            // ROUNDS
+                          </div>
+                          <div className="text-xs font-bold text-white truncate">
+                            {event.rounds}
+                          </div>
+                        </div>
+                      </div>
 
-                  <div>
-                    <div className="flex items-center gap-1 text-[#737373] mb-0.5">
-                      <MapPinIcon className="size-3 text-white" />
-                      <span className="font-mono text-[9px] uppercase tracking-wider">VENUE</span>
+                      <div className="p-3 sm:p-3.5 flex items-center gap-2.5">
+                        <div className="p-1.5 bg-[#141414] border border-[#262626] shrink-0">
+                          <UsersIcon className="size-3.5 text-neutral-300" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-[10px] uppercase tracking-widest text-[#737373]">
+                            // TEAM
+                          </div>
+                          <div className="text-xs font-bold text-white truncate">
+                            {event.teamSize}
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <p className="font-mono text-xs font-bold text-white truncate" title={event.venue}>
-                      {event.venue.split("&")[0].trim()}
-                    </p>
+
+                    {/* Row 2 */}
+                    <div className="grid grid-cols-2 divide-x divide-[#222222]">
+                      <div className="p-3 sm:p-3.5 flex items-center gap-2.5">
+                        <div className="p-1.5 bg-[#141414] border border-[#262626] shrink-0">
+                          <CalendarIcon className="size-3.5 text-neutral-300" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-[10px] uppercase tracking-widest text-[#737373]">
+                            // DATE
+                          </div>
+                          <div className="text-xs font-bold text-white truncate">
+                            23 &amp; 24 Oct 2026
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="p-3 sm:p-3.5 flex items-center gap-2.5">
+                        <div className="p-1.5 bg-[#141414] border border-[#262626] shrink-0">
+                          <MapPinIcon className="size-3.5 text-neutral-300" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-[10px] uppercase tracking-widest text-[#737373]">
+                            // VENUE
+                          </div>
+                          <div className="text-xs font-bold text-white truncate" title={event.venue}>
+                            Vel Tech Multi Tech
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 {/* Primary Action Button */}
-                <div>
+                <div className="pt-6">
                   <Link
                     href={event.href}
-                    className={cn(
-                      "w-full inline-flex items-center justify-center gap-2 h-11 font-mono text-xs uppercase tracking-wider font-bold border transition-all shadow-sm",
-                      monochromeEventCard.buttonBg
-                    )}
+                    className="group/btn w-full inline-flex items-center justify-center gap-2 h-12 font-mono text-xs uppercase tracking-wider font-bold bg-white hover:bg-neutral-200 text-black border border-white transition-all duration-150"
                   >
-                    [ View Event Details ]
-                    <ArrowRightIcon className="size-3.5 group-hover:translate-x-1 transition-transform" />
+                    <span>[ View Track Details &amp; Register ]</span>
+                    <ArrowRightIcon className="size-3.5 group-hover/btn:translate-x-1 transition-transform" />
                   </Link>
                 </div>
               </div>

@@ -5,7 +5,7 @@ import { RegistrationForm } from "@/components/registration/registration-form";
 import { EventInstructions } from "@/components/events/event-instructions";
 import { formatDate } from "@/utils/formatters";
 import { notFound } from "next/navigation";
-import { CalendarIcon, MapPinIcon, UsersIcon, ArrowLeftIcon } from "lucide-react";
+import { CalendarIcon, MapPinIcon, UsersIcon, ArrowLeftIcon, TicketIcon } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -25,44 +25,88 @@ export default async function EventDetailPage({ params }: Props) {
   const event = result.data as any;
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black">
       <Header />
-      <div className="max-w-5xl mx-auto px-3 sm:px-6 py-6 sm:py-10 space-y-5 sm:space-y-8">
-        {/* Navigation & Back Button */}
+      
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-8">
+        {/* Navigation Bar */}
         <div className="flex items-center justify-between border-b border-[#262626] pb-4">
           <Link
             href="/events"
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-mono font-bold uppercase tracking-wider text-neutral-300 bg-[#0F0F0F] border border-[#262626] hover:text-white hover:border-[#404040] hover:bg-[#161616] transition-all duration-150"
+            className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-mono font-bold uppercase tracking-wider text-neutral-300 bg-[#0A0A0A] border border-[#262626] hover:text-white hover:border-[#404040] hover:bg-[#141414] transition-all duration-150"
           >
             <ArrowLeftIcon className="size-3.5 text-white" />
-            <span>Back to Events</span>
+            <span>[ Back to Events ]</span>
           </Link>
+
+          <div className="flex items-center gap-2 font-mono text-[11px] text-emerald-400 font-bold">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>OPEN // FREE ENTRY</span>
+          </div>
         </div>
 
         {/* Event Header Banner */}
-        <div className="space-y-4 border border-[#262626] bg-[#0F0F0F] p-4 sm:p-8">
-          <div className="inline-flex text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-none bg-[#161616] text-white border border-[#262626]">
-            {event.category?.name || "Event"}
-          </div>
-          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight font-sans text-white">
-            {event.name}
-          </h1>
-          <p className="text-xs sm:text-sm font-sans text-neutral-400 max-w-3xl leading-relaxed">
-            {event.description}
-          </p>
+        <div className="relative border border-[#262626] bg-[#0A0A0A] p-6 sm:p-8 space-y-6">
+          {/* Corner accents */}
+          <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#333333]" />
+          <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#333333]" />
 
-          <div className="flex flex-wrap gap-3.5 sm:gap-6 pt-4 text-xs text-neutral-300 border-t border-[#262626]">
-            <div className="flex items-center gap-2 font-mono">
-              <CalendarIcon className="size-4 text-white shrink-0" />
-              <span>{formatDate(event.startAt)}</span>
+          <div className="space-y-3">
+            <div className="inline-flex font-mono text-[11px] uppercase tracking-wider px-2 py-0.5 bg-[#141414] text-neutral-300 border border-[#262626]">
+              [ {event.category?.name || "TRACK"} ]
             </div>
-            <div className="flex items-center gap-2 font-sans">
-              <MapPinIcon className="size-4 text-white shrink-0" />
-              <span>{event.venue}</span>
+            
+            <h1 className="text-3xl sm:text-5xl font-mono font-black uppercase tracking-tight text-white leading-tight">
+              {event.name}
+            </h1>
+
+            <p className="text-xs sm:text-sm text-neutral-400 max-w-3xl leading-relaxed font-sans">
+              {event.description}
+            </p>
+          </div>
+
+          {/* Quick Specs Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-4 border-t border-[#262626] text-xs font-mono">
+            <div className="bg-[#121212] border border-[#1f1f1f] p-3 space-y-1">
+              <span className="text-[10px] text-[#737373] uppercase tracking-wider block">
+                // DATE
+              </span>
+              <span className="font-bold text-white text-[11px] flex items-center gap-1.5">
+                <CalendarIcon className="size-3 text-neutral-400 shrink-0" />
+                {formatDate(event.startAt)}
+              </span>
             </div>
-            <div className="flex items-center gap-2 font-mono">
-              <UsersIcon className="size-4 text-white shrink-0" />
-              <span>Entries: Unlimited</span>
+
+            <div className="bg-[#121212] border border-[#1f1f1f] p-3 space-y-1">
+              <span className="text-[10px] text-[#737373] uppercase tracking-wider block">
+                // TEAM SIZE
+              </span>
+              <span className="font-bold text-white text-[11px] flex items-center gap-1.5">
+                <UsersIcon className="size-3 text-neutral-400 shrink-0" />
+                {event.minTeamSize === event.maxTeamSize
+                  ? `Team of ${event.minTeamSize}`
+                  : `${event.minTeamSize}-${event.maxTeamSize} Builders`}
+              </span>
+            </div>
+
+            <div className="bg-[#121212] border border-[#1f1f1f] p-3 space-y-1">
+              <span className="text-[10px] text-[#737373] uppercase tracking-wider block">
+                // ADMISSION
+              </span>
+              <span className="font-bold text-emerald-400 text-[11px] flex items-center gap-1.5">
+                <TicketIcon className="size-3 text-emerald-400 shrink-0" />
+                100% FREE
+              </span>
+            </div>
+
+            <div className="bg-[#121212] border border-[#1f1f1f] p-3 space-y-1">
+              <span className="text-[10px] text-[#737373] uppercase tracking-wider block">
+                // VENUE
+              </span>
+              <span className="font-bold text-white text-[11px] flex items-center gap-1.5 truncate" title={event.venue}>
+                <MapPinIcon className="size-3 text-neutral-400 shrink-0" />
+                {event.venue}
+              </span>
             </div>
           </div>
         </div>
@@ -71,15 +115,23 @@ export default async function EventDetailPage({ params }: Props) {
         <EventInstructions slug={slug} eventName={event.name} />
 
         {/* Registration Section */}
-        <div className="border border-[#262626] bg-[#0F0F0F] p-4 sm:p-8">
-          <div className="border-b border-[#262626] pb-4 mb-6">
-            <h2 className="text-base sm:text-lg font-sans font-bold text-white uppercase tracking-wider">
-              Event Registration Portal
+        <div className="relative border border-[#262626] bg-[#0A0A0A] p-6 sm:p-8 space-y-6">
+          {/* Corner accents */}
+          <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#333333]" />
+          <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#333333]" />
+
+          <div className="border-b border-[#262626] pb-4">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-[#737373]">
+              // STEP 02
+            </span>
+            <h2 className="text-xl sm:text-2xl font-mono font-black text-white uppercase tracking-tight mt-1">
+              REGISTRATION PORTAL
             </h2>
-            <p className="text-xs font-sans text-neutral-400 mt-1">
-              Complete your identity verification and generate your event pass.
+            <p className="text-xs text-neutral-400 font-sans mt-1">
+              Register your team members and secure your team event pass.
             </p>
           </div>
+          
           <RegistrationForm
             eventId={event.id}
             eventName={event.name}
@@ -87,7 +139,7 @@ export default async function EventDetailPage({ params }: Props) {
             maxTeamSize={event.maxTeamSize}
           />
         </div>
-      </div>
+      </main>
     </div>
   );
 }

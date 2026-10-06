@@ -159,9 +159,9 @@ model Event {
   registrationDeadline DateTime
   status               EventStatus     @default(DRAFT)
   posterUrl            String?
-  isTeamEvent          Boolean         @default(false)
-  minTeamSize          Int             @default(1)
-  maxTeamSize          Int             @default(1)
+  isTeamEvent          Boolean         @default(true)
+  minTeamSize          Int             @default(3)
+  maxTeamSize          Int             @default(3)
   categoryId           String?
   category             EventCategory?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   registrations        Registration[]
