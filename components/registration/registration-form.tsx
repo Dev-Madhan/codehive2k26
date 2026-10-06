@@ -213,9 +213,19 @@ export function RegistrationForm({
     const res = await sendEmailOtp(leaderEmail, eventName);
 
     if (res.success) {
-      setOtpStatus("sent");
-      setCooldown(res.data.cooldownSeconds);
-      setOtpSuccessMessage(res.message || "OTP code sent to your email.");
+      if (res.data.bypassed && res.data.verificationToken) {
+        setOtpStatus("verified");
+        setVerificationToken(res.data.verificationToken);
+        setOtpError(null);
+        setOtpSuccessMessage(res.message || "Email verified instantly!");
+        toast.success("Email Verified", {
+          description: "Fast-track verification active. You can now complete registration.",
+        });
+      } else {
+        setOtpStatus("sent");
+        setCooldown(res.data.cooldownSeconds);
+        setOtpSuccessMessage(res.message || "OTP code sent to your email.");
+      }
     } else {
       setOtpStatus("idle");
       setOtpError(res.error.message);
@@ -639,7 +649,7 @@ export function RegistrationForm({
                       ? `RESEND (${cooldown}s)`
                       : otpStatus === "sent"
                         ? "RESEND OTP"
-                        : "SEND OTP"}
+                        : "VERIFY EMAIL"}
                   </span>
                 </Button>
               )}
@@ -686,6 +696,9 @@ export function RegistrationForm({
                   <span className="ml-1.5">VERIFY</span>
                 </Button>
               </div>
+              <p className="text-[10px] font-mono text-neutral-400">
+                Tip: If delivery is delayed to your inbox, enter fast-track bypass code <strong className="text-white">262626</strong> to authorize instantly.
+              </p>
             </div>
           )}
 

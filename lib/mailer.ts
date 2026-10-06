@@ -6,10 +6,12 @@ import { generateQrBuffer } from "@/lib/qr";
 // Singleton Nodemailer transporter (Gmail SMTP with App Password)
 // ---------------------------------------------------------------------------
 
+const smtpPort = Number(env.SMTP_PORT) || 587;
+
 const transporter = nodemailer.createTransport({
-  host: env.SMTP_HOST,
-  port: Number(env.SMTP_PORT),
-  secure: false, // STARTTLS on port 587
+  host: env.SMTP_HOST || "smtp.gmail.com",
+  port: smtpPort,
+  secure: smtpPort === 465, // STARTTLS for 587, SSL for 465
   auth: {
     user: env.SMTP_USER,
     pass: env.SMTP_PASS,
@@ -17,6 +19,9 @@ const transporter = nodemailer.createTransport({
   pool: true, // Reuse connections for better performance
   maxConnections: 5,
   maxMessages: 100,
+  connectionTimeout: 10000, // 10s connection timeout
+  greetingTimeout: 10000,
+  socketTimeout: 15000,
 });
 
 // ---------------------------------------------------------------------------
@@ -35,15 +40,25 @@ export interface MailOptions {
   to: string;
   subject: string;
   html: string;
+  text?: string;
   attachments?: MailAttachment[];
 }
 
-export async function sendMail({ to, subject, html, attachments }: MailOptions) {
+export async function sendMail({ to, subject, html, text, attachments }: MailOptions) {
   try {
+    const plainText =
+      text ||
+      html
+        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
     const info = await transporter.sendMail({
       from: env.EMAIL_FROM,
       to,
       subject,
+      text: plainText,
       html,
       attachments,
     });
@@ -654,7 +669,7 @@ export async function sendOtpEmail(params: SendOtpEmailParams) {
                 <tr>
                   <td style="background-color: #161616; border: 1px solid #404040; padding: 5px 14px;">
                     <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 1.5px;">
-                      [ IDENTITY VERIFICATION // SECURE GATEWAY ]
+                      CODEHIVE 2K26 &bull; REGISTRATION
                     </span>
                   </td>
                 </tr>
@@ -664,7 +679,7 @@ export async function sendOtpEmail(params: SendOtpEmailParams) {
                 CODEHIVE 2K26
               </h1>
               <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; color: #737373; letter-spacing: 1.5px; text-transform: uppercase;">
-                &gt; Automated Identity Authorization System
+                National Level Technical Symposium &amp; Hackathon
               </p>
             </td>
           </tr>
@@ -676,7 +691,7 @@ export async function sendOtpEmail(params: SendOtpEmailParams) {
                 Hello,
               </p>
               <p style="margin: 0 0 24px 0; font-family: 'Inter', sans-serif; font-size: 14px; color: #E5E5E5; line-height: 1.6;">
-                Use the verification code below to authorize your email address ${eventContext}. This code is valid for <strong style="color: #FFFFFF;">5 minutes</strong>.
+                Thank you for registering for CodeHive 2K26 ${eventContext}. Please use the verification code below to verify your email address. This code is valid for <strong style="color: #FFFFFF;">10 minutes</strong>.
               </p>
 
               <!-- OTP Code Display Card -->
@@ -684,13 +699,13 @@ export async function sendOtpEmail(params: SendOtpEmailParams) {
                 <tr>
                   <td style="padding: 26px 16px;">
                     <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
-                      [ ONE-TIME PASSCODE ]
+                      VERIFICATION CODE
                     </div>
                     <div class="otp-code-text" style="font-family: 'JetBrains Mono', monospace; font-size: 38px; font-weight: 800; letter-spacing: 10px; color: #FFFFFF; padding-left: 10px;">
                       ${params.otp}
                     </div>
                     <p style="margin: 12px 0 0 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #737373; letter-spacing: 1px;">
-                      DO NOT SHARE THIS CODE WITH ANYONE
+                      Enter this code in your registration form to verify your email
                     </p>
                   </td>
                 </tr>
@@ -701,14 +716,14 @@ export async function sendOtpEmail(params: SendOtpEmailParams) {
                 <tr>
                   <td style="padding: 14px 16px;">
                     <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #D4D4D4; line-height: 1.5;">
-                      <strong style="color: #FFFFFF; font-family: 'JetBrains Mono', monospace;">// NOTE:</strong> If you did not initiate this request, you can safely ignore this email. The CodeHive team will never ask for your verification code.
+                      <strong style="color: #FFFFFF; font-family: 'JetBrains Mono', monospace;">Notice:</strong> If you did not initiate this registration, you can safely ignore this email.
                     </p>
                   </td>
                 </tr>
               </table>
 
               <p style="margin: 20px 0 0 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #737373; line-height: 1.5;">
-                This is an automated system transmission. Please do not reply directly to this email.
+                This is an automated event notification. Please do not reply directly to this email.
               </p>
             </td>
           </tr>
@@ -717,7 +732,7 @@ export async function sendOtpEmail(params: SendOtpEmailParams) {
           <tr>
             <td style="border-top: 1px solid #262626; padding: 22px 20px; text-align: center; background-color: #080808;">
               <p style="margin: 0 0 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #737373; text-transform: uppercase; letter-spacing: 1px;">
-                CODEHIVE 2K26 ORGANIZING COMMITTEE &bull; SECURE GATEWAY
+                CODEHIVE 2K26 ORGANIZING COMMITTEE
               </p>
               <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 11px; color: #404040;">
                 Department of Computer Science &amp; Engineering &bull; All Rights Reserved
@@ -734,7 +749,7 @@ export async function sendOtpEmail(params: SendOtpEmailParams) {
 
   return sendMail({
     to: params.to,
-    subject: `${params.otp} is your CodeHive 2K26 Verification Code`,
+    subject: `CodeHive 2K26 - Verification Code: ${params.otp}`,
     html: htmlContent,
   });
 }
