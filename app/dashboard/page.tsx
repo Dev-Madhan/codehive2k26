@@ -145,7 +145,7 @@ export default async function DashboardPage() {
       type: ev.category?.name || "Technical",
       categorySlug: ev.category?.slug || "technical",
       status: ev.status === "PUBLISHED" ? "Open" : ev.status.replace("_", " "),
-      venue: ev.venue || "Palani Murugan Hall of Fame, Vel Tech",
+      venue: ev.venue || "Palani Murugan Hall of Fame, Vel Tech Multi Tech",
       isTeamEvent: ev.isTeamEvent,
       minTeamSize: ev.minTeamSize,
       maxTeamSize: ev.maxTeamSize,

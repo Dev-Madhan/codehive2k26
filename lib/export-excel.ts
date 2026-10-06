@@ -35,6 +35,10 @@ export interface ExportRegistrationRecord {
       id: string;
       name: string;
       phone: string;
+      email?: string | null;
+      college?: string | null;
+      department?: string | null;
+      year?: string | null;
       transportOptIn?: boolean;
       pickupRoute?: string | null;
       pickupStop?: string | null;
@@ -271,7 +275,9 @@ function buildRegistrationsSheet(
       year: r.participant.year || "-",
       format: r.team ? "Team Entry" : "Solo Entry",
       teamName: r.team?.name || "-",
-      members: r.team?.members ? r.team.members.map((m) => m.name).join(", ") : "-",
+      members: r.team?.members
+        ? r.team.members.map((m) => `${m.name} (${m.phone}${m.email ? ` | ${m.email}` : ""})`).join("; ")
+        : "-",
       busOptIn: r.transportOptIn ? "YES" : "NO",
       pickupRoute: r.pickupRoute || (r.transportOptIn ? "Vel Tech Bus" : "-"),
       pickupStop: r.pickupStop || "-",

@@ -199,6 +199,10 @@ model TeamMember {
   teamId        String
   name          String
   phone         String
+  email         String?
+  college       String?
+  department    String?
+  year          String?
   collegeIdUrl  String?
   participantId String?
   transportOptIn Boolean      @default(false)
@@ -211,6 +215,7 @@ model TeamMember {
 
   @@index([teamId])
   @@index([pickupRoute])
+  @@index([email])
 }
 
 // ----------------------------------------------------

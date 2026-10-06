@@ -37,7 +37,7 @@ export default async function EventsPage() {
             </h1>
 
             <p className="text-neutral-400 text-xs sm:text-sm font-sans leading-relaxed line-clamp-2 sm:line-clamp-none">
-              Explore our two flagship hackathon tracks: TECH FORGE and AGENT VIBE. Free registration, 4 exciting rounds, and ₹20,000 in cash prizes.
+              Explore our two flagship hackathon tracks: TECH FORGE and AGENT VIBE hosted on-site at Vel Tech Multi Tech (VTMT). Free registration, 4 exciting rounds, and ₹20,000 in cash prizes.
             </p>
           </div>
 

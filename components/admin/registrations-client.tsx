@@ -90,6 +90,10 @@ export interface RegistrationItem {
       id: string;
       name: string;
       phone: string;
+      email?: string | null;
+      college?: string | null;
+      department?: string | null;
+      year?: string | null;
       transportOptIn: boolean;
       pickupRoute?: string | null;
       pickupStop?: string | null;
@@ -442,28 +446,32 @@ function ParticipantDetailDialog({
                   {team.members.map((member, idx) => (
                     <div
                       key={member.id}
-                      className="flex items-center justify-between gap-2 bg-[#080808] border border-[#262626] px-3 py-2"
+                      className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 bg-[#080808] border border-[#262626] px-3 py-2"
                     >
                       <div className="flex items-center gap-2 min-w-0">
-                        <span className="text-[10px] text-[#737373] shrink-0 font-bold">
+                        <span className="text-[10px] text-[#737373] shrink-0 font-bold font-mono">
                           #{idx + 1}
                         </span>
-                        <span className="text-xs text-white font-semibold truncate">
-                          {member.name}
-                        </span>
-                        <span className="text-[10px] text-[#A3A3A3] truncate hidden sm:inline font-mono">
-                          {member.phone}
-                        </span>
+                        <div className="min-w-0">
+                          <span className="text-xs text-white font-semibold truncate block">
+                            {member.name}
+                          </span>
+                          <span className="text-[10px] text-[#A3A3A3] truncate block font-mono">
+                            {member.phone}{member.email ? ` • ${member.email}` : ""}{member.department ? ` • ${member.department}` : ""}{member.year ? ` (${member.year})` : ""}
+                          </span>
+                        </div>
                       </div>
-                      {member.transportOptIn ? (
-                        <span className="text-[9px] text-white font-bold border border-[#262626] bg-[#161616] px-1.5 py-0.5 shrink-0 tracking-wider">
-                          BUS PASS {member.pickupRoute ? `• ${member.pickupRoute}` : ""}
-                        </span>
-                      ) : (
-                        <span className="text-[9px] text-neutral-400 border border-[#262626] bg-[#0c0c0c] px-1.5 py-0.5 shrink-0 tracking-wider">
-                          OWN TRANSPORT
-                        </span>
-                      )}
+                      <div className="shrink-0 self-start sm:self-auto">
+                        {member.transportOptIn ? (
+                          <span className="text-[9px] text-white font-bold border border-[#262626] bg-[#161616] px-1.5 py-0.5 tracking-wider font-mono">
+                            BUS PASS {member.pickupRoute ? `• ${member.pickupRoute}` : ""}
+                          </span>
+                        ) : (
+                          <span className="text-[9px] text-neutral-400 border border-[#262626] bg-[#0c0c0c] px-1.5 py-0.5 tracking-wider font-mono">
+                            OWN TRANSPORT
+                          </span>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>

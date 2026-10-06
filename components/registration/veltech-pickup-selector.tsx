@@ -77,7 +77,7 @@ export function VelTechPickupSelector({
   return (
     <div className="space-y-3.5 sm:space-y-4 p-3.5 sm:p-4 rounded-none border border-[#262626] bg-[#080808]">
       {title && (
-        <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-1.5 border-b border-[#262626] pb-2.5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 border-b border-[#262626] pb-2.5">
           <div className="flex items-center gap-2 min-w-0">
             <BusIcon className="size-4 text-white shrink-0" />
             <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-white truncate">
@@ -85,7 +85,7 @@ export function VelTechPickupSelector({
             </span>
           </div>
           {passengerCount && (
-            <span className="self-start xs:self-auto text-[10px] font-mono font-semibold px-2 py-0.5 rounded-none border border-[#404040] bg-[#161616] text-[#E5E5E5] shrink-0">
+            <span className="self-start sm:self-auto text-[10px] font-mono font-semibold px-2 py-0.5 rounded-none border border-[#404040] bg-[#161616] text-[#E5E5E5] shrink-0">
               {passengerCount} Seat{passengerCount > 1 ? "s" : ""} Reserved
             </span>
           )}
@@ -269,7 +269,7 @@ export function VelTechPickupSelector({
       {/* Selected Route Info Card */}
       {currentRoute && (
         <div className="p-3 border border-[#262626] bg-[#0A0A0A] space-y-1.5 font-mono text-[11px]">
-          <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-1.5 border-b border-[#1F1F1F] pb-1.5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 border-b border-[#1F1F1F] pb-1.5">
             <div className="flex items-center gap-2">
               <span className="bg-white text-black font-bold px-1.5 py-0.5 text-[10px] tracking-wider uppercase shrink-0">
                 BUS {currentRoute.busNumber || "TRANSIT"}
