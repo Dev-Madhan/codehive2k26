@@ -148,12 +148,16 @@ export async function POST(req: NextRequest) {
           },
         });
 
-        const busCommutersCount = await prisma.registration.count({
+        const busCommutersAgg = await prisma.registration.aggregate({
           where: {
             eventId: ev.id,
             transportOptIn: true,
           },
+          _sum: {
+            passengersCount: true,
+          },
         });
+        const busCommutersCount = busCommutersAgg._sum.passengersCount || 0;
 
         const regCount = ev._count.registrations;
         const turnoutRate = regCount > 0 ? Math.round((checkedInCount / regCount) * 100) : 0;

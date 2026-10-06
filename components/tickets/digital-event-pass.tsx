@@ -83,13 +83,13 @@ export function DigitalEventPass({
       {/* Main Ticket Container */}
       <div
         id="codehive-digital-pass"
-        className="relative overflow-hidden rounded-none border-2 border-white/80 bg-[#080808] shadow-2xl p-5 sm:p-8"
+        className="relative overflow-hidden rounded-none border-2 border-white/80 bg-[#080808] shadow-2xl p-4 sm:p-7 md:p-8"
       >
         {/* Subtle Ambient Top Accent */}
         <div className="absolute top-0 right-0 size-48 bg-white/[0.03] rounded-full blur-3xl pointer-events-none" />
 
         {/* ── Top Bar ── */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#262626] pb-4 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#262626] pb-4 mb-5 sm:mb-6">
           <div className="flex items-center gap-2">
             <span className="text-white font-extrabold text-base">&gt;</span>
             <span className="font-mono font-bold text-white text-sm sm:text-base tracking-tight">
@@ -109,17 +109,17 @@ export function DigitalEventPass({
         </div>
 
         {/* ── Event Title & Core Meta ── */}
-        <div className="space-y-4 mb-6">
+        <div className="space-y-3.5 sm:space-y-4 mb-5 sm:mb-6">
           <div className="space-y-1">
             <span className="text-[10px] uppercase font-mono tracking-widest text-[#A3A3A3] font-semibold block">
               OFFICIAL PARTICIPATION PASS
             </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold font-sans text-white tracking-tight uppercase">
+            <h2 className="text-xl xs:text-2xl sm:text-3xl font-extrabold font-sans text-white tracking-tight uppercase">
               {ticket.eventName}
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-none border border-[#262626] bg-[#0F0F0F] text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 p-3 sm:p-3.5 rounded-none border border-[#262626] bg-[#0F0F0F] text-xs">
             <div className="flex items-center gap-2.5 text-neutral-300">
               <CalendarIcon className="size-4 text-white shrink-0" />
               <div>
@@ -139,13 +139,13 @@ export function DigitalEventPass({
         </div>
 
         {/* ── Verification Block: Pass Code & QR Code ── */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 sm:p-5 rounded-none border border-[#262626] bg-[#0F0F0F] mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 p-3.5 sm:p-5 rounded-none border border-[#262626] bg-[#0F0F0F] mb-5 sm:mb-6">
           {/* Pass Code (3 Columns on Desktop) */}
-          <div className="md:col-span-3 flex flex-col justify-between space-y-4">
+          <div className="md:col-span-3 flex flex-col justify-between space-y-3 sm:space-y-4">
             <div>
-              <div className="flex items-center gap-2 mb-1.5">
+              <div className="flex items-center gap-2 mb-1 sm:mb-1.5">
                 <SparklesIcon className="size-3.5 text-white" />
-                <span className="text-[11px] font-mono text-white font-bold uppercase tracking-widest">
+                <span className="text-[10px] sm:text-[11px] font-mono text-white font-bold uppercase tracking-widest">
                   GATE PASS VERIFICATION CODE
                 </span>
               </div>
@@ -154,12 +154,12 @@ export function DigitalEventPass({
               </p>
             </div>
 
-            <div className="p-3.5 rounded-none border border-[#262626] bg-[#080808] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="p-3 sm:p-3.5 rounded-none border border-[#262626] bg-[#080808] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <span className="text-[9px] uppercase font-mono text-[#737373] block">
                   PASS CODE / TICKET ID
                 </span>
-                <span className="text-xl sm:text-2xl font-mono font-extrabold text-white tracking-wider">
+                <span className="text-xl sm:text-2xl font-mono font-extrabold text-white tracking-wider break-all">
                   {ticket.registrationNumber}
                 </span>
               </div>
@@ -167,7 +167,7 @@ export function DigitalEventPass({
               <button
                 type="button"
                 onClick={handleCopyCode}
-                className="inline-flex items-center justify-center gap-1.5 h-10 px-4 font-mono text-xs font-bold uppercase tracking-wider text-black bg-white hover:bg-neutral-200 active:scale-95 border border-white transition-all cursor-pointer shrink-0"
+                className="inline-flex items-center justify-center gap-1.5 h-11 sm:h-10 px-4 font-mono text-xs font-bold uppercase tracking-wider text-black bg-white hover:bg-neutral-200 active:scale-95 border border-white transition-all cursor-pointer shrink-0 w-full sm:w-auto"
               >
                 {copied ? (
                   <>
@@ -304,7 +304,7 @@ export function DigitalEventPass({
               Vel Tech Campus Transportation
             </span>
             <span className="font-mono text-white font-bold text-[10px] px-2 py-0.5 border border-[#404040] bg-[#161616]">
-              {ticket.transportOptIn ? "6:00 AM ONWARDS" : "SELF-COMMUTE"}
+              {ticket.transportOptIn ? "CAMPUS BUS TRANSIT" : "SELF-COMMUTE"}
             </span>
           </div>
 
@@ -315,7 +315,7 @@ export function DigitalEventPass({
                   [ OFFICIAL VEL TECH BUS PASS ]
                 </span>
                 <span className="text-[10px] font-mono text-[#737373]">
-                  {ticket.passengersCount} Seat{ticket.passengersCount > 1 ? "s" : ""} Reserved • Report by 06:00 AM
+                  {ticket.passengersCount} Seat{ticket.passengersCount > 1 ? "s" : ""} Reserved &bull; Report 10 Mins Prior
                 </span>
               </div>
 
@@ -350,7 +350,11 @@ export function DigitalEventPass({
                           <p className="text-[10px] font-mono text-[#737373]">Landmark: {m.pickupLandmark}</p>
                         </>
                       ) : (
-                        <p className="text-[#737373] italic">Self-Arranged Transportation</p>
+                        <div className="pt-0.5">
+                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-mono font-bold uppercase text-white bg-[#161616] border border-[#262626]">
+                            🚗 Own Transport (Self-Arranged Commute)
+                          </span>
+                        </div>
                       )}
                     </div>
                   ))}
@@ -393,12 +397,12 @@ export function DigitalEventPass({
           </button>
         </div>
 
-        <div className="w-full sm:w-auto text-right">
+        <div className="w-full sm:w-auto text-center sm:text-right pt-1 sm:pt-0">
           {onRegisterAnother ? (
             <button
               type="button"
               onClick={onRegisterAnother}
-              className="inline-flex items-center gap-1.5 text-xs font-mono text-white hover:text-neutral-300 uppercase tracking-wider underline underline-offset-4 cursor-pointer"
+              className="inline-flex items-center justify-center gap-1.5 text-xs font-mono text-white hover:text-neutral-300 uppercase tracking-wider underline underline-offset-4 cursor-pointer"
             >
               <span>Register for Another Event</span>
               <ArrowRightIcon className="size-3" />
@@ -406,7 +410,7 @@ export function DigitalEventPass({
           ) : (
             <Link
               href="/events"
-              className="inline-flex items-center gap-1.5 text-xs font-mono text-white hover:text-neutral-300 uppercase tracking-wider underline underline-offset-4"
+              className="inline-flex items-center justify-center gap-1.5 text-xs font-mono text-white hover:text-neutral-300 uppercase tracking-wider underline underline-offset-4"
             >
               <span>Explore More Events</span>
               <ArrowRightIcon className="size-3" />

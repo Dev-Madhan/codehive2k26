@@ -395,11 +395,47 @@ export async function sendRegistrationConfirmationEmail(
                         </tr>
                         <tr>
                           <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #737373; text-transform: uppercase;">Reporting Time:</td>
-                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF;">06:00 AM Sharp (Buses operate from 6:00 AM onwards)</td>
+                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF;">10 Mins Prior to Pickup (Fleet operates from 05:45 AM)</td>
                         </tr>
                       </table>
+                      ${
+                        !params.samePickupForTeam && params.members && params.members.length > 0
+                          ? `
+                        <div style="margin-top: 14px; border-top: 1px solid #262626; padding-top: 10px;">
+                          <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #737373; text-transform: uppercase; margin-bottom: 8px;">
+                            // INDIVIDUAL COMMUTE ROSTER (${params.passengersCount || 1} BUS SEAT(S) RESERVED)
+                          </div>
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 11px; line-height: 1.5;">
+                            <tr>
+                              <td style="padding: 4px 0; font-family: 'Inter', sans-serif;">
+                                <strong style="color: #FFFFFF;">Leader (${params.participantName}):</strong>
+                                <span style="color: #E5E5E5;">${params.pickupRoute} &gt; ${params.pickupStop}</span>
+                                <span style="color: #737373; font-size: 10px;">(${params.pickupLandmark})</span>
+                              </td>
+                            </tr>
+                            ${params.members
+                              .map(
+                                (m, idx) => `
+                              <tr>
+                                <td style="padding: 4px 0; font-family: 'Inter', sans-serif;">
+                                  <strong style="color: #FFFFFF;">Member 0${idx + 2} (${m.name}):</strong>
+                                  ${
+                                    m.transportOptIn
+                                      ? `<span style="color: #E5E5E5;">${m.pickupRoute} &gt; ${m.pickupStop}</span> <span style="color: #737373; font-size: 10px;">(${m.pickupLandmark})</span>`
+                                      : `<span style="color: #A3A3A3; font-style: italic;">🚗 Own Transportation (Self-Arranged Commute directly to campus)</span>`
+                                  }
+                                </td>
+                              </tr>
+                            `
+                              )
+                              .join("")}
+                          </table>
+                        </div>
+                      `
+                          : ""
+                      }
                       <div style="margin-top: 10px; padding: 8px 12px; background-color: #161616; border-left: 3px solid #FFFFFF; font-family: 'Inter', sans-serif; font-size: 11px; color: #A3A3A3; line-height: 1.4;">
-                        Note: The student transport coordinator and bus captain will coordinate with the team leader via mobile. Please be at your landmark by 6:00 AM.
+                        Note: The student transport coordinator and bus captain will coordinate with the team leader via mobile. Please be at your designated boarding stop 10 minutes prior to scheduled pickup time.
                       </div>
                     </td>
                   </tr>
@@ -993,11 +1029,47 @@ export async function sendEventPostponedEmail(
                         </tr>
                         <tr>
                           <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #737373; text-transform: uppercase;">Reporting Time:</td>
-                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF;">06:00 AM Sharp (Buses operate from 6:00 AM onwards)</td>
+                          <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF;">10 Mins Prior to Pickup (Fleet operates from 05:45 AM)</td>
                         </tr>
                       </table>
+                      ${
+                        !params.samePickupForTeam && params.members && params.members.length > 0
+                          ? `
+                        <div style="margin-top: 14px; border-top: 1px solid #262626; padding-top: 10px;">
+                          <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #737373; text-transform: uppercase; margin-bottom: 8px;">
+                            // INDIVIDUAL COMMUTE ROSTER (${params.passengersCount || 1} BUS SEAT(S) RESERVED)
+                          </div>
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 11px; line-height: 1.5;">
+                            <tr>
+                              <td style="padding: 4px 0; font-family: 'Inter', sans-serif;">
+                                <strong style="color: #FFFFFF;">Leader (${params.participantName}):</strong>
+                                <span style="color: #E5E5E5;">${params.pickupRoute} &gt; ${params.pickupStop}</span>
+                                <span style="color: #737373; font-size: 10px;">(${params.pickupLandmark})</span>
+                              </td>
+                            </tr>
+                            ${params.members
+                              .map(
+                                (m, idx) => `
+                              <tr>
+                                <td style="padding: 4px 0; font-family: 'Inter', sans-serif;">
+                                  <strong style="color: #FFFFFF;">Member 0${idx + 2} (${m.name}):</strong>
+                                  ${
+                                    m.transportOptIn
+                                      ? `<span style="color: #E5E5E5;">${m.pickupRoute} &gt; ${m.pickupStop}</span> <span style="color: #737373; font-size: 10px;">(${m.pickupLandmark})</span>`
+                                      : `<span style="color: #A3A3A3; font-style: italic;">🚗 Own Transportation (Self-Arranged Commute directly to campus)</span>`
+                                  }
+                                </td>
+                              </tr>
+                            `
+                              )
+                              .join("")}
+                          </table>
+                        </div>
+                      `
+                          : ""
+                      }
                       <div style="margin-top: 10px; padding: 8px 12px; background-color: #161616; border-left: 3px solid #FFFFFF; font-family: 'Inter', sans-serif; font-size: 11px; color: #A3A3A3; line-height: 1.4;">
-                        Note: The student transport coordinator and bus captain will coordinate with the team leader via mobile. Please be at your landmark by 6:00 AM.
+                        Note: The student transport coordinator and bus captain will coordinate with the team leader via mobile. Please be at your designated boarding stop 10 minutes prior to scheduled pickup time.
                       </div>
                     </td>
                   </tr>

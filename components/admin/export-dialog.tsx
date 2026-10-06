@@ -444,7 +444,7 @@ export function ExportDataDialog({
                     <SelectTrigger className="w-full h-9">
                       <SelectValue placeholder="[ ALL BUS ROUTES & CORRIDORS ]" />
                     </SelectTrigger>
-                    <SelectContent className="max-h-60">
+                    <SelectContent className="max-h-60 no-scrollbar scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                       <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-zinc-500 border-b border-[#262626] mb-1 flex items-center justify-between">
                         <span>// VEL TECH BUS CORRIDORS</span>
                         <span className="text-white font-bold">{VELTECH_BUS_ROUTES.length} ROUTES</span>

@@ -202,9 +202,9 @@ function buildRegistrationsSheet(
   if (options.columns.transportInfo) {
     cols.push(
       { header: "BUS OPT-IN", key: "busOptIn", width: 14, alignment: { horizontal: "center" } },
-      { header: "PICKUP ROUTE", key: "pickupRoute", width: 28 },
-      { header: "PICKUP STOP", key: "pickupStop", width: 30 },
-      { header: "LANDMARK", key: "landmark", width: 26 },
+      { header: "PICKUP ROUTE", key: "pickupRoute", width: 34 },
+      { header: "PICKUP STOP", key: "pickupStop", width: 40 },
+      { header: "LANDMARK", key: "landmark", width: 30 },
       { header: "SEATS", key: "seats", width: 12, alignment: { horizontal: "center" } }
     );
   }
@@ -365,13 +365,80 @@ function buildTransportSheet(
     { header: "TEAM NAME", key: "teamName", width: 22 },
   ];
 
-  const totalSeats = busRecords.reduce((acc, r) => acc + (r.passengersCount || 1), 0);
+  // Flatten bus records: if a team has different pickup points, list each rider under their designated route
+  interface BusManifestEntry {
+    regNo: string;
+    pickupRoute: string;
+    pickupStop: string;
+    landmark: string;
+    seats: number;
+    name: string;
+    phone: string;
+    college: string;
+    eventName: string;
+    teamName: string;
+  }
+
+  const manifestEntries: BusManifestEntry[] = [];
+
+  busRecords.forEach((r) => {
+    const isSplitTeam = !r.samePickupForTeam && Boolean(r.team?.members && r.team.members.length > 0);
+
+    if (!isSplitTeam) {
+      manifestEntries.push({
+        regNo: r.registrationNumber,
+        pickupRoute: r.pickupRoute || "Vel Tech Fleet",
+        pickupStop: r.pickupStop || "Assigned Stop",
+        landmark: r.pickupLandmark || "-",
+        seats: r.passengersCount || 1,
+        name: r.participant.name,
+        phone: String(r.participant.phone || ""),
+        college: r.participant.college,
+        eventName: r.event.name,
+        teamName: r.team?.name || "Solo",
+      });
+    } else {
+      // Leader row (always 1 seat)
+      manifestEntries.push({
+        regNo: r.registrationNumber,
+        pickupRoute: r.pickupRoute || "Vel Tech Fleet",
+        pickupStop: r.pickupStop || "Assigned Stop",
+        landmark: r.pickupLandmark || "-",
+        seats: 1,
+        name: `${r.participant.name} (Leader)`,
+        phone: String(r.participant.phone || ""),
+        college: r.participant.college,
+        eventName: r.event.name,
+        teamName: r.team?.name || "Team",
+      });
+
+      // Member rows (only those who opted for bus)
+      r.team?.members?.forEach((m) => {
+        if (m.transportOptIn) {
+          manifestEntries.push({
+            regNo: r.registrationNumber,
+            pickupRoute: m.pickupRoute || "Vel Tech Fleet",
+            pickupStop: m.pickupStop || "Assigned Stop",
+            landmark: m.pickupLandmark || "-",
+            seats: 1,
+            name: `${m.name} (Member)`,
+            phone: String(m.phone || ""),
+            college: r.participant.college,
+            eventName: r.event.name,
+            teamName: r.team?.name || "Team",
+          });
+        }
+      });
+    }
+  });
+
+  const totalSeats = manifestEntries.reduce((acc, e) => acc + (e.seats || 1), 0);
   const generatedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
 
   applyExecutiveHeaderBanner(
     worksheet,
     "SHUTTLE BUS LOGISTICS MANIFEST",
-    `Generated on: ${generatedDate} IST | Total Commuters: ${totalSeats} Seats across ${busRecords.length} Bookings`,
+    `Generated on: ${generatedDate} IST | Total Commuters: ${totalSeats} Seats across ${manifestEntries.length} Bus Manifest Entries`,
     cols.length
   );
 
@@ -390,18 +457,18 @@ function buildTransportSheet(
     };
   });
 
-  busRecords.forEach((r, idx) => {
+  manifestEntries.forEach((entry, idx) => {
     const rowValues = [
-      r.registrationNumber,
-      r.pickupRoute || "Vel Tech Fleet",
-      r.pickupStop || "Assigned Stop",
-      r.pickupLandmark || "-",
-      r.passengersCount || 1,
-      r.participant.name,
-      String(r.participant.phone || ""),
-      r.participant.college,
-      r.event.name,
-      r.team?.name || "Solo",
+      entry.regNo,
+      entry.pickupRoute,
+      entry.pickupStop,
+      entry.landmark,
+      entry.seats,
+      entry.name,
+      entry.phone,
+      entry.college,
+      entry.eventName,
+      entry.teamName,
     ];
 
     const dataRow = worksheet.addRow(rowValues);

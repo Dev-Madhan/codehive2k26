@@ -24,16 +24,48 @@ export async function GET(req: NextRequest) {
       include: {
         event: {
           select: {
+            id: true,
             name: true,
             slug: true,
+            venue: true,
+            startAt: true,
+            isTeamEvent: true,
+            minTeamSize: true,
+            maxTeamSize: true,
           },
         },
         participant: {
           select: {
+            id: true,
             name: true,
             email: true,
             phone: true,
             college: true,
+            department: true,
+            year: true,
+            imageUrl: true,
+          },
+        },
+        team: {
+          select: {
+            id: true,
+            name: true,
+            members: {
+              select: {
+                id: true,
+                name: true,
+                phone: true,
+                transportOptIn: true,
+                pickupRoute: true,
+                pickupStop: true,
+                pickupLandmark: true,
+              },
+            },
+          },
+        },
+        checkIn: {
+          select: {
+            checkedInAt: true,
           },
         },
       },

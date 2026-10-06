@@ -475,26 +475,26 @@ export function RegistrationForm({
       {/* ═══════════════════════════════════════════════
           SECTION 01: TEAM CONFIGURATION
           ═══════════════════════════════════════════════ */}
-      <div className="rounded-none border border-[#262626] bg-[#0F0F0F] p-4 sm:p-5 space-y-4">
-        <div className="flex items-center justify-between border-b border-[#262626] pb-3">
-          <div className="flex items-center gap-2">
-            <UsersIcon className="size-4 text-white" />
-            <h3 className="text-[11px] font-mono font-bold text-white uppercase tracking-wider">
-              Section 01: Team Configuration
+      <div className="rounded-none border border-[#262626] bg-[#0F0F0F] p-3.5 sm:p-5 space-y-3 sm:space-y-4">
+        <div className="flex items-center justify-between border-b border-[#262626] pb-2.5">
+          <div className="flex items-center gap-2 min-w-0">
+            <UsersIcon className="size-4 text-white shrink-0" />
+            <h3 className="text-[11px] font-mono font-bold text-white uppercase tracking-wider truncate">
+              Section 01: Team Setup
             </h3>
           </div>
-          <span className="text-[10px] font-mono font-bold uppercase px-2 py-0.5 border border-[#383838] bg-[#141414] text-neutral-300">
-            Strictly 3 Members
+          <span className="text-[9px] sm:text-[10px] font-mono font-bold uppercase px-2 py-0.5 border border-[#383838] bg-[#141414] text-neutral-300 shrink-0">
+            3 Members
           </span>
         </div>
 
         {/* Rule Policy Banner */}
-        <div className="flex items-center gap-2 p-2.5 bg-[#121212] border border-[#262626] font-mono text-[11px] text-neutral-300">
-          <span className="text-white font-bold">// ENTRY POLICY:</span>
-          <span>Each team must have exactly 3 builders (1 Leader + 2 Members). Solo &amp; dual entries are disabled.</span>
+        <div className="px-3 py-2 bg-[#121212] border border-[#262626] font-mono text-[11px] text-neutral-300 leading-relaxed">
+          <span className="text-white font-bold mr-1.5">// POLICY:</span>
+          <span>Each team requires exactly 3 builders (1 Leader + 2 Members). Solo &amp; dual entries disabled.</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div className="space-y-1.5">
             <Label
               htmlFor="reg-team-size"
@@ -555,15 +555,15 @@ export function RegistrationForm({
       {/* ═══════════════════════════════════════════════
           SECTION 02: TEAM LEADER
           ═══════════════════════════════════════════════ */}
-      <div className="rounded-none border border-[#262626] bg-[#0F0F0F] p-4 sm:p-5 space-y-4">
-        <div className="flex items-center justify-between border-b border-[#262626] pb-3">
+      <div className="rounded-none border border-[#262626] bg-[#0F0F0F] p-3.5 sm:p-5 space-y-3.5 sm:space-y-4">
+        <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-1.5 border-b border-[#262626] pb-3">
           <div className="flex items-center gap-2">
-            <UserIcon className="size-4 text-white" />
+            <UserIcon className="size-4 text-white shrink-0" />
             <h3 className="text-[11px] font-mono font-bold text-white uppercase tracking-wider">
               Section 02: Team Leader
             </h3>
           </div>
-          <span className="text-[10px] font-mono text-[#737373]">
+          <span className="self-start xs:self-auto text-[10px] font-mono text-[#737373] shrink-0">
             Member 01 • Primary Contact
           </span>
         </div>
@@ -816,15 +816,15 @@ export function RegistrationForm({
           SECTION 03: TEAM ROSTER (MEMBER 02 & MEMBER 03)
           ═══════════════════════════════════════════════ */}
       {members.length > 0 && (
-        <div className="rounded-none border border-[#262626] bg-[#0F0F0F] p-4 sm:p-5 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-b border-[#262626] pb-3">
+        <div className="rounded-none border border-[#262626] bg-[#0F0F0F] p-3.5 sm:p-5 space-y-3.5 sm:space-y-4">
+          <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-1.5 border-b border-[#262626] pb-3">
             <div className="flex items-center gap-2">
-              <UsersIcon className="size-4 text-white" />
+              <UsersIcon className="size-4 text-white shrink-0" />
               <h3 className="text-[11px] font-mono font-bold text-white uppercase tracking-wider">
                 Section 03: Team Roster (Members 02 &amp; 03)
               </h3>
             </div>
-            <span className="text-[10px] font-mono text-[#737373]">
+            <span className="hidden sm:inline-block self-start xs:self-auto text-[10px] font-mono text-[#737373] shrink-0">
               Leader is recorded as Member 01
             </span>
           </div>
@@ -832,14 +832,19 @@ export function RegistrationForm({
           {members.map((member, index) => (
             <div
               key={index}
-              className="space-y-3 p-3.5 sm:p-4 rounded-none border border-[#262626] bg-[#080808]"
+              className="space-y-3 p-3 sm:p-3.5 rounded-none border border-[#262626] bg-[#080808]"
             >
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center justify-center size-6 rounded-none border border-[#404040] bg-[#161616] text-[10px] font-mono font-bold text-white">
-                  {String(index + 2).padStart(2, "0")}
-                </span>
-                <span className="text-[11px] font-mono font-bold text-white uppercase tracking-wider">
-                  Member {String(index + 2).padStart(2, "0")}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center justify-center size-6 rounded-none border border-[#404040] bg-[#161616] text-[10px] font-mono font-bold text-white">
+                    {String(index + 2).padStart(2, "0")}
+                  </span>
+                  <span className="text-[11px] font-mono font-bold text-white uppercase tracking-wider">
+                    Member {String(index + 2).padStart(2, "0")}
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">
+                  Builder
                 </span>
               </div>
 
@@ -890,17 +895,17 @@ export function RegistrationForm({
       {/* ═══════════════════════════════════════════════
           SECTION: VEL TECH CAMPUS TRANSPORTATION (6:00 AM ONWARDS)
           ═══════════════════════════════════════════════ */}
-      <div className="rounded-none border border-[#262626] bg-[#0F0F0F] p-4 sm:p-5 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2 border-b border-[#262626] pb-3">
-          <div className="flex items-center gap-2">
+      <div className="rounded-none border border-[#262626] bg-[#0F0F0F] p-3.5 sm:p-5 space-y-3.5 sm:space-y-4">
+        <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-1.5 border-b border-[#262626] pb-3">
+          <div className="flex items-center gap-2 min-w-0">
             <BusIcon className="size-4 text-white shrink-0" />
-            <h3 className="text-[11px] font-mono font-bold text-white uppercase tracking-wider">
+            <h3 className="text-[11px] font-mono font-bold text-white uppercase tracking-wider truncate">
               {teamSizeNum > 1
-                ? "Section 04: Vel Tech Campus Transportation Logistics"
-                : "Section 03: Vel Tech Campus Transportation Logistics"}
+                ? "Section 04: Campus Transport Logistics"
+                : "Section 03: Campus Transport Logistics"}
             </h3>
           </div>
-          <span className="self-start sm:self-auto text-[10px] font-mono text-[#E5E5E5] font-semibold border border-[#404040] bg-[#161616] px-2 py-0.5">
+          <span className="self-start xs:self-auto text-[10px] font-mono text-[#E5E5E5] font-semibold border border-[#404040] bg-[#161616] px-2 py-0.5 shrink-0">
             FREE SERVICE • 6:00 AM ONWARDS
           </span>
         </div>
@@ -911,25 +916,27 @@ export function RegistrationForm({
         </p>
 
         {/* Transportation Mode Toggle */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-1">
           <button
             type="button"
             onClick={() => setTransportOptIn(false)}
-            className={`p-3.5 text-left border transition-all rounded-none cursor-pointer flex flex-col gap-1 ${
+            className={`p-2.5 sm:p-3.5 text-left border transition-all rounded-none cursor-pointer flex flex-col gap-1 active:scale-[0.99] ${
               !transportOptIn
-                ? "border-white bg-[#161616] text-white shadow-sm"
+                ? "border-white bg-[#161616] text-white shadow-sm ring-1 ring-white/20"
                 : "border-[#262626] bg-[#080808] text-neutral-400 hover:border-neutral-700"
             }`}
           >
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-200">
-                🚗 Own Transportation
+                🚗 Own Transport
               </span>
-              {!transportOptIn && (
-                <span className="size-2 rounded-full bg-white" />
+              {!transportOptIn ? (
+                <span className="size-2 rounded-full bg-white shadow-[0_0_8px_white]" />
+              ) : (
+                <span className="size-2 rounded-full border border-neutral-700" />
               )}
             </div>
-            <span className="text-[11px] text-neutral-400 font-sans">
+            <span className="hidden sm:block text-[11px] text-neutral-400 font-sans leading-normal">
               I / our team will reach the Vel Tech campus directly on our own.
             </span>
           </button>
@@ -937,21 +944,23 @@ export function RegistrationForm({
           <button
             type="button"
             onClick={() => setTransportOptIn(true)}
-            className={`p-3.5 text-left border transition-all rounded-none cursor-pointer flex flex-col gap-1 ${
+            className={`p-2.5 sm:p-3.5 text-left border transition-all rounded-none cursor-pointer flex flex-col gap-1 active:scale-[0.99] ${
               transportOptIn
-                ? "border-white bg-[#161616] text-white shadow-sm"
+                ? "border-white bg-[#161616] text-white shadow-sm ring-1 ring-white/20"
                 : "border-[#262626] bg-[#080808] text-neutral-400 hover:border-neutral-700"
             }`}
           >
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-white">
-                🚌 Vel Tech Bus Pickup
+                🚌 Vel Tech Bus (Free)
               </span>
-              {transportOptIn && (
-                <span className="size-2 rounded-full bg-white animate-pulse" />
+              {transportOptIn ? (
+                <span className="size-2 rounded-full bg-white shadow-[0_0_8px_white] animate-pulse" />
+              ) : (
+                <span className="size-2 rounded-full border border-neutral-700" />
               )}
             </div>
-            <span className="text-[11px] text-neutral-400 font-sans">
+            <span className="hidden sm:block text-[11px] text-neutral-400 font-sans leading-normal">
               Avail free Vel Tech bus pickup from designated city stops from 6:00 AM onwards.
             </span>
           </button>
@@ -961,7 +970,7 @@ export function RegistrationForm({
         {transportOptIn && (
           <div className="space-y-4 pt-2">
             {teamSizeNum > 1 && (
-              <div className="p-3.5 border border-[#262626] bg-[#080808] space-y-2">
+              <div className="p-3 sm:p-3.5 border border-[#262626] bg-[#080808] space-y-2">
                 <Label className="font-mono text-[10px] uppercase tracking-wider text-neutral-400 font-bold block">
                   Team Boarding Preference:
                 </Label>
@@ -975,7 +984,7 @@ export function RegistrationForm({
                         : "border-[#262626] text-neutral-400 hover:border-neutral-700"
                     }`}
                   >
-                    [•] All Team Members Board Together
+                    [•] <span className="hidden sm:inline">All Team Members </span>Board Together
                   </button>
                   <button
                     type="button"
@@ -986,7 +995,7 @@ export function RegistrationForm({
                         : "border-[#262626] text-neutral-400 hover:border-neutral-700"
                     }`}
                   >
-                    [ ] Individual Member Pickup Locations
+                    [ ] Individual <span className="hidden sm:inline">Member Pickup </span>Locations
                   </button>
                 </div>
               </div>
@@ -1026,39 +1035,71 @@ export function RegistrationForm({
                 />
 
                 {/* Additional Members Pickups */}
-                {members.map((member, idx) => (
-                  <div key={idx} className="space-y-3 p-3.5 border border-[#262626] bg-[#080808]">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-mono font-bold text-neutral-300 uppercase">
-                        Member {String(idx + 2).padStart(2, "0")}: {member.name || `Member ${idx + 2}`}
-                      </span>
-                      <label className="flex items-center gap-1.5 cursor-pointer text-xs font-mono text-white">
-                        <input
-                          type="checkbox"
-                          checked={Boolean(member.transportOptIn)}
-                          onChange={(e) =>
-                            updateMember(idx, "transportOptIn", e.target.checked)
-                          }
-                          className="size-3.5 rounded-none border border-[#262626] bg-[#0F0F0F] accent-white"
-                        />
-                        <span>Needs Vel Tech Bus</span>
-                      </label>
-                    </div>
+                {members.map((member, idx) => {
+                  const isMemberBus = Boolean(member.transportOptIn);
+                  return (
+                    <div key={idx} className="space-y-3 p-3 sm:p-3.5 border border-[#262626] bg-[#080808]">
+                      <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-2 border-b border-[#1A1A1A] pb-2.5">
+                        <span className="text-[11px] font-mono font-bold text-neutral-300 uppercase truncate">
+                          Member {String(idx + 2).padStart(2, "0")}: {member.name || `Member ${idx + 2}`}
+                        </span>
+                        {/* Commute Mode Toggle */}
+                        <div className="grid grid-cols-2 sm:flex sm:items-center gap-1 bg-[#0F0F0F] p-0.5 border border-[#262626] w-full xs:w-auto">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              updateMember(idx, "transportOptIn", false);
+                              updateMember(idx, "pickupRoute", "");
+                              updateMember(idx, "pickupStop", "");
+                              updateMember(idx, "pickupLandmark", "");
+                            }}
+                            className={`h-8 sm:h-7 px-2.5 text-[10px] font-mono font-semibold uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center ${
+                              !isMemberBus
+                                ? "bg-white text-black shadow-xs font-bold"
+                                : "text-[#737373] hover:text-white"
+                            }`}
+                          >
+                            🚗 Own Transport
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => updateMember(idx, "transportOptIn", true)}
+                            className={`h-8 sm:h-7 px-2.5 text-[10px] font-mono font-semibold uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center ${
+                              isMemberBus
+                                ? "bg-white text-black shadow-xs font-bold"
+                                : "text-[#737373] hover:text-white"
+                            }`}
+                          >
+                            🚌 Vel Tech Bus
+                          </button>
+                        </div>
+                      </div>
 
-                    {member.transportOptIn && (
-                      <VelTechPickupSelector
-                        routeValue={member.pickupRoute || ""}
-                        stopValue={member.pickupStop || ""}
-                        landmarkValue={member.pickupLandmark || ""}
-                        onRouteChange={(val) => updateMember(idx, "pickupRoute", val)}
-                        onStopChange={(val) => updateMember(idx, "pickupStop", val)}
-                        onLandmarkChange={(val) => updateMember(idx, "pickupLandmark", val)}
-                        passengerCount={1}
-                        showScheduleNotice={false}
-                      />
-                    )}
-                  </div>
-                ))}
+                      {isMemberBus ? (
+                        <VelTechPickupSelector
+                          routeValue={member.pickupRoute || ""}
+                          stopValue={member.pickupStop || ""}
+                          landmarkValue={member.pickupLandmark || ""}
+                          onRouteChange={(val) => updateMember(idx, "pickupRoute", val)}
+                          onStopChange={(val) => updateMember(idx, "pickupStop", val)}
+                          onLandmarkChange={(val) => updateMember(idx, "pickupLandmark", val)}
+                          passengerCount={1}
+                          showScheduleNotice={false}
+                        />
+                      ) : (
+                        <div className="p-2.5 border border-[#1F1F1F] bg-[#0D0D0D] font-mono text-[11px] text-[#A3A3A3] flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                          <span className="flex items-center gap-2">
+                            <span className="size-1.5 rounded-full bg-emerald-400 shrink-0" />
+                            <span>Self-Arranged Commute directly to campus</span>
+                          </span>
+                          <span className="text-[10px] text-[#737373] uppercase tracking-wider border border-[#262626] px-1.5 py-0.5 bg-[#141414] self-start sm:self-auto">
+                            No Bus Seat Reserved
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -1068,21 +1109,26 @@ export function RegistrationForm({
       {/* ═══════════════════════════════════════════════
           SECTION 05: COLLEGE ID CARDS (SINGLE PDF)
           ═══════════════════════════════════════════════ */}
-      <div className="rounded-none border border-[#262626] bg-[#0F0F0F] p-4 sm:p-5 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2 border-b border-[#262626] pb-3">
-          <div className="flex items-center gap-2">
+      <div className="rounded-none border border-[#262626] bg-[#0F0F0F] p-3.5 sm:p-5 space-y-3 sm:space-y-4">
+        <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-1.5 border-b border-[#262626] pb-3">
+          <div className="flex items-center gap-2 min-w-0">
             <IdCardIcon className="size-4 text-white shrink-0" />
-            <h3 className="text-[11px] font-mono font-bold text-white uppercase tracking-wider">
+            <h3 className="text-[11px] font-mono font-bold text-white uppercase tracking-wider truncate">
               Section 05: Team College ID Cards (Single PDF)
             </h3>
           </div>
-          <span className="self-start sm:self-auto text-[10px] font-mono text-[#E5E5E5] font-semibold border border-[#404040] bg-[#161616] px-2 py-0.5">
+          <span className="self-start xs:self-auto text-[10px] font-mono text-[#E5E5E5] font-semibold border border-[#404040] bg-[#161616] px-2 py-0.5 shrink-0">
             MANDATORY • SINGLE PDF
           </span>
         </div>
 
         <p className="text-xs font-mono text-neutral-300 leading-relaxed">
-          The team leader must upload a single merged PDF containing the College ID cards of all 3 team members (Leader + Member 02 + Member 03).
+          <span className="hidden sm:inline">
+            The team leader must upload a single merged PDF containing the College ID cards of all 3 team members (Leader + Member 02 + Member 03).
+          </span>
+          <span className="sm:hidden">
+            Upload a single merged PDF with ID cards for all 3 team members.
+          </span>
         </p>
 
         <TeamIdUploader
@@ -1112,26 +1158,31 @@ export function RegistrationForm({
               )));
 
         return (
-          <Button
-            type="submit"
-            disabled={loading || !isEmailVerified || !year || !idCardPdf || !isTransportComplete}
-            className="h-12 sm:h-11 w-full font-mono text-xs sm:text-sm uppercase tracking-wider font-bold rounded-none bg-white hover:bg-neutral-200 active:scale-[0.99] text-black border border-white transition-all cursor-pointer shadow-lg disabled:opacity-40 disabled:cursor-not-allowed justify-center"
-          >
-            {loading ? (
-              <>
-                <Loader2Icon className="size-4 animate-spin mr-2" />
-                {uploadStep || "Processing Registration..."}
-              </>
-            ) : !isEmailVerified ? (
-              "Verify Email to Continue"
-            ) : !idCardPdf ? (
-              "Upload College ID PDF to Continue"
-            ) : !isTransportComplete ? (
-              "Complete Vel Tech Bus Details to Continue"
-            ) : (
-              `Confirm & Register ${teamSizeNum > 1 ? "Team" : ""}`
-            )}
-          </Button>
+          <div className="space-y-2 pt-2 sm:pt-4">
+            <Button
+              type="submit"
+              disabled={loading || !isEmailVerified || !year || !idCardPdf || !isTransportComplete}
+              className="h-12 w-full font-mono text-xs sm:text-sm uppercase tracking-wider font-extrabold rounded-none bg-white hover:bg-neutral-200 active:scale-[0.99] text-black border border-white transition-all cursor-pointer shadow-lg disabled:opacity-40 disabled:cursor-not-allowed justify-center"
+            >
+              {loading ? (
+                <>
+                  <Loader2Icon className="size-4 animate-spin mr-2" />
+                  {uploadStep || "Processing Registration..."}
+                </>
+              ) : !isEmailVerified ? (
+                "Verify Email to Continue"
+              ) : !idCardPdf ? (
+                "Upload College ID PDF to Continue"
+              ) : !isTransportComplete ? (
+                "Complete Vel Tech Bus Details to Continue"
+              ) : (
+                `Confirm & Register ${teamSizeNum > 1 ? "Team" : ""}`
+              )}
+            </Button>
+            <p className="text-[10px] font-mono text-neutral-500 text-center">
+              Official digital pass &amp; QR verification generated instantly upon confirmation
+            </p>
+          </div>
         );
       })()}
     </form>
