@@ -110,6 +110,10 @@ export interface SendRegistrationEmailParams {
   members?: Array<{
     name: string;
     phone: string;
+    email?: string;
+    college?: string;
+    department?: string;
+    year?: string;
     transportOptIn?: boolean;
     pickupRoute?: string | null;
     pickupStop?: string | null;
@@ -493,9 +497,9 @@ export async function sendRegistrationConfirmationEmail(
                                 (m, idx) => `
                               <tr>
                                 <td style="padding: 3px 0; font-family: 'Inter', sans-serif;">
-                                  <span style="color: #737373; font-family: 'JetBrains Mono', monospace; margin-right: 6px;">[0${idx + 1}]</span>
+                                  <span style="color: #737373; font-family: 'JetBrains Mono', monospace; margin-right: 6px;">[0${idx + 2}]</span>
                                   <strong style="color: #FFFFFF;">${m.name}</strong>
-                                  <span style="color: #737373; margin-left: 4px;">(${m.phone})</span>
+                                  <span style="color: #737373; margin-left: 4px;">(${m.phone}${m.email ? ` &bull; ${m.email}` : ""}${m.department ? ` &bull; ${m.department}` : ""})</span>
                                 </td>
                               </tr>
                             `

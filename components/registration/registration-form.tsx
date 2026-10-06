@@ -27,6 +27,12 @@ import {
   MailIcon,
   IdCardIcon,
   BusIcon,
+  Building2Icon,
+  GraduationCapIcon,
+  BookOpenIcon,
+  CheckCircle2Icon,
+  AlertCircleIcon,
+  SparklesIcon,
 } from "lucide-react";
 import { TeamIdUploader } from "@/components/registration/team-id-uploader";
 import { VelTechPickupSelector } from "@/components/registration/veltech-pickup-selector";
@@ -65,6 +71,10 @@ interface Props {
 interface TeamMember {
   name: string;
   phone: string;
+  email: string;
+  college: string;
+  department: string;
+  year: string;
   collegeIdUrl?: string;
   transportOptIn?: boolean;
   pickupRoute?: string;
@@ -98,6 +108,10 @@ export function RegistrationForm({
     {
       name: "",
       phone: "",
+      email: "",
+      college: "",
+      department: "",
+      year: "",
       collegeIdUrl: "",
       transportOptIn: false,
       pickupRoute: "",
@@ -107,6 +121,10 @@ export function RegistrationForm({
     {
       name: "",
       phone: "",
+      email: "",
+      college: "",
+      department: "",
+      year: "",
       collegeIdUrl: "",
       transportOptIn: false,
       pickupRoute: "",
@@ -165,6 +183,10 @@ export function RegistrationForm({
           ...Array.from({ length: count - prev.length }, () => ({
             name: "",
             phone: "",
+            email: "",
+            college: "",
+            department: "",
+            year: "",
             collegeIdUrl: "",
             transportOptIn: false,
             pickupRoute: "",
@@ -262,31 +284,134 @@ export function RegistrationForm({
     setError(null);
     setUploadStep(null);
 
-    // Validate Team Name
+    // 1. Validate Team Name
     if (!teamName.trim()) {
       setError("Please provide a team name for your 3-member squad.");
       setLoading(false);
       return;
     }
 
-    // Validate Member 02 and Member 03 fields
-    if (
-      members.length !== 2 ||
-      members.some((m) => !m.name.trim() || !m.phone.trim())
-    ) {
-      setError(
-        "Please provide full name and mobile number for both Member 02 and Member 03."
-      );
+    // 2. Validate Team Leader (Member 01)
+    if (!leaderName.trim() || leaderName.trim().length < 2) {
+      setError("Please provide the Team Leader's full name (at least 2 characters).");
       setLoading(false);
       return;
     }
 
-    // Validate unique phones across all 3 members
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!leaderEmail.trim() || !emailRegex.test(leaderEmail.trim())) {
+      setError("Please provide a valid email address for the Team Leader.");
+      setLoading(false);
+      return;
+    }
+
+    if (!isEmailVerified) {
+      setError("Please verify the Team Leader's email address with the OTP verification code.");
+      setLoading(false);
+      return;
+    }
+
+    const phoneRegex = /^[6-9]\d{9}$/;
+    if (!phoneRegex.test(leaderPhone.trim())) {
+      setError("Team Leader's mobile number must be a valid 10-digit Indian mobile number.");
+      setLoading(false);
+      return;
+    }
+
+    if (!college.trim() || college.trim().length < 2) {
+      setError("Please enter the Team Leader's College / Institution.");
+      setLoading(false);
+      return;
+    }
+
+    if (!year) {
+      setError("Please select the Team Leader's Year of Study.");
+      setLoading(false);
+      return;
+    }
+
+    if (!department.trim() || department.trim().length < 2) {
+      setError("Please enter the Team Leader's Department / Branch.");
+      setLoading(false);
+      return;
+    }
+
+    // 3. Validate Member 02 and Member 03 (EVERY DETAIL MANDATORY)
+    if (members.length !== 2) {
+      setError("Event registration strictly requires a team of 3 builders (Leader + 2 Members).");
+      setLoading(false);
+      return;
+    }
+
+    for (let i = 0; i < members.length; i++) {
+      const m = members[i];
+      const memberLabel = `Member 0${i + 2}`;
+
+      if (!m.name.trim() || m.name.trim().length < 2) {
+        setError(`Please provide ${memberLabel}'s full legal name.`);
+        setLoading(false);
+        return;
+      }
+
+      if (!m.email.trim() || !emailRegex.test(m.email.trim())) {
+        setError(`Please provide a valid email address for ${memberLabel}.`);
+        setLoading(false);
+        return;
+      }
+
+      if (!phoneRegex.test(m.phone.trim())) {
+        setError(`${memberLabel}'s mobile number must be a valid 10-digit Indian mobile number (e.g. 9876543210).`);
+        setLoading(false);
+        return;
+      }
+
+      if (!m.college.trim() || m.college.trim().length < 2) {
+        setError(`Please enter ${memberLabel}'s College / Institution.`);
+        setLoading(false);
+        return;
+      }
+
+      if (!m.department.trim() || m.department.trim().length < 2) {
+        setError(`Please enter ${memberLabel}'s Department / Branch.`);
+        setLoading(false);
+        return;
+      }
+
+      if (!m.year) {
+        setError(`Please select ${memberLabel}'s Year of Study.`);
+        setLoading(false);
+        return;
+      }
+    }
+
+    // 4. Validate Distinct Constraints across all 3 members
     const allPhones = [leaderPhone.trim(), ...members.map((m) => m.phone.trim())];
     if (new Set(allPhones).size !== 3) {
       setError(
         "All 3 team members (Leader, Member 02, and Member 03) must have distinct mobile numbers."
       );
+      setLoading(false);
+      return;
+    }
+
+    const allEmails = [
+      leaderEmail.trim().toLowerCase(),
+      ...members.map((m) => m.email.trim().toLowerCase()),
+    ];
+    if (new Set(allEmails).size !== 3) {
+      setError(
+        "All 3 team members (Leader, Member 02, and Member 03) must have distinct email addresses."
+      );
+      setLoading(false);
+      return;
+    }
+
+    const allNames = [
+      leaderName.trim().toLowerCase(),
+      ...members.map((m) => m.name.trim().toLowerCase()),
+    ];
+    if (new Set(allNames).size !== 3) {
+      setError("Team member names cannot be identical. Please enter distinct names for all members.");
       setLoading(false);
       return;
     }
@@ -376,6 +501,10 @@ export function RegistrationForm({
         members: members.map((m) => ({
           name: m.name.trim(),
           phone: m.phone.trim(),
+          email: m.email.trim().toLowerCase(),
+          college: m.college.trim(),
+          department: m.department.trim(),
+          year: m.year as any,
           collegeIdUrl: uploadedPdfUrl, // All team members reference the team's combined PDF
           transportOptIn: samePickupForTeam ? transportOptIn : Boolean(m.transportOptIn),
           pickupRoute: samePickupForTeam ? (transportOptIn ? leaderPickupRoute : undefined) : m.pickupRoute,
@@ -434,6 +563,10 @@ export function RegistrationForm({
             {
               name: "",
               phone: "",
+              email: "",
+              college: "",
+              department: "",
+              year: "",
               collegeIdUrl: "",
               transportOptIn: false,
               pickupRoute: "",
@@ -443,6 +576,10 @@ export function RegistrationForm({
             {
               name: "",
               phone: "",
+              email: "",
+              college: "",
+              department: "",
+              year: "",
               collegeIdUrl: "",
               transportOptIn: false,
               pickupRoute: "",
@@ -566,14 +703,14 @@ export function RegistrationForm({
           SECTION 02: TEAM LEADER
           ═══════════════════════════════════════════════ */}
       <div className="rounded-none border border-[#262626] bg-[#0F0F0F] p-3.5 sm:p-5 space-y-3.5 sm:space-y-4">
-        <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-1.5 border-b border-[#262626] pb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 border-b border-[#262626] pb-3">
           <div className="flex items-center gap-2">
             <UserIcon className="size-4 text-white shrink-0" />
             <h3 className="text-[11px] font-mono font-bold text-white uppercase tracking-wider">
               Section 02: Team Leader
             </h3>
           </div>
-          <span className="self-start xs:self-auto text-[10px] font-mono text-[#737373] shrink-0">
+          <span className="self-start sm:self-auto text-[10px] font-mono text-[#737373] shrink-0">
             Member 01 • Primary Contact
           </span>
         </div>
@@ -828,80 +965,277 @@ export function RegistrationForm({
       {/* ═══════════════════════════════════════════════
           SECTION 03: TEAM ROSTER (MEMBER 02 & MEMBER 03)
           ═══════════════════════════════════════════════ */}
+      {/* ═══════════════════════════════════════════════
+          SECTION 03: TEAM ROSTER (MEMBER 02 & MEMBER 03)
+          ═══════════════════════════════════════════════ */}
       {members.length > 0 && (
         <div className="rounded-none border border-[#262626] bg-[#0F0F0F] p-3.5 sm:p-5 space-y-3.5 sm:space-y-4">
-          <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-1.5 border-b border-[#262626] pb-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 border-b border-[#262626] pb-3">
             <div className="flex items-center gap-2">
               <UsersIcon className="size-4 text-white shrink-0" />
               <h3 className="text-[11px] font-mono font-bold text-white uppercase tracking-wider">
-                Section 03: Team Roster (Members 02 &amp; 03)
+                Section 03: Squad Roster (Members 02 &amp; 03)
               </h3>
             </div>
-            <span className="hidden sm:inline-block self-start xs:self-auto text-[10px] font-mono text-[#737373] shrink-0">
-              Leader is recorded as Member 01
+            <span className="self-start sm:self-auto text-[10px] font-mono text-emerald-400 border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 shrink-0 font-semibold">
+              ALL DETAILS ARE MANDATORY *
             </span>
           </div>
 
-          {members.map((member, index) => (
-            <div
-              key={index}
-              className="space-y-3 p-3 sm:p-3.5 rounded-none border border-[#262626] bg-[#080808]"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center justify-center size-6 rounded-none border border-[#404040] bg-[#161616] text-[10px] font-mono font-bold text-white">
-                    {String(index + 2).padStart(2, "0")}
-                  </span>
-                  <span className="text-[11px] font-mono font-bold text-white uppercase tracking-wider">
-                    Member {String(index + 2).padStart(2, "0")}
-                  </span>
+          {/* Policy Banner */}
+          <div className="px-3 py-2 bg-[#121212] border border-[#262626] font-mono text-[11px] text-neutral-300 leading-relaxed">
+            <span className="text-white font-bold mr-1.5">// ACCREDITATION NOTICE:</span>
+            <span>
+              Every team member must provide distinct full legal name, active email, 10-digit mobile number, college, department, and year of study. These details are verified during gate check-in and printed on participation certificates.
+            </span>
+          </div>
+
+          {members.map((member, index) => {
+            const memberNumStr = String(index + 2).padStart(2, "0");
+            const otherIndex = index === 0 ? 1 : 0;
+            const otherMember = members[otherIndex];
+
+            // Validation checks for badges
+            const isNameValid = member.name.trim().length >= 2;
+            const isEmailValid = Boolean(
+              member.email.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(member.email.trim())
+            );
+            const isPhoneValid = Boolean(
+              member.phone.trim() && /^[6-9]\d{9}$/.test(member.phone.trim())
+            );
+            const isCollegeValid = member.college.trim().length >= 2;
+            const isDeptValid = member.department.trim().length >= 2;
+            const isYearValid = Boolean(member.year);
+
+            const filledCount = [
+              isNameValid,
+              isEmailValid,
+              isPhoneValid,
+              isCollegeValid,
+              isDeptValid,
+              isYearValid,
+            ].filter(Boolean).length;
+            const isFullyFilled = filledCount === 6;
+
+            // Duplicate checks
+            const isDuplicatePhoneWithLeader =
+              Boolean(leaderPhone) && member.phone.trim() === leaderPhone.trim();
+            const isDuplicatePhoneWithOther =
+              Boolean(otherMember?.phone) && member.phone.trim() === otherMember.phone.trim();
+            const isDuplicateEmailWithLeader =
+              Boolean(leaderEmail) &&
+              member.email.trim().toLowerCase() === leaderEmail.trim().toLowerCase();
+            const isDuplicateEmailWithOther =
+              Boolean(otherMember?.email) &&
+              member.email.trim().toLowerCase() === otherMember.email.trim().toLowerCase();
+
+            return (
+              <div
+                key={index}
+                className="space-y-3.5 p-3.5 sm:p-4 rounded-none border border-[#262626] bg-[#080808]"
+              >
+                {/* Member Sub-header & Status */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#1A1A1A] pb-2.5">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center justify-center size-6 rounded-none border border-[#404040] bg-[#161616] text-[10px] font-mono font-bold text-white">
+                      {memberNumStr}
+                    </span>
+                    <span className="text-[11px] font-mono font-bold text-white uppercase tracking-wider">
+                      Member {memberNumStr} // Squad Builder
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {/* Quick Autofill Buttons */}
+                    {college && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          updateMember(index, "college", college);
+                          toast.success(`Copied Leader's College for Member ${memberNumStr}`);
+                        }}
+                        className="text-[10px] font-mono text-neutral-300 hover:text-white bg-[#141414] hover:bg-[#1E1E1E] border border-[#2B2B2B] px-2 py-0.5 transition-colors cursor-pointer flex items-center gap-1"
+                        title="Copy College from Leader"
+                      >
+                        <CopyIcon className="size-2.5" />
+                        <span>Same College</span>
+                      </button>
+                    )}
+                    {department && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          updateMember(index, "department", department);
+                          toast.success(`Copied Leader's Department for Member ${memberNumStr}`);
+                        }}
+                        className="text-[10px] font-mono text-neutral-300 hover:text-white bg-[#141414] hover:bg-[#1E1E1E] border border-[#2B2B2B] px-2 py-0.5 transition-colors cursor-pointer flex items-center gap-1"
+                        title="Copy Department from Leader"
+                      >
+                        <CopyIcon className="size-2.5" />
+                        <span>Same Dept</span>
+                      </button>
+                    )}
+
+                    {/* Completion Status Chip */}
+                    {isFullyFilled ? (
+                      <span className="text-[10px] font-mono font-bold uppercase px-2 py-0.5 border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 flex items-center gap-1 shrink-0">
+                        <CheckCircle2Icon className="size-3" />
+                        <span>6/6 Complete</span>
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-mono font-bold uppercase px-2 py-0.5 border border-[#383838] bg-[#141414] text-neutral-400 flex items-center gap-1 shrink-0">
+                        <AlertCircleIcon className="size-3 text-amber-400" />
+                        <span>{filledCount}/6 Required</span>
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">
-                  Builder
-                </span>
+
+                {/* Form Fields Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  {/* Full Name */}
+                  <div className="space-y-1.5">
+                    <Label className="font-sans text-xs uppercase tracking-wider text-neutral-300 font-semibold block">
+                      Full Legal Name <span className="text-red-400">*</span>
+                    </Label>
+                    <div className="relative">
+                      <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-neutral-500 pointer-events-none" />
+                      <Input
+                        required
+                        value={member.name}
+                        onChange={(e) => updateMember(index, "name", e.target.value)}
+                        placeholder={`Member ${memberNumStr} Full Name`}
+                        className="h-11 sm:h-10 pl-9 rounded-none border border-[#262626] bg-[#0F0F0F] text-white font-sans text-base sm:text-sm placeholder:text-neutral-500 focus:border-white focus:ring-1 focus:ring-white"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Email Address */}
+                  <div className="space-y-1.5">
+                    <Label className="font-sans text-xs uppercase tracking-wider text-neutral-300 font-semibold block">
+                      Email Address <span className="text-red-400">*</span>
+                    </Label>
+                    <div className="relative">
+                      <MailIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-neutral-500 pointer-events-none" />
+                      <Input
+                        required
+                        type="email"
+                        value={member.email}
+                        onChange={(e) => updateMember(index, "email", e.target.value)}
+                        placeholder="member@example.com"
+                        className="h-11 sm:h-10 pl-9 rounded-none border border-[#262626] bg-[#0F0F0F] text-white font-sans text-base sm:text-sm placeholder:text-neutral-500 focus:border-white focus:ring-1 focus:ring-white"
+                      />
+                    </div>
+                    {(isDuplicateEmailWithLeader || isDuplicateEmailWithOther) && (
+                      <p className="text-[10px] font-mono text-red-400 mt-1">
+                        ⚠️ Must be a distinct email address (cannot duplicate Leader or Member {index === 0 ? "03" : "02"}).
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Mobile Number */}
+                  <div className="space-y-1.5">
+                    <Label className="font-sans text-xs uppercase tracking-wider text-neutral-300 font-semibold block">
+                      Mobile Number <span className="text-red-400">*</span>
+                    </Label>
+                    <div className="relative">
+                      <PhoneIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-neutral-500 pointer-events-none" />
+                      <Input
+                        required
+                        type="tel"
+                        pattern="[6-9][0-9]{9}"
+                        maxLength={10}
+                        value={member.phone}
+                        onChange={(e) =>
+                          updateMember(
+                            index,
+                            "phone",
+                            e.target.value.replace(/\D/g, "").slice(0, 10)
+                          )
+                        }
+                        placeholder="+91 98765 43210"
+                        className="h-11 sm:h-10 pl-9 rounded-none border border-[#262626] bg-[#0F0F0F] text-white font-sans text-base sm:text-sm placeholder:text-neutral-500 focus:border-white focus:ring-1 focus:ring-white"
+                      />
+                    </div>
+                    {(isDuplicatePhoneWithLeader || isDuplicatePhoneWithOther) && (
+                      <p className="text-[10px] font-mono text-red-400 mt-1">
+                        ⚠️ Must be a distinct mobile number (cannot duplicate Leader or Member {index === 0 ? "03" : "02"}).
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Year of Study */}
+                  <div className="space-y-1.5">
+                    <Label className="font-sans text-xs uppercase tracking-wider text-neutral-300 font-semibold block">
+                      Year of Study <span className="text-red-400">*</span>
+                    </Label>
+                    <Select
+                      value={member.year}
+                      onValueChange={(val) => {
+                        if (val) updateMember(index, "year", val);
+                      }}
+                    >
+                      <SelectTrigger
+                        className="h-11 sm:h-10 w-full rounded-none border border-[#262626] bg-[#0F0F0F] px-3 text-white font-sans text-base sm:text-sm focus:border-white focus:ring-1 focus:ring-white data-placeholder:text-neutral-500"
+                      >
+                        <SelectValue placeholder="Select year of study" />
+                      </SelectTrigger>
+                      <SelectContent className="border-[#262626] bg-[#0F0F0F] text-white">
+                        <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-[#737373] border-b border-[#262626] mb-1 font-mono">
+                          // YEAR OF STUDY
+                        </div>
+                        <SelectGroup>
+                          {YEAR_OPTIONS.map((opt) => (
+                            <SelectItem
+                              key={opt.value}
+                              value={opt.value}
+                              className="rounded-none hover:bg-[#161616] text-neutral-200"
+                            >
+                              {opt.label}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* College / Institution */}
+                  <div className="space-y-1.5">
+                    <Label className="font-sans text-xs uppercase tracking-wider text-neutral-300 font-semibold block">
+                      College / Institution <span className="text-red-400">*</span>
+                    </Label>
+                    <div className="relative">
+                      <Building2Icon className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-neutral-500 pointer-events-none" />
+                      <Input
+                        required
+                        value={member.college}
+                        onChange={(e) => updateMember(index, "college", e.target.value)}
+                        placeholder="Engineering College / Institution"
+                        className="h-11 sm:h-10 pl-9 rounded-none border border-[#262626] bg-[#0F0F0F] text-white font-sans text-base sm:text-sm placeholder:text-neutral-500 focus:border-white focus:ring-1 focus:ring-white"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Department / Branch */}
+                  <div className="space-y-1.5">
+                    <Label className="font-sans text-xs uppercase tracking-wider text-neutral-300 font-semibold block">
+                      Department / Branch <span className="text-red-400">*</span>
+                    </Label>
+                    <div className="relative">
+                      <BookOpenIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-neutral-500 pointer-events-none" />
+                      <Input
+                        required
+                        value={member.department}
+                        onChange={(e) => updateMember(index, "department", e.target.value)}
+                        placeholder="e.g. Computer Science & Engineering"
+                        className="h-11 sm:h-10 pl-9 rounded-none border border-[#262626] bg-[#0F0F0F] text-white font-sans text-base sm:text-sm placeholder:text-neutral-500 focus:border-white focus:ring-1 focus:ring-white"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="space-y-1.5">
-                  <Label className="font-sans text-xs uppercase tracking-wider text-neutral-300 font-semibold block">
-                    Full Name
-                  </Label>
-                  <Input
-                    required
-                    value={member.name}
-                    onChange={(e) =>
-                      updateMember(index, "name", e.target.value)
-                    }
-                    placeholder="Member name"
-                    className="h-11 sm:h-10 rounded-none border border-[#262626] bg-[#0F0F0F] text-white font-sans text-base sm:text-sm placeholder:text-neutral-500 focus:border-white focus:ring-1 focus:ring-white"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label className="font-sans text-xs uppercase tracking-wider text-neutral-300 font-semibold block">
-                    Mobile Number
-                  </Label>
-                  <Input
-                    required
-                    type="tel"
-                    pattern="[6-9][0-9]{9}"
-                    maxLength={10}
-                    value={member.phone}
-                    onChange={(e) =>
-                      updateMember(
-                        index,
-                        "phone",
-                        e.target.value.replace(/\D/g, "").slice(0, 10)
-                      )
-                    }
-                    placeholder="+91 98765 43210"
-                    className="h-11 sm:h-10 rounded-none border border-[#262626] bg-[#0F0F0F] text-white font-sans text-base sm:text-sm placeholder:text-neutral-500 focus:border-white focus:ring-1 focus:ring-white"
-                  />
-                </div>
-              </div>
-
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -909,7 +1243,7 @@ export function RegistrationForm({
           SECTION: VEL TECH CAMPUS TRANSPORTATION (6:00 AM ONWARDS)
           ═══════════════════════════════════════════════ */}
       <div className="rounded-none border border-[#262626] bg-[#0F0F0F] p-3.5 sm:p-5 space-y-3.5 sm:space-y-4">
-        <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-1.5 border-b border-[#262626] pb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 border-b border-[#262626] pb-3">
           <div className="flex items-center gap-2 min-w-0">
             <BusIcon className="size-4 text-white shrink-0" />
             <h3 className="text-[11px] font-mono font-bold text-white uppercase tracking-wider truncate">
@@ -918,13 +1252,14 @@ export function RegistrationForm({
                 : "Section 03: Campus Transport Logistics"}
             </h3>
           </div>
-          <span className="self-start xs:self-auto text-[10px] font-mono text-[#E5E5E5] font-semibold border border-[#404040] bg-[#161616] px-2 py-0.5 shrink-0">
+          <span className="self-start sm:self-auto text-[10px] font-mono text-[#E5E5E5] font-semibold border border-[#404040] bg-[#161616] px-2 py-0.5 shrink-0">
             FREE SERVICE • 6:00 AM ONWARDS
           </span>
         </div>
 
         <p className="text-xs font-sans text-neutral-300 leading-relaxed">
-          Vel Tech provides complimentary campus bus transportation for all registered participants across major city corridors starting from{" "}
+          Vel Tech provides complimentary campus bus transportation for all registered participants across major city corridors directly to the{" "}
+          <strong className="text-white font-mono">Vel Tech Multi Tech</strong> campus starting from{" "}
           <strong className="text-white font-mono">6:00 AM onwards</strong>.
         </p>
 
@@ -950,7 +1285,7 @@ export function RegistrationForm({
               )}
             </div>
             <span className="hidden sm:block text-[11px] text-neutral-400 font-sans leading-normal">
-              I / our team will reach the Vel Tech campus directly on our own.
+              I / our team will reach the Vel Tech Multi Tech campus directly on our own.
             </span>
           </button>
 
@@ -1052,12 +1387,12 @@ export function RegistrationForm({
                   const isMemberBus = Boolean(member.transportOptIn);
                   return (
                     <div key={idx} className="space-y-3 p-3 sm:p-3.5 border border-[#262626] bg-[#080808]">
-                      <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-2 border-b border-[#1A1A1A] pb-2.5">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-[#1A1A1A] pb-2.5">
                         <span className="text-[11px] font-mono font-bold text-neutral-300 uppercase truncate">
                           Member {String(idx + 2).padStart(2, "0")}: {member.name || `Member ${idx + 2}`}
                         </span>
                         {/* Commute Mode Toggle */}
-                        <div className="grid grid-cols-2 sm:flex sm:items-center gap-1 bg-[#0F0F0F] p-0.5 border border-[#262626] w-full xs:w-auto">
+                        <div className="grid grid-cols-2 sm:inline-flex sm:items-center gap-1 bg-[#0F0F0F] p-0.5 border border-[#262626] w-full sm:w-auto shrink-0">
                           <button
                             type="button"
                             onClick={() => {
@@ -1066,7 +1401,7 @@ export function RegistrationForm({
                               updateMember(idx, "pickupStop", "");
                               updateMember(idx, "pickupLandmark", "");
                             }}
-                            className={`h-8 sm:h-7 px-2.5 text-[10px] font-mono font-semibold uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center ${
+                            className={`h-8 sm:h-7 px-3 text-[10px] font-mono font-semibold uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center whitespace-nowrap ${
                               !isMemberBus
                                 ? "bg-white text-black shadow-xs font-bold"
                                 : "text-[#737373] hover:text-white"
@@ -1077,7 +1412,7 @@ export function RegistrationForm({
                           <button
                             type="button"
                             onClick={() => updateMember(idx, "transportOptIn", true)}
-                            className={`h-8 sm:h-7 px-2.5 text-[10px] font-mono font-semibold uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center ${
+                            className={`h-8 sm:h-7 px-3 text-[10px] font-mono font-semibold uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center whitespace-nowrap ${
                               isMemberBus
                                 ? "bg-white text-black shadow-xs font-bold"
                                 : "text-[#737373] hover:text-white"
@@ -1103,7 +1438,7 @@ export function RegistrationForm({
                         <div className="p-2.5 border border-[#1F1F1F] bg-[#0D0D0D] font-mono text-[11px] text-[#A3A3A3] flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
                           <span className="flex items-center gap-2">
                             <span className="size-1.5 rounded-full bg-emerald-400 shrink-0" />
-                            <span>Self-Arranged Commute directly to campus</span>
+                            <span>Self-Arranged Commute directly to Vel Tech Multi Tech campus</span>
                           </span>
                           <span className="text-[10px] text-[#737373] uppercase tracking-wider border border-[#262626] px-1.5 py-0.5 bg-[#141414] self-start sm:self-auto">
                             No Bus Seat Reserved
@@ -1123,14 +1458,14 @@ export function RegistrationForm({
           SECTION 05: COLLEGE ID CARDS (SINGLE PDF)
           ═══════════════════════════════════════════════ */}
       <div className="rounded-none border border-[#262626] bg-[#0F0F0F] p-3.5 sm:p-5 space-y-3 sm:space-y-4">
-        <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-1.5 border-b border-[#262626] pb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 border-b border-[#262626] pb-3">
           <div className="flex items-center gap-2 min-w-0">
             <IdCardIcon className="size-4 text-white shrink-0" />
             <h3 className="text-[11px] font-mono font-bold text-white uppercase tracking-wider truncate">
               Section 05: Team College ID Cards (Single PDF)
             </h3>
           </div>
-          <span className="self-start xs:self-auto text-[10px] font-mono text-[#E5E5E5] font-semibold border border-[#404040] bg-[#161616] px-2 py-0.5 shrink-0">
+          <span className="self-start sm:self-auto text-[10px] font-mono text-[#E5E5E5] font-semibold border border-[#404040] bg-[#161616] px-2 py-0.5 shrink-0">
             MANDATORY • SINGLE PDF
           </span>
         </div>
@@ -1156,6 +1491,35 @@ export function RegistrationForm({
           SUBMIT BUTTON
           ═══════════════════════════════════════════════ */}
       {(() => {
+        const isLeaderComplete = Boolean(
+          leaderName.trim().length >= 2 &&
+          leaderEmail.trim() &&
+          leaderPhone.trim().length === 10 &&
+          college.trim().length >= 2 &&
+          department.trim().length >= 2 &&
+          year
+        );
+
+        const areMembersComplete =
+          members.length === 2 &&
+          members.every(
+            (m) =>
+              m.name.trim().length >= 2 &&
+              m.email.trim().includes("@") &&
+              m.phone.trim().length === 10 &&
+              m.college.trim().length >= 2 &&
+              m.department.trim().length >= 2 &&
+              Boolean(m.year)
+          );
+
+        const allMemberPhones = [leaderPhone.trim(), ...members.map((m) => m.phone.trim())];
+        const allMemberEmails = [
+          leaderEmail.trim().toLowerCase(),
+          ...members.map((m) => m.email.trim().toLowerCase()),
+        ];
+        const hasDistinctPhones = new Set(allMemberPhones.filter(Boolean)).size === 3;
+        const hasDistinctEmails = new Set(allMemberEmails.filter(Boolean)).size === 3;
+
         const isTransportComplete =
           !transportOptIn ||
           (Boolean(leaderPickupRoute) &&
@@ -1170,11 +1534,22 @@ export function RegistrationForm({
                     Boolean(m.pickupLandmark && m.pickupLandmark.trim().length >= 3))
               )));
 
+        const isFormReady =
+          !loading &&
+          Boolean(teamName.trim()) &&
+          isEmailVerified &&
+          isLeaderComplete &&
+          areMembersComplete &&
+          hasDistinctPhones &&
+          hasDistinctEmails &&
+          Boolean(idCardPdf) &&
+          isTransportComplete;
+
         return (
           <div className="space-y-2 pt-2 sm:pt-4">
             <Button
               type="submit"
-              disabled={loading || !isEmailVerified || !year || !idCardPdf || !isTransportComplete}
+              disabled={!isFormReady}
               className="h-12 w-full font-mono text-xs sm:text-sm uppercase tracking-wider font-extrabold rounded-none bg-white hover:bg-neutral-200 active:scale-[0.99] text-black border border-white transition-all cursor-pointer shadow-lg disabled:opacity-40 disabled:cursor-not-allowed justify-center"
             >
               {loading ? (
@@ -1182,14 +1557,26 @@ export function RegistrationForm({
                   <Loader2Icon className="size-4 animate-spin mr-2" />
                   {uploadStep || "Processing Registration..."}
                 </>
+              ) : !teamName.trim() ? (
+                "Enter Team Name to Continue"
               ) : !isEmailVerified ? (
-                "Verify Email to Continue"
+                "Verify Leader Email to Continue"
+              ) : !isLeaderComplete ? (
+                "Complete Leader Details to Continue"
+              ) : !areMembersComplete ? (
+                !members[0]?.name || !members[0]?.email || !members[0]?.phone || !members[0]?.college || !members[0]?.department || !members[0]?.year
+                  ? "Complete Member 02 Details to Continue"
+                  : "Complete Member 03 Details to Continue"
+              ) : !hasDistinctPhones ? (
+                "All 3 Members Must Have Distinct Mobile Numbers"
+              ) : !hasDistinctEmails ? (
+                "All 3 Members Must Have Distinct Email Addresses"
               ) : !idCardPdf ? (
-                "Upload College ID PDF to Continue"
+                "Upload Merged College ID PDF to Continue"
               ) : !isTransportComplete ? (
                 "Complete Vel Tech Bus Details to Continue"
               ) : (
-                `Confirm & Register ${teamSizeNum > 1 ? "Team" : ""}`
+                `Confirm & Register Team (Instant Official Pass)`
               )}
             </Button>
             <p className="text-[10px] font-mono text-neutral-500 text-center">

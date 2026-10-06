@@ -229,7 +229,7 @@ export function EventsSection({ initialEvents }: EventsSectionProps) {
                         <MapPinIcon className="size-3 text-neutral-400 shrink-0" />
                         <span>// VENUE</span>
                       </span>
-                      <span className="text-white font-bold">Vel Tech Campus</span>
+                      <span className="text-white font-bold" title="Vel Tech Multi Tech (VTMT)">VTMT</span>
                     </div>
                   </div>
 

@@ -38,8 +38,8 @@ export default async function EventDetailPage({ params }: Props) {
             className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-mono font-bold uppercase tracking-wider text-neutral-300 bg-[#0A0A0A] border border-[#262626] hover:text-white hover:border-[#404040] hover:bg-[#141414] transition-all duration-150"
           >
             <ArrowLeftIcon className="size-3.5 text-white shrink-0" />
-            <span className="hidden xs:inline">[ Back to Events ]</span>
-            <span className="xs:hidden">[ Events ]</span>
+            <span className="hidden sm:inline">[ Back to Events ]</span>
+            <span className="sm:hidden">[ Events ]</span>
           </Link>
 
           <div className="flex items-center gap-1.5 sm:gap-2 font-mono text-[10px] sm:text-[11px] text-emerald-400 font-bold shrink-0">
@@ -56,8 +56,15 @@ export default async function EventDetailPage({ params }: Props) {
 
           <div className="space-y-3.5 sm:space-y-6">
             <div className="space-y-1.5 sm:space-y-3">
-              <div className="inline-flex font-mono text-[9px] sm:text-[11px] uppercase tracking-wider px-2 py-0.5 bg-[#141414] text-neutral-300 border border-[#262626]">
-                [ {event.category?.name || "TRACK"} ]
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="inline-flex font-mono text-[9px] sm:text-[11px] uppercase tracking-wider px-2 py-0.5 bg-[#141414] text-neutral-300 border border-[#262626]">
+                  [ {event.category?.name || "TRACK"} ]
+                </span>
+                <span className="inline-flex font-mono text-[9px] sm:text-[11px] uppercase tracking-wider px-2 py-0.5 bg-[#141414] text-neutral-300 border border-[#262626] items-center gap-1">
+                  <MapPinIcon className="size-3 text-neutral-400" />
+                  <span className="sm:hidden" title="Vel Tech Multi Tech (VTMT)">VTMT</span>
+                  <span className="hidden sm:inline">Vel Tech Multi Tech</span>
+                </span>
               </div>
               
               <h1 className="text-xl sm:text-4xl md:text-5xl font-mono font-black uppercase tracking-tight text-white leading-tight break-words">
@@ -89,7 +96,7 @@ export default async function EventDetailPage({ params }: Props) {
               </span>
               <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#141414] border border-[#262626] text-neutral-300">
                 <MapPinIcon className="size-3 text-neutral-400" />
-                <span>Vel Tech Campus</span>
+                <span title="Vel Tech Multi Tech (VTMT)">VTMT</span>
               </span>
             </div>
 
@@ -133,9 +140,20 @@ export default async function EventDetailPage({ params }: Props) {
                 <span className="text-[9px] sm:text-[10px] text-[#737373] uppercase tracking-wider block font-mono">
                   // VENUE
                 </span>
-                <span className="font-bold text-white text-[10px] sm:text-xs flex items-center gap-1.5 min-w-0" title={event.venue}>
+                <span
+                  className="font-bold text-white text-[10px] sm:text-xs flex items-center gap-1.5 min-w-0"
+                  title={
+                    event.venue && !event.venue.includes("Vel Tech")
+                      ? `${event.venue} • Vel Tech Multi Tech`
+                      : (event.venue || "Vel Tech Multi Tech")
+                  }
+                >
                   <MapPinIcon className="size-3 text-neutral-400 shrink-0" />
-                  <span className="truncate">{event.venue}</span>
+                  <span className="truncate">
+                    {event.venue && !event.venue.includes("Vel Tech")
+                      ? `${event.venue} • Vel Tech Multi Tech`
+                      : (event.venue || "Vel Tech Multi Tech")}
+                  </span>
                 </span>
               </div>
             </div>
@@ -161,12 +179,17 @@ export default async function EventDetailPage({ params }: Props) {
                   REGISTRATION PORTAL
                 </h2>
                 <p className="hidden sm:block text-xs text-neutral-400 font-sans mt-0.5 sm:mt-1">
-                  Register your team members and secure your team event pass.
+                  Complete official squad registration. All 3 builders&apos; details (Leader + Members 02 &amp; 03) and merged College ID document are strictly mandatory.
                 </p>
               </div>
-              <span className="self-start xs:self-auto text-[9px] sm:text-[10px] font-mono font-bold uppercase px-2 py-0.5 border border-[#404040] bg-[#161616] text-neutral-200 shrink-0">
-                OFFICIAL ENTRY PASS
-              </span>
+              <div className="flex items-center gap-1.5 self-start xs:self-auto shrink-0">
+                <span className="text-[9px] sm:text-[10px] font-mono font-bold uppercase px-2 py-0.5 border border-emerald-500/40 bg-emerald-500/10 text-emerald-400">
+                  ALL 3 BUILDERS REQUIRED
+                </span>
+                <span className="text-[9px] sm:text-[10px] font-mono font-bold uppercase px-2 py-0.5 border border-[#404040] bg-[#161616] text-neutral-200">
+                  FREE PASS
+                </span>
+              </div>
             </div>
             
             <Suspense fallback={<RegistrationFormSkeleton />}>

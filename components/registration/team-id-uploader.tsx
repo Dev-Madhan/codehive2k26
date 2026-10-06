@@ -111,12 +111,12 @@ function PdfPreviewModal({ isOpen, onClose, file }: PdfPreviewModalProps) {
               <div className="flex items-center gap-2">
                 <h3
                   id="pdf-preview-title"
-                  className="text-xs sm:text-sm font-mono font-bold text-white uppercase tracking-wider truncate max-w-[140px] xs:max-w-[200px] sm:max-w-md"
+                  className="text-xs sm:text-sm font-mono font-bold text-white uppercase tracking-wider truncate max-w-[140px] sm:max-w-md"
                   title={file.name}
                 >
                   {file.name}
                 </h3>
-                <span className="hidden xs:inline-flex px-1.5 py-0.5 text-[9px] font-mono font-bold uppercase tracking-wider text-white bg-[#161616] border border-[#262626]">
+                <span className="hidden sm:inline-flex px-1.5 py-0.5 text-[9px] font-mono font-bold uppercase tracking-wider text-white bg-[#161616] border border-[#262626]">
                   PDF
                 </span>
               </div>
@@ -138,8 +138,8 @@ function PdfPreviewModal({ isOpen, onClose, file }: PdfPreviewModalProps) {
               title="Open PDF in a new browser tab for full zooming controls"
             >
               <ExternalLinkIcon className="size-3 text-white" />
-              <span className="hidden xs:inline">Open in Tab</span>
-              <span className="xs:hidden">Open</span>
+              <span className="hidden sm:inline">Open in Tab</span>
+              <span className="sm:hidden">Open</span>
             </a>
             <a
               href={blobUrl}
@@ -198,7 +198,7 @@ function PdfPreviewModal({ isOpen, onClose, file }: PdfPreviewModalProps) {
         {/* Desktop / Global Footer */}
         <div className="flex items-center justify-between px-3.5 sm:px-5 py-2.5 sm:py-3 border-t border-[#262626] bg-[#080808] text-[11px] font-mono text-neutral-400 shrink-0">
           <div className="flex items-center gap-2 text-neutral-400 text-[10px] sm:text-[11px]">
-            <ShieldCheckIcon className="size-3.5 text-white shrink-0 hidden xs:block" />
+            <ShieldCheckIcon className="size-3.5 text-white shrink-0 hidden sm:block" />
             <span className="truncate max-w-[200px] sm:max-w-md">
               Single PDF document verified for team ID cards
             </span>
@@ -312,7 +312,7 @@ export function TeamIdUploader({
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono font-bold text-white uppercase tracking-wider truncate max-w-[180px] xs:max-w-[220px] sm:max-w-xs">
+                  <span className="text-xs font-mono font-bold text-white uppercase tracking-wider truncate max-w-[180px] sm:max-w-xs">
                     {selectedFile.name}
                   </span>
                   <span className="inline-flex items-center px-1.5 py-0.5 rounded-none border border-[#404040] bg-[#161616] text-[9px] font-mono font-bold text-white shrink-0">

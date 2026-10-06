@@ -278,17 +278,25 @@ export function DigitalEventPass({
                 {ticket.teamMembers.map((member, idx) => (
                   <div
                     key={idx}
-                    className="p-2.5 rounded-none border border-[#262626] bg-[#080808] flex items-center justify-between"
+                    className="p-2.5 rounded-none border border-[#262626] bg-[#080808] flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between"
                   >
-                    <div className="flex items-center gap-2">
-                      <span className="inline-flex size-5 items-center justify-center text-[9px] font-bold text-white bg-[#161616] border border-[#262626]">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="inline-flex size-5 shrink-0 items-center justify-center text-[9px] font-bold text-white bg-[#161616] border border-[#262626]">
                         {String(idx + 2).padStart(2, "0")}
                       </span>
-                      <span className="font-semibold text-neutral-200">{member.name}</span>
+                      <div className="min-w-0">
+                        <span className="font-semibold text-neutral-200 block truncate">{member.name}</span>
+                        {(member.department || member.year) && (
+                          <span className="text-[10px] text-neutral-400 block truncate font-mono">
+                            {[member.department, member.year].filter(Boolean).join(" • ")}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    <span className="text-[10px] font-mono text-[#737373]">
-                      {member.phone}
-                    </span>
+                    <div className="text-left sm:text-right font-mono text-[10px] text-[#737373] shrink-0 pl-7 sm:pl-0">
+                      <div>{member.phone}</div>
+                      {member.email && <div className="text-neutral-400 truncate max-w-[180px]">{member.email}</div>}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -363,7 +371,7 @@ export function DigitalEventPass({
             </div>
           ) : (
             <div className="p-3 rounded-none border border-[#262626] bg-[#080808] text-xs text-neutral-400">
-              Participant has opted for Self-Arranged Commute directly to Vel Tech campus.
+              Participant has opted for Self-Arranged Commute directly to Vel Tech Multi Tech campus.
             </div>
           )}
         </div>

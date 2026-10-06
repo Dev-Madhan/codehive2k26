@@ -38,7 +38,7 @@ const INSTRUCTIONS_MAP: Record<string, CleanEventInstructions> = {
     totalRounds: 4,
     totalMarks: 200,
     brief:
-      "TECHFORGE is a 2-day technical challenge where you Analyze, Build, Adapt & Defend. Solve a real-world problem, develop your solution, and face a surprise technical challenge that will test your coding, problem-solving, and innovation skills.",
+      "TECHFORGE is a 2-day technical challenge hosted at Vel Tech Multi Tech Dr. Rangarajan Dr. Sakunthala Engineering College where you Analyze, Build, Adapt & Defend. Solve a real-world problem, develop your solution, and face a surprise technical challenge that will test your coding, problem-solving, and innovation skills.",
     corePrinciple:
       "One Problem. Four Rounds. One Champion. — AI-allowed, tool-flexible, and technology-independent, with live jury defense.",
     rounds: [
@@ -118,7 +118,7 @@ const INSTRUCTIONS_MAP: Record<string, CleanEventInstructions> = {
     totalRounds: 4,
     totalMarks: 200,
     brief:
-      "AGENT VIBE is a 2-day AI challenge where you Imagine, Build, Adapt & Deploy. Design and develop intelligent AI agents to solve real-world problems, then tackle surprise challenges that will test your creativity, AI skills, and ability to innovate using LLMs, APIs, and modern AI tools.",
+      "AGENT VIBE is a 2-day AI challenge hosted at Vel Tech Multi Tech Dr. Rangarajan Dr. Sakunthala Engineering College where you Imagine, Build, Adapt & Deploy. Design and develop intelligent AI agents to solve real-world problems, then tackle surprise challenges that will test your creativity, AI skills, and ability to innovate using LLMs, APIs, and modern AI tools.",
     corePrinciple:
       "One Idea. Four Rounds. One AI Champion. — Imagine, Build, Adapt & Deploy intelligent autonomous agents.",
     rounds: [
@@ -210,7 +210,7 @@ export function getEventInstructions(slug: string, eventName?: string): CleanEve
     format: "Multi-Round Technical Challenge",
     totalRounds: 3,
     totalMarks: 100,
-    brief: `${cleanTitle} is a team-based technical competition where participants design, build, and demonstrate a working real-world application under structured evaluation.`,
+    brief: `${cleanTitle} is a team-based technical competition hosted at Vel Tech Multi Tech Dr. Rangarajan Dr. Sakunthala Engineering College where participants design, build, and demonstrate a working real-world application under structured evaluation.`,
     corePrinciple:
       "Build with precision, solve real-world problems, and be prepared to defend your implementation.",
     rounds: [

@@ -101,13 +101,25 @@ export async function createRegistration(
       };
     }
 
-    const memberPhones = members.map((m) => m.phone);
-    if (memberPhones.includes(phone) || memberPhones[0] === memberPhones[1]) {
+    const memberPhones = members.map((m) => m.phone.trim());
+    if (memberPhones.includes(phone.trim()) || memberPhones[0] === memberPhones[1]) {
       return {
         success: false,
         error: {
           code: "INVALID_INPUT",
           message: "All 3 team members must have distinct mobile numbers.",
+        },
+      };
+    }
+
+    const memberEmails = members.map((m) => m.email.toLowerCase().trim());
+    const leaderEmailNorm = email.toLowerCase().trim();
+    if (memberEmails.includes(leaderEmailNorm) || memberEmails[0] === memberEmails[1]) {
+      return {
+        success: false,
+        error: {
+          code: "INVALID_INPUT",
+          message: "All 3 team members must have distinct email addresses.",
         },
       };
     }
@@ -237,6 +249,10 @@ export async function createRegistration(
             teamId: team.id,
             name,
             phone,
+            email,
+            college,
+            department,
+            year,
             collegeIdUrl: imageUrl || null,
             participantId: participant.id,
             transportOptIn: Boolean(transportOptIn),
@@ -264,8 +280,12 @@ export async function createRegistration(
           await tx.teamMember.create({
             data: {
               teamId: team.id,
-              name: member.name,
-              phone: member.phone,
+              name: member.name.trim(),
+              phone: member.phone.trim(),
+              email: member.email.trim().toLowerCase(),
+              college: member.college.trim(),
+              department: member.department.trim(),
+              year: member.year,
               collegeIdUrl: member.collegeIdUrl || imageUrl || null,
               transportOptIn: memberTransportOptIn,
               pickupRoute: memberRoute,
@@ -384,8 +404,12 @@ export async function createRegistration(
         pickupLandmark: transportOptIn ? pickupLandmark : null,
         passengersCount: finalBusSeats,
         teamMembers: members.map((m) => ({
-          name: m.name,
-          phone: m.phone,
+          name: m.name.trim(),
+          phone: m.phone.trim(),
+          email: m.email.trim(),
+          college: m.college.trim(),
+          department: m.department.trim(),
+          year: m.year,
           transportOptIn: samePickupForTeam ? Boolean(transportOptIn) : Boolean(m.transportOptIn),
           pickupRoute: samePickupForTeam ? (transportOptIn ? pickupRoute : null) : m.pickupRoute,
           pickupStop: samePickupForTeam ? (transportOptIn ? pickupStop : null) : m.pickupStop,

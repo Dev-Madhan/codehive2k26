@@ -22,6 +22,10 @@ export interface RegistrationDetails {
       id: string;
       name: string;
       phone: string;
+      email?: string | null;
+      college?: string | null;
+      department?: string | null;
+      year?: string | null;
       transportOptIn?: boolean;
       pickupRoute?: string | null;
       pickupStop?: string | null;
@@ -84,6 +88,10 @@ export interface RegistrationSuccessPayload {
   teamMembers: Array<{
     name: string;
     phone: string;
+    email?: string;
+    college?: string;
+    department?: string;
+    year?: string;
     transportOptIn?: boolean;
     pickupRoute?: string | null;
     pickupStop?: string | null;

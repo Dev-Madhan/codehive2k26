@@ -10,7 +10,7 @@ export function RegistrationFormSkeleton() {
             <Skeleton className="size-4 shrink-0" />
             <Skeleton className="h-3.5 w-44" />
           </div>
-          <Skeleton className="h-4 w-24 hidden xs:block" />
+          <Skeleton className="h-4 w-24 hidden sm:block" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
@@ -32,7 +32,7 @@ export function RegistrationFormSkeleton() {
             <Skeleton className="size-4 shrink-0" />
             <Skeleton className="h-3.5 w-40" />
           </div>
-          <Skeleton className="h-3.5 w-36 hidden xs:block" />
+          <Skeleton className="h-3.5 w-36 hidden sm:block" />
         </div>
 
         {/* Leader Name */}
@@ -80,7 +80,7 @@ export function RegistrationFormSkeleton() {
             <Skeleton className="size-4 shrink-0" />
             <Skeleton className="h-3.5 w-48" />
           </div>
-          <Skeleton className="h-4 w-28 hidden xs:block" />
+          <Skeleton className="h-4 w-28 hidden sm:block" />
         </div>
 
         <div className="space-y-3">
@@ -111,7 +111,7 @@ export function RegistrationFormSkeleton() {
             <Skeleton className="size-4 shrink-0" />
             <Skeleton className="h-3.5 w-56" />
           </div>
-          <Skeleton className="h-4 w-28 hidden xs:block" />
+          <Skeleton className="h-4 w-28 hidden sm:block" />
         </div>
 
         {/* Toggle pill */}
@@ -131,7 +131,7 @@ export function RegistrationFormSkeleton() {
             <Skeleton className="size-4 shrink-0" />
             <Skeleton className="h-3.5 w-52" />
           </div>
-          <Skeleton className="h-4 w-32 hidden xs:block" />
+          <Skeleton className="h-4 w-32 hidden sm:block" />
         </div>
 
         <Skeleton className="h-3.5 w-full max-w-xl" />
@@ -163,13 +163,13 @@ export function RegistrationSkeleton() {
       <div className="absolute bottom-0 left-0 w-2.5 sm:w-3 h-2.5 sm:h-3 border-b border-l border-[#333333] pointer-events-none !m-0" />
 
       {/* Header Bar */}
-      <div className="border-b border-[#262626] pb-3 sm:pb-4 flex flex-col xs:flex-row xs:items-center justify-between gap-2">
+      <div className="border-b border-[#262626] pb-3 sm:pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div className="space-y-1">
           <Skeleton className="h-3 w-20" />
           <Skeleton className="h-6 sm:h-7 w-48 sm:w-64" />
           <Skeleton className="hidden sm:block h-3.5 w-72 mt-1" />
         </div>
-        <Skeleton className="h-6 w-32 shrink-0 self-start xs:self-auto" />
+        <Skeleton className="h-6 w-32 shrink-0 self-start sm:self-auto" />
       </div>
 
       <RegistrationFormSkeleton />

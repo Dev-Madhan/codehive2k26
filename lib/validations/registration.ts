@@ -4,10 +4,29 @@ const indianPhoneRegex = /^[6-9]\d{9}$/;
 
 // Team member sub-schema (for additional members beyond the leader)
 const teamMemberSchema = z.object({
-  name: z.string().min(2, "Member name must be at least 2 characters").max(100),
+  name: z.string().trim().min(2, "Member name must be at least 2 characters").max(100),
   phone: z
     .string()
-    .regex(indianPhoneRegex, "Must be a valid 10-digit Indian mobile number"),
+    .trim()
+    .regex(indianPhoneRegex, "Member mobile must be a valid 10-digit Indian mobile number"),
+  email: z
+    .string()
+    .trim()
+    .email("Member email must be a valid email address")
+    .max(100),
+  college: z
+    .string()
+    .trim()
+    .min(2, "Member college is required")
+    .max(150),
+  department: z
+    .string()
+    .trim()
+    .min(2, "Member department is required")
+    .max(100),
+  year: z.enum(["1st Year", "2nd Year", "3rd Year", "4th Year", "Postgraduate"], {
+    message: "Member year of study is required",
+  }),
   collegeIdUrl: z.string().url("Invalid College ID URL").optional().or(z.literal("")),
   // Individual member transport preferences (if individual pickup mode is chosen)
   transportOptIn: z.boolean().optional().default(false),
@@ -52,7 +71,7 @@ export const registrationSchema = z
   })
   .superRefine((data, ctx) => {
     // 1. Verify that all 3 members have unique phone numbers
-    const allPhones = [data.phone, ...data.members.map((m) => m.phone)];
+    const allPhones = [data.phone.trim(), ...data.members.map((m) => m.phone.trim())];
     const uniquePhones = new Set(allPhones);
     if (uniquePhones.size !== 3) {
       ctx.addIssue({
@@ -62,7 +81,21 @@ export const registrationSchema = z
       });
     }
 
-    // 2. Verify that all 3 members have distinct names
+    // 2. Verify that all 3 members have unique email addresses
+    const allEmails = [
+      data.email.trim().toLowerCase(),
+      ...data.members.map((m) => m.email.trim().toLowerCase()),
+    ];
+    const uniqueEmails = new Set(allEmails);
+    if (uniqueEmails.size !== 3) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "All 3 team members (Leader, Member 02, and Member 03) must have distinct email addresses.",
+        path: ["members"],
+      });
+    }
+
+    // 3. Verify that all 3 members have distinct names
     const allNames = [
       data.name.trim().toLowerCase(),
       ...data.members.map((m) => m.name.trim().toLowerCase()),
