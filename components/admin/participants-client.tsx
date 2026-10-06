@@ -47,34 +47,34 @@ export function ParticipantsClient({
     <div className="space-y-4 font-mono max-w-full">
       {/* ── Summary Metrics ── */}
       <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
-        <div className="border border-[#152A54] bg-[#060D1A] p-3 sm:p-4">
-          <p className="text-[10px] sm:text-[11px] uppercase tracking-wider text-slate-400">Total Participants</p>
+        <div className="border border-[#262626] bg-[#0F0F0F] p-3 sm:p-4">
+          <p className="text-[10px] sm:text-[11px] uppercase tracking-wider text-zinc-400">Total Participants</p>
           <p className="text-xl sm:text-2xl font-bold text-white mt-0.5 tabular-nums">
             {initialParticipants.length}
           </p>
         </div>
-        <div className="border border-[#152A54] bg-[#060D1A] p-3 sm:p-4">
-          <p className="text-[10px] sm:text-[11px] uppercase tracking-wider text-blue-400">Multi-Event Attendees</p>
-          <p className="text-xl sm:text-2xl font-bold text-blue-400 mt-0.5 tabular-nums">
+        <div className="border border-[#262626] bg-[#0F0F0F] p-3 sm:p-4">
+          <p className="text-[10px] sm:text-[11px] uppercase tracking-wider text-zinc-400">Multi-Event Attendees</p>
+          <p className="text-xl sm:text-2xl font-bold text-white mt-0.5 tabular-nums">
             {multiEventCount}
           </p>
         </div>
       </div>
 
       {/* ── Search Bar ── */}
-      <div className="relative border border-[#152A54] bg-[#060D1A] p-2.5 sm:p-3">
-        <SearchIcon className="absolute left-5 top-1/2 -translate-y-1/2 size-3.5 text-slate-500" />
+      <div className="relative border border-[#262626] bg-[#0F0F0F] p-2.5 sm:p-3">
+        <SearchIcon className="absolute left-5 top-1/2 -translate-y-1/2 size-3.5 text-zinc-500" />
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by name, email, phone, college..."
-          className="w-full bg-[#03060E] border border-[#152A54] pl-9 pr-8 py-2 text-xs text-white placeholder:text-slate-600 focus:outline-hidden focus:border-blue-500 rounded-none"
+          className="w-full bg-[#080808] border border-[#262626] pl-9 pr-8 py-2 text-xs text-white placeholder:text-zinc-600 focus:outline-hidden focus:border-white rounded-none"
         />
         {search && (
           <button
             onClick={() => setSearch("")}
-            className="absolute right-4.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white p-0.5"
+            className="absolute right-4.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white p-0.5"
           >
             <XIcon className="size-3.5" />
           </button>
@@ -82,14 +82,14 @@ export function ParticipantsClient({
       </div>
 
       {/* ── Results Count Bar ── */}
-      <div className="flex items-center justify-between text-[11px] text-slate-400 px-1">
+      <div className="flex items-center justify-between text-[11px] text-zinc-400 px-1">
         <span>
           Showing <strong className="text-white">{filtered.length}</strong> of {initialParticipants.length} participants
         </span>
         {search && (
           <button
             onClick={() => setSearch("")}
-            className="text-blue-400 hover:underline cursor-pointer"
+            className="text-zinc-300 hover:text-white hover:underline cursor-pointer"
           >
             [ Clear Search ]
           </button>
@@ -99,7 +99,7 @@ export function ParticipantsClient({
       {/* ── Mobile Card View (< md) ── */}
       <div className="block md:hidden space-y-3">
         {filtered.length === 0 ? (
-          <div className="border border-[#152A54] bg-[#060D1A] p-8 text-center text-xs text-slate-500">
+          <div className="border border-[#262626] bg-[#0F0F0F] p-8 text-center text-xs text-zinc-500">
             No participants found matching your search.
           </div>
         ) : (
@@ -115,40 +115,40 @@ export function ParticipantsClient({
             return (
               <div
                 key={p.id}
-                className="border border-[#152A54] bg-[#060D1A] p-3.5 space-y-2.5 transition-colors hover:border-blue-500/40 relative"
+                className="border border-[#262626] bg-[#0F0F0F] p-3.5 space-y-2.5 transition-colors hover:border-[#404040] relative"
               >
-                <div className="flex items-center justify-between gap-2 border-b border-[#152A54] pb-2">
+                <div className="flex items-center justify-between gap-2 border-b border-[#262626] pb-2">
                   <div className="flex items-center gap-2 min-w-0">
-                    <div className="size-7 rounded-none bg-[#0B162C] border border-[#152A54] text-blue-400 font-bold text-xs flex items-center justify-center shrink-0">
+                    <div className="size-7 rounded-none bg-[#161616] border border-[#262626] text-white font-bold text-xs flex items-center justify-center shrink-0">
                       {initials}
                     </div>
                     <span className="font-bold text-white text-xs truncate">{p.name}</span>
                   </div>
-                  <span className="text-[10px] font-bold text-blue-400 bg-blue-950/40 border border-blue-500/30 px-2 py-0.5 shrink-0">
+                  <span className="text-[10px] font-bold text-white bg-white/10 border border-white/20 px-2 py-0.5 shrink-0">
                     {p._count.registrations} {p._count.registrations === 1 ? "EVENT" : "EVENTS"}
                   </span>
                 </div>
 
                 <div className="space-y-1.5 text-xs">
-                  <div className="flex items-center gap-1.5 text-slate-300">
-                    <Building2Icon className="size-3 text-slate-500 shrink-0" />
+                  <div className="flex items-center gap-1.5 text-zinc-300">
+                    <Building2Icon className="size-3 text-zinc-500 shrink-0" />
                     <span className="truncate">{p.college}</span>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-3 pt-1 text-[11px] text-slate-400">
+                  <div className="flex flex-wrap items-center gap-3 pt-1 text-[11px] text-zinc-400">
                     <a
                       href={`mailto:${p.email}`}
-                      className="flex items-center gap-1 hover:text-blue-400 transition-colors truncate max-w-[190px]"
+                      className="flex items-center gap-1 hover:text-white transition-colors truncate max-w-[190px]"
                     >
-                      <MailIcon className="size-3 text-slate-500 shrink-0" />
+                      <MailIcon className="size-3 text-zinc-500 shrink-0" />
                       <span className="truncate">{p.email}</span>
                     </a>
                     {p.phone && (
                       <a
                         href={`tel:${p.phone}`}
-                        className="flex items-center gap-1 hover:text-blue-400 transition-colors"
+                        className="flex items-center gap-1 hover:text-white transition-colors"
                       >
-                        <PhoneIcon className="size-3 text-slate-500 shrink-0" />
+                        <PhoneIcon className="size-3 text-zinc-500 shrink-0" />
                         <span>{p.phone}</span>
                       </a>
                     )}
@@ -161,9 +161,9 @@ export function ParticipantsClient({
       </div>
 
       {/* ── Desktop Table View (>= md) ── */}
-      <div className="hidden md:block rounded-none border border-[#152A54] bg-[#060D1A] overflow-x-auto">
+      <div className="hidden md:block rounded-none border border-[#262626] bg-[#0F0F0F] overflow-x-auto">
         <table className="w-full text-left text-xs">
-          <thead className="bg-[#03060E] text-[11px] uppercase tracking-wider text-slate-400 border-b border-[#152A54]">
+          <thead className="bg-[#080808] text-[11px] uppercase tracking-wider text-zinc-400 border-b border-[#262626]">
             <tr>
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Email</th>
@@ -172,21 +172,21 @@ export function ParticipantsClient({
               <th className="px-4 py-3">Events Count</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#152A54]">
+          <tbody className="divide-y divide-[#262626]">
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={5} className="text-center py-8 text-slate-500">
+                <td colSpan={5} className="text-center py-8 text-zinc-500">
                   No participants found.
                 </td>
               </tr>
             ) : (
               filtered.map((p) => (
-                <tr key={p.id} className="hover:bg-[#0B162C] transition-colors">
+                <tr key={p.id} className="hover:bg-[#161616] transition-colors">
                   <td className="px-4 py-3 font-semibold text-white">{p.name}</td>
-                  <td className="px-4 py-3 text-slate-300">{p.email}</td>
-                  <td className="px-4 py-3 text-slate-400">{p.phone}</td>
-                  <td className="px-4 py-3 text-slate-400 truncate max-w-[200px]">{p.college}</td>
-                  <td className="px-4 py-3 font-bold text-blue-400">{p._count.registrations} EVENTS</td>
+                  <td className="px-4 py-3 text-zinc-300">{p.email}</td>
+                  <td className="px-4 py-3 text-zinc-400">{p.phone}</td>
+                  <td className="px-4 py-3 text-zinc-400 truncate max-w-[200px]">{p.college}</td>
+                  <td className="px-4 py-3 font-bold text-white">{p._count.registrations} EVENTS</td>
                 </tr>
               ))
             )}

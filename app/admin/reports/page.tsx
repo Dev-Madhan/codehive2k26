@@ -31,12 +31,12 @@ export default async function AdminReportsPage() {
 
   return (
     <div className="space-y-5 font-mono max-w-full">
-      <div className="border-b border-[#152A54] pb-3 sm:pb-4">
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[11px] font-bold text-blue-400 bg-blue-600/15 border border-blue-500/30 mb-2">
+      <div className="border-b border-[#262626] pb-3 sm:pb-4">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[11px] font-bold text-black bg-white border border-white mb-2">
           &gt; admin / analytics_reports
         </div>
         <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white uppercase">Reports &amp; Analytics</h1>
-        <p className="text-xs text-slate-400 mt-1">Real-time attendance rates, registration metrics, and exportable reports.</p>
+        <p className="text-xs text-[#A3A3A3] mt-1">Real-time attendance rates, registration metrics, and exportable reports.</p>
       </div>
 
       <ReportsClient

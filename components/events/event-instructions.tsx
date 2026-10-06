@@ -22,9 +22,9 @@ export function EventInstructions({ slug, eventName }: EventInstructionsProps) {
   const data: CleanEventInstructions = getEventInstructions(slug, eventName);
 
   return (
-    <div className="border border-[#152A54] bg-[#060D1A] font-sans space-y-6 p-4 sm:p-8">
+    <div className="border border-[#262626] bg-[#0F0F0F] font-sans space-y-6 p-4 sm:p-8">
       {/* Header & Badges */}
-      <div className="space-y-4 border-b border-[#152A54] pb-6">
+      <div className="space-y-4 border-b border-[#262626] pb-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="space-y-1">
             <h2 className="text-xl sm:text-2xl font-bold font-sans tracking-tight text-white uppercase">
@@ -34,21 +34,21 @@ export function EventInstructions({ slug, eventName }: EventInstructionsProps) {
 
           {/* Quick Metrics Pills */}
           <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
-            <div className="border border-[#152A54] bg-[#081224] px-3 py-1 text-slate-300">
-              <span className="text-slate-500 mr-1.5">FORMAT:</span>
-              <span className="text-blue-400 font-bold">{data.totalRounds} ROUNDS</span>
+            <div className="border border-[#262626] bg-[#161616] px-3 py-1 text-neutral-300">
+              <span className="text-[#737373] mr-1.5">FORMAT:</span>
+              <span className="text-white font-bold">{data.totalRounds} ROUNDS</span>
             </div>
-            <div className="border border-[#152A54] bg-[#081224] px-3 py-1 text-slate-300">
-              <span className="text-slate-500 mr-1.5">SCORE:</span>
-              <span className="text-emerald-400 font-bold">{data.totalMarks} MARKS</span>
+            <div className="border border-[#262626] bg-[#161616] px-3 py-1 text-neutral-300">
+              <span className="text-[#737373] mr-1.5">SCORE:</span>
+              <span className="text-white font-bold">{data.totalMarks} MARKS</span>
             </div>
-            <div className="border border-emerald-500/40 bg-emerald-950/20 px-3 py-1 text-emerald-300 font-bold">
+            <div className="border border-[#404040] bg-[#161616] px-3 py-1 text-white font-bold">
               AI TOOLS ALLOWED
             </div>
           </div>
         </div>
 
-        <p className="text-xs sm:text-sm font-sans text-slate-300 leading-relaxed max-w-3xl">
+        <p className="text-xs sm:text-sm font-sans text-neutral-400 leading-relaxed max-w-3xl">
           {data.brief}
         </p>
       </div>
@@ -56,11 +56,11 @@ export function EventInstructions({ slug, eventName }: EventInstructionsProps) {
       {/* 4 Rounds Progression (Clean Grid) */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-xs uppercase font-mono font-bold text-slate-400 tracking-wider flex items-center gap-2">
-            <TerminalIcon className="size-3.5 text-blue-400" />
+          <span className="text-xs uppercase font-mono font-bold text-[#737373] tracking-wider flex items-center gap-2">
+            <TerminalIcon className="size-3.5 text-white" />
             Competition Rounds (Cumulative {data.totalMarks} Marks)
           </span>
-          <span className="text-[11px] font-mono text-slate-500 hidden sm:inline">
+          <span className="text-[11px] font-mono text-[#737373] hidden sm:inline">
             Day 1: 100 M &bull; Day 2: 100 M
           </span>
         </div>
@@ -69,19 +69,19 @@ export function EventInstructions({ slug, eventName }: EventInstructionsProps) {
           {data.rounds.map((round) => (
             <div
               key={round.roundNumber}
-              className="border border-[#152A54] bg-[#03060E] p-4 space-y-2 hover:border-blue-500/40 transition-colors flex flex-col justify-between"
+              className="border border-[#262626] bg-[#080808] p-4 space-y-2 hover:border-[#404040] transition-colors flex flex-col justify-between"
             >
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="font-bold text-blue-400 font-mono text-xs uppercase tracking-wider">
+                  <span className="font-bold text-white font-mono text-xs uppercase tracking-wider">
                     Round {round.roundNumber}
                   </span>
                   <div className="flex items-center gap-2">
-                    <span className="text-slate-500 text-[11px] flex items-center gap-1 font-mono">
-                      <ClockIcon className="size-3 text-slate-500" />
+                    <span className="text-[#737373] text-[11px] flex items-center gap-1 font-mono">
+                      <ClockIcon className="size-3 text-[#737373]" />
                       {round.day}
                     </span>
-                    <span className="border border-blue-500/40 bg-blue-600/15 px-2 py-0.5 text-blue-300 font-bold text-[11px] font-mono">
+                    <span className="border border-[#404040] bg-[#161616] px-2 py-0.5 text-white font-bold text-[11px] font-mono">
                       {round.marks} M
                     </span>
                   </div>
@@ -91,7 +91,7 @@ export function EventInstructions({ slug, eventName }: EventInstructionsProps) {
                   {round.name}
                 </h4>
 
-                <p className="text-xs font-sans text-slate-300 leading-relaxed">
+                <p className="text-xs font-sans text-neutral-400 leading-relaxed">
                   {round.summary}
                 </p>
               </div>
@@ -102,8 +102,8 @@ export function EventInstructions({ slug, eventName }: EventInstructionsProps) {
 
       {/* Essential Directives: AI, Continuity, Defense (3 Cards) */}
       <div className="space-y-3 pt-2">
-        <span className="text-xs uppercase font-mono font-bold text-slate-400 tracking-wider flex items-center gap-2">
-          <ShieldCheckIcon className="size-3.5 text-blue-400" />
+        <span className="text-xs uppercase font-mono font-bold text-[#737373] tracking-wider flex items-center gap-2">
+          <ShieldCheckIcon className="size-3.5 text-white" />
           Key Competition Guidelines
         </span>
 
@@ -111,23 +111,23 @@ export function EventInstructions({ slug, eventName }: EventInstructionsProps) {
           {data.directives.map((dir, idx) => (
             <div
               key={idx}
-              className="border border-[#152A54] bg-[#03060E] p-4 space-y-2.5 hover:border-blue-500/40 transition-colors"
+              className="border border-[#262626] bg-[#080808] p-4 space-y-2.5 hover:border-[#404040] transition-colors"
             >
-              <div className="flex items-center gap-2 text-xs font-sans font-bold text-blue-400 uppercase tracking-wide">
-                {dir.iconType === "ai" && <SparklesIcon className="size-3.5 text-blue-400 shrink-0" />}
-                {dir.iconType === "security" && <ShieldCheckIcon className="size-3.5 text-emerald-400 shrink-0" />}
-                {dir.iconType === "defense" && <HelpCircleIcon className="size-3.5 text-amber-400 shrink-0" />}
+              <div className="flex items-center gap-2 text-xs font-sans font-bold text-white uppercase tracking-wide">
+                {dir.iconType === "ai" && <SparklesIcon className="size-3.5 text-white shrink-0" />}
+                {dir.iconType === "security" && <ShieldCheckIcon className="size-3.5 text-white shrink-0" />}
+                {dir.iconType === "defense" && <HelpCircleIcon className="size-3.5 text-white shrink-0" />}
                 <span>{dir.title}</span>
               </div>
 
-              <p className="text-xs font-sans text-slate-300 leading-relaxed">
+              <p className="text-xs font-sans text-neutral-400 leading-relaxed">
                 {dir.description}
               </p>
 
-              <ul className="space-y-1 pt-1 border-t border-[#152A54]/60 text-xs font-sans text-slate-300">
+              <ul className="space-y-1 pt-1 border-t border-[#262626] text-xs font-sans text-neutral-300">
                 {dir.highlights.map((h, hIdx) => (
                   <li key={hIdx} className="flex items-start gap-1.5">
-                    <CheckIcon className="size-3 text-blue-400 shrink-0 mt-0.5" />
+                    <CheckIcon className="size-3 text-white shrink-0 mt-0.5" />
                     <span>{h}</span>
                   </li>
                 ))}

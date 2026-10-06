@@ -205,20 +205,20 @@ export function ExportDataDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[96vw] max-w-4xl bg-[#060D1A] border border-[#152A54] text-white p-0 gap-0 rounded-none shadow-2xl overflow-hidden font-mono text-xs max-h-[88vh] flex flex-col">
+      <DialogContent className="w-[96vw] max-w-4xl bg-[#0F0F0F] border border-[#262626] text-white p-0 gap-0 rounded-none shadow-2xl overflow-hidden font-mono text-xs max-h-[88vh] flex flex-col">
         {/* ── Dialog Header Banner ── */}
-        <DialogHeader className="p-4 sm:p-6 border-b border-[#152A54] bg-[#03060E] space-y-1.5 shrink-0">
+        <DialogHeader className="p-4 sm:p-6 border-b border-[#262626] bg-[#080808] space-y-1.5 shrink-0">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold text-sky-400 bg-blue-950/60 border border-blue-500/40 px-2 py-0.5 uppercase tracking-wider inline-flex items-center gap-1.5">
-              <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[10px] font-bold text-white bg-white/10 border border-[#404040] px-2 py-0.5 uppercase tracking-wider inline-flex items-center gap-1.5">
+              <span className="size-1.5 rounded-none bg-white animate-pulse" />
               DATA EXPORT TOOL
             </span>
           </div>
           <DialogTitle className="text-base sm:text-xl font-bold text-white uppercase tracking-tight flex items-center gap-2.5">
-            <FileSpreadsheetIcon className="size-5 sm:size-5.5 text-blue-400 shrink-0" />
+            <FileSpreadsheetIcon className="size-5 sm:size-5.5 text-white shrink-0" />
             <span>Export Registrations Data</span>
           </DialogTitle>
-          <DialogDescription className="text-xs text-slate-400 leading-relaxed max-w-2xl">
+          <DialogDescription className="text-xs text-zinc-400 leading-relaxed max-w-2xl">
             Choose what data you want to export and how you want it formatted. You can download it as an Excel or CSV file.
           </DialogDescription>
         </DialogHeader>
@@ -227,17 +227,17 @@ export function ExportDataDialog({
         <div className="p-4 sm:p-6 space-y-5 sm:space-y-6 overflow-y-auto no-scrollbar flex-1">
           {/* ── 01. Target Scope Selection ── */}
           <div className="space-y-2.5">
-            <div className="flex items-center justify-between border-b border-[#152A54]/80 pb-1.5">
+            <div className="flex items-center justify-between border-b border-[#262626] pb-1.5">
               <div className="flex items-center gap-2">
-                <span className="font-mono text-[10px] font-bold text-sky-400 bg-blue-950/60 border border-blue-500/40 px-1.5 py-0.5">
+                <span className="font-mono text-[10px] font-bold text-white bg-white/10 border border-[#404040] px-1.5 py-0.5">
                   01
                 </span>
                 <h3 className="font-mono text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                  <LayersIcon className="size-3.5 text-blue-400" />
+                  <LayersIcon className="size-3.5 text-white" />
                   Choose What to Export
                 </h3>
               </div>
-              <span className="font-mono text-[10px] text-slate-500 uppercase hidden sm:inline">
+              <span className="font-mono text-[10px] text-zinc-500 uppercase hidden sm:inline">
                 Select Report Type
               </span>
             </div>
@@ -274,23 +274,23 @@ export function ExportDataDialog({
                     onClick={() => setScope(item.id as any)}
                     className={`p-3 text-left border transition-all relative cursor-pointer flex flex-col justify-between min-h-[82px] ${
                       isSelected
-                        ? "border-blue-500 bg-blue-950/40 shadow-sm shadow-blue-500/20 ring-1 ring-blue-500/50"
-                        : "border-[#152A54] bg-[#03060E] hover:border-slate-600 hover:bg-[#081224]"
+                        ? "border-white bg-white/10 shadow-sm"
+                        : "border-[#262626] bg-[#080808] hover:border-zinc-500 hover:bg-[#161616]"
                     }`}
                   >
                     <div className="flex items-start justify-between gap-1 mb-1">
-                      <p className={`font-bold text-xs uppercase tracking-tight ${isSelected ? "text-white" : "text-slate-300"}`}>
+                      <p className={`font-bold text-xs uppercase tracking-tight ${isSelected ? "text-white" : "text-zinc-300"}`}>
                         {item.label}
                       </p>
                       {item.badge ? (
-                        <span className="text-[8px] font-bold px-1.5 py-0.5 bg-blue-500/20 text-sky-300 border border-blue-500/40 shrink-0">
+                        <span className="text-[8px] font-bold px-1.5 py-0.5 bg-white/10 text-white border border-white/20 shrink-0">
                           {item.badge}
                         </span>
                       ) : isSelected ? (
-                        <span className="size-2 rounded-full bg-blue-400 shrink-0 mt-1" />
+                        <span className="size-2 rounded-none bg-white shrink-0 mt-1" />
                       ) : null}
                     </div>
-                    <p className="text-[10px] text-slate-400 leading-snug">{item.desc}</p>
+                    <p className="text-[10px] text-zinc-400 leading-snug">{item.desc}</p>
                   </button>
                 );
               })}
@@ -299,25 +299,25 @@ export function ExportDataDialog({
 
           {/* ── 02. Detailed Filterization Matrix ── */}
           <div className="space-y-2.5">
-            <div className="flex items-center justify-between border-b border-[#152A54]/80 pb-1.5">
+            <div className="flex items-center justify-between border-b border-[#262626] pb-1.5">
               <div className="flex items-center gap-2">
-                <span className="font-mono text-[10px] font-bold text-sky-400 bg-blue-950/60 border border-blue-500/40 px-1.5 py-0.5">
+                <span className="font-mono text-[10px] font-bold text-white bg-white/10 border border-[#404040] px-1.5 py-0.5">
                   02
                 </span>
                 <h3 className="font-mono text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                  <FilterIcon className="size-3.5 text-blue-400" />
+                  <FilterIcon className="size-3.5 text-white" />
                   Filter Data
                 </h3>
               </div>
-              <span className="font-mono text-[10px] text-slate-500 uppercase hidden sm:inline">
+              <span className="font-mono text-[10px] text-zinc-500 uppercase hidden sm:inline">
                 Choose what to include
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 bg-[#03060E] border border-[#152A54] p-3.5 sm:p-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 bg-[#080808] border border-[#262626] p-3.5 sm:p-4">
               {/* Event Filter */}
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-300 block">
+                <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-300 block">
                   Select Event:
                 </label>
                 <Select
@@ -330,9 +330,9 @@ export function ExportDataDialog({
                     <SelectValue placeholder="[ ALL EVENTS ]" />
                   </SelectTrigger>
                   <SelectContent>
-                    <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-[#152A54]/60 mb-1 flex items-center justify-between">
+                    <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-zinc-500 border-b border-[#262626] mb-1 flex items-center justify-between">
                       <span>// HOSTED EVENTS</span>
-                      <span className="text-blue-400 font-bold">{events.length} TOTAL</span>
+                      <span className="text-white font-bold">{events.length} TOTAL</span>
                     </div>
                     <SelectItem value="ALL">[ ALL EVENTS ]</SelectItem>
                     {events.map((ev) => (
@@ -346,10 +346,10 @@ export function ExportDataDialog({
 
               {/* Team vs Solo Format Filter */}
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-300 block">
+                <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-300 block">
                   Participant Type:
                 </label>
-                <div className="grid grid-cols-3 h-9 p-0.5 border border-[#152A54] bg-[#060D1A]">
+                <div className="grid grid-cols-3 h-9 p-0.5 border border-[#262626] bg-[#0F0F0F]">
                   {[
                     { id: "ALL", label: "All Formats" },
                     { id: "TEAM", label: "Teams" },
@@ -361,8 +361,8 @@ export function ExportDataDialog({
                       onClick={() => setFormatFilter(btn.id as any)}
                       className={`h-full text-[10px] font-bold uppercase transition-all cursor-pointer flex items-center justify-center ${
                         formatFilter === btn.id
-                          ? "bg-blue-600 text-white shadow-xs"
-                          : "text-slate-400 hover:text-white hover:bg-[#0B162C]"
+                          ? "bg-white text-black font-bold shadow-xs"
+                          : "text-zinc-400 hover:text-white hover:bg-[#161616]"
                       }`}
                     >
                       {btn.label}
@@ -373,10 +373,10 @@ export function ExportDataDialog({
 
               {/* Transportation Filter */}
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-300 block">
+                <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-300 block">
                   Transport Option:
                 </label>
-                <div className="grid grid-cols-3 h-9 p-0.5 border border-[#152A54] bg-[#060D1A]">
+                <div className="grid grid-cols-3 h-9 p-0.5 border border-[#262626] bg-[#0F0F0F]">
                   {[
                     { id: "ALL", label: "All" },
                     { id: "BUS_ONLY", label: "Bus Only" },
@@ -391,8 +391,8 @@ export function ExportDataDialog({
                       }}
                       className={`h-full text-[10px] font-bold uppercase transition-all cursor-pointer flex items-center justify-center ${
                         transportFilter === btn.id
-                          ? "bg-blue-600 text-white shadow-xs"
-                          : "text-slate-400 hover:text-white hover:bg-[#0B162C]"
+                          ? "bg-white text-black font-bold shadow-xs"
+                          : "text-zinc-400 hover:text-white hover:bg-[#161616]"
                       }`}
                     >
                       {btn.label}
@@ -403,10 +403,10 @@ export function ExportDataDialog({
 
               {/* Gate Check-in Status Filter */}
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-300 block">
+                <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-300 block">
                   Check-In Status:
                 </label>
-                <div className="grid grid-cols-3 h-9 p-0.5 border border-[#152A54] bg-[#060D1A]">
+                <div className="grid grid-cols-3 h-9 p-0.5 border border-[#262626] bg-[#0F0F0F]">
                   {[
                     { id: "ALL", label: "All" },
                     { id: "CHECKED_IN", label: "Checked-In" },
@@ -418,8 +418,8 @@ export function ExportDataDialog({
                       onClick={() => setCheckInFilter(btn.id as any)}
                       className={`h-full text-[10px] font-bold uppercase transition-all cursor-pointer flex items-center justify-center ${
                         checkInFilter === btn.id
-                          ? "bg-blue-600 text-white shadow-xs"
-                          : "text-slate-400 hover:text-white hover:bg-[#0B162C]"
+                          ? "bg-white text-black font-bold shadow-xs"
+                          : "text-zinc-400 hover:text-white hover:bg-[#161616]"
                       }`}
                     >
                       {btn.label}
@@ -430,9 +430,9 @@ export function ExportDataDialog({
 
               {/* Specific Bus Route Filter (Full width conditionally) */}
               {transportFilter !== "SELF" && (
-                <div className="space-y-1.5 sm:col-span-2 pt-2 border-t border-[#152A54]/60">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-sky-400 flex items-center gap-1.5">
-                    <BusIcon className="size-3.5 text-sky-400" />
+                <div className="space-y-1.5 sm:col-span-2 pt-2 border-t border-[#262626]">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
+                    <BusIcon className="size-3.5 text-white" />
                     Specific Bus Route:
                   </label>
                   <Select
@@ -445,9 +445,9 @@ export function ExportDataDialog({
                       <SelectValue placeholder="[ ALL BUS ROUTES & CORRIDORS ]" />
                     </SelectTrigger>
                     <SelectContent className="max-h-60">
-                      <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-[#152A54]/60 mb-1 flex items-center justify-between">
+                      <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-zinc-500 border-b border-[#262626] mb-1 flex items-center justify-between">
                         <span>// VEL TECH BUS CORRIDORS</span>
-                        <span className="text-blue-400 font-bold">{VELTECH_BUS_ROUTES.length} ROUTES</span>
+                        <span className="text-white font-bold">{VELTECH_BUS_ROUTES.length} ROUTES</span>
                       </div>
                       <SelectItem value="ALL">[ ALL BUS ROUTES &amp; CORRIDORS ]</SelectItem>
                       {VELTECH_BUS_ROUTES.map((r) => (
@@ -465,17 +465,17 @@ export function ExportDataDialog({
           {/* ── 03. Column Inclusions (Symmetrical 3x2 Grid) ── */}
           {scope !== "SUMMARY" && (
             <div className="space-y-2.5">
-              <div className="flex items-center justify-between border-b border-[#152A54]/80 pb-1.5">
+              <div className="flex items-center justify-between border-b border-[#262626] pb-1.5">
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-[10px] font-bold text-sky-400 bg-blue-950/60 border border-blue-500/40 px-1.5 py-0.5">
+                  <span className="font-mono text-[10px] font-bold text-white bg-white/10 border border-[#404040] px-1.5 py-0.5">
                     03
                   </span>
                   <h3 className="font-mono text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                    <UsersIcon className="size-3.5 text-blue-400" />
+                    <UsersIcon className="size-3.5 text-white" />
                     Choose Columns to Export
                   </h3>
                 </div>
-                <span className="font-mono text-[10px] text-slate-500 uppercase hidden sm:inline">
+                <span className="font-mono text-[10px] text-zinc-500 uppercase hidden sm:inline">
                   Select information to include
                 </span>
               </div>
@@ -526,8 +526,8 @@ export function ExportDataDialog({
                       key={col.key}
                       className={`flex items-start gap-3 p-3 border cursor-pointer transition-all ${
                         isChecked
-                          ? "border-blue-500/80 bg-[#060D1A] shadow-xs"
-                          : "border-[#152A54] bg-[#03060E] opacity-70 hover:opacity-100"
+                          ? "border-white bg-[#161616] shadow-xs"
+                          : "border-[#262626] bg-[#080808] opacity-70 hover:opacity-100"
                       }`}
                     >
                       <Checkbox
@@ -542,10 +542,10 @@ export function ExportDataDialog({
                       />
                       <div className="min-w-0 space-y-0.5">
                         <p className="font-bold text-xs text-white uppercase tracking-tight flex items-center gap-1.5">
-                          <Icon className="size-3 text-sky-400 shrink-0" />
+                          <Icon className="size-3 text-white shrink-0" />
                           <span className="truncate">{col.label}</span>
                         </p>
-                        <p className="text-[10px] text-slate-400 leading-snug">{col.sub}</p>
+                        <p className="text-[10px] text-zinc-400 leading-snug">{col.sub}</p>
                       </div>
                     </label>
                   );
@@ -556,26 +556,26 @@ export function ExportDataDialog({
 
           {/* ── 04. Format Selection & Live Preview Card ── */}
           <div className="space-y-2.5">
-            <div className="flex items-center justify-between border-b border-[#152A54]/80 pb-1.5">
+            <div className="flex items-center justify-between border-b border-[#262626] pb-1.5">
               <div className="flex items-center gap-2">
-                <span className="font-mono text-[10px] font-bold text-sky-400 bg-blue-950/60 border border-blue-500/40 px-1.5 py-0.5">
+                <span className="font-mono text-[10px] font-bold text-white bg-white/10 border border-[#404040] px-1.5 py-0.5">
                   04
                 </span>
                 <h3 className="font-mono text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                  <FileTextIcon className="size-3.5 text-blue-400" />
+                  <FileTextIcon className="size-3.5 text-white" />
                   Final Preview &amp; Export
                 </h3>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-3.5 bg-[#03060E] border border-[#152A54] p-3.5 sm:p-4">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-3.5 bg-[#080808] border border-[#262626] p-3.5 sm:p-4">
               {/* Output format buttons */}
               <div className="md:col-span-7 space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-300">
                     File Type:
                   </span>
-                  <span className="text-[10px] font-mono text-slate-500 uppercase hidden sm:inline-block">
+                  <span className="text-[10px] font-mono text-zinc-500 uppercase hidden sm:inline-block">
                     {format === "XLSX" ? "Excel format (.xlsx)" : "CSV format (.csv)"}
                   </span>
                 </div>
@@ -585,11 +585,11 @@ export function ExportDataDialog({
                     onClick={() => setFormat("XLSX")}
                     className={`h-11 px-3 text-xs font-bold uppercase border transition-all cursor-pointer flex items-center justify-center gap-2 ${
                       format === "XLSX"
-                        ? "border-emerald-500 bg-emerald-950/60 text-emerald-300 ring-1 ring-emerald-500/40 shadow-xs"
-                        : "border-[#152A54] bg-[#060D1A] text-slate-400 hover:text-white hover:bg-[#0B162C]"
+                        ? "border-white bg-white/10 text-white font-bold"
+                        : "border-[#262626] bg-[#0F0F0F] text-zinc-400 hover:text-white hover:bg-[#161616]"
                     }`}
                   >
-                    <FileSpreadsheetIcon className="size-4 text-emerald-400 shrink-0" />
+                    <FileSpreadsheetIcon className="size-4 text-white shrink-0" />
                     <span className="truncate">Excel (.xlsx)</span>
                   </button>
 
@@ -598,11 +598,11 @@ export function ExportDataDialog({
                     onClick={() => setFormat("CSV")}
                     className={`h-11 px-3 text-xs font-bold uppercase border transition-all cursor-pointer flex items-center justify-center gap-2 ${
                       format === "CSV"
-                        ? "border-blue-500 bg-blue-950/60 text-blue-300 ring-1 ring-blue-500/40 shadow-xs"
-                        : "border-[#152A54] bg-[#060D1A] text-slate-400 hover:text-white hover:bg-[#0B162C]"
+                        ? "border-white bg-white/10 text-white font-bold"
+                        : "border-[#262626] bg-[#0F0F0F] text-zinc-400 hover:text-white hover:bg-[#161616]"
                     }`}
                   >
-                    <DownloadIcon className="size-4 text-blue-400 shrink-0" />
+                    <DownloadIcon className="size-4 text-white shrink-0" />
                     <span className="truncate">CSV (.csv)</span>
                   </button>
                 </div>
@@ -611,22 +611,22 @@ export function ExportDataDialog({
               {/* Matches Prediction block */}
               <div className="md:col-span-5 space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-300">
                     Estimated Records:
                   </span>
-                  <span className="inline-flex items-center gap-1.5 font-mono text-[9px] text-emerald-400 tracking-wider">
+                  <span className="inline-flex items-center gap-1.5 font-mono text-[9px] text-zinc-400 tracking-wider">
                     <span className="relative flex size-1.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full size-1.5 bg-emerald-500"></span>
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-none bg-white opacity-75"></span>
+                      <span className="relative inline-flex rounded-none size-1.5 bg-white"></span>
                     </span>
                     LIVE PREVIEW
                   </span>
                 </div>
 
-                <div className="h-11 border border-[#152A54] bg-[#060D1A] px-3 sm:px-3.5 flex items-center justify-between gap-2.5">
+                <div className="h-11 border border-[#262626] bg-[#0F0F0F] px-3 sm:px-3.5 flex items-center justify-between gap-2.5">
                   {isCounting ? (
-                    <div className="flex items-center gap-2 text-slate-400 text-xs font-mono">
-                      <Loader2Icon className="size-4 animate-spin text-blue-400 shrink-0" />
+                    <div className="flex items-center gap-2 text-zinc-400 text-xs font-mono">
+                      <Loader2Icon className="size-4 animate-spin text-white shrink-0" />
                       <span>Counting records...</span>
                     </div>
                   ) : (
@@ -636,7 +636,7 @@ export function ExportDataDialog({
                           className={`size-6 flex items-center justify-center shrink-0 border ${
                             matchingCount === 0
                               ? "bg-amber-950/60 border-amber-500/40 text-amber-400"
-                              : "bg-emerald-950/60 border-emerald-500/40 text-emerald-400"
+                              : "bg-white/10 border-white/20 text-white"
                           }`}
                         >
                           <CheckCircle2Icon className="size-3.5" />
@@ -644,12 +644,12 @@ export function ExportDataDialog({
                         <div className="flex items-baseline gap-1.5 truncate">
                           <span
                             className={`text-base font-bold font-mono tabular-nums ${
-                              matchingCount === 0 ? "text-amber-400" : "text-emerald-400"
+                              matchingCount === 0 ? "text-amber-400" : "text-white"
                             }`}
                           >
                             {matchingCount ?? 0}
                           </span>
-                          <span className="text-xs font-semibold text-slate-300 uppercase tracking-tight">
+                          <span className="text-xs font-semibold text-zinc-300 uppercase tracking-tight">
                             Records
                           </span>
                         </div>
@@ -661,7 +661,7 @@ export function ExportDataDialog({
                             No Records
                           </span>
                         ) : (
-                          <span className="text-[9px] font-mono uppercase px-2 py-0.5 border border-emerald-500/30 bg-emerald-950/40 text-emerald-300 font-semibold tracking-wider">
+                          <span className="text-[9px] font-mono uppercase px-2 py-0.5 border border-white/30 bg-white/10 text-white font-semibold tracking-wider">
                             Ready to Download
                           </span>
                         )}
@@ -675,9 +675,9 @@ export function ExportDataDialog({
         </div>
 
         {/* ── Dialog Action Footer ── */}
-        <DialogFooter className="p-3.5 sm:p-4 border-t border-[#152A54] bg-[#03060E] flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 shrink-0">
-          <div className="text-[10px] text-slate-400 hidden lg:flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-blue-400" />
+        <DialogFooter className="p-3.5 sm:p-4 border-t border-[#262626] bg-[#080808] flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 shrink-0">
+          <div className="text-[10px] text-zinc-400 hidden lg:flex items-center gap-2">
+            <span className="size-1.5 rounded-none bg-white" />
             <span>Cleanly formatted for Microsoft Excel and Google Sheets</span>
           </div>
 
@@ -686,7 +686,7 @@ export function ExportDataDialog({
               type="button"
               onClick={() => onOpenChange(false)}
               disabled={isExporting}
-              className="w-full sm:w-auto h-9 sm:h-10 px-4 border border-[#152A54] text-slate-300 hover:text-white hover:bg-[#060D1A] transition-colors cursor-pointer font-bold text-xs uppercase disabled:opacity-50"
+              className="w-full sm:w-auto h-9 sm:h-10 px-4 border border-[#262626] text-zinc-300 hover:text-white hover:bg-[#161616] transition-colors cursor-pointer font-bold text-xs uppercase disabled:opacity-50"
             >
               Cancel
             </button>
@@ -695,7 +695,7 @@ export function ExportDataDialog({
               type="button"
               onClick={handleExport}
               disabled={isExporting || matchingCount === 0}
-              className="w-full sm:w-auto h-9 sm:h-10 inline-flex items-center justify-center gap-2 px-6 font-mono text-xs uppercase font-bold text-white bg-blue-600 hover:bg-blue-500 border border-blue-400 transition-all cursor-pointer shadow-md shadow-blue-600/30 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+              className="w-full sm:w-auto h-9 sm:h-10 inline-flex items-center justify-center gap-2 px-6 font-mono text-xs uppercase font-bold text-black bg-white hover:bg-zinc-200 border border-white transition-all cursor-pointer shadow-none disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
             >
               {isExporting ? (
                 <>

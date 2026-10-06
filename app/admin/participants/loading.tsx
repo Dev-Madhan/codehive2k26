@@ -4,16 +4,16 @@ export default function AdminParticipantsLoading() {
   return (
     <div className="space-y-6 font-mono">
       {/* Header */}
-      <div className="border-b border-[#152A54] pb-4 space-y-2">
+      <div className="border-b border-[#262626] pb-4 space-y-2">
         <Skeleton className="h-4 w-48" />
         <Skeleton className="h-8 w-64" />
         <Skeleton className="h-3.5 w-80" />
       </div>
 
       {/* Participants Table Container */}
-      <div className="rounded-none border border-[#152A54] bg-[#060D1A] overflow-hidden">
+      <div className="rounded-none border border-[#262626] bg-[#0F0F0F] overflow-hidden">
         {/* Table Head */}
-        <div className="bg-[#03060E] border-b border-[#152A54] px-4 py-3 grid grid-cols-5 gap-4">
+        <div className="bg-[#080808] border-b border-[#262626] px-4 py-3 grid grid-cols-5 gap-4">
           <Skeleton className="h-3 w-20" />
           <Skeleton className="h-3 w-28" />
           <Skeleton className="h-3 w-20" />
@@ -22,7 +22,7 @@ export default function AdminParticipantsLoading() {
         </div>
 
         {/* Table Rows (6 Rows) */}
-        <div className="divide-y divide-[#152A54]">
+        <div className="divide-y divide-[#262626]">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div key={i} className="px-4 py-3.5 grid grid-cols-5 gap-4 items-center">
               <Skeleton className="h-4 w-32" />

@@ -126,9 +126,9 @@ export interface WaveGridBackgroundProps {
   className?: string;
   /** Grid resolution (NxN cubes). Defaults to 40. */
   gridSize?: number;
-  /** Base cube color / scene tint. Defaults to dark obsidian `#060D1A`. */
+  /** Base cube color / scene tint. Defaults to monochrome dark `#0F0F0F`. */
   colorBase?: string;
-  /** Color of the wave peaks. Defaults to CodeHive theme dark/electric blue `#2563EB`. */
+  /** Color of the wave peaks. Defaults to CodeHive monochrome white `#FFFFFF`. */
   colorHigh?: string;
   /** Peak displacement multiplier. Defaults to 0.45. */
   waveAmplitude?: number;
@@ -152,8 +152,8 @@ export function WaveGridBackground({
   children,
   className,
   gridSize = 40,
-  colorBase = "#060D1A",
-  colorHigh = "#2563EB",
+  colorBase = "#0F0F0F",
+  colorHigh = "#FFFFFF",
   waveAmplitude = 0.45,
   waveSpeed = 6.0,
   waveFrequency = 1.2,
@@ -248,11 +248,11 @@ export function WaveGridBackground({
     positionCamera(0, 0);
     scene.add(camera);
 
-    // ── Lighting (Dark Mode Cyber Aesthetic) ─────────────────────────────────
-    const ambientLight = new THREE.AmbientLight("#0B162C", 1.8);
+    // ── Lighting (Monochrome Aesthetic) ─────────────────────────────────
+    const ambientLight = new THREE.AmbientLight("#1F1F1F", 1.8);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight("#3B82F6", 3.2);
+    const keyLight = new THREE.DirectionalLight("#FFFFFF", 2.8);
     keyLight.position.set(-20, 12, 6);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.set(1024, 1024);
@@ -266,7 +266,7 @@ export function WaveGridBackground({
     keyLight.shadow.bias = 0.0001;
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight("#1E3A8A", 2.0);
+    const fillLight = new THREE.DirectionalLight("#737373", 1.5);
     fillLight.position.set(10, 5, -3);
     scene.add(fillLight);
 
@@ -405,7 +405,7 @@ export function WaveGridBackground({
     const material = new THREE.MeshPhongMaterial({
       color: 0xffffff,
       shininess: 45,
-      specular: new THREE.Color("#3B82F6"),
+      specular: new THREE.Color("#FFFFFF"),
     });
 
     material.onBeforeCompile = (shader) => {

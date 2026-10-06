@@ -31,7 +31,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       }
     >
       <AppSidebar variant="inset" />
-      <SidebarInset className="bg-[#030712] min-h-screen flex flex-col max-w-full overflow-x-hidden">
+      <SidebarInset className="bg-black min-h-screen flex flex-col max-w-full overflow-x-hidden">
         <SiteHeader />
         <main className="flex-1 p-3 sm:p-5 md:p-6 lg:p-8 overflow-y-auto overflow-x-hidden bg-black text-white max-w-full">
           {children}

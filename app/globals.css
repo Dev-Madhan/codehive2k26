@@ -74,10 +74,10 @@
   --radius-sm: 0px;
   --radius-md: 0px;
   --radius-lg: 0px;
-  --radius-xl: 2px;
-  --radius-2xl: 2px;
-  --radius-3xl: 4px;
-  --radius-4xl: 4px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 2px;
+  --radius-4xl: 2px;
 
   --color-invert-foreground: var(--invert-foreground);
   --color-invert: var(--invert);
@@ -92,153 +92,162 @@
   color-scheme: dark;
 
   /* ============================================================
-     CODEHIVE 2K26 — CYBER-TERMINAL BLUE THEME
-     Palette: Pure Black, Dark Blue, Medium Accent Blue, White
+     CODEHIVE 2K26 — MONOCHROME ASCII & TERMINAL DESIGN SYSTEM
+     Depth Hierarchy: #000000 → #080808 → #0F0F0F → #161616 → #1F1F1F
+                      → #262626 → #404040 → #737373 → #A3A3A3 → #E5E5E5 → #FFFFFF
      ============================================================ */
 
   /* ───────── Ground & Insets ───────── */
   --background: #000000;
-  --background-secondary: #040810;
+  --background-secondary: #080808;
 
-  /* ───────── Dark Blue Surfaces ───────── */
-  --surface: #060D1A;
-  --surface-hover: #0B162C;
-  --surface-elevated: #0E1B38;
+  /* ───────── Grayscale Surfaces ───────── */
+  --surface: #0F0F0F;
+  --surface-hover: #161616;
+  --surface-elevated: #1F1F1F;
 
-  /* ───────── Medium Accent Blue ───────── */
-  --primary: #2563EB;
-  --primary-hover: #1D4ED8;
-  --primary-dark: #1E3A8A;
-  --primary-light: #3B82F6;
+  /* ───────── High-Contrast Primary Controls ───────── */
+  --primary: #FFFFFF;
+  --primary-hover: #E5E5E5;
+  --primary-dark: #D4D4D4;
+  --primary-light: #FFFFFF;
+  --primary-foreground: #000000;
 
-  /* ───────── Legacy Redirects (Now Pure Blues) ───────── */
-  --cyan: #3B82F6;
-  --cyan-bright: #60A5FA;
-  --cyan-dark: #1D4ED8;
+  /* ───────── Secondary & Accent ───────── */
+  --secondary: #171717;
+  --secondary-foreground: #E5E5E5;
+  --accent: #1F1F1F;
+  --accent-foreground: #FFFFFF;
 
-  --mint: #3B82F6;
-  --mint-bright: #60A5FA;
-  --mint-dark: #1D4ED8;
-
-  /* ───────── Typography & Muted Surfaces ───────── */
+  /* ───────── Typography Hierarchy ───────── */
   --foreground: #FFFFFF;
-  --foreground-secondary: #E2E8F0;
-  --muted: #060D1A;
-  --muted-dark: #03060E;
+  --foreground-secondary: #E5E5E5;
+  --muted-foreground: #A3A3A3;
+  --muted: #737373;
+  --muted-dark: #525252;
 
   /* ───────── Borders & Focus ───────── */
-  --border: #152A54;
-  --border-bright: #2563EB;
-  --ring: #3B82F6;
+  --border: #262626;
+  --border-bright: #404040;
+  --ring: #FFFFFF;
 
-  /* ───────── Status ───────── */
-  --success: #3B82F6;
-  --warning: #F59E0B;
-  --error: #EF4444;
-
-  /* ───────── UI System Tokens ───────── */
-  --card: #060D1A;
+  /* ───────── Form Controls & Containers ───────── */
+  --input: #262626;
+  --card: #0F0F0F;
   --card-foreground: #FFFFFF;
-  --popover: #060D1A;
+  --popover: #0F0F0F;
   --popover-foreground: #FFFFFF;
-  --primary-foreground: #FFFFFF;
-  --secondary: #0A1325;
-  --secondary-foreground: #E2E8F0;
-  --muted-foreground: #94A3B8;
-  --accent: #0B162C;
-  --accent-foreground: #FFFFFF;
-  --destructive: var(--error);
-  --destructive-foreground: #FFFFFF;
-  --input: #152A54;
   --radius: 0px;
 
-  /* ───────── Sidebar ───────── */
-  --sidebar: #030712;
-  --sidebar-foreground: #FFFFFF;
-  --sidebar-primary: #2563EB;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #0A152C;
+  /* ───────── Status ───────── */
+  --success: #E5E5E5;
+  --success-foreground: #000000;
+  --warning: #F59E0B;
+  --warning-foreground: #000000;
+  --error: #EF4444;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --info: #FFFFFF;
+  --info-foreground: #000000;
+
+  /* ───────── Console Sidebar ───────── */
+  --sidebar: #080808;
+  --sidebar-foreground: #E5E5E5;
+  --sidebar-primary: #FFFFFF;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #161616;
   --sidebar-accent-foreground: #FFFFFF;
-  --sidebar-border: #152A54;
-  --sidebar-ring: #3B82F6;
+  --sidebar-border: #262626;
+  --sidebar-ring: #FFFFFF;
 
-  /* ───────── Charts ───────── */
-  --chart-1: #3B82F6;
-  --chart-2: #1D4ED8;
-  --chart-3: #60A5FA;
-  --chart-4: #2563EB;
-  --chart-5: #93C5FD;
+  /* ───────── Charts (Monochrome Series) ───────── */
+  --chart-1: #FFFFFF;
+  --chart-2: #E5E5E5;
+  --chart-3: #A3A3A3;
+  --chart-4: #737373;
+  --chart-5: #404040;
 
-  --success-foreground: #FFFFFF;
-  --info: #3B82F6;
-  --info-foreground: #FFFFFF;
-  --warning-foreground: #FFFFFF;
-  --invert: #060D1A;
-  --invert-foreground: #FFFFFF;
+  /* ───────── Legacy Semantic Redirects (Monochrome Mapping) ───────── */
+  --cyan: #E5E5E5;
+  --cyan-bright: #FFFFFF;
+  --cyan-dark: #A3A3A3;
+  --mint: #D4D4D4;
+  --mint-bright: #FFFFFF;
+  --mint-dark: #A3A3A3;
+
+  --invert: #FFFFFF;
+  --invert-foreground: #000000;
 }
 
 .dark {
   --background: #000000;
-  --background-secondary: #040810;
+  --background-secondary: #080808;
 
-  --surface: #060D1A;
-  --surface-hover: #0B162C;
-  --surface-elevated: #0E1B38;
+  --surface: #0F0F0F;
+  --surface-hover: #161616;
+  --surface-elevated: #1F1F1F;
 
-  --primary: #2563EB;
-  --primary-hover: #1D4ED8;
-  --primary-dark: #1E3A8A;
-  --primary-light: #3B82F6;
+  --primary: #FFFFFF;
+  --primary-hover: #E5E5E5;
+  --primary-dark: #D4D4D4;
+  --primary-light: #FFFFFF;
+  --primary-foreground: #000000;
 
-  --cyan: #3B82F6;
-  --cyan-bright: #60A5FA;
-  --cyan-dark: #1D4ED8;
-
-  --mint: #3B82F6;
-  --mint-bright: #60A5FA;
-  --mint-dark: #1D4ED8;
+  --secondary: #171717;
+  --secondary-foreground: #E5E5E5;
+  --accent: #1F1F1F;
+  --accent-foreground: #FFFFFF;
 
   --foreground: #FFFFFF;
-  --foreground-secondary: #E2E8F0;
-  --muted: #060D1A;
-  --muted-dark: #03060E;
+  --foreground-secondary: #E5E5E5;
+  --muted-foreground: #A3A3A3;
+  --muted: #737373;
+  --muted-dark: #525252;
 
-  --border: #152A54;
-  --border-bright: #2563EB;
-  --ring: #3B82F6;
+  --border: #262626;
+  --border-bright: #404040;
+  --ring: #FFFFFF;
 
-  --success: #3B82F6;
-  --warning: #F59E0B;
-  --error: #EF4444;
-
-  --card: #060D1A;
+  --input: #262626;
+  --card: #0F0F0F;
   --card-foreground: #FFFFFF;
-  --popover: #060D1A;
+  --popover: #0F0F0F;
   --popover-foreground: #FFFFFF;
-  --primary-foreground: #FFFFFF;
-  --secondary: #0A1325;
-  --secondary-foreground: #E2E8F0;
-  --muted-foreground: #94A3B8;
-  --accent: #0B162C;
-  --accent-foreground: #FFFFFF;
-  --destructive: var(--error);
+
+  --success: #E5E5E5;
+  --success-foreground: #000000;
+  --warning: #F59E0B;
+  --warning-foreground: #000000;
+  --error: #EF4444;
+  --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
-  --input: #152A54;
+  --info: #FFFFFF;
+  --info-foreground: #000000;
 
-  --sidebar: #030712;
-  --sidebar-foreground: #FFFFFF;
-  --sidebar-primary: #2563EB;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #0A152C;
+  --sidebar: #080808;
+  --sidebar-foreground: #E5E5E5;
+  --sidebar-primary: #FFFFFF;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #161616;
   --sidebar-accent-foreground: #FFFFFF;
-  --sidebar-border: #152A54;
-  --sidebar-ring: #3B82F6;
+  --sidebar-border: #262626;
+  --sidebar-ring: #FFFFFF;
 
-  --chart-1: #3B82F6;
-  --chart-2: #1D4ED8;
-  --chart-3: #60A5FA;
-  --chart-4: #2563EB;
-  --chart-5: #93C5FD;
+  --chart-1: #FFFFFF;
+  --chart-2: #E5E5E5;
+  --chart-3: #A3A3A3;
+  --chart-4: #737373;
+  --chart-5: #404040;
+
+  --cyan: #E5E5E5;
+  --cyan-bright: #FFFFFF;
+  --cyan-dark: #A3A3A3;
+  --mint: #D4D4D4;
+  --mint-bright: #FFFFFF;
+  --mint-dark: #A3A3A3;
+
+  --invert: #FFFFFF;
+  --invert-foreground: #000000;
 }
 
 @layer base {
@@ -263,25 +272,25 @@
     font-family: var(--font-mono), monospace;
   }
   select {
-    background-color: #03060E;
+    background-color: #080808;
     color: #FFFFFF;
-    border: 1px solid #152A54;
+    border: 1px solid #262626;
     font-family: var(--font-mono), monospace;
     border-radius: 0;
   }
   select option {
-    background-color: #060D1A;
-    color: #E2E8F0;
+    background-color: #0F0F0F;
+    color: #E5E5E5;
     font-family: var(--font-mono), monospace;
   }
   select option:checked {
-    background-color: #0B162C;
-    color: #38BDF8;
+    background-color: #161616;
+    color: #FFFFFF;
   }
 }
 
 /* ============================================================
-   CODEHIVE 2K26 — TOAST NOTIFICATIONS (SONNER THEME)
+   CODEHIVE 2K26 — TOAST NOTIFICATIONS (MONOCHROME TERMINAL THEME)
    ============================================================ */
 
 [data-sonner-toaster] {
@@ -301,12 +310,15 @@
   padding: 14px 16px !important;
   gap: 12px !important;
   box-sizing: border-box !important;
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(21, 42, 84, 0.4) !important;
+  border: 1px solid #262626 !important;
+  background: #0F0F0F !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.9), 0 0 1px 1px rgba(255, 255, 255, 0.05) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
 }
 
-/* Cyber laser accent line on top of each toast */
+/* Minimal terminal accent line on top of each toast */
 [data-sonner-toast]::before {
   content: "";
   position: absolute;
@@ -314,26 +326,26 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, #2563EB, #38BDF8, #2563EB);
+  background: #FFFFFF;
   pointer-events: none;
   z-index: 20;
 }
 
 [data-sonner-toast][data-type="success"]::before {
-  background: linear-gradient(90deg, #059669, #10B981, #059669);
+  background: #FFFFFF;
 }
 
 [data-sonner-toast][data-type="error"]::before {
-  background: linear-gradient(90deg, #DC2626, #F43F5E, #DC2626);
+  background: #737373;
 }
 
 [data-sonner-toast][data-type="warning"]::before {
-  background: linear-gradient(90deg, #D97706, #F59E0B, #D97706);
+  background: #A3A3A3;
 }
 
 [data-sonner-toast][data-type="info"]::before,
 [data-sonner-toast][data-type="loading"]::before {
-  background: linear-gradient(90deg, #2563EB, #38BDF8, #2563EB);
+  background: #FFFFFF;
 }
 
 /* Align icon cleanly to the top row alongside title */
@@ -373,6 +385,7 @@
   letter-spacing: 0.05em !important;
   text-transform: uppercase !important;
   line-height: 1.35 !important;
+  color: #FFFFFF !important;
   margin: 0 !important;
 }
 
@@ -382,12 +395,12 @@
   font-family: var(--font-mono), monospace !important;
   font-size: 11px !important;
   line-height: 1.5 !important;
-  color: #94A3B8 !important;
+  color: #A3A3A3 !important;
   word-break: break-word !important;
   margin: 0 !important;
 }
 
-/* Top-Right Cyber Close Button (unclipped, inside toast boundary) */
+/* Top-Right Terminal Close Button */
 [data-sonner-toast] [data-close-button],
 [data-sonner-toast][data-styled="true"] [data-close-button] {
   position: absolute !important;
@@ -402,9 +415,9 @@
   align-items: center !important;
   justify-content: center !important;
   border-radius: 0px !important;
-  border: 1px solid #1E3A6E !important;
-  background: #03060E !important;
-  color: #94A3B8 !important;
+  border: 1px solid #404040 !important;
+  background: #080808 !important;
+  color: #A3A3A3 !important;
   opacity: 0.8 !important;
   cursor: pointer !important;
   transition: all 0.15s ease !important;
@@ -415,10 +428,10 @@
 [data-sonner-toast] [data-close-button]:hover,
 [data-sonner-toast][data-styled="true"] [data-close-button]:hover {
   opacity: 1 !important;
-  background: #0B162C !important;
+  background: #161616 !important;
   color: #FFFFFF !important;
-  border-color: #38BDF8 !important;
-  box-shadow: 0 0 8px rgba(56, 189, 248, 0.3) !important;
+  border-color: #737373 !important;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.08) !important;
 }
 
 [data-sonner-toast] [data-close-button] svg,
@@ -428,51 +441,14 @@
   stroke-width: 2 !important;
 }
 
-/* Cyber theme colors & hover glow per toast type */
-[data-sonner-toast][data-type="success"] {
-  border-color: rgba(16, 185, 129, 0.45) !important;
-  background: #020C0A !important;
-}
-[data-sonner-toast][data-type="success"] [data-title] {
-  color: #34D399 !important;
-}
-[data-sonner-toast][data-type="success"] [data-close-button]:hover {
-  border-color: #10B981 !important;
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.3) !important;
-}
-
-[data-sonner-toast][data-type="error"] {
-  border-color: rgba(244, 63, 94, 0.45) !important;
-  background: #0C0307 !important;
-}
-[data-sonner-toast][data-type="error"] [data-title] {
-  color: #FB7185 !important;
-}
-[data-sonner-toast][data-type="error"] [data-close-button]:hover {
-  border-color: #F43F5E !important;
-  box-shadow: 0 0 8px rgba(244, 63, 94, 0.3) !important;
-}
-
-[data-sonner-toast][data-type="warning"] {
-  border-color: rgba(245, 158, 11, 0.45) !important;
-  background: #0C0802 !important;
-}
-[data-sonner-toast][data-type="warning"] [data-title] {
-  color: #FBBF24 !important;
-}
-[data-sonner-toast][data-type="warning"] [data-close-button]:hover {
-  border-color: #F59E0B !important;
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.3) !important;
-}
-
+/* Monochrome theme per toast type */
+[data-sonner-toast][data-type="success"],
+[data-sonner-toast][data-type="error"],
+[data-sonner-toast][data-type="warning"],
 [data-sonner-toast][data-type="info"],
 [data-sonner-toast][data-type="loading"] {
-  border-color: rgba(56, 189, 248, 0.4) !important;
-  background: #040915 !important;
-}
-[data-sonner-toast][data-type="info"] [data-title],
-[data-sonner-toast][data-type="loading"] [data-title] {
-  color: #38BDF8 !important;
+  border-color: #262626 !important;
+  background: #0F0F0F !important;
 }
 
 /* Desktop positioning: bottom right */

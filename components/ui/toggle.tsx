@@ -5,14 +5,14 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "cn";
 
 const toggleVariants = cva(
-  "group/toggle inline-flex items-center justify-center gap-1 rounded-none text-xs font-mono uppercase tracking-wider transition-colors outline-none focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500 disabled:pointer-events-none disabled:opacity-50 border cursor-pointer aria-pressed:bg-blue-600 aria-pressed:text-white aria-pressed:border-blue-500 data-pressed:bg-blue-600 data-pressed:text-white data-pressed:border-blue-500 data-[state=on]:bg-blue-600 data-[state=on]:text-white data-[state=on]:border-blue-500",
+  "group/toggle inline-flex items-center justify-center gap-1 rounded-none text-xs font-mono uppercase tracking-wider transition-colors outline-none focus-visible:border-white focus-visible:ring-1 focus-visible:ring-white disabled:pointer-events-none disabled:opacity-50 border cursor-pointer aria-pressed:bg-white aria-pressed:text-black aria-pressed:border-white data-pressed:bg-white data-pressed:text-black data-pressed:border-white data-[state=on]:bg-white data-[state=on]:text-black data-[state=on]:border-white",
   {
     variants: {
       variant: {
         default:
-          "border-transparent bg-transparent text-slate-400 hover:bg-[#0B162C] hover:text-white",
+          "border-transparent bg-transparent text-neutral-400 hover:bg-[#161616] hover:text-white",
         outline:
-          "border-[#152A54] bg-[#03060E] text-slate-400 hover:bg-[#0B162C] hover:text-white",
+          "border-[#262626] bg-[#080808] text-neutral-400 hover:bg-[#161616] hover:text-white",
       },
       size: {
         default: "h-8 px-3",

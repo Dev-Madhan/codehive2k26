@@ -248,24 +248,23 @@ export function AsciiBackground({
           }
           const char = ASCII_CHARS[charIndex] || "0";
 
-          // Dynamic Color Grading: Deep Navy -> Cyber Blue -> Electric Cyan / White
+          // Monochrome ASCII Luminance Grading
           if (totalEnergy > 0.85 || isHead) {
-            // High energy / Head: Electric Ice Cyan / Luminous White
-            ctx.fillStyle = `rgba(186, 230, 253, ${Math.min(1.0, 0.75 + totalEnergy * 0.25)})`;
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = "#38bdf8";
+            // High energy / Stream Head: Crisp Luminous White
+            ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1.0, 0.75 + totalEnergy * 0.25)})`;
+            ctx.shadowBlur = 6;
+            ctx.shadowColor = "rgba(255, 255, 255, 0.5)";
           } else if (totalEnergy > 0.45) {
-            // Mid energy: Vibrant Royal / Cyber Blue
-            ctx.fillStyle = `rgba(59, 130, 246, ${Math.min(0.85, 0.4 + totalEnergy * 0.5)})`;
-            ctx.shadowBlur = 4;
-            ctx.shadowColor = "#2563eb";
+            // Mid energy: Light gray #E5E5E5
+            ctx.fillStyle = `rgba(229, 229, 229, ${Math.min(0.65, 0.25 + totalEnergy * 0.35)})`;
+            ctx.shadowBlur = 0;
           } else if (totalEnergy > 0.15) {
-            // Low ambient energy: Deep Cyber Indigo
-            ctx.fillStyle = `rgba(30, 58, 138, ${Math.min(0.45, 0.12 + totalEnergy * 0.3)})`;
+            // Low energy trail: Medium gray #A3A3A3
+            ctx.fillStyle = `rgba(163, 163, 163, ${Math.min(0.35, 0.08 + totalEnergy * 0.2)})`;
             ctx.shadowBlur = 0;
           } else {
             // Rest state: Subtle faint terminal ghost
-            ctx.fillStyle = "rgba(15, 23, 42, 0.18)";
+            ctx.fillStyle = "rgba(255, 255, 255, 0.04)";
             ctx.shadowBlur = 0;
           }
 
@@ -291,7 +290,7 @@ export function AsciiBackground({
     <div
       ref={containerRef}
       className={cn(
-        "relative w-full h-full min-h-screen overflow-hidden bg-black selection:bg-blue-600 selection:text-white",
+        "relative w-full h-full min-h-screen overflow-hidden bg-black selection:bg-white selection:text-black",
         className
       )}
     >
@@ -304,8 +303,8 @@ export function AsciiBackground({
       {/* Cinematic Center & Radial Vignette to guarantee pristine text contrast */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.65)_0%,rgba(0,0,0,0.85)_65%,rgba(0,0,0,0.98)_100%)]" />
 
-      {/* Top subtle blue laser bloom */}
-      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-gradient-to-b from-blue-600/15 via-blue-900/5 to-transparent blur-[120px]" />
+      {/* Top subtle monochrome ambient illumination */}
+      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-gradient-to-b from-white/[0.03] via-transparent to-transparent blur-[120px]" />
 
       {/* Foreground Content */}
       {children && (

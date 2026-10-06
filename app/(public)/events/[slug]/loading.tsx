@@ -7,15 +7,15 @@ export default function EventDetailLoading() {
       <Header />
       <div className="max-w-5xl mx-auto px-3 sm:px-6 py-6 sm:py-10 space-y-5 sm:space-y-8 font-mono">
         {/* Navigation & Back Button */}
-        <div className="flex items-center justify-between border-b border-[#152A54] pb-4">
-          <div className="flex items-center gap-2 px-3.5 py-1.5 border border-[#152A54] bg-[#060D1A]">
+        <div className="flex items-center justify-between border-b border-[#262626] pb-4">
+          <div className="flex items-center gap-2 px-3.5 py-1.5 border border-[#262626] bg-[#0F0F0F]">
             <Skeleton className="size-3.5 rounded-none" />
             <Skeleton className="h-3.5 w-28 rounded-none" />
           </div>
         </div>
 
         {/* Event Header Banner Skeleton */}
-        <div className="space-y-4 border border-[#152A54] bg-[#060D1A] p-4 sm:p-8">
+        <div className="space-y-4 border border-[#262626] bg-[#0F0F0F] p-4 sm:p-8">
           <Skeleton className="h-5 w-24" />
           <Skeleton className="h-9 sm:h-10 w-3/4 max-w-lg" />
           <div className="space-y-2 max-w-3xl">
@@ -23,7 +23,7 @@ export default function EventDetailLoading() {
             <Skeleton className="h-4 w-4/5" />
           </div>
 
-          <div className="flex flex-wrap gap-3.5 sm:gap-6 pt-4 border-t border-[#152A54]">
+          <div className="flex flex-wrap gap-3.5 sm:gap-6 pt-4 border-t border-[#262626]">
             <Skeleton className="h-5 w-36" />
             <Skeleton className="h-5 w-32" />
             <Skeleton className="h-5 w-40" />
@@ -31,8 +31,8 @@ export default function EventDetailLoading() {
         </div>
 
         {/* Event Instructions Skeleton */}
-        <div className="border border-[#152A54] bg-[#060D1A] space-y-6 p-4 sm:p-8">
-          <div className="space-y-4 border-b border-[#152A54] pb-6">
+        <div className="border border-[#262626] bg-[#0F0F0F] space-y-6 p-4 sm:p-8">
+          <div className="space-y-4 border-b border-[#262626] pb-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <Skeleton className="h-7 w-64" />
               <div className="flex items-center gap-2">
@@ -54,7 +54,7 @@ export default function EventDetailLoading() {
               {[1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
-                  className="border border-[#152A54] bg-[#03060E] p-4 space-y-2.5"
+                  className="border border-[#262626] bg-[#080808] p-4 space-y-2.5"
                 >
                   <div className="flex justify-between items-center">
                     <Skeleton className="h-4 w-20" />
@@ -72,7 +72,7 @@ export default function EventDetailLoading() {
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="border border-[#152A54] bg-[#03060E] p-4 space-y-2"
+                className="border border-[#262626] bg-[#080808] p-4 space-y-2"
               >
                 <Skeleton className="h-4 w-28" />
                 <Skeleton className="h-12 w-full" />
@@ -82,15 +82,15 @@ export default function EventDetailLoading() {
         </div>
 
         {/* Registration Portal Section Skeleton */}
-        <div className="border border-[#152A54] bg-[#060D1A] p-4 sm:p-8 space-y-5">
-          <div className="border-b border-[#152A54] pb-4">
+        <div className="border border-[#262626] bg-[#0F0F0F] p-4 sm:p-8 space-y-5">
+          <div className="border-b border-[#262626] pb-4">
             <Skeleton className="h-6 w-60" />
             <Skeleton className="h-3.5 w-72 mt-2" />
           </div>
 
           {/* Section 01: Team Configuration */}
-          <div className="border border-[#152A54] bg-[#060D1A] p-4 sm:p-5 space-y-3">
-            <div className="flex items-center gap-2 border-b border-[#152A54] pb-2">
+          <div className="border border-[#262626] bg-[#0F0F0F] p-4 sm:p-5 space-y-3">
+            <div className="flex items-center gap-2 border-b border-[#262626] pb-2">
               <Skeleton className="size-4" />
               <Skeleton className="h-3.5 w-48" />
             </div>
@@ -98,8 +98,8 @@ export default function EventDetailLoading() {
           </div>
 
           {/* Section 02: Team Leader */}
-          <div className="border border-[#152A54] bg-[#060D1A] p-4 sm:p-5 space-y-4">
-            <div className="flex items-center gap-2 border-b border-[#152A54] pb-2">
+          <div className="border border-[#262626] bg-[#0F0F0F] p-4 sm:p-5 space-y-4">
+            <div className="flex items-center gap-2 border-b border-[#262626] pb-2">
               <Skeleton className="size-4" />
               <Skeleton className="h-3.5 w-40" />
             </div>
@@ -115,12 +115,12 @@ export default function EventDetailLoading() {
           </div>
 
           {/* Section 03/04: ID Card Dropzone */}
-          <div className="border border-[#152A54] bg-[#060D1A] p-4 sm:p-5 space-y-3">
-            <div className="flex justify-between items-center border-b border-[#152A54] pb-2">
+          <div className="border border-[#262626] bg-[#0F0F0F] p-4 sm:p-5 space-y-3">
+            <div className="flex justify-between items-center border-b border-[#262626] pb-2">
               <Skeleton className="h-3.5 w-48" />
               <Skeleton className="h-4 w-32" />
             </div>
-            <div className="border-2 border-dashed border-[#152A54] bg-[#03060E] p-8 flex flex-col items-center justify-center space-y-3">
+            <div className="border-2 border-dashed border-[#262626] bg-[#080808] p-8 flex flex-col items-center justify-center space-y-3">
               <Skeleton className="size-12" />
               <Skeleton className="h-4 w-64" />
               <Skeleton className="h-3 w-48" />

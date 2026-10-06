@@ -63,12 +63,12 @@ export function PrizesSection() {
   return (
     <section
       ref={ref}
-      className="relative py-24 sm:py-32 bg-[#030712] border-t border-[#152A54]/60 overflow-hidden"
+      className="relative py-24 sm:py-32 bg-black border-t border-[#262626] overflow-hidden"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(21,42,84,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(21,42,84,0.05)_1px,transparent_1px)] bg-[size:60px_60px]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
       {/* Prize glow */}
-      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-blue-900/15 to-transparent blur-[120px]" />
+      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-white/5 to-transparent blur-[120px]" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
@@ -79,19 +79,19 @@ export function PrizesSection() {
           )}
         >
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="h-px w-8 bg-blue-500" />
-            <span className="font-mono text-[11px] uppercase tracking-widest text-blue-500">
+            <div className="h-px w-8 bg-white" />
+            <span className="font-mono text-[11px] uppercase tracking-widest text-[#737373]">
               PRIZES &amp; RECOGNITION
             </span>
-            <div className="h-px w-8 bg-blue-500" />
+            <div className="h-px w-8 bg-white" />
           </div>
           <h2 className="font-mono text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-tight">
             TOTAL PRIZE POOL{" "}
-            <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">
+            <span className="text-white">
               ₹20,000
             </span>
           </h2>
-          <p className="mt-3 text-slate-400 text-base max-w-xl mx-auto font-sans">
+          <p className="mt-3 text-neutral-400 text-base max-w-xl mx-auto font-sans">
             Cash awards for 1st, 2nd, and 3rd place winners across tracks, plus 100% Free Entry &amp; Certificates for all participants.
           </p>
         </div>
@@ -107,53 +107,48 @@ export function PrizesSection() {
                 className={cn(
                   "relative flex flex-col p-6 border transition-all duration-700",
                   isFeatured
-                    ? "border-blue-500/60 bg-[#060D1A] shadow-[0_0_40px_rgba(37,99,235,0.15)] md:-mt-4"
-                    : "border-[#152A54]/80 bg-[#060D1A]/60",
+                    ? "border-white bg-[#0F0F0F] shadow-[0_0_40px_rgba(255,255,255,0.08)] md:-mt-4"
+                    : "border-[#262626] bg-[#0F0F0F]",
                   inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                 )}
                 style={{ transitionDelay: `${i * 100}ms` }}
               >
                 {/* Featured badge */}
                 {isFeatured && (
-                  <div className="absolute -top-px left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
+                  <div className="absolute -top-px left-0 right-0 h-[2px] bg-white" />
                 )}
 
                 {/* Corner */}
-                <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-blue-400/60" />
+                <div className={cn("absolute top-0 right-0 w-3 h-3 border-t border-r", isFeatured ? "border-white" : "border-[#404040]")} />
 
                 {/* Rank */}
                 <div className="flex items-start justify-between mb-4">
-                  <span className="font-mono text-5xl font-black text-[#152A54] leading-none select-none">
+                  <span className="font-mono text-5xl font-black text-neutral-700 leading-none select-none">
                     {prize.rank}
                   </span>
                   <div className={cn(
                     "p-2.5",
-                    isFeatured ? "bg-blue-500/15" : "bg-[#0B162C]"
+                    isFeatured ? "bg-white text-black" : "bg-[#161616] text-white border border-[#262626]"
                   )}>
-                    <Icon className={cn("size-5", isFeatured ? "text-blue-400" : "text-slate-400")} />
+                    <Icon className="size-5" />
                   </div>
                 </div>
 
                 {/* Label & track */}
-                <p className="font-mono text-[10px] uppercase tracking-widest text-slate-500 mb-1">
+                <p className="font-mono text-[10px] uppercase tracking-widest text-[#737373] mb-1">
                   {prize.track} // {prize.label}
                 </p>
 
                 {/* Amount */}
-                <p className={cn(
-                  "font-mono text-3xl sm:text-4xl font-black mb-4 tracking-tight",
-                  isFeatured
-                    ? "bg-gradient-to-r from-blue-400 to-sky-300 bg-clip-text text-transparent"
-                    : "text-white"
-                )}>
+                <p className="font-mono text-3xl sm:text-4xl font-black mb-4 tracking-tight text-white">
                   {prize.amount}
                 </p>
 
                 {/* Perks */}
                 <ul className="space-y-2 flex-1">
                   {prize.perks.map((perk) => (
-                    <li key={perk} className="flex items-center gap-2 text-sm text-slate-400">
-                      <span className={cn("w-1 h-1 shrink-0", isFeatured ? "bg-blue-400" : "bg-[#152A54]")} />
+                    <li key={perk} className="flex items-center gap-2 text-sm text-neutral-400">
+                      <span className={cn("w-1 h-1 shrink-0", isFeatured ? "bg-white" : "bg-[#404040]")} />
                       {perk}
                     </li>
                   ))}
@@ -176,16 +171,16 @@ export function PrizesSection() {
             return (
               <div
                 key={perk.title}
-                className="flex items-start gap-3 p-4 border border-[#152A54]/60 bg-[#060D1A]/40"
+                className="flex items-start gap-3 p-4 border border-[#262626] bg-[#0F0F0F]"
               >
-                <div className="p-2 bg-[#0B162C] shrink-0">
-                  <Icon className="size-4 text-blue-400" />
+                <div className="p-2 bg-[#161616] border border-[#262626] text-white shrink-0">
+                  <Icon className="size-4" />
                 </div>
                 <div>
                   <p className="font-mono text-xs font-bold uppercase tracking-wider text-white mb-1">
                     {perk.title}
                   </p>
-                  <p className="text-xs text-slate-500 leading-relaxed">{perk.desc}</p>
+                  <p className="text-xs text-[#737373] leading-relaxed">{perk.desc}</p>
                 </div>
               </div>
             );

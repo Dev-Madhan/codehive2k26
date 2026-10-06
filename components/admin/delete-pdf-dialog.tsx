@@ -61,7 +61,7 @@ export function DeletePdfDialog({
 
   return (
     <Dialog open={open} onOpenChange={isDeleting ? undefined : onOpenChange}>
-      <DialogContent className="max-w-md w-full bg-[#060D1A] border border-red-900/60 text-white p-0 overflow-hidden font-mono text-xs rounded-none shadow-2xl">
+      <DialogContent className="max-w-md w-full bg-[#0F0F0F] border border-red-900/60 text-white p-0 overflow-hidden font-mono text-xs rounded-none shadow-2xl">
         {/* Header */}
         <DialogHeader className="p-4 sm:p-5 pr-12 border-b border-red-900/40 bg-red-950/20 space-y-1">
           <div className="flex items-center gap-2 text-red-400 font-bold uppercase text-xs">
@@ -90,33 +90,33 @@ export function DeletePdfDialog({
           </div>
 
           {/* Attendee Details Card */}
-          <div className="border border-[#152A54] bg-[#03060E] p-3 space-y-2 text-xs">
-            <div className="flex justify-between items-start gap-2 border-b border-[#152A54]/60 pb-2">
-              <span className="text-slate-400 uppercase text-[10px]">Attendee:</span>
+          <div className="border border-[#262626] bg-[#080808] p-3 space-y-2 text-xs">
+            <div className="flex justify-between items-start gap-2 border-b border-[#262626]/60 pb-2">
+              <span className="text-[#737373] uppercase text-[10px]">Attendee:</span>
               <span className="font-bold text-white text-right truncate">{item.name}</span>
             </div>
 
-            <div className="flex justify-between items-start gap-2 border-b border-[#152A54]/60 pb-2">
-              <span className="text-slate-400 uppercase text-[10px]">College:</span>
+            <div className="flex justify-between items-start gap-2 border-b border-[#262626]/60 pb-2">
+              <span className="text-[#737373] uppercase text-[10px]">College:</span>
               <span className="font-semibold text-slate-200 text-right truncate max-w-[240px]">
                 {item.college || "N/A"}
               </span>
             </div>
 
-            <div className="flex justify-between items-start gap-2 border-b border-[#152A54]/60 pb-2">
-              <span className="text-slate-400 uppercase text-[10px]">Event Track:</span>
-              <span className="font-mono text-blue-400 font-bold text-right truncate">
+            <div className="flex justify-between items-start gap-2 border-b border-[#262626]/60 pb-2">
+              <span className="text-[#737373] uppercase text-[10px]">Event Track:</span>
+              <span className="font-mono text-white font-bold text-right truncate">
                 {item.eventName}
               </span>
             </div>
 
             <div className="flex justify-between items-center gap-2 pt-1">
-              <span className="text-slate-400 uppercase text-[10px]">File Target:</span>
+              <span className="text-[#737373] uppercase text-[10px]">File Target:</span>
               <a
                 href={item.pdfUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-[11px] text-blue-400 hover:text-white underline truncate max-w-[200px]"
+                className="inline-flex items-center gap-1 text-[11px] text-white hover:underline truncate max-w-[200px]"
               >
                 <span>View Current PDF</span>
                 <ExternalLinkIcon className="size-3 shrink-0" />
@@ -126,13 +126,13 @@ export function DeletePdfDialog({
         </div>
 
         {/* Footer Actions */}
-        <DialogFooter className="p-4 sm:p-5 border-t border-red-900/40 bg-[#030712] flex flex-row items-center justify-end gap-2">
+        <DialogFooter className="p-4 sm:p-5 border-t border-[#262626] bg-[#080808] flex flex-row items-center justify-end gap-2">
           <Button
             type="button"
             variant="outline"
             disabled={isDeleting}
             onClick={() => onOpenChange(false)}
-            className="rounded-none border-[#152A54] bg-transparent text-slate-300 hover:bg-[#0B162C] hover:text-white"
+            className="rounded-none border-[#262626] bg-transparent text-[#E5E5E5] hover:bg-[#161616] hover:text-white"
           >
             [ Cancel ]
           </Button>

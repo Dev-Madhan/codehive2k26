@@ -139,20 +139,20 @@ export function CreateEventDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl w-full bg-[#060D1A] border border-[#152A54] text-white p-0 overflow-hidden font-mono text-xs rounded-none shadow-2xl flex flex-col max-h-[90vh]">
+      <DialogContent className="max-w-2xl w-full bg-[#0F0F0F] border border-[#262626] text-white p-0 overflow-hidden font-mono text-xs rounded-none shadow-2xl flex flex-col max-h-[90vh]">
         {/* Header */}
-        <DialogHeader className="p-4 sm:p-5 border-b border-[#152A54] bg-[#03060E] space-y-1 shrink-0">
+        <DialogHeader className="p-4 sm:p-5 border-b border-[#262626] bg-[#080808] space-y-1 shrink-0">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold text-sky-400 bg-blue-950/60 border border-blue-500/40 px-2 py-0.5 uppercase tracking-wider inline-flex items-center gap-1.5">
-              <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[10px] font-bold text-white bg-white/10 border border-[#404040] px-2 py-0.5 uppercase tracking-wider inline-flex items-center gap-1.5">
+              <span className="size-1.5 rounded-none bg-white animate-pulse" />
               EVENT AUTHORING ENGINE
             </span>
           </div>
           <DialogTitle className="text-base sm:text-lg font-bold text-white uppercase tracking-tight flex items-center gap-2">
-            <SparklesIcon className="size-4 text-blue-400 shrink-0" />
+            <SparklesIcon className="size-4 text-white shrink-0" />
             <span>Create New Symposium Event Track</span>
           </DialogTitle>
-          <DialogDescription className="text-xs text-slate-400">
+          <DialogDescription className="text-xs text-zinc-400">
             Publish a new competition or challenge for CodeHive 2K26 symposium.
           </DialogDescription>
         </DialogHeader>
@@ -165,14 +165,14 @@ export function CreateEventDialog({
         >
           {/* Section: Track Identity */}
           <div className="space-y-3">
-            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-blue-400 border-b border-[#152A54]/60 pb-1">
+            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-white border-b border-[#262626] pb-1">
               <TagIcon className="size-3.5" />
               <span>Track Identity</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-[10px] font-bold uppercase text-slate-300">
+                <label className="text-[10px] font-bold uppercase text-zinc-300">
                   Event Name *
                 </label>
                 <input
@@ -181,16 +181,16 @@ export function CreateEventDialog({
                   placeholder="e.g. CODE CRAFT HACKATHON"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full h-9 bg-[#03060E] border border-[#152A54] px-3 text-xs text-white placeholder:text-slate-600 focus:outline-hidden focus:border-blue-500 rounded-none uppercase font-semibold"
+                  className="w-full h-9 bg-[#080808] border border-[#262626] px-3 text-xs text-white placeholder:text-zinc-600 focus:outline-hidden focus:border-white rounded-none uppercase font-semibold"
                 />
               </div>
 
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
-                  <label className="text-[10px] font-bold uppercase text-slate-300">
+                  <label className="text-[10px] font-bold uppercase text-zinc-300">
                     URL Slug *
                   </label>
-                  <span className="text-[10px] text-slate-500 font-mono truncate max-w-[140px]">
+                  <span className="text-[10px] text-zinc-500 font-mono truncate max-w-[140px]">
                     {slug ? `/events/${slug}` : ""}
                   </span>
                 </div>
@@ -201,15 +201,15 @@ export function CreateEventDialog({
                     placeholder="e.g. code-craft-2026"
                     value={slug}
                     onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
-                    className="w-full h-9 bg-[#03060E] border border-[#152A54] pl-3 pr-28 text-xs text-blue-400 font-mono focus:outline-hidden focus:border-blue-500 rounded-none lowercase"
+                    className="w-full h-9 bg-[#080808] border border-[#262626] pl-3 pr-28 text-xs text-white font-mono focus:outline-hidden focus:border-white rounded-none lowercase"
                   />
                   <button
                     type="button"
                     onClick={handleGenerateSlug}
-                    className="absolute right-1 top-1/2 -translate-y-1/2 h-7 px-2.5 bg-blue-600/25 hover:bg-blue-600/40 text-sky-300 hover:text-white border border-blue-500/40 text-[10px] uppercase font-bold tracking-wider cursor-pointer flex items-center gap-1.5 transition-all shadow-xs"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 h-7 px-2.5 bg-[#161616] hover:bg-[#262626] text-white border border-[#404040] text-[10px] uppercase font-bold tracking-wider cursor-pointer flex items-center gap-1.5 transition-all shadow-xs"
                     title="Create slug from event name"
                   >
-                    <SparklesIcon className="size-3 text-sky-400" />
+                    <SparklesIcon className="size-3 text-white" />
                     <span>Create Slug</span>
                   </button>
                 </div>
@@ -217,7 +217,7 @@ export function CreateEventDialog({
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-slate-300">
+              <label className="text-[10px] font-bold uppercase text-zinc-300">
                 Track Category
               </label>
               <Select
@@ -230,9 +230,9 @@ export function CreateEventDialog({
                   <SelectValue placeholder="Select track category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 border-b border-[#152A54]/60 mb-1 flex items-center justify-between">
+                  <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-zinc-500 border-b border-[#262626] mb-1 flex items-center justify-between">
                     <span>// TRACK CATEGORIES</span>
-                    <span className="text-blue-400 font-bold">{categories.length} TOTAL</span>
+                    <span className="text-white font-bold">{categories.length} TOTAL</span>
                   </div>
                   {categories.map((cat) => (
                     <SelectItem key={cat.id} value={cat.id}>
@@ -246,7 +246,7 @@ export function CreateEventDialog({
 
           {/* Section: Format & Participation */}
           <div className="space-y-3 pt-2">
-            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-purple-400 border-b border-[#152A54]/60 pb-1">
+            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-white border-b border-[#262626] pb-1">
               <UsersIcon className="size-3.5" />
               <span>Participation Mode</span>
             </div>
@@ -257,8 +257,8 @@ export function CreateEventDialog({
                 onClick={() => setIsTeamEvent(false)}
                 className={`h-9 px-3 text-xs font-bold uppercase border transition-all cursor-pointer ${
                   !isTeamEvent
-                    ? "border-blue-500 bg-blue-950/60 text-blue-300 font-bold"
-                    : "border-[#152A54] bg-[#03060E] text-slate-400 hover:text-white"
+                    ? "border-white bg-white/10 text-white font-bold"
+                    : "border-[#262626] bg-[#080808] text-zinc-400 hover:text-white"
                 }`}
               >
                 Solo Entry (Individual)
@@ -268,8 +268,8 @@ export function CreateEventDialog({
                 onClick={() => setIsTeamEvent(true)}
                 className={`h-9 px-3 text-xs font-bold uppercase border transition-all cursor-pointer ${
                   isTeamEvent
-                    ? "border-purple-500 bg-purple-950/60 text-purple-300 font-bold"
-                    : "border-[#152A54] bg-[#03060E] text-slate-400 hover:text-white"
+                    ? "border-white bg-white/10 text-white font-bold"
+                    : "border-[#262626] bg-[#080808] text-zinc-400 hover:text-white"
                 }`}
               >
                 Team Participation
@@ -277,9 +277,9 @@ export function CreateEventDialog({
             </div>
 
             {isTeamEvent && (
-              <div className="grid grid-cols-2 gap-3 bg-[#03060E] border border-[#152A54] p-3">
+              <div className="grid grid-cols-2 gap-3 bg-[#080808] border border-[#262626] p-3">
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold uppercase text-slate-300">
+                  <label className="text-[10px] font-bold uppercase text-zinc-300">
                     Min Team Size
                   </label>
                   <input
@@ -288,11 +288,11 @@ export function CreateEventDialog({
                     max={10}
                     value={minTeamSize}
                     onChange={(e) => setMinTeamSize(Number(e.target.value))}
-                    className="w-full h-8 bg-[#060D1A] border border-[#152A54] px-3 text-xs text-white focus:outline-hidden focus:border-blue-500 rounded-none"
+                    className="w-full h-8 bg-[#080808] border border-[#262626] px-3 text-xs text-white focus:outline-hidden focus:border-white rounded-none"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold uppercase text-slate-300">
+                  <label className="text-[10px] font-bold uppercase text-zinc-300">
                     Max Team Size
                   </label>
                   <input
@@ -301,7 +301,7 @@ export function CreateEventDialog({
                     max={10}
                     value={maxTeamSize}
                     onChange={(e) => setMaxTeamSize(Number(e.target.value))}
-                    className="w-full h-8 bg-[#060D1A] border border-[#152A54] px-3 text-xs text-white focus:outline-hidden focus:border-blue-500 rounded-none"
+                    className="w-full h-8 bg-[#080808] border border-[#262626] px-3 text-xs text-white focus:outline-hidden focus:border-white rounded-none"
                   />
                 </div>
               </div>
@@ -310,13 +310,13 @@ export function CreateEventDialog({
 
           {/* Section: Logistics & Timings */}
           <div className="space-y-3 pt-2">
-            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-sky-400 border-b border-[#152A54]/60 pb-1">
+            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-white border-b border-[#262626] pb-1">
               <MapPinIcon className="size-3.5" />
               <span>Logistics &amp; Venue</span>
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-slate-300">
+              <label className="text-[10px] font-bold uppercase text-zinc-300">
                 Venue Location *
               </label>
               <input
@@ -324,13 +324,13 @@ export function CreateEventDialog({
                 required
                 value={venue}
                 onChange={(e) => setVenue(e.target.value)}
-                className="w-full h-9 bg-[#03060E] border border-[#152A54] px-3 text-xs text-white focus:outline-hidden focus:border-blue-500 rounded-none"
+                className="w-full h-9 bg-[#080808] border border-[#262626] px-3 text-xs text-white focus:outline-hidden focus:border-white rounded-none"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
               <div className="space-y-1">
-                <label className="text-[10px] font-bold uppercase text-slate-300">
+                <label className="text-[10px] font-bold uppercase text-zinc-300">
                   Starts At
                 </label>
                 <input
@@ -338,11 +338,11 @@ export function CreateEventDialog({
                   required
                   value={startAt}
                   onChange={(e) => setStartAt(e.target.value)}
-                  className="w-full h-8 bg-[#03060E] border border-[#152A54] px-2 text-[11px] text-white focus:outline-hidden focus:border-blue-500 rounded-none"
+                  className="w-full h-8 bg-[#080808] border border-[#262626] px-2 text-[11px] text-white focus:outline-hidden focus:border-white rounded-none"
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[10px] font-bold uppercase text-slate-300">
+                <label className="text-[10px] font-bold uppercase text-zinc-300">
                   Ends At
                 </label>
                 <input
@@ -350,11 +350,11 @@ export function CreateEventDialog({
                   required
                   value={endAt}
                   onChange={(e) => setEndAt(e.target.value)}
-                  className="w-full h-8 bg-[#03060E] border border-[#152A54] px-2 text-[11px] text-white focus:outline-hidden focus:border-blue-500 rounded-none"
+                  className="w-full h-8 bg-[#080808] border border-[#262626] px-2 text-[11px] text-white focus:outline-hidden focus:border-white rounded-none"
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[10px] font-bold uppercase text-slate-300">
+                <label className="text-[10px] font-bold uppercase text-zinc-300">
                   Reg Deadline
                 </label>
                 <input
@@ -362,7 +362,7 @@ export function CreateEventDialog({
                   required
                   value={registrationDeadline}
                   onChange={(e) => setRegistrationDeadline(e.target.value)}
-                  className="w-full h-8 bg-[#03060E] border border-[#152A54] px-2 text-[11px] text-white focus:outline-hidden focus:border-blue-500 rounded-none"
+                  className="w-full h-8 bg-[#080808] border border-[#262626] px-2 text-[11px] text-white focus:outline-hidden focus:border-white rounded-none"
                 />
               </div>
             </div>
@@ -370,13 +370,13 @@ export function CreateEventDialog({
 
           {/* Section: Challenge Scope */}
           <div className="space-y-3 pt-2">
-            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-emerald-400 border-b border-[#152A54]/60 pb-1">
+            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-white border-b border-[#262626] pb-1">
               <FileTextIcon className="size-3.5" />
               <span>Track Challenge Brief &amp; Rules</span>
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-slate-300">
+              <label className="text-[10px] font-bold uppercase text-zinc-300">
                 Detailed Description &amp; Problem Statement *
               </label>
               <textarea
@@ -385,20 +385,20 @@ export function CreateEventDialog({
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Explain the objectives, problem statement, judging criteria, and round formats..."
-                className="w-full bg-[#03060E] border border-[#152A54] p-3 text-xs text-white placeholder:text-slate-600 focus:outline-hidden focus:border-blue-500 rounded-none leading-relaxed"
+                className="w-full bg-[#080808] border border-[#262626] p-3 text-xs text-white placeholder:text-zinc-600 focus:outline-hidden focus:border-white rounded-none leading-relaxed"
               />
             </div>
           </div>
         </form>
 
         {/* Footer */}
-        <DialogFooter className="p-4 border-t border-[#152A54] bg-[#03060E] flex flex-row items-center justify-between gap-3 shrink-0">
+        <DialogFooter className="p-4 border-t border-[#262626] bg-[#080808] flex flex-row items-center justify-between gap-3 shrink-0">
           <Button
             type="button"
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={isSubmitting}
-            className="rounded-none border-[#152A54] bg-[#060D1A] text-slate-300 font-mono text-xs uppercase"
+            className="rounded-none border-[#262626] bg-[#0F0F0F] text-zinc-300 hover:bg-[#161616] hover:text-white font-mono text-xs uppercase"
           >
             Cancel
           </Button>
@@ -407,7 +407,7 @@ export function CreateEventDialog({
             type="submit"
             form="create-event-form"
             disabled={isSubmitting}
-            className="rounded-none bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs uppercase font-bold px-5 cursor-pointer shadow-md shadow-blue-600/30"
+            className="rounded-none bg-white hover:bg-zinc-200 text-black font-mono text-xs uppercase font-bold px-5 cursor-pointer border border-white"
           >
             {isSubmitting ? (
               <>

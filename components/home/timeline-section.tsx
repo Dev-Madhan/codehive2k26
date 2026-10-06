@@ -49,9 +49,9 @@ export function TimelineSection() {
   return (
     <section
       ref={ref}
-      className="relative py-24 sm:py-32 bg-black border-t border-[#152A54]/60 overflow-hidden"
+      className="relative py-24 sm:py-32 bg-black border-t border-[#262626] overflow-hidden"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(21,42,84,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(21,42,84,0.05)_1px,transparent_1px)] bg-[size:60px_60px]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
@@ -62,23 +62,20 @@ export function TimelineSection() {
           )}
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-8 bg-blue-500" />
-            <span className="font-mono text-[11px] uppercase tracking-widest text-blue-500">
+            <div className="h-px w-8 bg-white" />
+            <span className="font-mono text-[11px] uppercase tracking-widest text-[#737373]">
               TIMELINE
             </span>
           </div>
           <h2 className="font-mono text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-tight">
-            MARK YOUR{" "}
-            <span className="bg-gradient-to-r from-blue-400 to-sky-300 bg-clip-text text-transparent">
-              CALENDAR
-            </span>
+            MARK YOUR <span className="text-white">CALENDAR</span>
           </h2>
         </div>
 
         {/* Timeline */}
         <div className="relative">
           {/* Vertical line */}
-          <div className="absolute left-[19px] sm:left-1/2 sm:-translate-x-px top-0 bottom-0 w-px bg-[#152A54]" />
+          <div className="absolute left-[19px] sm:left-1/2 sm:-translate-x-px top-0 bottom-0 w-px bg-[#262626]" />
 
           <div className="space-y-0">
             {timeline.map((item, i) => {
@@ -110,11 +107,9 @@ export function TimelineSection() {
                     <div
                       className={cn(
                         "w-10 h-10 flex items-center justify-center border-2 font-mono text-[9px] font-bold uppercase tracking-widest transition-all",
-                        item.status === "completed"
-                          ? "border-blue-500 bg-blue-500/20 text-blue-300"
-                          : item.status === "active"
-                          ? "border-emerald-500 bg-emerald-500/20 text-emerald-300 animate-[pulse_2s_infinite]"
-                          : "border-[#152A54] bg-[#060D1A] text-slate-600"
+                        item.status === "active"
+                          ? "border-white bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.2)]"
+                          : "border-[#262626] bg-[#0F0F0F] text-neutral-500"
                       )}
                     >
                       {String(i + 1).padStart(2, "0")}
@@ -157,27 +152,23 @@ function TimelineCard({
   return (
     <div
       className={cn(
-        "p-4 border bg-[#060D1A]/80 max-w-sm",
-        item.status === "completed"
-          ? "border-blue-500/30"
-          : item.status === "active"
-          ? "border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
-          : "border-[#152A54]/60",
+        "p-4 border bg-[#0F0F0F] max-w-sm",
+        item.status === "active"
+          ? "border-white shadow-[0_0_20px_rgba(255,255,255,0.06)]"
+          : "border-[#262626]",
         align === "right" && "ml-auto"
       )}
     >
       <div className="flex items-center justify-between gap-2 mb-2">
-        <span className="font-mono text-[10px] uppercase tracking-widest text-slate-500">
+        <span className="font-mono text-[10px] uppercase tracking-widest text-[#737373]">
           {item.phase}
         </span>
         <span
           className={cn(
             "font-mono text-[10px] uppercase tracking-widest",
-            item.status === "completed"
-              ? "text-blue-400"
-              : item.status === "active"
-              ? "text-emerald-400"
-              : "text-slate-600"
+            item.status === "active"
+              ? "text-white font-bold"
+              : "text-[#737373]"
           )}
         >
           {item.status === "active" ? "● LIVE" : item.date}
@@ -186,7 +177,7 @@ function TimelineCard({
       <h3 className="font-mono text-sm font-bold uppercase text-white mb-1">
         {item.title}
       </h3>
-      <p className="text-xs text-slate-400 leading-relaxed">{item.desc}</p>
+      <p className="text-xs text-neutral-400 leading-relaxed">{item.desc}</p>
     </div>
   );
 }

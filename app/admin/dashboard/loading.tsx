@@ -4,7 +4,7 @@ export default function AdminDashboardLoading() {
   return (
     <div className="space-y-8 font-mono">
       {/* Header */}
-      <div className="border-b border-[#152A54] pb-4 space-y-2">
+      <div className="border-b border-[#262626] pb-4 space-y-2">
         <Skeleton className="h-4 w-40" />
         <Skeleton className="h-8 w-60" />
         <Skeleton className="h-3.5 w-80" />
@@ -15,7 +15,7 @@ export default function AdminDashboardLoading() {
         {[1, 2, 3, 4].map((i) => (
           <div
             key={i}
-            className="rounded-none border border-[#152A54] bg-[#060D1A] p-5 space-y-3"
+            className="rounded-none border border-[#262626] bg-[#0F0F0F] p-5 space-y-3"
           >
             <div className="flex items-center justify-between">
               <Skeleton className="h-3.5 w-28" />

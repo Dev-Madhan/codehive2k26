@@ -53,11 +53,11 @@ export function NavSecondary({
                   }
                   className={`rounded-none text-xs uppercase tracking-wider transition-colors min-h-[38px] px-3 ${
                     isActive
-                      ? "bg-[#0B162C] text-white border-l-2 border-blue-500 font-bold"
-                      : "text-slate-500 hover:text-slate-300 hover:bg-[#060D1A] border-l-2 border-transparent active:bg-[#0B162C]"
+                      ? "bg-[#161616] text-white border-l-2 border-white font-bold"
+                      : "text-[#737373] hover:text-[#E5E5E5] hover:bg-[#161616] border-l-2 border-transparent active:bg-[#1F1F1F]"
                   }`}
                 >
-                  <span className={`shrink-0 ${isActive ? "text-blue-400" : "text-slate-500"}`}>
+                  <span className={`shrink-0 ${isActive ? "text-white" : "text-[#737373]"}`}>
                     {item.icon}
                   </span>
                   <span className="truncate">{item.title}</span>

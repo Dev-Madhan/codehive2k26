@@ -81,13 +81,13 @@ export function SectionCards({ stats }: { stats?: DashboardStats }) {
         return (
           <div
             key={s.label}
-            className="border border-[#152A54] bg-[#060D1A] p-3 sm:p-4 transition-colors hover:border-blue-500/40 relative group"
+            className="border border-[#262626] bg-[#0F0F0F] p-3 sm:p-4 transition-colors hover:border-[#404040] relative group"
           >
-            <div className="flex items-center justify-between text-slate-400 gap-1">
-              <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-slate-400 truncate">
+            <div className="flex items-center justify-between text-[#A3A3A3] gap-1">
+              <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-[#737373] truncate">
                 {s.label}
               </span>
-              <Icon className="size-3.5 text-blue-400 shrink-0" />
+              <Icon className="size-3.5 text-white shrink-0" />
             </div>
 
             <div className="mt-2 sm:mt-3 flex items-baseline justify-between gap-1 flex-wrap">
@@ -96,10 +96,10 @@ export function SectionCards({ stats }: { stats?: DashboardStats }) {
               </span>
               <span
                 className={`text-[10px] sm:text-[11px] font-medium shrink-0 flex items-center gap-1 ${
-                  s.isStatus ? "text-emerald-400 font-semibold" : "text-slate-400"
+                  s.isStatus ? "text-white font-semibold" : "text-[#A3A3A3]"
                 }`}
               >
-                {s.isStatus && <span className="size-1.5 bg-emerald-400 rounded-none animate-pulse shrink-0" />}
+                {s.isStatus && <span className="size-1.5 bg-white rounded-none animate-pulse shrink-0" />}
                 {s.detail}
               </span>
             </div>

@@ -288,15 +288,15 @@ export function SettingsClient({
   return (
     <div className="space-y-6 font-mono max-w-full">
       {/* Top Page Header */}
-      <div className="border-b border-[#152A54] pb-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="border-b border-[#262626] pb-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[11px] font-bold text-blue-400 bg-blue-600/15 border border-blue-500/30 mb-2">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[11px] font-bold text-white bg-white/10 border border-[#404040] mb-2">
             &gt; ADMIN // OPERATIONAL_HUB
           </div>
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white uppercase">
             System Settings &amp; Telemetry
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-zinc-400 mt-1">
             Real-time session telemetry, administrative governance, and Tigris S3 document inspection.
           </p>
         </div>
@@ -305,9 +305,9 @@ export function SettingsClient({
           type="button"
           onClick={handleRefresh}
           disabled={isRefreshing}
-          className="rounded-none border border-[#152A54] bg-[#060D1A] hover:bg-[#0B162C] hover:border-blue-500/50 text-slate-300 hover:text-white text-xs uppercase transition-all shrink-0 cursor-pointer"
+          className="rounded-none border border-[#262626] bg-[#0F0F0F] hover:bg-[#161616] hover:border-zinc-500 text-zinc-300 hover:text-white text-xs uppercase transition-all shrink-0 cursor-pointer"
         >
-          <RefreshCwIcon className={`size-3.5 mr-1.5 ${isRefreshing ? "animate-spin text-blue-400" : ""}`} />
+          <RefreshCwIcon className={`size-3.5 mr-1.5 ${isRefreshing ? "animate-spin text-white" : ""}`} />
           [ Refresh Feed ]
         </Button>
       </div>
@@ -322,25 +322,25 @@ export function SettingsClient({
             setActiveTab("activity");
             setActivityStatusFilter("ACTIVE");
           }}
-          className={`p-3.5 border transition-all cursor-pointer bg-[#060D1A] ${
+          className={`p-3.5 border transition-all cursor-pointer bg-[#0F0F0F] ${
             activeTab === "activity" && activityStatusFilter === "ACTIVE"
-              ? "border-emerald-500 ring-1 ring-emerald-500/30"
-              : "border-[#152A54] hover:border-emerald-500/50"
+              ? "border-white ring-1 ring-white/30"
+              : "border-[#262626] hover:border-[#404040]"
           }`}
         >
           <div className="flex items-center justify-between">
-            <span className="text-[10px] text-slate-400 uppercase tracking-wider">Active Sessions</span>
+            <span className="text-[10px] text-zinc-400 uppercase tracking-wider">Active Sessions</span>
             <span className="relative flex size-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full size-2 bg-emerald-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-none bg-white opacity-75"></span>
+              <span className="relative inline-flex rounded-none size-2 bg-white"></span>
             </span>
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-bold text-white tracking-tight">{activeSessionsCount}</span>
-            <span className="text-[10px] text-emerald-400 uppercase">ONLINE</span>
+            <span className="text-[10px] text-white uppercase">ONLINE</span>
           </div>
-          <div className="mt-1 text-[11px] text-slate-500 truncate flex items-center gap-1">
-            <ActivityIcon className="size-3 text-emerald-400" />
+          <div className="mt-1 text-[11px] text-zinc-500 truncate flex items-center gap-1">
+            <ActivityIcon className="size-3 text-white" />
             <span>{activitySessions.length} total logged sessions</span>
           </div>
         </div>
@@ -351,21 +351,21 @@ export function SettingsClient({
             setActiveTab("roles");
             setRoleFilter("ADMIN");
           }}
-          className={`p-3.5 border transition-all cursor-pointer bg-[#060D1A] ${
+          className={`p-3.5 border transition-all cursor-pointer bg-[#0F0F0F] ${
             activeTab === "roles" && roleFilter === "ADMIN"
               ? "border-amber-500 ring-1 ring-amber-500/30"
-              : "border-[#152A54] hover:border-amber-500/50"
+              : "border-[#262626] hover:border-amber-500/50"
           }`}
         >
           <div className="flex items-center justify-between">
-            <span className="text-[10px] text-slate-400 uppercase tracking-wider">Administrators</span>
+            <span className="text-[10px] text-zinc-400 uppercase tracking-wider">Administrators</span>
             <ShieldCheckIcon className="size-4 text-amber-400" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-bold text-white tracking-tight">{adminUsersCount}</span>
             <span className="text-[10px] text-amber-400 uppercase">ELEVATED</span>
           </div>
-          <div className="mt-1 text-[11px] text-slate-500 truncate">
+          <div className="mt-1 text-[11px] text-zinc-500 truncate">
             {participantUsersCount} standard participants
           </div>
         </div>
@@ -376,21 +376,21 @@ export function SettingsClient({
             setActiveTab("roles");
             setRoleFilter("ALL");
           }}
-          className={`p-3.5 border transition-all cursor-pointer bg-[#060D1A] ${
+          className={`p-3.5 border transition-all cursor-pointer bg-[#0F0F0F] ${
             activeTab === "roles" && roleFilter === "ALL"
-              ? "border-blue-500 ring-1 ring-blue-500/30"
-              : "border-[#152A54] hover:border-blue-500/50"
+              ? "border-white ring-1 ring-white/30"
+              : "border-[#262626] hover:border-[#404040]"
           }`}
         >
           <div className="flex items-center justify-between">
-            <span className="text-[10px] text-slate-400 uppercase tracking-wider">User Directory</span>
-            <UsersIcon className="size-4 text-blue-400" />
+            <span className="text-[10px] text-zinc-400 uppercase tracking-wider">User Directory</span>
+            <UsersIcon className="size-4 text-white" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-bold text-white tracking-tight">{users.length}</span>
-            <span className="text-[10px] text-blue-400 uppercase">ACCOUNTS</span>
+            <span className="text-[10px] text-white uppercase">ACCOUNTS</span>
           </div>
-          <div className="mt-1 text-[11px] text-slate-500 truncate">
+          <div className="mt-1 text-[11px] text-zinc-500 truncate">
             Registered symposium profiles
           </div>
         </div>
@@ -401,21 +401,21 @@ export function SettingsClient({
             setActiveTab("pdfs");
             setEventFilter("ALL");
           }}
-          className={`p-3.5 border transition-all cursor-pointer bg-[#060D1A] ${
+          className={`p-3.5 border transition-all cursor-pointer bg-[#0F0F0F] ${
             activeTab === "pdfs"
               ? "border-red-500 ring-1 ring-red-500/30"
-              : "border-[#152A54] hover:border-red-500/50"
+              : "border-[#262626] hover:border-red-500/50"
           }`}
         >
           <div className="flex items-center justify-between">
-            <span className="text-[10px] text-slate-400 uppercase tracking-wider">Tigris S3 Storage</span>
+            <span className="text-[10px] text-zinc-400 uppercase tracking-wider">Tigris S3 Storage</span>
             <FileTextIcon className="size-4 text-red-400" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-bold text-white tracking-tight">{pdfItems.length}</span>
             <span className="text-[10px] text-red-400 uppercase">DOCUMENTS</span>
           </div>
-          <div className="mt-1 text-[11px] text-slate-500 truncate flex items-center gap-1">
+          <div className="mt-1 text-[11px] text-zinc-500 truncate flex items-center gap-1">
             <ServerIcon className="size-3 text-red-400" />
             <span>Live College ID files</span>
           </div>
@@ -425,7 +425,7 @@ export function SettingsClient({
       {/* ──────────────────────────────────────────────────────────── */}
       {/* PRIMARY TAB NAVIGATION */}
       {/* ──────────────────────────────────────────────────────────── */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-[#152A54] pb-3">
+      <div className="flex flex-wrap items-center gap-2 border-b border-[#262626] pb-3">
         <button
           type="button"
           onClick={() => {
@@ -434,13 +434,13 @@ export function SettingsClient({
           }}
           className={`flex items-center gap-2 px-4 py-2 font-bold text-xs uppercase tracking-wider border rounded-none transition-all cursor-pointer ${
             activeTab === "activity"
-              ? "border-blue-500 bg-blue-600/20 text-white shadow-xs"
-              : "border-[#152A54] bg-[#060D1A] text-slate-400 hover:text-slate-200 hover:border-slate-500"
+              ? "border-white bg-white/10 text-white shadow-xs"
+              : "border-[#262626] bg-[#0F0F0F] text-zinc-400 hover:text-zinc-200 hover:border-zinc-500"
           }`}
         >
-          <ActivityIcon className={`size-3.5 ${activeTab === "activity" ? "text-blue-400" : "text-slate-500"}`} />
+          <ActivityIcon className="size-3.5 text-white" />
           <span>Activity Log</span>
-          <span className="px-1.5 py-0.2 text-[10px] bg-[#0E1B38] text-blue-400 border border-blue-500/30">
+          <span className="px-1.5 py-0.2 text-[10px] bg-[#161616] text-white border border-[#262626]">
             {activeSessionsCount} LIVE
           </span>
         </button>
@@ -454,10 +454,10 @@ export function SettingsClient({
           className={`flex items-center gap-2 px-4 py-2 font-bold text-xs uppercase tracking-wider border rounded-none transition-all cursor-pointer ${
             activeTab === "roles"
               ? "border-amber-500 bg-amber-500/15 text-white shadow-xs"
-              : "border-[#152A54] bg-[#060D1A] text-slate-400 hover:text-slate-200 hover:border-slate-500"
+              : "border-[#262626] bg-[#0F0F0F] text-zinc-400 hover:text-zinc-200 hover:border-zinc-500"
           }`}
         >
-          <ShieldCheckIcon className={`size-3.5 ${activeTab === "roles" ? "text-amber-400" : "text-slate-500"}`} />
+          <ShieldCheckIcon className={`size-3.5 ${activeTab === "roles" ? "text-amber-400" : "text-zinc-500"}`} />
           <span>Role Assigner</span>
           <span className="px-1.5 py-0.2 text-[10px] bg-amber-950/40 text-amber-400 border border-amber-500/30">
             {users.length} USERS
@@ -473,10 +473,10 @@ export function SettingsClient({
           className={`flex items-center gap-2 px-4 py-2 font-bold text-xs uppercase tracking-wider border rounded-none transition-all cursor-pointer ${
             activeTab === "pdfs"
               ? "border-red-500 bg-red-950/20 text-white shadow-xs"
-              : "border-[#152A54] bg-[#060D1A] text-slate-400 hover:text-slate-200 hover:border-slate-500"
+              : "border-[#262626] bg-[#0F0F0F] text-zinc-400 hover:text-zinc-200 hover:border-zinc-500"
           }`}
         >
-          <FileTextIcon className={`size-3.5 ${activeTab === "pdfs" ? "text-red-400" : "text-slate-500"}`} />
+          <FileTextIcon className={`size-3.5 ${activeTab === "pdfs" ? "text-red-400" : "text-zinc-500"}`} />
           <span>PDF Access</span>
           <span className="px-1.5 py-0.2 text-[10px] bg-red-950/40 text-red-400 border border-red-500/30">
             {pdfItems.length} STORED
@@ -485,9 +485,9 @@ export function SettingsClient({
       </div>
 
       {/* Control / Search Filter Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-[#060D1A] border border-[#152A54] p-3">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-[#0F0F0F] border border-[#262626] p-3">
         <div className="relative flex-1">
-          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-slate-500" />
+          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-zinc-500" />
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -498,7 +498,7 @@ export function SettingsClient({
                 ? "Search users by name, email, college, department..."
                 : "Search attendees by name, college, event, phone..."
             }
-            className="pl-9 h-9 rounded-none border-[#152A54] bg-[#03060E] text-xs font-mono text-white placeholder:text-slate-600 focus-visible:border-blue-500"
+            className="pl-9 h-9 rounded-none border-[#262626] bg-[#080808] text-xs font-mono text-white placeholder:text-zinc-600 focus-visible:border-white"
           />
         </div>
 
@@ -506,14 +506,14 @@ export function SettingsClient({
         <div className="flex items-center gap-2 shrink-0">
           {activeTab === "activity" && (
             <div className="flex items-center gap-1 text-xs">
-              <span className="text-[10px] text-slate-400 uppercase hidden sm:inline">Status:</span>
+              <span className="text-[10px] text-zinc-400 uppercase hidden sm:inline">Status:</span>
               <button
                 type="button"
                 onClick={() => setActivityStatusFilter("ALL")}
                 className={`px-2.5 py-1 text-[11px] font-bold border transition-colors cursor-pointer ${
                   activityStatusFilter === "ALL"
-                    ? "border-blue-500 bg-blue-600/20 text-white"
-                    : "border-[#152A54] bg-[#03060E] text-slate-400 hover:text-white"
+                    ? "border-white bg-white/10 text-white"
+                    : "border-[#262626] bg-[#080808] text-zinc-400 hover:text-white"
                 }`}
               >
                 ALL ({activitySessions.length})
@@ -523,8 +523,8 @@ export function SettingsClient({
                 onClick={() => setActivityStatusFilter("ACTIVE")}
                 className={`px-2.5 py-1 text-[11px] font-bold border transition-colors cursor-pointer ${
                   activityStatusFilter === "ACTIVE"
-                    ? "border-emerald-500 bg-emerald-500/20 text-emerald-300"
-                    : "border-[#152A54] bg-[#03060E] text-slate-400 hover:text-white"
+                    ? "border-white bg-white/10 text-white font-bold"
+                    : "border-[#262626] bg-[#080808] text-zinc-400 hover:text-white"
                 }`}
               >
                 LIVE ({activeSessionsCount})
@@ -534,8 +534,8 @@ export function SettingsClient({
                 onClick={() => setActivityStatusFilter("EXPIRED")}
                 className={`px-2.5 py-1 text-[11px] font-bold border transition-colors cursor-pointer ${
                   activityStatusFilter === "EXPIRED"
-                    ? "border-slate-500 bg-slate-800 text-slate-200"
-                    : "border-[#152A54] bg-[#03060E] text-slate-400 hover:text-white"
+                    ? "border-zinc-500 bg-zinc-800 text-zinc-200"
+                    : "border-[#262626] bg-[#080808] text-zinc-400 hover:text-white"
                 }`}
               >
                 EXPIRED ({activitySessions.length - activeSessionsCount})
@@ -545,14 +545,14 @@ export function SettingsClient({
 
           {activeTab === "roles" && (
             <div className="flex items-center gap-1 text-xs">
-              <span className="text-[10px] text-slate-400 uppercase hidden sm:inline">Role:</span>
+              <span className="text-[10px] text-zinc-400 uppercase hidden sm:inline">Role:</span>
               <button
                 type="button"
                 onClick={() => setRoleFilter("ALL")}
                 className={`px-2.5 py-1 text-[11px] font-bold border transition-colors cursor-pointer ${
                   roleFilter === "ALL"
-                    ? "border-blue-500 bg-blue-600/20 text-white"
-                    : "border-[#152A54] bg-[#03060E] text-slate-400 hover:text-white"
+                    ? "border-white bg-white/10 text-white"
+                    : "border-[#262626] bg-[#080808] text-zinc-400 hover:text-white"
                 }`}
               >
                 ALL ({users.length})
@@ -563,7 +563,7 @@ export function SettingsClient({
                 className={`px-2.5 py-1 text-[11px] font-bold border transition-colors cursor-pointer ${
                   roleFilter === "ADMIN"
                     ? "border-amber-500 bg-amber-500/20 text-amber-300"
-                    : "border-[#152A54] bg-[#03060E] text-slate-400 hover:text-white"
+                    : "border-[#262626] bg-[#080808] text-zinc-400 hover:text-white"
                 }`}
               >
                 ADMINS ({adminUsersCount})
@@ -573,8 +573,8 @@ export function SettingsClient({
                 onClick={() => setRoleFilter("PARTICIPANT")}
                 className={`px-2.5 py-1 text-[11px] font-bold border transition-colors cursor-pointer ${
                   roleFilter === "PARTICIPANT"
-                    ? "border-blue-500 bg-blue-500/20 text-blue-300"
-                    : "border-[#152A54] bg-[#03060E] text-slate-400 hover:text-white"
+                    ? "border-white bg-white/10 text-white font-bold"
+                    : "border-[#262626] bg-[#080808] text-zinc-400 hover:text-white"
                 }`}
               >
                 PARTICIPANTS ({participantUsersCount})
@@ -584,11 +584,11 @@ export function SettingsClient({
 
           {activeTab === "pdfs" && (
             <div className="flex items-center gap-2 text-xs">
-              <span className="text-[10px] text-slate-400 uppercase hidden sm:inline">Track:</span>
+              <span className="text-[10px] text-zinc-400 uppercase hidden sm:inline">Track:</span>
               <select
                 value={eventFilter}
                 onChange={(e) => setEventFilter(e.target.value)}
-                className="h-8 bg-[#03060E] border border-[#152A54] text-xs text-slate-200 px-2 rounded-none font-mono focus:border-blue-500"
+                className="h-8 bg-[#080808] border border-[#262626] text-xs text-zinc-200 px-2 rounded-none font-mono focus:border-white"
               >
                 <option value="ALL">All Events ({pdfItems.length})</option>
                 {eventOptions.map((ev) => (
@@ -606,15 +606,15 @@ export function SettingsClient({
       {/* TAB 1: ACTIVITY LOG TABULAR COLUMN */}
       {/* ──────────────────────────────────────────────────────────── */}
       {activeTab === "activity" && (
-        <div className="border border-[#152A54] bg-[#060D1A] overflow-hidden">
-          <div className="px-4 py-3 border-b border-[#152A54] bg-[#030712] flex items-center justify-between">
+        <div className="border border-[#262626] bg-[#0F0F0F] overflow-hidden">
+          <div className="px-4 py-3 border-b border-[#262626] bg-[#080808] flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <ActivityIcon className="size-4 text-blue-400" />
+              <ActivityIcon className="size-4 text-white" />
               <h2 className="text-xs font-bold text-white uppercase tracking-wider">
                 Live Login &amp; Session Activity ({filteredSessions.length})
               </h2>
             </div>
-            <span className="text-[10px] text-slate-400">
+            <span className="text-[10px] text-zinc-400">
               Auto-authenticated via OAuth &amp; Better Auth
             </span>
           </div>
@@ -624,7 +624,7 @@ export function SettingsClient({
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             <table className="w-full text-left text-xs min-w-[780px]">
-              <thead className="bg-[#03060E] text-[10px] uppercase tracking-wider text-slate-400 border-b border-[#152A54]">
+              <thead className="bg-[#080808] text-[10px] uppercase tracking-wider text-zinc-400 border-b border-[#262626]">
                 <tr>
                   <th className="px-4 py-3">Logged-in User</th>
                   <th className="px-4 py-3">Client Endpoint / Device</th>
@@ -633,10 +633,10 @@ export function SettingsClient({
                   <th className="px-4 py-3 text-right">Security Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#152A54]">
+              <tbody className="divide-y divide-[#262626]">
                 {filteredSessions.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-4 py-12 text-center text-slate-500">
+                    <td colSpan={5} className="px-4 py-12 text-center text-zinc-500">
                       &gt; NO_ACTIVITY_SESSIONS_FOUND
                     </td>
                   </tr>
@@ -648,11 +648,11 @@ export function SettingsClient({
                     const isTerminating = terminatingSessionId === session.id;
 
                     return (
-                      <tr key={session.id} className="hover:bg-[#0B162C] transition-colors">
+                      <tr key={session.id} className="hover:bg-[#161616] transition-colors">
                         {/* User Identity */}
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-3">
-                            <div className="size-8 rounded-none bg-[#03060E] border border-[#152A54] flex items-center justify-center font-bold text-xs text-blue-400 shrink-0">
+                            <div className="size-8 rounded-none bg-[#080808] border border-[#262626] flex items-center justify-center font-bold text-xs text-white shrink-0">
                               {session.userName.charAt(0).toUpperCase()}
                             </div>
                             <div className="flex flex-col min-w-0">
@@ -662,13 +662,13 @@ export function SettingsClient({
                                   className={`px-1.5 py-0.2 text-[9px] font-bold border uppercase shrink-0 ${
                                     session.userRole === "ADMIN"
                                       ? "text-amber-400 border-amber-500/40 bg-amber-500/10"
-                                      : "text-blue-400 border-blue-500/40 bg-blue-500/10"
+                                      : "text-white border-[#404040] bg-[#161616]"
                                   }`}
                                 >
                                   {session.userRole}
                                 </span>
                               </div>
-                              <span className="text-[11px] text-slate-400 truncate">{session.userEmail}</span>
+                              <span className="text-[11px] text-zinc-400 truncate">{session.userEmail}</span>
                             </div>
                           </div>
                         </td>
@@ -677,15 +677,15 @@ export function SettingsClient({
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2">
                             {parsedUA.isMobile ? (
-                              <SmartphoneIcon className="size-3.5 text-slate-400 shrink-0" />
+                              <SmartphoneIcon className="size-3.5 text-zinc-400 shrink-0" />
                             ) : (
-                              <LaptopIcon className="size-3.5 text-slate-400 shrink-0" />
+                              <LaptopIcon className="size-3.5 text-zinc-400 shrink-0" />
                             )}
                             <div className="flex flex-col text-[11px] min-w-0">
                               <span className="text-white font-medium truncate">
                                 {parsedUA.browser} • {parsedUA.os}
                               </span>
-                              <span className="text-[10px] text-slate-500 font-mono">
+                              <span className="text-[10px] text-zinc-500 font-mono">
                                 IP: {session.ipAddress || "Internal / Proxy"}
                               </span>
                             </div>
@@ -696,28 +696,28 @@ export function SettingsClient({
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2">
                             {session.isActive ? (
-                              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-500/40 uppercase">
-                                <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-bold text-white bg-white/10 border border-white/20 uppercase">
+                                <span className="size-1.5 rounded-none bg-white animate-pulse" />
                                 LIVE
                               </span>
                             ) : (
-                              <span className="px-2 py-0.5 text-[10px] font-bold text-slate-400 bg-slate-900 border border-slate-700 uppercase">
+                              <span className="px-2 py-0.5 text-[10px] font-bold text-zinc-400 bg-zinc-900 border border-zinc-700 uppercase">
                                 EXPIRED
                               </span>
                             )}
-                            <span className="text-[10px] text-slate-500">
+                            <span className="text-[10px] text-zinc-500">
                               {expiry.text}
                             </span>
                           </div>
                         </td>
 
                         {/* Last Active */}
-                        <td className="px-4 py-3 text-slate-300 text-[11px]">
+                        <td className="px-4 py-3 text-zinc-300 text-[11px]">
                           <div className="flex flex-col">
                             <span className="text-white font-medium">
                               {formatRelativeTime(session.updatedAt)}
                             </span>
-                            <span className="text-[10px] text-slate-500">
+                            <span className="text-[10px] text-zinc-500">
                               {new Date(session.createdAt).toLocaleDateString("en-US", {
                                 month: "short",
                                 day: "numeric",
@@ -729,8 +729,8 @@ export function SettingsClient({
                         {/* Security Action */}
                         <td className="px-4 py-3 text-right">
                           {isSelf ? (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[10px] font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-500/40 uppercase">
-                              <CheckCircle2Icon className="size-3 text-emerald-400" />
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[10px] font-bold text-white bg-white/10 border border-white/20 uppercase">
+                              <CheckCircle2Icon className="size-3 text-white" />
                               [ CURRENT_SESSION ]
                             </span>
                           ) : (
@@ -766,8 +766,8 @@ export function SettingsClient({
       {/* TAB 2: ROLE ASSIGNER TABULAR COLUMN */}
       {/* ──────────────────────────────────────────────────────────── */}
       {activeTab === "roles" && (
-        <div className="border border-[#152A54] bg-[#060D1A] overflow-hidden">
-          <div className="px-4 py-3 border-b border-[#152A54] bg-[#030712] flex items-center justify-between">
+        <div className="border border-[#262626] bg-[#0F0F0F] overflow-hidden">
+          <div className="px-4 py-3 border-b border-[#262626] bg-[#080808] flex items-center justify-between">
             <div className="flex items-center gap-2">
               <ShieldCheckIcon className="size-4 text-amber-400" />
               <h2 className="text-xs font-bold text-white uppercase tracking-wider">
@@ -784,7 +784,7 @@ export function SettingsClient({
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             <table className="w-full text-left text-xs min-w-[760px]">
-              <thead className="bg-[#03060E] text-[10px] uppercase tracking-wider text-slate-400 border-b border-[#152A54]">
+              <thead className="bg-[#080808] text-[10px] uppercase tracking-wider text-zinc-400 border-b border-[#262626]">
                 <tr>
                   <th className="px-4 py-3">Account User</th>
                   <th className="px-4 py-3">Academic Institution</th>
@@ -793,40 +793,40 @@ export function SettingsClient({
                   <th className="px-4 py-3 text-right">Privilege Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#152A54]">
+              <tbody className="divide-y divide-[#262626]">
                 {filteredUsers.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-4 py-12 text-center text-slate-500">
+                    <td colSpan={5} className="px-4 py-12 text-center text-zinc-500">
                       &gt; NO_MATCHING_USERS_FOUND
                     </td>
                   </tr>
                 ) : (
                   filteredUsers.map((user) => (
-                    <tr key={user.id} className="hover:bg-[#0B162C] transition-colors">
+                    <tr key={user.id} className="hover:bg-[#161616] transition-colors">
                       {/* User */}
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-3">
-                          <div className="size-8 rounded-none bg-[#03060E] border border-[#152A54] flex items-center justify-center font-bold text-xs text-white shrink-0">
+                          <div className="size-8 rounded-none bg-[#080808] border border-[#262626] flex items-center justify-center font-bold text-xs text-white shrink-0">
                             {user.name.charAt(0).toUpperCase()}
                           </div>
                           <div className="flex flex-col min-w-0">
                             <span className="font-bold text-white truncate">{user.name}</span>
-                            <span className="text-[11px] text-slate-400 truncate">{user.email}</span>
+                            <span className="text-[11px] text-zinc-400 truncate">{user.email}</span>
                           </div>
                         </div>
                       </td>
 
                       {/* College */}
-                      <td className="px-4 py-3 text-slate-300">
+                      <td className="px-4 py-3 text-zinc-300">
                         {user.college ? (
                           <div className="flex flex-col min-w-0 max-w-[260px]">
                             <span className="text-white font-medium truncate">{user.college}</span>
-                            <span className="text-[10px] text-slate-500 truncate">
+                            <span className="text-[10px] text-zinc-500 truncate">
                               {user.department || "Dept"} {user.year ? `• Year ${user.year}` : ""}
                             </span>
                           </div>
                         ) : (
-                          <span className="text-slate-500 text-[11px] italic">Not submitted</span>
+                          <span className="text-zinc-500 text-[11px] italic">Not submitted</span>
                         )}
                       </td>
 
@@ -836,7 +836,7 @@ export function SettingsClient({
                           className={`px-2 py-0.5 text-[10px] font-bold border uppercase shrink-0 ${
                             user.role === "ADMIN"
                               ? "text-amber-400 border-amber-500/40 bg-amber-500/10"
-                              : "text-blue-400 border-blue-500/40 bg-blue-500/10"
+                              : "text-white border-[#404040] bg-[#161616]"
                           }`}
                         >
                           {user.role}
@@ -844,7 +844,7 @@ export function SettingsClient({
                       </td>
 
                       {/* Registered Date */}
-                      <td className="px-4 py-3 text-slate-400 text-[11px]">
+                      <td className="px-4 py-3 text-zinc-400 text-[11px]">
                         {new Date(user.createdAt).toLocaleDateString("en-US", {
                           month: "short",
                           day: "numeric",
@@ -868,8 +868,8 @@ export function SettingsClient({
                           }}
                           className={`rounded-none text-xs font-bold uppercase transition-all shadow-xs cursor-pointer ${
                             user.role === "ADMIN"
-                              ? "border border-amber-500/50 bg-[#060D1A] text-amber-400 hover:bg-amber-950/30"
-                              : "border border-blue-500/50 bg-blue-600 hover:bg-blue-500 text-white"
+                              ? "border border-amber-500/50 bg-[#080808] text-amber-400 hover:bg-amber-950/30"
+                              : "border border-white bg-white hover:bg-zinc-200 text-black font-bold"
                           }`}
                         >
                           [ Assign Role ]
@@ -888,8 +888,8 @@ export function SettingsClient({
       {/* TAB 3: PDF ACCESS & TIGRIS STORAGE TABULAR COLUMN */}
       {/* ──────────────────────────────────────────────────────────── */}
       {activeTab === "pdfs" && (
-        <div className="border border-[#152A54] bg-[#060D1A] overflow-hidden">
-          <div className="px-4 py-3 border-b border-[#152A54] bg-[#030712] flex items-center justify-between">
+        <div className="border border-[#262626] bg-[#0F0F0F] overflow-hidden">
+          <div className="px-4 py-3 border-b border-[#262626] bg-[#080808] flex items-center justify-between">
             <div className="flex items-center gap-2">
               <FileTextIcon className="size-4 text-red-400" />
               <h2 className="text-xs font-bold text-white uppercase tracking-wider">
@@ -906,7 +906,7 @@ export function SettingsClient({
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             <table className="w-full text-left text-xs min-w-[820px]">
-              <thead className="bg-[#03060E] text-[10px] uppercase tracking-wider text-slate-400 border-b border-[#152A54]">
+              <thead className="bg-[#080808] text-[10px] uppercase tracking-wider text-zinc-400 border-b border-[#262626]">
                 <tr>
                   <th className="px-4 py-3">Attendee Name</th>
                   <th className="px-4 py-3">Contact Info</th>
@@ -916,10 +916,10 @@ export function SettingsClient({
                   <th className="px-4 py-3 text-right">Storage Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#152A54]">
+              <tbody className="divide-y divide-[#262626]">
                 {filteredPdfs.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="px-4 py-12 text-center text-slate-500">
+                    <td colSpan={6} className="px-4 py-12 text-center text-zinc-500">
                       &gt; NO_ATTENDEE_DOCUMENTS_FOUND
                     </td>
                   </tr>
@@ -928,25 +928,25 @@ export function SettingsClient({
                     const isCopied = copiedUrl === pdf.collegeIdUrl;
 
                     return (
-                      <tr key={pdf.id} className="hover:bg-[#0B162C] transition-colors">
+                      <tr key={pdf.id} className="hover:bg-[#161616] transition-colors">
                         {/* Name */}
                         <td className="px-4 py-3 font-bold text-white truncate">
                           {pdf.name}
                         </td>
 
                         {/* Contact */}
-                        <td className="px-4 py-3 text-slate-300">
+                        <td className="px-4 py-3 text-zinc-300">
                           <div className="flex flex-col text-[11px]">
                             <span className="text-white font-mono">{pdf.phone}</span>
-                            {pdf.email && <span className="text-slate-400 truncate max-w-[200px]">{pdf.email}</span>}
+                            {pdf.email && <span className="text-zinc-400 truncate max-w-[200px]">{pdf.email}</span>}
                           </div>
                         </td>
 
                         {/* College */}
-                        <td className="px-4 py-3 text-slate-200">
+                        <td className="px-4 py-3 text-zinc-200">
                           <div className="flex flex-col min-w-0 max-w-[240px]">
                             <span className="font-semibold text-white truncate">{pdf.college}</span>
-                            <span className="text-[10px] text-slate-500 truncate">
+                            <span className="text-[10px] text-zinc-500 truncate">
                               {pdf.department || "General"} {pdf.year ? `• Year ${pdf.year}` : ""}
                             </span>
                           </div>
@@ -954,7 +954,7 @@ export function SettingsClient({
 
                         {/* Event */}
                         <td className="px-4 py-3">
-                          <span className="px-2 py-0.5 text-[10px] font-bold text-blue-400 bg-blue-600/15 border border-blue-500/30 uppercase truncate">
+                          <span className="px-2 py-0.5 text-[10px] font-bold text-zinc-300 bg-white/5 border border-[#262626] uppercase truncate">
                             {pdf.eventName}
                           </span>
                         </td>
@@ -970,7 +970,7 @@ export function SettingsClient({
                                 setSelectedPdfForPreview(pdf);
                                 setPreviewPdfOpen(true);
                               }}
-                              className="rounded-none h-7 px-2.5 text-[11px] font-bold text-white bg-blue-600 hover:bg-blue-500 border border-blue-500 transition-colors uppercase cursor-pointer"
+                              className="rounded-none h-7 px-2.5 text-[11px] font-bold text-black bg-white hover:bg-zinc-200 border border-white transition-colors uppercase cursor-pointer"
                             >
                               <EyeIcon className="size-3 mr-1" />
                               <span>Inspect</span>
@@ -981,7 +981,7 @@ export function SettingsClient({
                               href={pdf.collegeIdUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-medium text-slate-400 hover:text-white bg-[#03060E] hover:bg-[#0B162C] border border-[#152A54] transition-colors"
+                              className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-medium text-zinc-400 hover:text-white bg-[#080808] hover:bg-[#161616] border border-[#262626] transition-colors"
                               title="Open raw document in new tab"
                             >
                               <ExternalLinkIcon className="size-3" />
@@ -991,11 +991,11 @@ export function SettingsClient({
                             <button
                               type="button"
                               onClick={() => handleCopyLink(pdf.collegeIdUrl)}
-                              className="p-1 text-slate-400 hover:text-white bg-[#03060E] hover:bg-[#0B162C] border border-[#152A54] transition-colors cursor-pointer"
+                              className="p-1 text-zinc-400 hover:text-white bg-[#080808] hover:bg-[#161616] border border-[#262626] transition-colors cursor-pointer"
                               title="Copy Tigris S3 URL"
                             >
                               {isCopied ? (
-                                <CheckIcon className="size-3 text-emerald-400" />
+                                <CheckIcon className="size-3 text-white" />
                               ) : (
                                 <CopyIcon className="size-3" />
                               )}
