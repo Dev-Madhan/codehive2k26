@@ -10,6 +10,20 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "fly.storage.tigris.dev" },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/auth/signin",
+        destination: "/auth",
+        permanent: true,
+      },
+      {
+        source: "/auth/sign-in",
+        destination: "/auth",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
