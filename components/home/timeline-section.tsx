@@ -9,7 +9,7 @@ const timeline = [
     phase: "PHASE_01",
     date: "OCTOBER 2026",
     title: "Online Registrations & Team Locking",
-    desc: "Team onboarding (1–3 builders) opens online with 100% Free Entry. Select your track: TECH FORGE or AGENT VIBE.",
+    desc: "Team onboarding (strictly 3 builders) opens online with 100% Free Entry. Select your track: TECH FORGE or AGENT VIBE.",
     status: "active",
   },
   {
