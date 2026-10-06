@@ -304,18 +304,18 @@ export function TeamIdUploader({
       {/* Case 1: A PDF is currently selected */}
       {selectedFile ? (
         <div className="space-y-3">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-none border border-white/60 bg-[#080808] shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-none border border-white/60 bg-[#080808] shadow-sm">
             {/* File info */}
             <div className="flex items-center gap-3 min-w-0">
-              <div className="size-11 rounded-none border border-[#404040] bg-[#161616] flex items-center justify-center text-white shrink-0">
-                <FileTextIcon className="size-6" />
+              <div className="size-10 sm:size-11 rounded-none border border-[#404040] bg-[#161616] flex items-center justify-center text-white shrink-0">
+                <FileTextIcon className="size-5 sm:size-6" />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono font-bold text-white uppercase tracking-wider truncate max-w-[220px] sm:max-w-xs">
+                  <span className="text-xs font-mono font-bold text-white uppercase tracking-wider truncate max-w-[180px] xs:max-w-[220px] sm:max-w-xs">
                     {selectedFile.name}
                   </span>
-                  <span className="inline-flex items-center px-1.5 py-0.5 rounded-none border border-[#404040] bg-[#161616] text-[9px] font-mono font-bold text-white">
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded-none border border-[#404040] bg-[#161616] text-[9px] font-mono font-bold text-white shrink-0">
                     PDF
                   </span>
                 </div>
@@ -362,7 +362,7 @@ export function TeamIdUploader({
         <div className="space-y-2">
           <div
             {...getRootProps()}
-            className={`relative flex flex-col items-center justify-center p-5 sm:p-8 text-center border-2 border-dashed transition-all cursor-pointer select-none rounded-none ${
+            className={`relative flex flex-col items-center justify-center p-4 sm:p-8 text-center border-2 border-dashed transition-all cursor-pointer select-none rounded-none ${
               isDragReject
                 ? "border-red-500 bg-red-950/20 text-red-300"
                 : isDragActive
@@ -372,20 +372,27 @@ export function TeamIdUploader({
           >
             <input {...getInputProps()} id={id} disabled={disabled} />
 
-            <div className="size-12 rounded-none border border-[#262626] bg-[#0F0F0F] flex items-center justify-center text-white mb-3 group-hover:scale-105 transition-transform">
-              <UploadCloudIcon className="size-6" />
+            <div className="size-11 sm:size-12 rounded-none border border-[#262626] bg-[#0F0F0F] flex items-center justify-center text-white mb-2.5 sm:mb-3 group-hover:scale-105 transition-transform">
+              <UploadCloudIcon className="size-5 sm:size-6" />
             </div>
 
-            <p className="text-xs font-mono font-bold text-white uppercase tracking-wider mb-1">
-              Drag & Drop Single PDF Here, or{" "}
-              <span className="text-white underline underline-offset-4 font-bold">Browse</span>
+            <p className="text-xs font-mono font-bold text-white uppercase tracking-wider mb-1 px-2">
+              <span className="sm:hidden">Tap to Upload Single PDF (or Browse)</span>
+              <span className="hidden sm:inline">Drag & Drop Single PDF Here, or{" "}
+                <span className="text-white underline underline-offset-4 font-bold">Browse</span>
+              </span>
             </p>
 
-            <p className="text-[11px] font-mono text-neutral-400 max-w-md mt-0.5">
-              The team leader must upload a single PDF containing the collection of ID cards of all team members
+            <p className="text-[11px] font-mono text-neutral-400 max-w-md mt-0.5 px-2">
+              Upload a single PDF containing the ID cards of all 3 team members
             </p>
 
-            <div className="inline-flex items-center gap-2 mt-3 px-2 py-1 rounded-none border border-[#262626] bg-[#0F0F0F] text-[10px] font-mono text-[#A3A3A3]">
+            <div className="sm:hidden mt-3 inline-flex items-center gap-1.5 h-9 px-4 font-mono text-xs font-bold uppercase tracking-wider bg-white text-black border border-white">
+              <UploadCloudIcon className="size-3.5" />
+              <span>Choose PDF File</span>
+            </div>
+
+            <div className="inline-flex items-center gap-2 mt-2.5 sm:mt-3 px-2 py-1 rounded-none border border-[#262626] bg-[#0F0F0F] text-[10px] font-mono text-[#A3A3A3]">
               <span className="font-semibold text-white">PDF FORMAT ONLY</span>
               <span className="text-[#404040]">•</span>
               <span>MAX 10 MB</span>

@@ -21,7 +21,10 @@ function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
   return (
     <SelectPrimitive.Value
       data-slot="select-value"
-      className={cn("flex flex-1 text-left truncate", className)}
+      className={cn(
+        "flex flex-1 text-left min-w-0 overflow-x-auto whitespace-nowrap scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
+        className
+      )}
       {...props}
     />
   )
@@ -40,7 +43,7 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        "flex h-9 w-full min-w-0 items-center justify-between gap-2 rounded-none border border-[#262626] bg-[#080808] px-3 py-1.5 text-xs font-mono text-white whitespace-nowrap shadow-none transition-colors outline-none hover:border-[#404040] hover:bg-[#161616] focus-visible:border-white focus-visible:ring-1 focus-visible:ring-white/40 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-red-500 aria-invalid:ring-1 aria-invalid:ring-red-500/30 data-placeholder:text-slate-500 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 cursor-pointer",
+        "group flex h-9 w-full min-w-0 items-center justify-between gap-2 rounded-none border border-[#262626] bg-[#080808] px-3 py-1.5 text-xs font-mono text-white whitespace-nowrap shadow-none transition-colors outline-none hover:border-[#404040] hover:bg-[#161616] focus-visible:border-white focus-visible:ring-1 focus-visible:ring-white/40 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-red-500 aria-invalid:ring-1 aria-invalid:ring-red-500/30 data-placeholder:text-slate-500 *:data-[slot=select-value]:overflow-x-auto *:data-[slot=select-value]:whitespace-nowrap *:data-[slot=select-value]:scrollbar-none *:data-[slot=select-value]:[scrollbar-width:none] *:data-[slot=select-value]:[-ms-overflow-style:none] *:data-[slot=select-value]:[&::-webkit-scrollbar]:hidden *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 cursor-pointer active:scale-[0.99]",
         size === "sm" && "h-7 text-[11px] px-2.5",
         className
       )}
@@ -49,7 +52,7 @@ function SelectTrigger({
       {children}
       <SelectPrimitive.Icon
         render={
-          <ChevronDownIcon className="pointer-events-none size-3.5 text-[#A3A3A3] group-hover:text-white" />
+          <ChevronDownIcon className="pointer-events-none size-3.5 text-[#A3A3A3] group-hover:text-white transition-transform duration-200 group-data-[popup-open]:rotate-180 group-data-[open]:rotate-180" />
         }
       />
     </SelectPrimitive.Trigger>
@@ -59,6 +62,7 @@ function SelectTrigger({
 function SelectContent({
   className,
   children,
+  header,
   side = "bottom",
   sideOffset = 4,
   align = "start",
@@ -69,7 +73,9 @@ function SelectContent({
   Pick<
     SelectPrimitive.Positioner.Props,
     "align" | "alignOffset" | "side" | "sideOffset" | "alignItemWithTrigger"
-  >) {
+  > & {
+    header?: React.ReactNode
+  }) {
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Positioner
@@ -84,13 +90,23 @@ function SelectContent({
           data-slot="select-content"
           data-align-trigger={alignItemWithTrigger}
           className={cn(
-            "relative isolate z-50 max-h-(--available-height) w-(--anchor-width) min-w-44 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-none border border-[#262626] bg-[#0F0F0F] font-mono text-xs text-white shadow-2xl p-1 ring-1 ring-white/10 duration-100 data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+            "relative isolate z-50 flex flex-col max-h-[min(var(--available-height),380px)] w-(--anchor-width) min-w-[min(100vw-1.5rem,360px)] max-w-[calc(100vw-1rem)] origin-(--transform-origin) overflow-hidden rounded-none border border-[#333333] bg-[#0F0F0F] font-mono text-xs text-white shadow-2xl p-0 ring-1 ring-white/10 duration-100 data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
             className
           )}
           {...props}
         >
+          {header && (
+            <div className="shrink-0 border-b border-[#262626] bg-[#0F0F0F] z-20">
+              {header}
+            </div>
+          )}
           <SelectScrollUpButton />
-          <SelectPrimitive.List>{children}</SelectPrimitive.List>
+          <SelectPrimitive.List
+            data-slot="select-list"
+            className="flex-1 overflow-x-hidden overflow-y-auto overscroll-contain no-scrollbar scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden p-1"
+          >
+            {children}
+          </SelectPrimitive.List>
           <SelectScrollDownButton />
         </SelectPrimitive.Popup>
       </SelectPrimitive.Positioner>
@@ -128,7 +144,7 @@ function SelectItem({
       )}
       {...props}
     >
-      <SelectPrimitive.ItemText className="flex flex-1 shrink-0 gap-2 whitespace-nowrap">
+      <SelectPrimitive.ItemText className="flex flex-1 shrink-0 gap-2 whitespace-nowrap overflow-x-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         {children}
       </SelectPrimitive.ItemText>
       <SelectPrimitive.ItemIndicator

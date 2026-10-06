@@ -91,7 +91,9 @@ export interface RegistrationItem {
       name: string;
       phone: string;
       transportOptIn: boolean;
+      pickupRoute?: string | null;
       pickupStop?: string | null;
+      pickupLandmark?: string | null;
     }[];
   } | null;
   checkIn?: {
@@ -219,13 +221,13 @@ function ParticipantDetailDialog({
                 {/* Entry Type Badge */}
                 <span
                   className={`inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 border ${
-                    team 
-                      ? "border-[#404040] bg-[#161616] text-[#E5E5E5]"
-                      : "border-[#262626] bg-[#161616] text-[#A3A3A3]"
+                    Boolean(team && team.name) 
+                      ? "border-purple-500/40 bg-purple-500/15 text-purple-300"
+                      : "border-sky-500/40 bg-sky-500/15 text-sky-300"
                   }`}
                 >
-                  <UsersIcon className="size-3 shrink-0 text-[#737373]" />
-                  <span>{team ? "TEAM ENTRY" : "SOLO ENTRY"}</span>
+                  <UsersIcon className="size-3 shrink-0" />
+                  <span>{team && team.name ? `TEAM ENTRY (${team.name})` : "INDIVIDUAL ENTRY"}</span>
                 </span>
 
                 {/* Pass Code Badge with copy action */}
@@ -314,8 +316,8 @@ function ParticipantDetailDialog({
               <InfoField
                 icon={<UsersIcon className="size-3 text-[#737373]" />}
                 label="ENTRY TYPE"
-                value={team ? `TEAM (${team.name})` : "INDIVIDUAL (SOLO)"}
-                highlight={!!team}
+                value={team && team.name ? `TEAM (${team.name})` : "INDIVIDUAL"}
+                highlight={Boolean(team && team.name)}
               />
               <InfoField
                 icon={<CalendarCheckIcon className="size-3 text-[#737373]" />}
@@ -453,9 +455,13 @@ function ParticipantDetailDialog({
                           {member.phone}
                         </span>
                       </div>
-                      {member.transportOptIn && (
+                      {member.transportOptIn ? (
                         <span className="text-[9px] text-white font-bold border border-[#262626] bg-[#161616] px-1.5 py-0.5 shrink-0 tracking-wider">
-                          BUS PASS
+                          BUS PASS {member.pickupRoute ? `• ${member.pickupRoute}` : ""}
+                        </span>
+                      ) : (
+                        <span className="text-[9px] text-neutral-400 border border-[#262626] bg-[#0c0c0c] px-1.5 py-0.5 shrink-0 tracking-wider">
+                          OWN TRANSPORT
                         </span>
                       )}
                     </div>
@@ -647,7 +653,7 @@ export function RegistrationsClient({
   const [registrations, setRegistrations] =
     React.useState<RegistrationItem[]>(initialRegistrations);
   const [search, setSearch] = React.useState("");
-  const [filter, setFilter] = React.useState<"ALL" | "CHECKED_IN" | "PENDING" | "BUS">("ALL");
+  const [filter, setFilter] = React.useState<"ALL" | "TEAM" | "INDIVIDUAL" | "CHECKED_IN" | "PENDING" | "BUS">("ALL");
   const [selectedEvent, setSelectedEvent] = React.useState<string>("ALL");
   const [copiedId, setCopiedId] = React.useState<string | null>(null);
 
@@ -879,10 +885,13 @@ export function RegistrationsClient({
         r.participant.college.toLowerCase().includes(q) ||
         r.participant.email.toLowerCase().includes(q) ||
         r.event.name.toLowerCase().includes(q) ||
+        (r.team?.name && r.team.name.toLowerCase().includes(q)) ||
         (r.pickupStop && r.pickupStop.toLowerCase().includes(q));
 
       if (!matchesSearch) return false;
 
+      if (filter === "TEAM") return Boolean(r.team && r.team.name);
+      if (filter === "INDIVIDUAL") return !r.team || !r.team.name;
       if (filter === "CHECKED_IN") return r.checkedIn;
       if (filter === "PENDING") return !r.checkedIn;
       if (filter === "BUS") return r.transportOptIn;
@@ -897,6 +906,8 @@ export function RegistrationsClient({
 
   // Dynamic counts computed directly from real-time registrations
   const totalCount = registrations.length;
+  const teamCount = registrations.filter((r) => Boolean(r.team && r.team.name)).length;
+  const individualCount = totalCount - teamCount;
   const checkedInCount = registrations.filter((r) => r.checkedIn).length;
   const busCount = registrations.filter((r) => r.transportOptIn).length;
 
@@ -1022,23 +1033,41 @@ export function RegistrationsClient({
       </div>
 
       {/* ── Top Metric Cards (Dynamically Live Updated) ── */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-4">
-        <div className="border border-[#262626] bg-[#0F0F0F] p-2.5 sm:p-4">
-          <p className="text-[10px] sm:text-[11px] uppercase tracking-wider text-[#737373]">Total Registered</p>
-          <p className="text-lg sm:text-2xl font-bold text-white mt-0.5 tabular-nums">{totalCount}</p>
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3">
+        <div className="border border-[#262626] bg-[#0F0F0F] p-2.5 sm:p-3">
+          <p className="text-[10px] uppercase tracking-wider text-[#737373]">Total Registered</p>
+          <p className="text-lg sm:text-xl font-bold text-white mt-0.5 tabular-nums">{totalCount}</p>
         </div>
-        <div className="border border-[#262626] bg-[#0F0F0F] p-2.5 sm:p-4">
-          <p className="text-[10px] sm:text-[11px] uppercase tracking-wider text-emerald-400">Verified</p>
-          <p className="text-lg sm:text-2xl font-bold text-emerald-400 mt-0.5 tabular-nums">
+        <div className="border border-[#262626] bg-[#0F0F0F] p-2.5 sm:p-3">
+          <p className="text-[10px] uppercase tracking-wider text-purple-400">Team Entries</p>
+          <p className="text-lg sm:text-xl font-bold text-purple-400 mt-0.5 tabular-nums">
+            {teamCount}
+            <span className="text-[10px] text-[#737373] font-normal ml-1">
+              ({totalCount > 0 ? Math.round((teamCount / totalCount) * 100) : 0}%)
+            </span>
+          </p>
+        </div>
+        <div className="border border-[#262626] bg-[#0F0F0F] p-2.5 sm:p-3">
+          <p className="text-[10px] uppercase tracking-wider text-sky-400">Individual</p>
+          <p className="text-lg sm:text-xl font-bold text-sky-400 mt-0.5 tabular-nums">
+            {individualCount}
+            <span className="text-[10px] text-[#737373] font-normal ml-1">
+              ({totalCount > 0 ? Math.round((individualCount / totalCount) * 100) : 0}%)
+            </span>
+          </p>
+        </div>
+        <div className="border border-[#262626] bg-[#0F0F0F] p-2.5 sm:p-3">
+          <p className="text-[10px] uppercase tracking-wider text-emerald-400">Verified</p>
+          <p className="text-lg sm:text-xl font-bold text-emerald-400 mt-0.5 tabular-nums">
             {checkedInCount}
-            <span className="text-[10px] sm:text-xs text-[#737373] font-normal ml-1">
+            <span className="text-[10px] text-[#737373] font-normal ml-1">
               ({totalCount > 0 ? Math.round((checkedInCount / totalCount) * 100) : 0}%)
             </span>
           </p>
         </div>
-        <div className="border border-[#262626] bg-[#0F0F0F] p-2.5 sm:p-4">
-          <p className="text-[10px] sm:text-[11px] uppercase tracking-wider text-white">Bus Opt-in</p>
-          <p className="text-lg sm:text-2xl font-bold text-white mt-0.5 tabular-nums">{busCount}</p>
+        <div className="border border-[#262626] bg-[#0F0F0F] p-2.5 sm:p-3 col-span-2 sm:col-span-1">
+          <p className="text-[10px] uppercase tracking-wider text-white">Bus Opt-in</p>
+          <p className="text-lg sm:text-xl font-bold text-white mt-0.5 tabular-nums">{busCount}</p>
         </div>
       </div>
 
@@ -1070,6 +1099,8 @@ export function RegistrationsClient({
           <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5 text-xs [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {[
               { id: "ALL", label: `All (${totalCount})` },
+              { id: "TEAM", label: `Team (${teamCount})` },
+              { id: "INDIVIDUAL", label: `Individual (${individualCount})` },
               { id: "CHECKED_IN", label: `Verified (${checkedInCount})` },
               { id: "PENDING", label: `Pending (${totalCount - checkedInCount})` },
               { id: "BUS", label: `Bus (${busCount})` },
@@ -1222,6 +1253,15 @@ export function RegistrationsClient({
 
                   <div className="flex items-center gap-1.5 shrink-0">
                     <span
+                      className={`inline-flex items-center gap-1 text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 border ${
+                        r.team && r.team.name
+                          ? "border-purple-500/40 bg-purple-500/15 text-purple-300"
+                          : "border-sky-500/40 bg-sky-500/15 text-sky-300"
+                      }`}
+                    >
+                      {r.team && r.team.name ? "TEAM" : "INDIVIDUAL"}
+                    </span>
+                    <span
                       className={`inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 border ${
                         r.checkedIn
                           ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-400"
@@ -1254,6 +1294,12 @@ export function RegistrationsClient({
                     <span>{r.participant.name}</span>
                     <UserIcon className="size-3 text-[#737373] group-hover:text-white transition-colors shrink-0" />
                   </button>
+                  {r.team && r.team.name && (
+                    <div className="flex items-center gap-1 text-[11px] text-purple-300 font-bold">
+                      <UsersIcon className="size-3 text-purple-400 shrink-0" />
+                      <span>Team: {r.team.name}</span>
+                    </div>
+                  )}
                   <p className="text-xs text-[#A3A3A3] truncate">{r.participant.email}</p>
                   <div className="flex items-center gap-1.5 text-xs text-[#737373] truncate">
                     <Building2Icon className="size-3 text-[#737373] shrink-0" />
@@ -1314,6 +1360,7 @@ export function RegistrationsClient({
               <th className="px-4 py-3">Reg ID</th>
               <th className="px-4 py-3">Participant</th>
               <th className="px-4 py-3">Event</th>
+              <th className="px-4 py-3">Entry Type</th>
               <th className="px-4 py-3">College</th>
               <th className="px-4 py-3">Transport (6:00 AM)</th>
               <th className="px-4 py-3">Status</th>
@@ -1323,7 +1370,7 @@ export function RegistrationsClient({
           <tbody className="divide-y divide-[#262626]">
             {filteredRegistrations.length === 0 ? (
               <tr>
-                <td colSpan={7} className="text-center py-8 text-[#737373]">
+                <td colSpan={8} className="text-center py-8 text-[#737373]">
                   No registrations found matching the filters.
                 </td>
               </tr>
@@ -1384,6 +1431,27 @@ export function RegistrationsClient({
                       </button>
                     </td>
                     <td className="px-4 py-3 text-[#E5E5E5] font-semibold">{r.event.name}</td>
+                    <td className="px-4 py-3">
+                      {r.team && r.team.name ? (
+                        <div className="flex flex-col gap-0.5">
+                          <span className="inline-flex items-center gap-1 text-[10px] uppercase font-mono font-bold px-1.5 py-0.5 border border-purple-500/40 bg-purple-500/15 text-purple-300 w-fit">
+                            <UsersIcon className="size-2.5 shrink-0" />
+                            TEAM
+                          </span>
+                          <span
+                            className="text-[11px] text-white font-semibold truncate max-w-[130px]"
+                            title={r.team.name}
+                          >
+                            {r.team.name}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-[10px] uppercase font-mono font-bold px-1.5 py-0.5 border border-sky-500/40 bg-sky-500/15 text-sky-300 w-fit">
+                          <UserIcon className="size-2.5 shrink-0" />
+                          INDIVIDUAL
+                        </span>
+                      )}
+                    </td>
                     <td
                       className="px-4 py-3 text-[#A3A3A3] truncate max-w-[180px]"
                       title={r.participant.college}

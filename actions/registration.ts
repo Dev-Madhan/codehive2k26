@@ -112,6 +112,12 @@ export async function createRegistration(
       };
     }
 
+    const finalBusSeats = transportOptIn
+      ? (samePickupForTeam
+          ? teamSizeNum
+          : 1 + members.filter((m) => Boolean(m.transportOptIn)).length)
+      : 0;
+
     // 4. Database Transaction: Create/Update Participant + Team + Registration
     const registrationNumber = generateRegistrationNumber();
     const qrToken = generateQrToken();
@@ -246,14 +252,14 @@ export async function createRegistration(
             ? Boolean(transportOptIn)
             : Boolean(member.transportOptIn);
           const memberRoute = samePickupForTeam
-            ? (transportOptIn ? pickupRoute : null)
-            : (member.transportOptIn ? member.pickupRoute : null);
+            ? (transportOptIn ? pickupRoute : "Own Transportation")
+            : (member.transportOptIn ? member.pickupRoute : "Own Transportation");
           const memberStop = samePickupForTeam
-            ? (transportOptIn ? pickupStop : null)
-            : (member.transportOptIn ? member.pickupStop : null);
+            ? (transportOptIn ? pickupStop : "Direct to Campus")
+            : (member.transportOptIn ? member.pickupStop : "Direct to Campus");
           const memberLandmark = samePickupForTeam
-            ? (transportOptIn ? pickupLandmark : null)
-            : (member.transportOptIn ? member.pickupLandmark : null);
+            ? (transportOptIn ? pickupLandmark : "Self-Arranged")
+            : (member.transportOptIn ? member.pickupLandmark : "Self-Arranged");
 
           await tx.teamMember.create({
             data: {
@@ -285,7 +291,7 @@ export async function createRegistration(
           pickupRoute: transportOptIn ? pickupRoute : null,
           pickupStop: transportOptIn ? pickupStop : null,
           pickupLandmark: transportOptIn ? pickupLandmark : null,
-          passengersCount: teamSizeNum,
+          passengersCount: finalBusSeats,
         },
       });
 
@@ -341,8 +347,7 @@ export async function createRegistration(
       samePickupForTeam: Boolean(samePickupForTeam),
       pickupRoute: transportOptIn ? pickupRoute : null,
       pickupStop: transportOptIn ? pickupStop : null,
-      pickupLandmark: transportOptIn ? pickupLandmark : null,
-      passengersCount: teamSizeNum,
+      passengersCount: finalBusSeats,
     }).catch((err) => console.error("Email notification dispatch error:", err));
 
     revalidatePath("/admin/registrations");
@@ -377,7 +382,7 @@ export async function createRegistration(
         pickupRoute: transportOptIn ? pickupRoute : null,
         pickupStop: transportOptIn ? pickupStop : null,
         pickupLandmark: transportOptIn ? pickupLandmark : null,
-        passengersCount: teamSizeNum,
+        passengersCount: finalBusSeats,
         teamMembers: members.map((m) => ({
           name: m.name,
           phone: m.phone,

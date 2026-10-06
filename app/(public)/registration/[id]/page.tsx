@@ -47,10 +47,10 @@ export default async function RegistrationViewPage({ params }: Props) {
   return (
     <div className="min-h-screen bg-black text-white font-sans selection:bg-white selection:text-black">
       <Header />
-      <main className="max-w-xl mx-auto px-4 py-10 sm:py-16">
+      <main className="max-w-xl mx-auto px-3 sm:px-4 py-6 sm:py-16">
         
         {/* Real-Time Digital Entry Pass Card */}
-        <div className="relative rounded-none border border-[#262626] bg-[#080808] p-6 sm:p-8 shadow-2xl space-y-6 text-center">
+        <div className="relative rounded-none border border-[#262626] bg-[#080808] p-4 sm:p-7 md:p-8 shadow-2xl space-y-5 sm:space-y-6 text-center">
           
           {/* Top Status Header */}
           <div className="border-b border-[#262626] pb-5 space-y-2">
@@ -150,29 +150,63 @@ export default async function RegistrationViewPage({ params }: Props) {
                   <span>Vel Tech Bus Transit Pass</span>
                 </div>
                 <span className="text-[10px] font-bold text-white px-2 py-0.5 border border-[#404040] bg-[#161616]">
-                  6:00 AM ONWARDS
+                  {registration.passengersCount} SEAT{registration.passengersCount > 1 ? "S" : ""} RESERVED
                 </span>
               </div>
 
-              <div className="space-y-1.5 text-xs">
-                <div>
-                  <span className="text-neutral-400 uppercase text-[10px] block">Designated Route Corridor:</span>
-                  <strong className="text-white">{registration.pickupRoute || "Vel Tech Campus Network"}</strong>
+              {registration.samePickupForTeam || !registration.team || registration.team.members.length === 0 ? (
+                <div className="space-y-1.5 text-xs">
+                  <div>
+                    <span className="text-neutral-400 uppercase text-[10px] block">Designated Route Corridor:</span>
+                    <strong className="text-white">{registration.pickupRoute || "Vel Tech Campus Network"}</strong>
+                  </div>
+                  <div>
+                    <span className="text-neutral-400 uppercase text-[10px] block">Boarding Stop &amp; Exact Landmark:</span>
+                    <span className="text-white font-semibold">{registration.pickupStop}</span>
+                    <span className="text-neutral-400"> &bull; {registration.pickupLandmark}</span>
+                  </div>
+                  <p className="text-[10px] text-neutral-400 pt-1 leading-relaxed border-t border-[#262626] mt-1">
+                    Advisory: Vel Tech buses commence pickup from 05:45 AM onwards. Please report to your boarding stop 10 minutes prior to scheduled pickup time.
+                  </p>
                 </div>
-                <div>
-                  <span className="text-neutral-400 uppercase text-[10px] block">Boarding Stop &amp; Exact Landmark:</span>
-                  <span className="text-white font-semibold">{registration.pickupStop}</span>
-                  <span className="text-neutral-400"> &bull; {registration.pickupLandmark}</span>
+              ) : (
+                <div className="space-y-2 divide-y divide-[#262626] text-xs">
+                  <div className="space-y-0.5">
+                    <span className="font-bold text-white">Leader ({registration.participant.name}):</span>
+                    <p className="text-neutral-300">{registration.pickupRoute} &gt; {registration.pickupStop}</p>
+                    <p className="text-[10px] text-[#737373]">Landmark: {registration.pickupLandmark}</p>
+                  </div>
+                  {registration.team.members.map((member, idx) => (
+                    <div key={member.id} className="pt-2 space-y-0.5">
+                      <span className="font-bold text-neutral-300">Member {idx + 2} ({member.name}):</span>
+                      {member.transportOptIn ? (
+                        <>
+                          <p className="text-neutral-300">{member.pickupRoute} &gt; {member.pickupStop}</p>
+                          <p className="text-[10px] text-[#737373]">Landmark: {member.pickupLandmark}</p>
+                        </>
+                      ) : (
+                        <div className="pt-0.5">
+                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-mono font-bold uppercase text-white bg-[#161616] border border-[#262626]">
+                            🚗 Own Transport (Self-Arranged Commute)
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                  <p className="text-[10px] text-neutral-400 pt-2 leading-relaxed border-t border-[#262626]">
+                    Advisory: Vel Tech buses commence pickup from 05:45 AM onwards. Please report to your boarding stop 10 minutes prior to scheduled pickup time.
+                  </p>
                 </div>
-                <p className="text-[10px] text-neutral-400 pt-1 leading-relaxed border-t border-[#262626] mt-1">
-                  Advisory: Vel Tech buses operate from 6:00 AM onwards. Report to your boarding landmark by 06:00 AM sharp.
-                </p>
-              </div>
+              )}
             </div>
           ) : (
             <div className="border border-[#262626] bg-[#0F0F0F] p-3 text-left font-mono text-xs text-neutral-400">
               <span className="text-[#737373] uppercase text-[10px] block">Transportation:</span>
-              <span>Self-Arranged Commute (Direct to Vel Tech Campus)</span>
+              <div className="flex items-center gap-2 mt-1">
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-mono font-bold uppercase text-white bg-[#161616] border border-[#262626]">
+                  🚗 Own Transportation (Direct to Campus)
+                </span>
+              </div>
             </div>
           )}
 
