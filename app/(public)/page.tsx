@@ -8,6 +8,7 @@ import { PrizesSection } from "@/components/home/prizes-section";
 import { SponsorsSection } from "@/components/home/sponsors-section";
 import { FaqSection } from "@/components/home/faq-section";
 import { Footer } from "@/components/home/footer";
+import { LocationSection } from "@/components/home/location-section";
 import { getEvents } from "@/actions/event";
 
 export default async function Home() {
@@ -47,7 +48,9 @@ export default async function Home() {
             </span>
           </h1>
           <p className="font-mono text-xs sm:text-sm md:text-base font-bold tracking-widest text-[#A3A3A3] uppercase text-center mx-auto">
-            IDEAS × CODE × IMPACT • ₹20,000 PRIZE POOL
+            <span className="block sm:inline">IDEAS × CODE × IMPACT</span>
+            <span className="hidden sm:inline mx-1.5">•</span>
+            <span className="block sm:inline mt-1 sm:mt-0">₹20,000 PRIZE POOL</span>
           </p>
         </div>
 
@@ -66,6 +69,7 @@ export default async function Home() {
       <PrizesSection />
       <SponsorsSection />
       <FaqSection />
+      <LocationSection />
       <Footer />
     </div>
   );

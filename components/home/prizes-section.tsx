@@ -65,7 +65,7 @@ const perks = [
     icon: UsersIcon,
     tag: "// EVALUATION",
     title: "INDUSTRY JURY",
-    desc: "Live project evaluation by engineers from Sri Vensy Technologies & BIC.",
+    desc: "Live project evaluation by engineers from Sri Vensy Technologies.",
   },
 ];
 

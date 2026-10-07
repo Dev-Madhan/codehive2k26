@@ -26,8 +26,8 @@ const highlights = [
   },
   {
     tag: "EVALUATION",
-    title: "INDUSTRY PARTNERS",
-    desc: "Mentored and evaluated by engineers from Sri Vensy Technologies & BIC.",
+    title: "INDUSTRY PARTNER",
+    desc: "Mentored and evaluated by engineers from Sri Vensy Technologies.",
     icon: ShieldCheckIcon,
   },
 ];
