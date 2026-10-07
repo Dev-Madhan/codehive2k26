@@ -27,7 +27,7 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: "CodeHive 2K26 2.0 — National Level Hackathon | Ideas × Code × Impact",
   description:
-    "Official platform for CodeHive 2K26 2.0 National Level Hackathon on 23 & 24 October 2026 by Dept of CSBS, Vel Tech Multi Tech, in association with Sri Vensy Technologies & Business Intelligence Club.",
+    "Official platform for CodeHive 2K26 2.0 National Level Hackathon on 23 & 24 October 2026 by Dept of CSBS, Vel Tech Multi Tech, in association with Sri Vensy Technologies.",
 };
 
 export default function RootLayout({

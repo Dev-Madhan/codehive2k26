@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { Logo } from "@/components/logo";
 import {
   Sidebar,
   SidebarContent,
@@ -80,18 +81,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     >
       {/* Brand Header with Mobile Dismiss */}
       <SidebarHeader className="border-b border-[#262626] p-3 flex flex-row items-center justify-between">
-        <Link
+        <Logo
+          size="sm"
+          context="sidebar"
           href="/dashboard"
+          priority={false}
           onClick={() => {
             if (isMobile) setOpenMobile(false);
           }}
-          className="flex items-center gap-1 font-mono p-1 hover:bg-[#161616] transition-colors"
-        >
-          <span className="text-white font-extrabold text-sm">&gt;</span>
-          <span className="font-bold text-white text-sm">code</span>
-          <span className="font-bold text-white text-sm">hive</span>
-          <span className="text-[10px] text-[#737373] ml-1">2K26</span>
-        </Link>
+        />
 
         {isMobile && (
           <button

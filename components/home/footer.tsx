@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Logo } from "@/components/logo";
 import { ArrowRightIcon, GlobeIcon, XIcon, Share2Icon, ExternalLinkIcon } from "lucide-react";
 
 const footerLinks = [
@@ -68,17 +69,18 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10">
           {/* Brand & Department */}
           <div className="lg:col-span-2">
-            <Link href="/" className="inline-flex items-center gap-1.5 font-mono font-bold text-base tracking-tight text-white hover:opacity-90 transition-opacity mb-3">
-              <span className="text-white font-extrabold">&gt;</span>
-              <span>code</span>
-              <span className="text-white">hive</span>
-              <span className="text-[11px] text-[#737373] font-mono">_2k26 2.0</span>
-            </Link>
+            <Logo
+              size="lg"
+              context="footer"
+              href="/"
+              priority={false}
+              className="mb-3"
+            />
             <p className="text-xs text-neutral-400 leading-relaxed mb-3 max-w-sm font-sans">
               Department of Computer Science and Business Systems, Vel Tech Multi Tech Dr. Rangarajan Dr. Sakunthala Engineering College (Autonomous, NBA &amp; NAAC &apos;A&apos; Grade).
             </p>
             <p className="font-mono text-[11px] text-[#737373] uppercase tracking-wider mb-4">
-              In association with Sri Vensy Technologies Pvt Ltd &amp; Business Intelligence Club
+              In association with Sri Vensy Technologies Pvt Ltd
             </p>
 
             <a
@@ -136,12 +138,20 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 pt-6 border-t border-[#262626] flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="font-mono text-[10px] uppercase tracking-widest text-[#737373]">
-            © 2026 CODEHIVE 2K26 2.0 • VEL TECH MULTI TECH (CSBS). ALL RIGHTS RESERVED.
+        <div className="mt-12 pt-6 border-t border-[#262626] flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4 text-center sm:text-left">
+          <p className="font-mono text-[10px] sm:text-[11px] uppercase tracking-wider text-[#737373] leading-normal">
+            © 2026 CODEHIVE 2K26 • VEL TECH MULTI TECH
           </p>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-[#737373]">
-            IDEAS × CODE × IMPACT
+          <p className="font-mono text-[10px] sm:text-[11px] uppercase tracking-wider text-[#737373] leading-normal">
+            ALL RIGHTS RESERVED BY{" "}
+            <a
+              href="https://www.instagram.com/mxddy.ex/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white hover:text-neutral-300 font-bold transition-colors"
+            >
+              MADDY
+            </a>
           </p>
         </div>
       </div>

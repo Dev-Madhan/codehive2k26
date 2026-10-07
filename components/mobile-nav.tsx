@@ -9,6 +9,7 @@ import { navLinks } from "@/components/header";
 import { XIcon, MenuIcon, LogOutIcon } from "lucide-react";
 import { useSession, signOut } from "@/lib/auth-client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Logo } from "@/components/logo";
 
 export function MobileNav() {
   const [open, setOpen] = React.useState(false);
@@ -39,6 +40,18 @@ export function MobileNav() {
             )}
             data-slot={open ? "open" : "closed"}
           >
+            <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#262626]">
+              <Logo
+                size="sm"
+                context="mobile-nav"
+                href="/"
+                onClick={() => setOpen(false)}
+                priority={false}
+              />
+              <span className="font-mono text-[10px] text-[#737373] uppercase tracking-widest">
+                MENU
+              </span>
+            </div>
             {session?.user && (
               <div className="flex items-center gap-3 p-3 mb-4 rounded-none border border-[#262626] bg-[#0F0F0F]">
                 <Avatar className="size-9 rounded-none border border-[#404040]">

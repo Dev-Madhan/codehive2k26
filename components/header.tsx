@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { MobileNav } from "@/components/mobile-nav";
 import { useSession } from "@/lib/auth-client";
 import { DropdownMenuAvatar } from "@/components/dropdown-menu-avatar";
+import { Logo } from "@/components/logo";
 
 export const navLinks = [
   {
@@ -29,16 +30,8 @@ export function Header() {
       )}
     >
       <div className="max-w-7xl mx-auto flex h-14 items-center justify-between px-4 sm:px-6">
-        {/* Logo / Prompt */}
-        <Link
-          className="flex items-center gap-1.5 font-mono font-bold text-base tracking-tight text-white hover:opacity-90 transition-opacity"
-          href="/"
-        >
-          <span className="text-white font-extrabold">&gt;</span>
-          <span>code</span>
-          <span className="text-white">hive</span>
-          <span className="text-[11px] text-[#737373] font-mono">_2k26</span>
-        </Link>
+        {/* Brand Logo */}
+        <Logo size="md" context="header" priority />
 
         {/* Centered navigation links */}
         <nav className="hidden items-center gap-1 md:flex">
