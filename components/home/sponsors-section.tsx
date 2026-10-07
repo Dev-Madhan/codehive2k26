@@ -90,7 +90,7 @@ export function SponsorsSection() {
                     [ 01 // TITLE INDUSTRY PARTNER ]
                   </span>
                   <span className="font-mono text-[8px] sm:text-[9px] px-1.5 sm:px-2 py-0.5 border border-[#333333] bg-[#141414] text-white uppercase tracking-wider font-bold shrink-0">
-                    PRIMARY PARTNER
+                    PARTNER
                   </span>
                 </div>
 
