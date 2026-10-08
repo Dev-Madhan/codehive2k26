@@ -389,9 +389,9 @@ export function EventCard({ event }: EventCardProps) {
               <Link
                 href={`/events/${sisterEvent.slug}#register`}
                 onClick={() => setDialogOpen(false)}
-                className="group/cta w-full h-11 sm:h-12 bg-white hover:bg-neutral-200 text-black font-mono text-xs uppercase font-bold tracking-wider border border-white flex items-center justify-center gap-2 transition-all active:scale-[0.99] cursor-pointer"
+                className="group/cta w-full h-11 sm:h-12 px-3 sm:px-4 bg-white hover:bg-neutral-200 text-black font-mono text-xs uppercase font-bold tracking-wider border border-white flex items-center justify-center gap-2 transition-all active:scale-[0.99] cursor-pointer whitespace-nowrap"
               >
-                <span>Register for {sisterEvent.name} Now</span>
+                <span>Register Now</span>
                 <ArrowRightIcon className="size-3.5 group-hover/cta:translate-x-1 transition-transform" />
               </Link>
 

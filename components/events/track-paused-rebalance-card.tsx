@@ -117,15 +117,15 @@ export function TrackPausedRebalanceCard({
         <div className="pt-3 sm:pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full">
           <Link
             href={`/events/${sisterTrack.slug}#register`}
-            className="group/cta w-full sm:flex-1 py-3.5 sm:py-4 px-5 sm:px-6 min-h-[48px] sm:min-h-[50px] bg-white hover:bg-neutral-200 text-black font-mono text-xs sm:text-sm uppercase font-bold tracking-wider border border-white flex items-center justify-center gap-2.5 transition-all duration-150 active:scale-[0.98] text-center cursor-pointer shadow-md select-none"
+            className="group/cta w-full sm:flex-1 py-3.5 sm:py-4 px-4 sm:px-6 min-h-[48px] sm:min-h-[50px] bg-white hover:bg-neutral-200 text-black font-mono text-xs sm:text-sm uppercase font-bold tracking-wider border border-white flex items-center justify-center gap-2 sm:gap-2.5 transition-all duration-150 active:scale-[0.98] text-center cursor-pointer shadow-md select-none whitespace-nowrap"
           >
-            <span>Register for {sisterTrack.name} Now</span>
+            <span>Register Now</span>
             <ArrowRightIcon className="size-4 shrink-0 group-hover/cta:translate-x-1 transition-transform" />
           </Link>
 
           <Link
             href="/events"
-            className="group/all w-full sm:w-auto py-3.5 sm:py-4 px-5 sm:px-6 min-h-[48px] sm:min-h-[50px] bg-[#141414] hover:bg-[#1E1E1E] text-neutral-300 hover:text-white font-mono text-xs sm:text-sm uppercase font-bold tracking-wider border border-[#333333] hover:border-neutral-500 flex items-center justify-center gap-2 transition-all duration-150 active:scale-[0.98] text-center cursor-pointer select-none"
+            className="group/all w-full sm:w-auto py-3.5 sm:py-4 px-4 sm:px-6 min-h-[48px] sm:min-h-[50px] bg-[#141414] hover:bg-[#1E1E1E] text-neutral-300 hover:text-white font-mono text-xs sm:text-sm uppercase font-bold tracking-wider border border-[#333333] hover:border-neutral-500 flex items-center justify-center gap-2 transition-all duration-150 active:scale-[0.98] text-center cursor-pointer select-none whitespace-nowrap"
           >
             <span>Browse All Tracks</span>
             <ArrowRightIcon className="size-3.5 shrink-0 text-neutral-500 group-hover/all:text-neutral-300 group-hover/all:translate-x-0.5 transition-all" />
