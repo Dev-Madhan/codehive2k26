@@ -21,7 +21,9 @@ export interface DashboardEventItem {
   type: string;
   categorySlug: string;
   status: string;
-  venue: string;
+  venue?: string;
+  headcount: number;
+  candidateCount?: number;
   isTeamEvent: boolean;
   minTeamSize: number;
   maxTeamSize: number;

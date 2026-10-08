@@ -451,6 +451,29 @@ export function RegistrationForm({
 
     try {
       // ─────────────────────────────────────────────────────────────
+      // STEP 0: Realtime pre-flight gate check
+      // ─────────────────────────────────────────────────────────────
+      try {
+        const gateRes = await fetch(`/api/events/gate?eventId=${eventId}`, { cache: "no-store" });
+        if (gateRes.ok) {
+          const gateData = await gateRes.json();
+          if (gateData.success && gateData.data && !gateData.data.isOpen) {
+            setError(
+              `Registrations for ${eventName} were just paused by organizers to balance track capacity. Please register for our sister track.`
+            );
+            toast.warning(`Slots Paused for ${eventName}`, {
+              description: "Track capacity has been reached. Please check the sister track.",
+            });
+            setLoading(false);
+            setUploadStep(null);
+            return;
+          }
+        }
+      } catch {
+        // Fallback to server action check
+      }
+
+      // ─────────────────────────────────────────────────────────────
       // STEP 1: Upload the single PDF to Tigris Storage
       // ─────────────────────────────────────────────────────────────
       setUploadStep("Uploading ID cards document...");

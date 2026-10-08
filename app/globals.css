@@ -495,10 +495,13 @@
 
 /* ============================================================
    SCROLLBAR UTILITIES
-   Hides scrollbars completely while preserving full scrollability
+   1. .no-scrollbar / .scrollbar-none: Hides scrollbars completely while preserving full scrollability
+   2. .dialog-scrollbar / .custom-scrollbar: Ultra-thin 4px Brutalist dark themed scrollbar
    ============================================================ */
 .no-scrollbar::-webkit-scrollbar,
 .scrollbar-none::-webkit-scrollbar,
+.no-scrollbar *::-webkit-scrollbar,
+[data-slot="dialog-content"].no-scrollbar::-webkit-scrollbar,
 [data-slot="select-content"]::-webkit-scrollbar,
 [data-slot="select-content"] *::-webkit-scrollbar,
 [data-slot="select-popup"]::-webkit-scrollbar,
@@ -513,6 +516,8 @@
 
 .no-scrollbar,
 .scrollbar-none,
+.no-scrollbar *,
+[data-slot="dialog-content"].no-scrollbar,
 [data-slot="select-content"],
 [data-slot="select-content"] *,
 [data-slot="select-popup"],
@@ -521,6 +526,36 @@
 [data-slot="select-list"] * {
   -ms-overflow-style: none !important; /* IE and Edge */
   scrollbar-width: none !important; /* Firefox */
+}
+
+/* Customized Themed Dialog Scrollbar (Brutalist Dark) */
+.dialog-scrollbar::-webkit-scrollbar,
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px !important;
+  height: 4px !important;
+}
+
+.dialog-scrollbar::-webkit-scrollbar-track,
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #0A0A0A !important;
+  border-left: 1px solid #1C1C1C !important;
+}
+
+.dialog-scrollbar::-webkit-scrollbar-thumb,
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #2E2E2E !important;
+  border-radius: 0px !important;
+}
+
+.dialog-scrollbar::-webkit-scrollbar-thumb:hover,
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #525252 !important;
+}
+
+.dialog-scrollbar,
+.custom-scrollbar {
+  scrollbar-width: thin !important;
+  scrollbar-color: #2E2E2E #0A0A0A !important;
 }
 
 /* Hide MapLibre / Carto attribution watermark & info button */
