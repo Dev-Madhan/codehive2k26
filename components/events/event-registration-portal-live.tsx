@@ -100,6 +100,32 @@ export function EventRegistrationPortalLive({
     };
   }, [checkLiveGate]);
 
+  // Auto-scroll to registration portal when page is loaded with #register hash
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const scrollToRegister = () => {
+      if (window.location.hash === "#register" || window.location.hash === "#registration-portal") {
+        const el = document.getElementById("register") || document.getElementById("registration-portal");
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+    };
+
+    // Attempt immediately and after brief delays to handle client hydration & suspense
+    scrollToRegister();
+    const t1 = setTimeout(scrollToRegister, 150);
+    const t2 = setTimeout(scrollToRegister, 400);
+
+    window.addEventListener("hashchange", scrollToRegister);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      window.removeEventListener("hashchange", scrollToRegister);
+    };
+  }, []);
+
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Header Portal Strip */}

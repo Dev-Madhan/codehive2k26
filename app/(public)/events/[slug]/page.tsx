@@ -164,7 +164,7 @@ export default async function EventDetailPage({ params }: Props) {
         <EventInstructions slug={slug} eventName={event.name} />
 
         {/* Registration Section */}
-        <div className="relative border border-[#262626] bg-[#0A0A0A] p-3.5 sm:p-7 md:p-8">
+        <div id="register" className="relative border border-[#262626] bg-[#0A0A0A] p-3.5 sm:p-7 md:p-8 scroll-mt-14 sm:scroll-mt-20">
           {/* Corner accents */}
           <div className="absolute top-0 right-0 w-2.5 sm:w-3 h-2.5 sm:h-3 border-t border-r border-[#333333] pointer-events-none !m-0" />
           <div className="absolute bottom-0 left-0 w-2.5 sm:w-3 h-2.5 sm:h-3 border-b border-l border-[#333333] pointer-events-none !m-0" />
