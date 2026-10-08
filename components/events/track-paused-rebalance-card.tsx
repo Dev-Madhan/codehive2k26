@@ -113,21 +113,22 @@ export function TrackPausedRebalanceCard({
           ))}
         </div>
 
-        {/* Action Button */}
-        <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        {/* Action Buttons */}
+        <div className="pt-3 sm:pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full">
           <Link
-            href={`/events/${sisterTrack.slug}`}
-            className="flex-1 inline-flex items-center justify-center gap-2 h-12 bg-white hover:bg-neutral-200 text-black font-mono text-xs uppercase font-bold tracking-wider border border-white transition-all duration-150 active:scale-[0.99] text-center"
+            href={`/events/${sisterTrack.slug}#register`}
+            className="group/cta w-full sm:flex-1 py-3.5 sm:py-4 px-5 sm:px-6 min-h-[48px] sm:min-h-[50px] bg-white hover:bg-neutral-200 text-black font-mono text-xs sm:text-sm uppercase font-bold tracking-wider border border-white flex items-center justify-center gap-2.5 transition-all duration-150 active:scale-[0.98] text-center cursor-pointer shadow-md select-none"
           >
-            <span>[ Register for {sisterTrack.name} Now ]</span>
-            <ArrowRightIcon className="size-4" />
+            <span>Register for {sisterTrack.name} Now</span>
+            <ArrowRightIcon className="size-4 shrink-0 group-hover/cta:translate-x-1 transition-transform" />
           </Link>
 
           <Link
             href="/events"
-            className="inline-flex items-center justify-center gap-2 h-12 px-6 bg-[#141414] hover:bg-[#1E1E1E] text-neutral-300 hover:text-white font-mono text-xs uppercase font-bold border border-[#333333] transition-colors text-center"
+            className="group/all w-full sm:w-auto py-3.5 sm:py-4 px-5 sm:px-6 min-h-[48px] sm:min-h-[50px] bg-[#141414] hover:bg-[#1E1E1E] text-neutral-300 hover:text-white font-mono text-xs sm:text-sm uppercase font-bold tracking-wider border border-[#333333] hover:border-neutral-500 flex items-center justify-center gap-2 transition-all duration-150 active:scale-[0.98] text-center cursor-pointer select-none"
           >
-            <span>[ Browse All Tracks ]</span>
+            <span>Browse All Tracks</span>
+            <ArrowRightIcon className="size-3.5 shrink-0 text-neutral-500 group-hover/all:text-neutral-300 group-hover/all:translate-x-0.5 transition-all" />
           </Link>
         </div>
       </div>

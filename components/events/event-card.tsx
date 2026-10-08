@@ -387,7 +387,7 @@ export function EventCard({ event }: EventCardProps) {
             {/* Quick Actions */}
             <div className="space-y-2 pt-1">
               <Link
-                href={`/events/${sisterEvent.slug}`}
+                href={`/events/${sisterEvent.slug}#register`}
                 onClick={() => setDialogOpen(false)}
                 className="group/cta w-full h-11 sm:h-12 bg-white hover:bg-neutral-200 text-black font-mono text-xs uppercase font-bold tracking-wider border border-white flex items-center justify-center gap-2 transition-all active:scale-[0.99] cursor-pointer"
               >
