@@ -127,8 +127,27 @@ export default async function DashboardPage() {
     }))
     .sort((a, b) => a.date.localeCompare(b.date));
 
-  // Transform events for DataTable with zero limit/capacity references
-  const tableData: DashboardEventItem[] = events.map((ev, index) => {
+  // Compute physical candidate headcount for each event
+  const eventsWithHeadcount = await Promise.all(
+    events.map(async (ev) => {
+      const [teamMembersCount, soloRegistrationsCount] = await Promise.all([
+        prisma.teamMember.count({
+          where: { team: { eventId: ev.id } },
+        }),
+        prisma.registration.count({
+          where: { eventId: ev.id, teamId: null },
+        }),
+      ]);
+      const candidateCount = teamMembersCount + soloRegistrationsCount;
+      return {
+        ...ev,
+        candidateCount,
+      };
+    })
+  );
+
+  // Transform events for DataTable with live headcount
+  const tableData: DashboardEventItem[] = eventsWithHeadcount.map((ev, index) => {
     let teamFormat = "Solo Entry";
     if (ev.isTeamEvent) {
       teamFormat =
@@ -145,7 +164,9 @@ export default async function DashboardPage() {
       type: ev.category?.name || "Technical",
       categorySlug: ev.category?.slug || "technical",
       status: ev.status === "PUBLISHED" ? "Open" : ev.status.replace("_", " "),
-      venue: ev.venue || "Palani Murugan Hall of Fame, Vel Tech Multi Tech",
+      venue: ev.venue || "Vel Tech Multi Tech",
+      headcount: ev.candidateCount,
+      candidateCount: ev.candidateCount,
       isTeamEvent: ev.isTeamEvent,
       minTeamSize: ev.minTeamSize,
       maxTeamSize: ev.maxTeamSize,
@@ -172,7 +193,7 @@ export default async function DashboardPage() {
         <SiteHeader />
         <div className="flex flex-1 flex-col max-w-full">
           <div className="@container/main flex flex-1 flex-col gap-2 max-w-full">
-            <div className="flex flex-col gap-3.5 py-3 sm:gap-6 sm:py-6 max-w-full">
+            <div className="flex flex-col gap-2.5 py-2.5 sm:gap-3.5 sm:py-4 max-w-full">
               <SectionCards stats={stats} />
               <div className="px-3 sm:px-4 lg:px-6 max-w-full">
                 <ChartAreaInteractive data={chartData} />

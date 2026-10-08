@@ -1,10 +1,9 @@
-import { Suspense } from "react";
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { getEventBySlug } from "@/actions/event";
-import { RegistrationForm } from "@/components/registration/registration-form";
-import { RegistrationFormSkeleton } from "@/components/registration/registration-skeleton";
 import { EventInstructions } from "@/components/events/event-instructions";
+import { EventGateLiveBadge } from "@/components/events/event-gate-live-badge";
+import { EventRegistrationPortalLive } from "@/components/events/event-registration-portal-live";
 import { formatDate } from "@/utils/formatters";
 import { notFound } from "next/navigation";
 import { CalendarIcon, MapPinIcon, UsersIcon, ArrowLeftIcon, TicketIcon } from "lucide-react";
@@ -25,6 +24,10 @@ export default async function EventDetailPage({ params }: Props) {
   }
 
   const event = result.data as any;
+  const isRegistrationOpen =
+    event.registrationOpen !== false &&
+    event.status !== "REGISTRATION_CLOSED" &&
+    new Date() <= new Date(event.registrationDeadline);
 
   return (
     <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black">
@@ -42,10 +45,7 @@ export default async function EventDetailPage({ params }: Props) {
             <span className="sm:hidden">[ Events ]</span>
           </Link>
 
-          <div className="flex items-center gap-1.5 sm:gap-2 font-mono text-[10px] sm:text-[11px] text-emerald-400 font-bold shrink-0">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span>OPEN // FREE ENTRY</span>
-          </div>
+          <EventGateLiveBadge initialIsOpen={isRegistrationOpen} eventSlug={slug} />
         </div>
 
         {/* Event Header Banner */}
@@ -169,38 +169,14 @@ export default async function EventDetailPage({ params }: Props) {
           <div className="absolute top-0 right-0 w-2.5 sm:w-3 h-2.5 sm:h-3 border-t border-r border-[#333333] pointer-events-none !m-0" />
           <div className="absolute bottom-0 left-0 w-2.5 sm:w-3 h-2.5 sm:h-3 border-b border-l border-[#333333] pointer-events-none !m-0" />
 
-          <div className="space-y-4 sm:space-y-6">
-            <div className="border-b border-[#262626] pb-3 sm:pb-4 flex flex-col xs:flex-row xs:items-center justify-between gap-1.5 sm:gap-2">
-              <div>
-                <span className="font-mono text-[9px] sm:text-[10px] uppercase tracking-widest text-[#737373]">
-                  // STEP 02
-                </span>
-                <h2 className="text-base sm:text-2xl font-mono font-black text-white uppercase tracking-tight mt-0.5">
-                  REGISTRATION PORTAL
-                </h2>
-                <p className="hidden sm:block text-xs text-neutral-400 font-sans mt-0.5 sm:mt-1">
-                  Complete official squad registration. All 3 builders&apos; details (Leader + Members 02 &amp; 03) and merged College ID document are strictly mandatory.
-                </p>
-              </div>
-              <div className="flex items-center gap-1.5 self-start xs:self-auto shrink-0">
-                <span className="text-[9px] sm:text-[10px] font-mono font-bold uppercase px-2 py-0.5 border border-emerald-500/40 bg-emerald-500/10 text-emerald-400">
-                  ALL 3 BUILDERS REQUIRED
-                </span>
-                <span className="text-[9px] sm:text-[10px] font-mono font-bold uppercase px-2 py-0.5 border border-[#404040] bg-[#161616] text-neutral-200">
-                  FREE PASS
-                </span>
-              </div>
-            </div>
-            
-            <Suspense fallback={<RegistrationFormSkeleton />}>
-              <RegistrationForm
-                eventId={event.id}
-                eventName={event.name}
-                minTeamSize={event.minTeamSize}
-                maxTeamSize={event.maxTeamSize}
-              />
-            </Suspense>
-          </div>
+          <EventRegistrationPortalLive
+            initialIsOpen={isRegistrationOpen}
+            eventId={event.id}
+            eventName={event.name}
+            eventSlug={slug}
+            minTeamSize={event.minTeamSize}
+            maxTeamSize={event.maxTeamSize}
+          />
         </div>
       </main>
     </div>

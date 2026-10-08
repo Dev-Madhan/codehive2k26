@@ -26,6 +26,7 @@ interface RealEventItem {
   teamSize: string;
   venue: string;
   status: string;
+  isOpen: boolean;
   href: string;
 }
 
@@ -43,6 +44,7 @@ const REAL_EVENTS: RealEventItem[] = [
     teamSize: "Team of 3",
     venue: "Palani Murugan Hall of Fame",
     status: "OPEN",
+    isOpen: true,
     href: "/events/techforge-2026",
   },
   {
@@ -58,6 +60,7 @@ const REAL_EVENTS: RealEventItem[] = [
     teamSize: "Team of 3",
     venue: "Palani Murugan Hall of Fame",
     status: "OPEN",
+    isOpen: true,
     href: "/events/agentvibe-2026",
   },
 ];
@@ -83,6 +86,7 @@ export function EventsSection({ initialEvents }: EventsSectionProps) {
     return sorted.map((ev) => {
       const isTechforge = ev.slug?.includes("techforge");
       const defaultRef = isTechforge ? REAL_EVENTS[0] : REAL_EVENTS[1];
+      const isOpen = ev.registrationOpen !== false && ev.status !== "REGISTRATION_CLOSED";
 
       return {
         id: ev.id || defaultRef.id,
@@ -98,7 +102,8 @@ export function EventsSection({ initialEvents }: EventsSectionProps) {
             ? `Team of ${ev.minTeamSize}`
             : "Team of 3",
         venue: ev.venue || defaultRef.venue,
-        status: "OPEN",
+        status: isOpen ? "OPEN" : "PAUSED",
+        isOpen,
         href: `/events/${ev.slug || defaultRef.slug}`,
       };
     });
@@ -172,13 +177,28 @@ export function EventsSection({ initialEvents }: EventsSectionProps) {
                 <div className="flex flex-col flex-1 space-y-4 sm:space-y-6">
                   {/* Status & Tag Bar */}
                   <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-[#1c1c1c] gap-2">
-                    <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 bg-[#121212] text-neutral-300 border border-[#262626] truncate">
-                      [ {event.tag} ]
+                    <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 bg-[#121212] text-neutral-300 border border-[#262626] shrink-0">
+                      <span className="hidden xs:inline">[ {event.tag} ]</span>
+                      <span className="xs:hidden">[ {event.slug.includes("techforge") ? "EVENT 01" : "EVENT 02"} ]</span>
                     </span>
-                    <span className="font-mono text-[9px] sm:text-[10px] uppercase tracking-widest text-emerald-400 font-bold flex items-center gap-1.5 shrink-0">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      <span>REGISTRATION OPEN</span>
-                    </span>
+                    {event.isOpen ? (
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        {event.slug.includes("agentvibe") && (
+                          <span className="font-mono text-[9px] sm:text-[10px] uppercase tracking-widest text-amber-400 font-bold border border-amber-500/40 bg-amber-500/10 px-1.5 py-0.5 hidden xs:inline-block">
+                            SPOTLIGHT TRACK
+                          </span>
+                        )}
+                        <span className="font-mono text-[9px] sm:text-[10px] uppercase tracking-widest text-emerald-400 font-bold flex items-center gap-1.5 shrink-0">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                          <span>REGISTRATION OPEN</span>
+                        </span>
+                      </div>
+                    ) : (
+                      <span className="font-mono text-[9px] sm:text-[10px] uppercase tracking-wider text-amber-400 font-bold flex items-center gap-1.5 shrink-0 border border-amber-500/40 bg-amber-500/10 px-2 py-0.5">
+                        <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+                        <span>SLOTS PAUSED</span>
+                      </span>
+                    )}
                   </div>
 
                   {/* Header info */}
@@ -303,10 +323,23 @@ export function EventsSection({ initialEvents }: EventsSectionProps) {
                 <div className="pt-4 sm:pt-6">
                   <Link
                     href={event.href}
-                    className="group/btn w-full inline-flex items-center justify-center gap-2 h-11 sm:h-12 font-mono text-xs uppercase tracking-wider font-bold bg-white hover:bg-neutral-200 text-black border border-white transition-all duration-150 active:scale-[0.99]"
+                    className={`group/btn w-full inline-flex items-center justify-center gap-2 h-11 sm:h-12 font-mono text-xs uppercase tracking-wider font-bold border transition-all duration-150 active:scale-[0.99] ${
+                      event.isOpen
+                        ? "bg-white hover:bg-neutral-200 text-black border-white"
+                        : "bg-[#141414] hover:bg-[#1E1E1E] text-neutral-200 border-[#333333]"
+                    }`}
                   >
-                    <span className="hidden sm:inline">[ View Track Details &amp; Register ]</span>
-                    <span className="sm:hidden">[ View Track &amp; Register ]</span>
+                    {event.isOpen ? (
+                      <>
+                        <span className="hidden sm:inline">[ View Track Details &amp; Register ]</span>
+                        <span className="sm:hidden">[ View Track &amp; Register ]</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="hidden sm:inline">[ View Track Details &amp; Alternatives ]</span>
+                        <span className="sm:hidden">[ View Track Details ]</span>
+                      </>
+                    )}
                     <ArrowRightIcon className="size-3.5 group-hover/btn:translate-x-1 transition-transform" />
                   </Link>
                 </div>

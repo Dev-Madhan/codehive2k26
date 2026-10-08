@@ -714,7 +714,7 @@ export function RegistrationsClient({
     async (isManual = false) => {
       try {
         setIsSyncing(true);
-        const res = await fetch(`/api/registrations?t=${Date.now()}&limit=250`, {
+        const res = await fetch(`/api/registrations?t=${Date.now()}`, {
           cache: "no-store",
           headers: {
             "Pragma": "no-cache",
@@ -919,6 +919,48 @@ export function RegistrationsClient({
   const checkedInCount = registrations.filter((r) => r.checkedIn).length;
   const busCount = registrations.filter((r) => r.transportOptIn).length;
 
+  // Real physical candidates count (team members + solo registrations)
+  const totalCandidates = React.useMemo(() => {
+    return registrations.reduce((acc, r) => {
+      if (r.team?.members && r.team.members.length > 0) {
+        return acc + r.team.members.length;
+      }
+      if (r.team) {
+        return acc + 3; // Standard 3-member team
+      }
+      return acc + 1; // Solo candidate
+    }, 0);
+  }, [registrations]);
+
+  // Total builders in teams
+  const teamBuildersCount = React.useMemo(() => {
+    return registrations.reduce((acc, r) => {
+      if (!r.team) return acc;
+      return acc + (r.team.members?.length || 3);
+    }, 0);
+  }, [registrations]);
+
+  // Total bus passenger seats needed across all registrations
+  const totalBusPassengers = React.useMemo(() => {
+    return registrations.reduce((acc, r) => {
+      if (!r.transportOptIn) return acc;
+      return acc + (r.passengersCount || 1);
+    }, 0);
+  }, [registrations]);
+
+  // Real candidates count in filtered view
+  const filteredCandidates = React.useMemo(() => {
+    return filteredRegistrations.reduce((acc, r) => {
+      if (r.team?.members && r.team.members.length > 0) {
+        return acc + r.team.members.length;
+      }
+      if (r.team) {
+        return acc + 3; // Standard 3-member team
+      }
+      return acc + 1; // Solo candidate
+    }, 0);
+  }, [filteredRegistrations]);
+
   return (
     <div className="space-y-4 font-mono">
       {/* ── Dialogs ── */}
@@ -949,9 +991,9 @@ export function RegistrationsClient({
       )}
 
       {/* ── Real-Time Status & Live Sync Control Strip ── */}
-      <div className="flex flex-wrap items-center justify-between gap-2.5 border border-[#262626] bg-[#080808] px-3 py-2 text-xs">
-        <div className="flex items-center gap-2.5">
-          <div className="flex items-center gap-1.5">
+      <div className="flex items-center justify-between gap-1.5 border border-[#262626] bg-[#080808] px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
+          <div className="flex items-center gap-1.5 shrink-0">
             <span
               className={`size-2 rounded-full ${
                 autoSync
@@ -962,7 +1004,7 @@ export function RegistrationsClient({
               }`}
             />
             <span
-              className={`text-[11px] font-bold uppercase tracking-wider ${
+              className={`text-[10px] sm:text-[11px] font-bold uppercase tracking-wider ${
                 autoSync ? "text-emerald-400" : "text-[#737373]"
               }`}
             >
@@ -978,8 +1020,8 @@ export function RegistrationsClient({
 
           <span className="text-[#404040] hidden md:inline">&bull;</span>
 
-          <span className="text-[10px] sm:text-[11px] text-[#737373]">
-            Last update:{" "}
+          <span className="text-[9px] sm:text-[11px] text-[#737373] truncate">
+            <span className="hidden min-[420px]:inline">Last update: </span>
             <strong className="text-[#E5E5E5]" suppressHydrationWarning>
               {lastSyncedAt.toLocaleTimeString([], {
                 hour: "2-digit",
@@ -990,7 +1032,7 @@ export function RegistrationsClient({
           </span>
         </div>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
           {/* Audio Chime Toggle */}
           <button
             type="button"
@@ -1005,7 +1047,7 @@ export function RegistrationsClient({
               }
             }}
             title={soundEnabled ? "Mute audio alerts" : "Enable sound chime for incoming registrations"}
-            className={`p-1.5 border transition-colors cursor-pointer ${
+            className={`p-1 sm:p-1.5 border transition-colors cursor-pointer ${
               soundEnabled
                 ? "bg-[#161616] text-white border-[#404040]"
                 : "bg-[#080808] text-[#737373] border-[#262626] hover:text-white hover:border-[#404040]"
@@ -1018,7 +1060,7 @@ export function RegistrationsClient({
           <button
             type="button"
             onClick={() => setAutoSync((prev) => !prev)}
-            className={`px-2 py-1 text-[10px] uppercase tracking-wider font-semibold border transition-colors cursor-pointer ${
+            className={`px-1.5 py-0.5 sm:px-2 sm:py-1 text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold border transition-colors cursor-pointer ${
               autoSync
                 ? "bg-[#161616] text-[#E5E5E5] border-[#404040]"
                 : "bg-[#080808] text-[#737373] border-[#262626] hover:text-white hover:border-[#404040]"
@@ -1032,7 +1074,7 @@ export function RegistrationsClient({
             type="button"
             onClick={() => fetchLiveRegistrations(true)}
             disabled={isSyncing}
-            className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] uppercase tracking-wider font-bold bg-white hover:bg-[#E5E5E5] disabled:opacity-50 text-black border border-white cursor-pointer transition-colors"
+            className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-[11px] uppercase tracking-wider font-bold bg-white hover:bg-[#E5E5E5] disabled:opacity-50 text-black border border-white cursor-pointer transition-colors"
           >
             <RefreshCwIcon className={`size-3 ${isSyncing ? "animate-spin" : ""}`} />
             <span>Sync</span>
@@ -1041,60 +1083,87 @@ export function RegistrationsClient({
       </div>
 
       {/* ── Top Metric Cards (Dynamically Live Updated) ── */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3">
-        <div className="border border-[#262626] bg-[#0F0F0F] p-2.5 sm:p-3">
-          <p className="text-[10px] uppercase tracking-wider text-[#737373]">Total Registered</p>
-          <p className="text-lg sm:text-xl font-bold text-white mt-0.5 tabular-nums">{totalCount}</p>
-        </div>
-        <div className="border border-[#262626] bg-[#0F0F0F] p-2.5 sm:p-3">
-          <p className="text-[10px] uppercase tracking-wider text-purple-400">Team Entries</p>
-          <p className="text-lg sm:text-xl font-bold text-purple-400 mt-0.5 tabular-nums">
-            {teamCount}
-            <span className="text-[10px] text-[#737373] font-normal ml-1">
-              ({totalCount > 0 ? Math.round((teamCount / totalCount) * 100) : 0}%)
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5 sm:gap-3">
+        <div className="border border-[#262626] bg-[#0F0F0F] p-2 sm:p-3">
+          <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-[#737373]">Total Headcount</p>
+          <div className="flex items-baseline gap-1 mt-0.5">
+            <span className="text-base sm:text-2xl font-bold text-white tabular-nums">
+              {totalCandidates}
             </span>
+            <span className="text-[9px] sm:text-[10px] text-zinc-400 uppercase font-semibold">Candidates</span>
+          </div>
+          <p className="text-[9px] sm:text-[10px] text-[#737373] mt-0.5 truncate">
+            {totalCount} passes ({teamCount} teams)
           </p>
         </div>
-        <div className="border border-[#262626] bg-[#0F0F0F] p-2.5 sm:p-3">
-          <p className="text-[10px] uppercase tracking-wider text-sky-400">Individual</p>
-          <p className="text-lg sm:text-xl font-bold text-sky-400 mt-0.5 tabular-nums">
-            {individualCount}
-            <span className="text-[10px] text-[#737373] font-normal ml-1">
-              ({totalCount > 0 ? Math.round((individualCount / totalCount) * 100) : 0}%)
+        <div className="border border-[#262626] bg-[#0F0F0F] p-2 sm:p-3">
+          <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-purple-400">Team Entries</p>
+          <div className="flex items-baseline gap-1 mt-0.5">
+            <span className="text-base sm:text-2xl font-bold text-purple-400 tabular-nums">
+              {teamCount}
             </span>
+            <span className="text-[9px] sm:text-[10px] text-purple-400/80 uppercase font-semibold">Teams</span>
+          </div>
+          <p className="text-[9px] sm:text-[10px] text-[#737373] mt-0.5 truncate">
+            {teamBuildersCount} builders ({totalCount > 0 ? Math.round((teamCount / totalCount) * 100) : 0}%)
           </p>
         </div>
-        <div className="border border-[#262626] bg-[#0F0F0F] p-2.5 sm:p-3">
-          <p className="text-[10px] uppercase tracking-wider text-emerald-400">Verified</p>
-          <p className="text-lg sm:text-xl font-bold text-emerald-400 mt-0.5 tabular-nums">
-            {checkedInCount}
-            <span className="text-[10px] text-[#737373] font-normal ml-1">
-              ({totalCount > 0 ? Math.round((checkedInCount / totalCount) * 100) : 0}%)
+        <div className="border border-[#262626] bg-[#0F0F0F] p-2 sm:p-3">
+          <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-sky-400">Individual</p>
+          <div className="flex items-baseline gap-1 mt-0.5">
+            <span className="text-base sm:text-2xl font-bold text-sky-400 tabular-nums">
+              {individualCount}
             </span>
+            <span className="text-[9px] sm:text-[10px] text-sky-400/80 uppercase font-semibold">Solo</span>
+          </div>
+          <p className="text-[9px] sm:text-[10px] text-[#737373] mt-0.5 truncate">
+            {totalCount > 0 ? Math.round((individualCount / totalCount) * 100) : 0}% of passes
           </p>
         </div>
-        <div className="border border-[#262626] bg-[#0F0F0F] p-2.5 sm:p-3 col-span-2 sm:col-span-1">
-          <p className="text-[10px] uppercase tracking-wider text-white">Bus Opt-in</p>
-          <p className="text-lg sm:text-xl font-bold text-white mt-0.5 tabular-nums">{busCount}</p>
+        <div className="border border-[#262626] bg-[#0F0F0F] p-2 sm:p-3">
+          <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-emerald-400">Verified</p>
+          <div className="flex items-baseline gap-1 mt-0.5">
+            <span className="text-base sm:text-2xl font-bold text-emerald-400 tabular-nums">
+              {checkedInCount}
+            </span>
+            <span className="text-[9px] sm:text-[10px] text-emerald-400/80 uppercase font-semibold">Admitted</span>
+          </div>
+          <p className="text-[9px] sm:text-[10px] text-[#737373] mt-0.5 truncate">
+            {totalCount > 0 ? Math.round((checkedInCount / totalCount) * 100) : 0}% turnout
+          </p>
+        </div>
+        <div className="border border-[#262626] bg-[#0F0F0F] p-2 sm:p-3 col-span-2 sm:col-span-1 flex sm:flex-col items-center sm:items-start justify-between gap-1 sm:gap-0">
+          <div>
+            <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-amber-400">Bus Transport</p>
+            <p className="text-[9px] sm:text-[10px] text-[#737373] mt-0.5">
+              across {busCount} team passes
+            </p>
+          </div>
+          <div className="flex items-baseline gap-1 sm:mt-0.5 shrink-0">
+            <span className="text-base sm:text-2xl font-bold text-amber-400 tabular-nums">
+              {totalBusPassengers}
+            </span>
+            <span className="text-[9px] sm:text-[10px] text-amber-400/80 uppercase font-semibold">Seats</span>
+          </div>
         </div>
       </div>
 
       {/* ── Search & Filter Controls ── */}
-      <div className="flex flex-col gap-2.5 border border-[#262626] bg-[#0F0F0F] p-3">
+      <div className="flex flex-col gap-2 sm:gap-2.5 border border-[#262626] bg-[#0F0F0F] p-2.5 sm:p-3">
         {/* Search Input */}
         <div className="relative w-full">
-          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-[#737373]" />
+          <SearchIcon className="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 size-3.5 text-[#737373]" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by attendee name, email, pass code, event, college..."
-            className="w-full bg-[#080808] border border-[#262626] pl-9 pr-8 py-2 text-xs text-white placeholder:text-[#737373] focus:outline-hidden focus:border-white rounded-none"
+            placeholder="Search attendee, pass, event, college..."
+            className="w-full bg-[#080808] border border-[#262626] pl-8 sm:pl-9 pr-7 sm:pr-8 py-1.5 sm:py-2 text-xs text-white placeholder:text-[#737373] focus:outline-hidden focus:border-white rounded-none"
           />
           {search && (
             <button
               onClick={() => setSearch("")}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#737373] hover:text-white p-0.5 cursor-pointer"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-[#737373] hover:text-white p-0.5 cursor-pointer"
             >
               <XIcon className="size-3.5" />
             </button>
@@ -1102,9 +1171,9 @@ export function RegistrationsClient({
         </div>
 
         {/* Filter Pills & Event Dropdown */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2">
           {/* Status Filter Pills */}
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5 text-xs [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar pb-0.5 text-xs [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {[
               { id: "ALL", label: `All (${totalCount})` },
               { id: "TEAM", label: `Team (${teamCount})` },
@@ -1119,7 +1188,7 @@ export function RegistrationsClient({
                   key={tab.id}
                   type="button"
                   onClick={() => setFilter(tab.id as typeof filter)}
-                  className={`px-2.5 py-1 text-[11px] uppercase tracking-wider font-semibold whitespace-nowrap transition-colors cursor-pointer border ${
+                  className={`px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold whitespace-nowrap transition-colors cursor-pointer border ${
                     isActive
                       ? "bg-white text-black border-white shadow-xs font-bold"
                       : "bg-[#080808] text-[#737373] border-[#262626] hover:bg-[#161616] hover:text-white hover:border-[#404040]"
@@ -1133,8 +1202,8 @@ export function RegistrationsClient({
 
           {/* Event Filter Dropdown */}
           {availableEvents.length > 0 && (
-            <div className="flex items-center gap-2 shrink-0 text-xs">
-              <span className="text-[10px] text-[#737373] uppercase font-bold tracking-wider font-mono">
+            <div className="flex items-center gap-2 shrink-0 text-xs w-full sm:w-auto pt-1 sm:pt-0 border-t border-[#1C1C1C] sm:border-t-0">
+              <span className="text-[10px] text-[#737373] uppercase font-bold tracking-wider font-mono shrink-0">
                 EVENT:
               </span>
               <Select
@@ -1145,7 +1214,7 @@ export function RegistrationsClient({
               >
                 <SelectTrigger
                   size="sm"
-                  className="h-7 w-auto min-w-[180px] max-w-[260px] rounded-none border border-[#262626] bg-[#080808] text-white font-mono text-xs px-2.5 py-1 hover:border-[#404040] hover:bg-[#161616] focus-visible:border-white focus-visible:ring-1 focus-visible:ring-white/40 shadow-none transition-colors cursor-pointer [&_svg]:text-white gap-2"
+                  className="h-7 w-full sm:w-auto sm:min-w-[180px] sm:max-w-[260px] rounded-none border border-[#262626] bg-[#080808] text-white font-mono text-xs px-2.5 py-1 hover:border-[#404040] hover:bg-[#161616] focus-visible:border-white focus-visible:ring-1 focus-visible:ring-white/40 shadow-none transition-colors cursor-pointer [&_svg]:text-white gap-2"
                   aria-label="Filter by Event"
                 >
                   <SelectValue placeholder="All Hosted Events" />
@@ -1184,16 +1253,24 @@ export function RegistrationsClient({
       </div>
 
       {/* ── Results Count Bar ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-[#737373] px-1">
-        <span>
-          Showing <strong className="text-white">{filteredRegistrations.length}</strong> of {totalCount} registrations
+      <div className="flex items-center justify-between gap-2 text-[10px] sm:text-[11px] text-[#737373] px-0.5 sm:px-1">
+        <span className="truncate">
+          {/* Mobile view (< sm): 'Showing 50 passes' or 'Showing 48/50 passes' */}
+          <span className="sm:hidden">
+            Showing <strong className="text-white">{filteredRegistrations.length}</strong>
+            {filteredRegistrations.length !== totalCount ? `/${totalCount}` : ""} passes
+          </span>
+          {/* Desktop view (>= sm): 'Showing 50 of 50 passes' */}
+          <span className="hidden sm:inline">
+            Showing <strong className="text-white">{filteredRegistrations.length}</strong> of {totalCount} passes
+          </span>
           {newlyAddedIds.size > 0 && (
-            <span className="ml-2 px-1.5 py-0.5 text-[10px] bg-[#161616] text-white border border-[#404040]">
+            <span className="ml-1.5 px-1 py-0.5 text-[9px] bg-[#161616] text-white border border-[#404040]">
               +{newlyAddedIds.size} NEW
             </span>
           )}
         </span>
-        <div className="flex items-center gap-2 self-end sm:self-auto">
+        <div className="flex items-center gap-1.5 shrink-0">
           {(search || filter !== "ALL" || selectedEvent !== "ALL") && (
             <button
               onClick={() => {
@@ -1201,26 +1278,27 @@ export function RegistrationsClient({
                 setFilter("ALL");
                 setSelectedEvent("ALL");
               }}
-              className="text-white hover:underline cursor-pointer mr-1"
+              className="text-white hover:underline cursor-pointer text-[10px] sm:text-[11px] mr-1"
             >
-              [ Reset Filters ]
+              [ Reset ]
             </button>
           )}
           <button
             type="button"
             onClick={() => setExportDialogOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-1 font-mono text-xs uppercase font-semibold text-black bg-white hover:bg-[#E5E5E5] border border-white transition-colors cursor-pointer shrink-0 shadow-xs"
+            className="inline-flex items-center gap-1 px-2.5 py-1 font-mono text-[10px] sm:text-xs uppercase font-semibold text-black bg-white hover:bg-[#E5E5E5] border border-white transition-colors cursor-pointer shrink-0 shadow-xs"
           >
             <DownloadIcon className="size-3" />
-            <span>[ Export Data ]</span>
+            <span className="hidden min-[420px]:inline">[ Export Data ]</span>
+            <span className="min-[420px]:hidden">[ Export ]</span>
           </button>
         </div>
       </div>
 
       {/* ── Mobile Card View (< md) ── */}
-      <div className="block md:hidden space-y-3">
+      <div className="block md:hidden space-y-2.5">
         {filteredRegistrations.length === 0 ? (
-          <div className="border border-[#262626] bg-[#0F0F0F] p-8 text-center text-xs text-[#737373]">
+          <div className="border border-[#262626] bg-[#0F0F0F] p-6 text-center text-xs text-[#737373]">
             No registrations match your search criteria.
           </div>
         ) : (
@@ -1229,37 +1307,37 @@ export function RegistrationsClient({
             return (
               <div
                 key={r.id}
-                className={`border p-3.5 space-y-2.5 transition-all relative ${
+                className={`border p-3 space-y-2 transition-all relative ${
                   isNew
                     ? "border-white bg-[#161616] shadow-md shadow-white/5"
                     : "border-[#262626] bg-[#0F0F0F] hover:border-[#404040]"
                 }`}
               >
                 {/* Card Header: Reg ID + Status Badges */}
-                <div className="flex items-center justify-between gap-2 border-b border-[#262626] pb-2">
-                  <div className="flex items-center gap-1.5">
+                <div className="flex items-center justify-between gap-1.5 border-b border-[#262626] pb-1.5">
+                  <div className="flex items-center gap-1">
                     <button
                       type="button"
                       onClick={() => handleCopy(r.registrationNumber)}
-                      className="flex items-center gap-1.5 text-white font-bold text-xs bg-[#161616] border border-[#262626] px-2 py-0.5 hover:bg-[#1F1F1F] hover:border-[#404040] transition-colors cursor-pointer"
+                      className="flex items-center gap-1 text-white font-bold text-[11px] bg-[#161616] border border-[#262626] px-1.5 py-0.5 hover:bg-[#1F1F1F] hover:border-[#404040] transition-colors cursor-pointer"
                       title="Click to copy pass code"
                     >
                       <span>{r.registrationNumber}</span>
                       {copiedId === r.registrationNumber ? (
-                        <CheckIcon className="size-3 text-emerald-400" />
+                        <CheckIcon className="size-2.5 text-emerald-400" />
                       ) : (
-                        <CopyIcon className="size-3 text-[#737373]" />
+                        <CopyIcon className="size-2.5 text-[#737373]" />
                       )}
                     </button>
 
                     {isNew && (
-                      <span className="px-1.5 py-0.5 text-[9px] font-bold bg-white text-black animate-pulse">
+                      <span className="px-1 py-0.2 text-[8px] font-bold bg-white text-black animate-pulse">
                         NEW
                       </span>
                     )}
                   </div>
 
-                  <div className="flex items-center gap-1.5 shrink-0">
+                  <div className="flex items-center gap-1 shrink-0">
                     <span
                       className={`inline-flex items-center gap-1 text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 border ${
                         r.team && r.team.name
@@ -1270,7 +1348,7 @@ export function RegistrationsClient({
                       {r.team && r.team.name ? "TEAM" : "INDIVIDUAL"}
                     </span>
                     <span
-                      className={`inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 border ${
+                      className={`inline-flex items-center gap-1 text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 border ${
                         r.checkedIn
                           ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-400"
                           : "border-amber-500/40 bg-amber-500/10 text-amber-400"
@@ -1291,44 +1369,53 @@ export function RegistrationsClient({
                   </div>
                 </div>
 
-                {/* Attendee Info — Name is now clickable */}
+                {/* Attendee Info & Quick Action */}
                 <div className="space-y-1">
-                  <button
-                    type="button"
-                    onClick={() => handleOpenDetail(r)}
-                    className="text-sm font-bold text-white hover:text-white transition-colors text-left cursor-pointer group flex items-center gap-1.5"
-                    title="Click to view full candidate details"
-                  >
-                    <span>{r.participant.name}</span>
-                    <UserIcon className="size-3 text-[#737373] group-hover:text-white transition-colors shrink-0" />
-                  </button>
+                  <div className="flex items-center justify-between gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleOpenDetail(r)}
+                      className="text-xs sm:text-sm font-bold text-white hover:text-white transition-colors text-left cursor-pointer group flex items-center gap-1.5 min-w-0"
+                      title="Click to view full candidate details"
+                    >
+                      <span className="truncate">{r.participant.name}</span>
+                      <UserIcon className="size-3 text-[#737373] group-hover:text-white transition-colors shrink-0" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleOpenDetail(r)}
+                      className="text-[9px] text-[#A3A3A3] hover:text-white uppercase font-bold border border-[#262626] bg-[#161616] px-1.5 py-0.5 shrink-0 transition-colors cursor-pointer"
+                    >
+                      [ Details ]
+                    </button>
+                  </div>
                   {r.team && r.team.name && (
-                    <div className="flex items-center gap-1 text-[11px] text-purple-300 font-bold">
+                    <div className="flex items-center gap-1 text-[10px] text-purple-300 font-bold truncate">
                       <UsersIcon className="size-3 text-purple-400 shrink-0" />
-                      <span>Team: {r.team.name}</span>
+                      <span className="truncate">Team: {r.team.name} ({r.team.members?.length || 3} members)</span>
                     </div>
                   )}
-                  <p className="text-xs text-[#A3A3A3] truncate">{r.participant.email}</p>
-                  <div className="flex items-center gap-1.5 text-xs text-[#737373] truncate">
+                  <p className="text-[11px] text-[#A3A3A3] truncate">{r.participant.email}</p>
+                  <div className="flex items-center gap-1.5 text-[11px] text-[#737373] truncate">
                     <Building2Icon className="size-3 text-[#737373] shrink-0" />
                     <span className="truncate">{r.participant.college}</span>
                   </div>
                 </div>
 
                 {/* Event Info */}
-                <div className="flex items-center justify-between gap-2 text-xs pt-1">
-                  <span className="text-[#737373] text-[11px] uppercase">Event:</span>
-                  <span className="text-[#E5E5E5] font-semibold truncate text-right">
+                <div className="flex items-center justify-between gap-2 text-xs pt-1 border-t border-[#1C1C1C]">
+                  <span className="text-[#737373] text-[10px] uppercase font-semibold">Event Track:</span>
+                  <span className="text-[#E5E5E5] text-[11px] font-semibold truncate text-right">
                     {r.event.name}
                   </span>
                 </div>
 
                 {/* Transport Details (Crucial for Mobile) */}
-                <div className="pt-2 border-t border-[#262626]">
+                <div className="pt-1.5 border-t border-[#262626]">
                   {r.transportOptIn ? (
                     <div className="bg-[#080808] border border-[#262626] p-2 space-y-1 text-xs">
                       <div className="flex items-center justify-between">
-                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-white uppercase tracking-wider">
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-400 uppercase tracking-wider">
                           <BusIcon className="size-3" />
                           BUS • {r.passengersCount} SEAT{r.passengersCount > 1 ? "S" : ""}
                         </span>
@@ -1346,9 +1433,9 @@ export function RegistrationsClient({
                       )}
                     </div>
                   ) : (
-                    <div className="flex items-center justify-between text-[11px] text-[#737373]">
+                    <div className="flex items-center justify-between text-[10px] text-[#737373]">
                       <span>Commute Mode:</span>
-                      <span className="px-1.5 py-0.5 border border-[#262626] bg-[#080808] text-[10px] text-[#737373]">
+                      <span className="px-1.5 py-0.5 border border-[#262626] bg-[#080808] text-[9px] text-[#737373] uppercase tracking-wider">
                         SELF TRANSPORT
                       </span>
                     </div>

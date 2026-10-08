@@ -17,6 +17,10 @@ export default async function EventsPage() {
     return 0;
   });
 
+  const openCount = events.filter(
+    (e) => e.registrationOpen !== false && e.status !== "REGISTRATION_CLOSED"
+  ).length;
+
   return (
     <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black">
       <Header />
@@ -45,7 +49,11 @@ export default async function EventsPage() {
           <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-mono shrink-0">
             <div className="border border-[#262626] bg-[#0A0A0A] px-2.5 sm:px-3 py-1 sm:py-1.5">
               <span className="text-[#737373] mr-1.5 sm:mr-2">TRACKS:</span>
-              <span className="font-bold text-white">{events.length || 2} ACTIVE</span>
+              <span className="font-bold text-white">{events.length || 2} TOTAL</span>
+            </div>
+            <div className="border border-[#262626] bg-[#0A0A0A] px-2.5 sm:px-3 py-1 sm:py-1.5">
+              <span className="text-[#737373] mr-1.5 sm:mr-2">GATEWAY:</span>
+              <span className="font-bold text-emerald-400">{openCount} ACCEPTING</span>
             </div>
             <div className="border border-[#262626] bg-[#0A0A0A] px-2.5 sm:px-3 py-1 sm:py-1.5">
               <span className="text-[#737373] mr-1.5 sm:mr-2">ENTRY:</span>
@@ -57,6 +65,16 @@ export default async function EventsPage() {
             </div>
           </div>
         </div>
+
+        {/* High demand notification strip if any track is paused */}
+        {openCount < events.length && events.length > 0 && (
+          <div className="border border-amber-500/30 bg-amber-500/10 px-3 py-2 sm:px-3.5 sm:py-2.5 flex items-center gap-2 text-[11px] sm:text-xs font-mono text-amber-300">
+            <span className="size-1.5 rounded-full bg-amber-400 shrink-0 animate-pulse" />
+            <span>
+              <strong>NOTICE:</strong> High demand — some track slots paused. Open tracks available below.
+            </span>
+          </div>
+        )}
 
         {/* Events Grid */}
         {events.length === 0 ? (

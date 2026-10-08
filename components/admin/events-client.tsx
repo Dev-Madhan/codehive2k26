@@ -22,6 +22,11 @@ import {
   UnlockIcon,
   ShieldAlertIcon,
   LayersIcon,
+  RefreshCwIcon,
+  RadioIcon,
+  BellIcon,
+  BellOffIcon,
+  ClockIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { formatDate } from "@/utils/formatters";
@@ -45,6 +50,7 @@ import { Button } from "@/components/ui/button";
 import { CreateEventDialog } from "@/components/admin/create-event-dialog";
 import { EditEventDialog } from "@/components/admin/edit-event-dialog";
 import { DeleteEventDialog } from "@/components/admin/delete-event-dialog";
+import { RegistrationControlDialog } from "@/components/admin/registration-control-dialog";
 import { toggleEventRegistration } from "@/actions/event";
 
 export interface EventItem {
@@ -72,6 +78,7 @@ export interface EventItem {
     registrations: number;
     teams?: number;
   };
+  candidateCount?: number;
 }
 
 export function EventsClient({
@@ -93,13 +100,140 @@ export function EventsClient({
   const [editDialogOpen, setEditDialogOpen] = React.useState(false);
   const [deleteEventItem, setDeleteEventItem] = React.useState<EventItem | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+  const [controlGateEvent, setControlGateEvent] = React.useState<EventItem | null>(null);
+  const [controlGateOpen, setControlGateOpen] = React.useState(false);
   const [dossierEvent, setDossierEvent] = React.useState<EventItem | null>(null);
   const [dossierOpen, setDossierOpen] = React.useState(false);
   const [isTogglingId, setIsTogglingId] = React.useState<string | null>(null);
 
+  // Real-time synchronization states
+  const [isSyncing, setIsSyncing] = React.useState(false);
+  const [lastSyncedAt, setLastSyncedAt] = React.useState<Date | null>(new Date());
+  const [autoSync, setAutoSync] = React.useState(true);
+  const [soundEnabled, setSoundEnabled] = React.useState(true);
+  const prevHeadcountsRef = React.useRef<Map<string, number>>(new Map());
+
+  // Web Audio subtle chime on live registration delta
+  const playLiveTone = React.useCallback(() => {
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(880, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1320, ctx.currentTime + 0.12);
+      gain.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.23);
+    } catch {
+      // Audio context blocked by browser autoplay policy
+    }
+  }, []);
+
+  // Realtime Live Fetch function
+  const fetchLiveEvents = React.useCallback(
+    async (isManual = false) => {
+      try {
+        if (isManual) setIsSyncing(true);
+        const res = await fetch("/api/admin/events", {
+          cache: "no-store",
+          headers: {
+            Pragma: "no-cache",
+            "Cache-Control": "no-cache",
+          },
+        });
+
+        if (!res.ok) throw new Error("Realtime events endpoint failed");
+        const json = await res.json();
+
+        if (json.success && Array.isArray(json.data)) {
+          const freshEvents: EventItem[] = json.data;
+
+          // Check if any track headcount increased
+          let deltaFound = false;
+          freshEvents.forEach((ev) => {
+            const prevCount = prevHeadcountsRef.current.get(ev.id);
+            const currentCount = ev.candidateCount ?? 0;
+            if (prevCount !== undefined && currentCount > prevCount) {
+              deltaFound = true;
+              const diff = currentCount - prevCount;
+              toast.success(`⚡ Live Registration Received!`, {
+                description: `+${diff} candidates enrolled in ${ev.name} (Total: ${currentCount} candidates across ${ev._count.teams} teams)`,
+                duration: 6000,
+              });
+            }
+            prevHeadcountsRef.current.set(ev.id, currentCount);
+          });
+
+          if (deltaFound && soundEnabled) {
+            playLiveTone();
+          }
+
+          setEvents(freshEvents);
+          setLastSyncedAt(new Date());
+
+          if (isManual) {
+            toast.success("Event Catalog Synchronized", {
+              description: `Realtime database sync verified at ${new Date().toLocaleTimeString()}`,
+            });
+          }
+        }
+      } catch (err) {
+        console.error("[Events Realtime Sync Error]", err);
+        if (isManual) {
+          toast.error("Failed to sync event catalog with live database.");
+        }
+      } finally {
+        setIsSyncing(false);
+      }
+    },
+    [soundEnabled, playLiveTone]
+  );
+
+  // Initialize previous count tracking on mount / initialEvents
   React.useEffect(() => {
+    initialEvents.forEach((e) => {
+      prevHeadcountsRef.current.set(e.id, e.candidateCount ?? 0);
+    });
     setEvents(initialEvents);
-  }, [initialEvents]);
+    fetchLiveEvents(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Background auto-sync polling every 4 seconds when tab is active
+  React.useEffect(() => {
+    if (!autoSync) return;
+
+    const interval = setInterval(() => {
+      if (typeof document !== "undefined" && document.visibilityState === "visible") {
+        fetchLiveEvents(false);
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [autoSync, fetchLiveEvents]);
+
+  // Immediate sync on window focus and tab visibility change
+  React.useEffect(() => {
+    const handleVisibilityOrFocus = () => {
+      if (typeof document !== "undefined" && document.visibilityState === "visible") {
+        fetchLiveEvents(false);
+      }
+    };
+
+    window.addEventListener("focus", handleVisibilityOrFocus);
+    document.addEventListener("visibilitychange", handleVisibilityOrFocus);
+
+    return () => {
+      window.removeEventListener("focus", handleVisibilityOrFocus);
+      document.removeEventListener("visibilitychange", handleVisibilityOrFocus);
+    };
+  }, [fetchLiveEvents]);
 
   // Unique categories derived from props or event items
   const allCategories = React.useMemo(() => {
@@ -146,6 +280,16 @@ export function EventsClient({
   }, [events, search, selectedCategory, selectedStatus]);
 
   // Live KPI totals
+  const totalCandidates = events.reduce(
+    (acc, e) =>
+      acc +
+      (e.candidateCount !== undefined
+        ? e.candidateCount
+        : e._count.teams
+        ? e._count.teams * (e.minTeamSize || 3)
+        : e._count.registrations),
+    0
+  );
   const totalRegistrations = events.reduce((acc, e) => acc + e._count.registrations, 0);
   const totalTeams = events.reduce((acc, e) => acc + (e._count.teams || 0), 0);
   const openEventsCount = events.filter(
@@ -183,6 +327,7 @@ export function EventsClient({
           ? `Registrations opened for ${event.name}`
           : `Registrations locked for ${event.name}`
       );
+      fetchLiveEvents(false);
       router.refresh();
     } catch {
       toast.error("Failed to change registration state.");
@@ -202,21 +347,94 @@ export function EventsClient({
   return (
     <div className="space-y-4 font-mono">
       {/* ── Top Operations Bar ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[#262626] pb-3">
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] font-bold text-white bg-white/10 border border-[#404040] px-2 py-0.5 uppercase tracking-wider inline-flex items-center gap-1.5">
-            <span className="size-1.5 rounded-none bg-white animate-pulse" />
-            LIVE SYMPOSIUM TRACKS
-          </span>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 border-b border-[#262626] pb-3">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Live indicator badge */}
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30">
+            <span className="size-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+            <span className="tracking-wider">LIVE TELEMETRY</span>
+          </div>
+
+          {/* Sync status & timestamp */}
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] text-zinc-400 bg-[#0F0F0F] border border-[#262626]">
+            {isSyncing ? (
+              <>
+                <RefreshCwIcon className="size-3 text-amber-400 animate-spin shrink-0" />
+                <span className="text-amber-400 font-bold">SYNCING DB...</span>
+              </>
+            ) : (
+              <>
+                <ClockIcon className="size-3 text-zinc-500 shrink-0" />
+                <span>
+                  LAST SYNC: {lastSyncedAt ? lastSyncedAt.toLocaleTimeString() : "READY"}
+                </span>
+              </>
+            )}
+          </div>
+
+          {/* Auto sync switch toggle */}
+          <button
+            type="button"
+            onClick={() => {
+              setAutoSync(!autoSync);
+              toast.info(!autoSync ? "Auto-sync active (every 4s)" : "Auto-sync paused");
+            }}
+            className={`inline-flex items-center gap-1 px-2 py-1 text-[10px] font-bold border transition-colors cursor-pointer ${
+              autoSync
+                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/40 hover:bg-emerald-500/20"
+                : "bg-zinc-900 text-zinc-500 border-zinc-800 hover:text-zinc-300"
+            }`}
+            title="Toggle background auto-sync polling"
+          >
+            <RadioIcon className="size-3" />
+            <span>{autoSync ? "AUTO-SYNC 4S" : "POLLING PAUSED"}</span>
+          </button>
+
+          {/* Audio Chime button */}
+          <button
+            type="button"
+            onClick={() => {
+              setSoundEnabled(!soundEnabled);
+              toast.info(!soundEnabled ? "Audio chimes enabled" : "Audio chimes muted");
+            }}
+            className={`inline-flex items-center gap-1 px-2 py-1 text-[10px] font-bold border transition-colors cursor-pointer ${
+              soundEnabled
+                ? "bg-white/5 text-zinc-300 border-[#333] hover:text-white"
+                : "bg-zinc-900 text-zinc-500 border-zinc-800"
+            }`}
+            title="Toggle audible chime on new registration"
+          >
+            {soundEnabled ? (
+              <BellIcon className="size-3 text-emerald-400" />
+            ) : (
+              <BellOffIcon className="size-3 text-zinc-500" />
+            )}
+            <span>{soundEnabled ? "SFX" : "MUTED"}</span>
+          </button>
         </div>
 
-        <Button
-          onClick={() => setCreateDialogOpen(true)}
-          className="rounded-none bg-white hover:bg-zinc-200 text-black font-mono text-xs uppercase font-bold px-4 py-2 cursor-pointer border border-white flex items-center gap-1.5 self-start sm:self-auto"
-        >
-          <PlusIcon className="size-4" />
-          <span>Create New Event Track</span>
-        </Button>
+        {/* Action buttons */}
+        <div className="flex items-center gap-2 self-start md:self-auto">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={isSyncing}
+            onClick={() => fetchLiveEvents(true)}
+            className="rounded-none bg-[#0F0F0F] hover:bg-[#1A1A1A] text-zinc-300 hover:text-white font-mono text-xs uppercase font-bold border border-[#333333] flex items-center gap-1.5 cursor-pointer h-9 px-3"
+          >
+            <RefreshCwIcon className={`size-3.5 ${isSyncing ? "animate-spin text-amber-400" : ""}`} />
+            <span>Sync</span>
+          </Button>
+
+          <Button
+            onClick={() => setCreateDialogOpen(true)}
+            className="rounded-none bg-white hover:bg-zinc-200 text-black font-mono text-xs uppercase font-bold px-4 py-2 cursor-pointer border border-white flex items-center gap-1.5 h-9"
+          >
+            <PlusIcon className="size-4" />
+            <span>Create Track</span>
+          </Button>
+        </div>
       </div>
 
       {/* ── Top Metrics Overview ── */}
@@ -240,9 +458,9 @@ export function EventsClient({
         <div className="border border-[#262626] bg-[#0F0F0F] p-3 sm:p-4">
           <p className="text-[10px] sm:text-[11px] uppercase tracking-wider text-zinc-400">Total Candidates</p>
           <p className="text-xl sm:text-2xl font-bold text-white mt-0.5 tabular-nums">
-            {totalRegistrations}
+            {totalCandidates}
           </p>
-          <p className="text-[10px] text-zinc-400 mt-1">Across all tracks</p>
+          <p className="text-[10px] text-zinc-400 mt-1">{totalTeams} teams • {totalRegistrations} passes</p>
         </div>
 
         <div className="border border-[#262626] bg-[#0F0F0F] p-3 sm:p-4">
@@ -375,13 +593,16 @@ export function EventsClient({
 
                   <button
                     type="button"
-                    onClick={() => handleToggleRegistration(e)}
-                    disabled={isTogglingId === e.id}
+                    onClick={() => {
+                      setControlGateEvent(e);
+                      setControlGateOpen(true);
+                    }}
                     className={`inline-flex items-center gap-1 text-[10px] uppercase font-bold px-2 py-0.5 border cursor-pointer transition-colors ${
                       isOpen
                         ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25"
                         : "border-amber-500/40 bg-amber-500/15 text-amber-400 hover:bg-amber-500/25"
                     }`}
+                    title="Click to manage registration gate"
                   >
                     {isOpen ? (
                       <>
@@ -391,7 +612,7 @@ export function EventsClient({
                     ) : (
                       <>
                         <LockIcon className="size-2.5" />
-                        <span>CLOSED</span>
+                        <span>SLOTS PAUSED</span>
                       </>
                     )}
                   </button>
@@ -425,9 +646,9 @@ export function EventsClient({
                 {/* Metrics */}
                 <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-[#262626]">
                   <div>
-                    <span className="text-zinc-400 text-[10px] uppercase block">Candidates:</span>
+                    <span className="text-zinc-400 text-[10px] uppercase block">Headcount:</span>
                     <span className="text-xs font-bold font-mono text-white">
-                      {e._count.registrations} registered
+                      {e.candidateCount !== undefined ? e.candidateCount : (e._count.teams ? e._count.teams * 3 : e._count.registrations)} ({e._count.teams || 0} teams)
                     </span>
                   </div>
                   <div>
@@ -445,7 +666,7 @@ export function EventsClient({
                     className="inline-flex items-center gap-1 text-[11px] font-bold text-white bg-white/10 hover:bg-white/20 border border-white/20 px-2.5 py-1 uppercase"
                   >
                     <UsersIcon className="size-3" />
-                    <span>Attendees ({e._count.registrations})</span>
+                    <span>Passes ({e._count.registrations})</span>
                   </Link>
 
                   <div className="flex items-center gap-1.5">
@@ -496,7 +717,7 @@ export function EventsClient({
             <tr>
               <th className="px-4 py-3">Event Track</th>
               <th className="px-4 py-3">Category</th>
-              <th className="px-4 py-3">Venue &amp; Dates</th>
+              <th className="px-4 py-3">Schedule &amp; Dates</th>
               <th className="px-4 py-3 text-right">Headcount</th>
               <th className="px-4 py-3 text-center">Registration Gateway</th>
               <th className="px-4 py-3 text-right">Operations</th>
@@ -539,13 +760,14 @@ export function EventsClient({
                       </span>
                     </td>
 
-                    {/* Venue & Date */}
+                    {/* Schedule & Date */}
                     <td className="px-4 py-3">
-                      <p className="text-zinc-300 font-semibold truncate max-w-[200px]" title={e.venue}>
-                        {e.venue || "Vel Tech Multi Tech"}
+                      <p className="text-zinc-300 font-semibold flex items-center gap-1.5">
+                        <CalendarDaysIcon className="size-3 text-zinc-400 shrink-0" />
+                        <span>{formatDate(e.startAt)}</span>
                       </p>
                       <p className="text-[10px] text-zinc-500 mt-0.5">
-                        {formatDate(e.startAt)}
+                        2-Day Symposium
                       </p>
                     </td>
 
@@ -556,7 +778,7 @@ export function EventsClient({
                         className="inline-flex flex-col items-end hover:text-white transition-colors"
                       >
                         <span className="font-bold font-mono text-sm text-white tabular-nums">
-                          {e._count.registrations}
+                          {e.candidateCount !== undefined ? e.candidateCount : (e._count.teams ? e._count.teams * 3 : e._count.registrations)}
                         </span>
                         <span className="text-[10px] text-zinc-500">
                           {e._count.teams ? `${e._count.teams} teams` : "candidates"}
@@ -568,14 +790,16 @@ export function EventsClient({
                     <td className="px-4 py-3 text-center">
                       <button
                         type="button"
-                        onClick={() => handleToggleRegistration(e)}
-                        disabled={isTogglingId === e.id}
+                        onClick={() => {
+                          setControlGateEvent(e);
+                          setControlGateOpen(true);
+                        }}
                         className={`inline-flex items-center gap-1.5 px-3 py-1 text-[10px] uppercase font-bold tracking-wider border transition-all cursor-pointer ${
                           isOpen
                             ? "border-emerald-500/50 bg-emerald-950/60 text-emerald-400 hover:bg-emerald-900/60"
                             : "border-amber-500/50 bg-amber-950/60 text-amber-400 hover:bg-amber-900/60"
                         }`}
-                        title="Click to toggle registration gate"
+                        title="Click to manage registration gate"
                       >
                         {isOpen ? (
                           <>
@@ -585,7 +809,7 @@ export function EventsClient({
                         ) : (
                           <>
                             <LockIcon className="size-3" />
-                            <span>GATE LOCKED</span>
+                            <span>SLOTS PAUSED</span>
                           </>
                         )}
                       </button>
@@ -608,11 +832,22 @@ export function EventsClient({
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
                           align="end"
-                          className="w-48"
+                          className="w-52"
                         >
                           <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-zinc-500 border-b border-[#262626] mb-1 flex items-center justify-between">
                             <span>// TRACK ACTIONS</span>
                           </div>
+                          <DropdownMenuItem
+                            className="cursor-pointer hover:bg-[#161616] flex items-center gap-2"
+                            onClick={() => {
+                              setControlGateEvent(e);
+                              setControlGateOpen(true);
+                            }}
+                          >
+                            <UnlockIcon className="size-3.5 text-white" />
+                            <span>Manage Registration Gate</span>
+                          </DropdownMenuItem>
+
                           <DropdownMenuItem
                             className="cursor-pointer hover:bg-[#161616] flex items-center gap-2"
                             onClick={() => router.push(`/admin/registrations?eventId=${e.id}`)}
@@ -703,9 +938,9 @@ export function EventsClient({
               {/* Stat Cards */}
               <div className="grid grid-cols-3 gap-2.5">
                 <div className="border border-[#262626] bg-[#080808] p-3">
-                  <span className="text-[10px] uppercase text-zinc-400 block">Registered</span>
+                  <span className="text-[10px] uppercase text-zinc-400 block">Candidates</span>
                   <p className="text-xl font-bold text-white mt-1 tabular-nums">
-                    {dossierEvent._count.registrations}
+                    {dossierEvent.candidateCount !== undefined ? dossierEvent.candidateCount : (dossierEvent._count.teams ? dossierEvent._count.teams * 3 : dossierEvent._count.registrations)}
                   </p>
                 </div>
                 <div className="border border-[#262626] bg-[#080808] p-3">
@@ -795,6 +1030,7 @@ export function EventsClient({
         onOpenChange={setCreateDialogOpen}
         categories={allCategories}
         onSuccess={() => {
+          fetchLiveEvents(false);
           router.refresh();
         }}
       />
@@ -806,6 +1042,7 @@ export function EventsClient({
         onOpenChange={setEditDialogOpen}
         categories={allCategories}
         onSuccess={() => {
+          fetchLiveEvents(false);
           router.refresh();
         }}
       />
@@ -819,6 +1056,30 @@ export function EventsClient({
         onOpenChange={setDeleteDialogOpen}
         onSuccess={() => {
           setEvents((prev) => prev.filter((e) => e.id !== deleteEventItem?.id));
+          fetchLiveEvents(false);
+          router.refresh();
+        }}
+      />
+
+      {/* ── Registration Gate Control Dialog ── */}
+      <RegistrationControlDialog
+        event={controlGateEvent}
+        open={controlGateOpen}
+        onOpenChange={setControlGateOpen}
+        onSuccess={(updated) => {
+          setEvents((prev) =>
+            prev.map((e) =>
+              e.id === updated.id
+                ? {
+                    ...e,
+                    registrationOpen: updated.registrationOpen,
+                    status: updated.status,
+                    ...(updated.capacity !== undefined ? { capacity: updated.capacity } : {}),
+                  }
+                : e
+            )
+          );
+          fetchLiveEvents(false);
           router.refresh();
         }}
       />

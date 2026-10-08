@@ -121,7 +121,9 @@ export const schema = z.object({
   type: z.string(),
   categorySlug: z.string(),
   status: z.string(),
-  venue: z.string(),
+  venue: z.string().optional(),
+  headcount: z.number().optional(),
+  candidateCount: z.number().optional(),
   isTeamEvent: z.boolean(),
   minTeamSize: z.number(),
   maxTeamSize: z.number(),
@@ -186,7 +188,7 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
             <span>{item.header}</span>
           </DrawerTitle>
           <DrawerDescription className="text-xs text-[#A3A3A3] leading-relaxed">
-            {item.venue}
+            {(item.headcount ?? item.candidateCount ?? item.registrationsCount)} Candidates enrolled • Vel Tech Multi Tech
           </DrawerDescription>
         </DrawerHeader>
 
@@ -195,10 +197,10 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
             <div className="border border-[#262626] bg-[#080808] p-3 space-y-1">
               <span className="text-[10px] uppercase text-[#737373] font-semibold tracking-wider block">
-                Total Registrations
+                Total Candidates
               </span>
               <p className="text-2xl font-bold text-white tabular-nums">
-                {item.registrationsCount}
+                {item.headcount ?? item.candidateCount ?? item.registrationsCount}
               </p>
             </div>
             <div className="border border-[#262626] bg-[#080808] p-3 space-y-1">
@@ -211,10 +213,10 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
             </div>
             <div className="border border-[#262626] bg-[#080808] p-3 space-y-1 col-span-2 sm:col-span-1">
               <span className="text-[10px] uppercase text-[#737373] font-semibold tracking-wider block">
-                Participation Mode
+                Passes Issued
               </span>
-              <p className="text-xs font-bold text-white uppercase mt-1">
-                {item.teamFormat}
+              <p className="text-2xl font-bold text-white tabular-nums">
+                {item.registrationsCount}
               </p>
             </div>
           </div>
@@ -354,31 +356,39 @@ const columns = columnHelper.columns([
       </Badge>
     ),
   }),
-  columnHelper.accessor("registrationsCount", {
-    header: () => <div className="w-full text-right font-mono">Registrations</div>,
-    cell: ({ row }) => (
-      <div className="text-right font-mono text-xs font-bold text-white tabular-nums pr-2">
-        {row.original.registrationsCount}
-      </div>
-    ),
+  columnHelper.accessor("headcount", {
+    header: () => <div className="w-full text-right font-mono">Headcount</div>,
+    cell: ({ row }) => {
+      const count =
+        row.original.headcount ??
+        row.original.candidateCount ??
+        (row.original.teamsCount > 0
+          ? row.original.teamsCount * (row.original.minTeamSize || 3)
+          : row.original.registrationsCount);
+      return (
+        <div className="text-right font-mono pr-2">
+          <span className="font-bold text-xs text-white tabular-nums">{count}</span>
+          <span className="text-[10px] text-zinc-500 block">candidates</span>
+        </div>
+      );
+    },
   }),
   columnHelper.accessor("teamsCount", {
     header: () => <div className="w-full text-right font-mono">Teams</div>,
     cell: ({ row }) => (
       <div className="text-right font-mono text-xs font-semibold text-[#A3A3A3] tabular-nums pr-2">
         {row.original.teamsCount}
+        <span className="text-[10px] text-zinc-600 block">teams</span>
       </div>
     ),
   }),
-  columnHelper.accessor("venue", {
-    header: "Venue",
+  columnHelper.accessor("registrationsCount", {
+    header: () => <div className="w-full text-right font-mono">Passes</div>,
     cell: ({ row }) => (
-      <span
-        className="font-mono text-xs text-[#737373] truncate max-w-[160px] block"
-        title={row.original.venue}
-      >
-        {row.original.venue}
-      </span>
+      <div className="text-right font-mono text-xs font-bold text-zinc-400 tabular-nums pr-2">
+        {row.original.registrationsCount}
+        <span className="text-[10px] text-zinc-600 block">issued</span>
+      </div>
     ),
   }),
   columnHelper.display({

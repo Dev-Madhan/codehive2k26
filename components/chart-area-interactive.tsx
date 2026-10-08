@@ -89,9 +89,9 @@ export function ChartAreaInteractive({
   }, [baseData, timeRange]);
 
   return (
-    <Card className="@container/card rounded-none border border-[#262626] bg-[#0F0F0F] shadow-none max-w-full overflow-hidden">
-      <CardHeader className="p-3.5 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div className="space-y-1">
+    <Card className="@container/card rounded-none border border-[#262626] bg-[#0F0F0F] shadow-none max-w-full overflow-hidden py-0 gap-1 sm:gap-2">
+      <CardHeader className="p-3 sm:px-5 sm:py-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
+        <div className="space-y-0.5 sm:space-y-1">
           <CardTitle className="font-mono font-bold text-white text-sm sm:text-base flex items-center gap-2">
             <span>&gt; Registration Telemetry &amp; Gate Influx</span>
           </CardTitle>
@@ -155,7 +155,7 @@ export function ChartAreaInteractive({
           </Select>
         </CardAction>
       </CardHeader>
-      <CardContent className="px-1.5 sm:px-6 pt-1 sm:pt-4">
+      <CardContent className="px-1.5 sm:px-5 pt-0 sm:pt-0 pb-2.5 sm:pb-3.5">
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-[190px] sm:h-[250px] w-full"

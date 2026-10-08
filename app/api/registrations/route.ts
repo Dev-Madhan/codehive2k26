@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     const eventId = searchParams.get("eventId");
     const eventSlug = searchParams.get("eventSlug");
     const limitParam = searchParams.get("limit");
-    const limit = limitParam ? Math.min(Math.max(parseInt(limitParam, 10), 1), 500) : 200;
+    const limit = limitParam ? Math.max(parseInt(limitParam, 10), 1) : undefined;
 
     const where: any = {};
     if (eventId && eventId !== "ALL") {

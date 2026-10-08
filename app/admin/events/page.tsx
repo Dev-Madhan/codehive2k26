@@ -29,6 +29,25 @@ export default async function AdminEventsPage() {
     }),
   ]);
 
+  // Compute actual physical candidate headcounts (team members + solo registrations)
+  const eventsWithHeadcount = await Promise.all(
+    events.map(async (e) => {
+      const [teamMembersCount, soloRegistrationsCount] = await Promise.all([
+        prisma.teamMember.count({
+          where: { team: { eventId: e.id } },
+        }),
+        prisma.registration.count({
+          where: { eventId: e.id, teamId: null },
+        }),
+      ]);
+      const candidateCount = teamMembersCount + soloRegistrationsCount;
+      return {
+        ...e,
+        candidateCount,
+      };
+    })
+  );
+
   return (
     <div className="space-y-5 font-mono max-w-full">
       <div className="border-b border-[#262626] pb-3 sm:pb-4 flex flex-col sm:flex-row sm:justify-between sm:items-end gap-2">
@@ -41,7 +60,7 @@ export default async function AdminEventsPage() {
         </div>
       </div>
 
-      <EventsClient initialEvents={events} categories={categories} />
+      <EventsClient initialEvents={eventsWithHeadcount} categories={categories} />
     </div>
   );
 }

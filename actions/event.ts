@@ -9,7 +9,11 @@ import { revalidatePath } from "next/cache";
 export async function getEvents(): Promise<ActionResponse<Event[]>> {
   try {
     const events = await prisma.event.findMany({
-      where: { status: "PUBLISHED" },
+      where: {
+        status: {
+          not: "DRAFT",
+        },
+      },
       orderBy: { startAt: "asc" },
       include: {
         category: true,
@@ -184,7 +188,9 @@ export async function toggleEventRegistration(
       },
     });
 
+    revalidatePath("/");
     revalidatePath("/events");
+    revalidatePath(`/events/${updated.slug}`);
     revalidatePath("/admin/events");
     revalidatePath("/admin/registrations");
     revalidatePath("/admin/dashboard");
@@ -196,6 +202,42 @@ export async function toggleEventRegistration(
     return {
       success: false,
       error: { code: "INTERNAL_ERROR", message: "Failed to toggle registration." },
+    };
+  }
+}
+
+export async function updateEventRegistrationGate(
+  id: string,
+  params: {
+    isOpen: boolean;
+    status?: EventStatus;
+    capacity?: number;
+  }
+): Promise<ActionResponse<Event>> {
+  try {
+    const updated = await prisma.event.update({
+      where: { id },
+      data: {
+        registrationOpen: params.isOpen,
+        status: params.status || (params.isOpen ? "REGISTRATION_OPEN" : "REGISTRATION_CLOSED"),
+        ...(params.capacity !== undefined ? { capacity: params.capacity } : {}),
+      },
+    });
+
+    revalidatePath("/");
+    revalidatePath("/events");
+    revalidatePath(`/events/${updated.slug}`);
+    revalidatePath("/admin/events");
+    revalidatePath("/admin/registrations");
+    revalidatePath("/admin/dashboard");
+    revalidatePath("/dashboard");
+
+    return { success: true, data: updated };
+  } catch (error: any) {
+    console.error("updateEventRegistrationGate error:", error);
+    return {
+      success: false,
+      error: { code: "INTERNAL_ERROR", message: "Failed to update registration gate." },
     };
   }
 }
