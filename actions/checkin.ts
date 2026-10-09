@@ -5,11 +5,18 @@ import { checkInSchema, CheckInInput } from "@/lib/validations/checkin";
 import { ActionResponse } from "@/types";
 import { CheckInResult } from "@/types/registration";
 import { revalidatePath } from "next/cache";
+import { requireAdminSession } from "@/lib/auth-guard";
+import { logAuditEvent } from "@/lib/audit";
 
 export async function checkInParticipant(
   staffUserId: string,
   input: CheckInInput
 ): Promise<ActionResponse<CheckInResult>> {
+  const authCheck = await requireAdminSession();
+  if (authCheck.error) {
+    return { success: false, error: authCheck.error };
+  }
+
   const parsed = checkInSchema.safeParse(input);
   if (!parsed.success) {
     return {
@@ -22,30 +29,7 @@ export async function checkInParticipant(
   const cleanToken = qrToken.trim();
 
   try {
-    // 1. Verify Staff User (with safe fallback for authorized console sessions)
-    let staff = await prisma.user.findUnique({
-      where: { id: staffUserId },
-    });
-
-    if (!staff || staff.role !== "ADMIN") {
-      staff = await prisma.user.findFirst({
-        where: {
-          role: "ADMIN",
-        },
-      });
-
-      if (!staff) {
-        staff = await prisma.user.upsert({
-          where: { email: "admin@codehive.org" },
-          update: { role: "ADMIN" },
-          create: {
-            name: "System Admin",
-            email: "admin@codehive.org",
-            role: "ADMIN",
-          },
-        });
-      }
-    }
+    const staff = authCheck.user;
 
     // 2. Find Registration by Registration Number OR QR Token (support raw code or scanned URL)
     let tokenToMatch = cleanToken;
@@ -103,6 +87,8 @@ export async function checkInParticipant(
         data: {
           registrationNumber: registration.registrationNumber,
           participantName: registration.participant.name,
+          participantEmail: registration.participant.email,
+          participantPhone: registration.participant.phone,
           eventName: registration.event.name,
           checkedInAt: registration.checkIn?.checkedInAt || new Date(),
           alreadyCheckedIn: Boolean(registration.checkedIn || registration.checkIn),
@@ -169,6 +155,20 @@ export async function checkInParticipant(
       });
     });
 
+    // 7. Record Non-blocking Audit Log
+    await logAuditEvent({
+      actorId: staff.id,
+      action: "CHECK_IN",
+      entity: "Registration",
+      entityId: registration.id,
+      metadata: {
+        registrationNumber: registration.registrationNumber,
+        participantName: registration.participant.name,
+        eventName: registration.event.name,
+        deviceInfo: deviceInfo || "Web Staff Scanner",
+      },
+    });
+
     revalidatePath("/admin/registrations");
     revalidatePath("/admin/dashboard");
     revalidatePath("/admin/check-in");
@@ -181,6 +181,8 @@ export async function checkInParticipant(
       data: {
         registrationNumber: registration.registrationNumber,
         participantName: registration.participant.name,
+        participantEmail: registration.participant.email,
+        participantPhone: registration.participant.phone,
         eventName: registration.event.name,
         checkedInAt: checkInRecord.checkedInAt,
         alreadyCheckedIn: false,
@@ -196,11 +198,12 @@ export async function checkInParticipant(
       },
       message: "Pass verified and attendee checked in successfully!",
     };
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("checkInParticipant error:", error);
+    const message = error instanceof Error ? error.message : "Check-in processing failed.";
     return {
       success: false,
-      error: { code: "INTERNAL_ERROR", message: "Check-in processing failed." },
+      error: { code: "INTERNAL_ERROR", message },
     };
   }
 }
@@ -210,6 +213,11 @@ export async function getGateStats(): Promise<{
   totalCheckedIn: number;
   percentage: number;
 }> {
+  const authCheck = await requireAdminSession();
+  if (authCheck.error) {
+    return { totalConfirmed: 0, totalCheckedIn: 0, percentage: 0 };
+  }
+
   try {
     const totalConfirmed = await prisma.registration.count({
       where: {
@@ -225,7 +233,7 @@ export async function getGateStats(): Promise<{
       totalConfirmed > 0 ? Math.round((totalCheckedIn / totalConfirmed) * 100) : 0;
 
     return { totalConfirmed, totalCheckedIn, percentage };
-  } catch (err) {
+  } catch (err: unknown) {
     console.error("getGateStats error:", err);
     return { totalConfirmed: 0, totalCheckedIn: 0, percentage: 0 };
   }

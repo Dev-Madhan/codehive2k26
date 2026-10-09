@@ -1,11 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
+import { requireAdminSession } from "@/lib/auth-guard";
+import { logAuditEvent } from "@/lib/audit";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export async function POST(req: NextRequest) {
   try {
+    const authCheck = await requireAdminSession(req.headers);
+    if (authCheck.error) {
+      const statusCode = authCheck.error.code === "UNAUTHORIZED" ? 401 : 403;
+      return NextResponse.json(
+        { success: false, error: authCheck.error },
+        { status: statusCode }
+      );
+    }
+
     const body = await req.json();
     const {
       eventId,
@@ -17,7 +29,7 @@ export async function POST(req: NextRequest) {
       preview = false,
     } = body;
 
-    const where: any = {};
+    const where: Prisma.RegistrationWhereInput = {};
 
     // 1. Event Filter
     if (eventId && eventId !== "ALL") {
@@ -179,6 +191,20 @@ export async function POST(req: NextRequest) {
       })
     );
 
+    await logAuditEvent({
+      actorId: authCheck.user.id,
+      action: "DATA_EXPORT",
+      entity: "Report",
+      entityId: eventId || "ALL",
+      metadata: {
+        format,
+        count: registrations.length,
+        transport,
+        route,
+        checkIn,
+      },
+    });
+
     return NextResponse.json({
       success: true,
       data: {
@@ -187,14 +213,15 @@ export async function POST(req: NextRequest) {
         count: registrations.length,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Export API error:", error);
+    const message = error instanceof Error ? error.message : "Failed to fetch export dataset.";
     return NextResponse.json(
       {
         success: false,
         error: {
           code: "INTERNAL_ERROR",
-          message: error?.message || "Failed to fetch export dataset.",
+          message,
         },
       },
       { status: 500 }

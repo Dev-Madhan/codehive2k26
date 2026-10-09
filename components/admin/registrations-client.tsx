@@ -10,11 +10,9 @@ import {
   CheckIcon,
   Building2Icon,
   CalendarIcon,
-  FilterIcon,
   XIcon,
   UserIcon,
   RefreshCwIcon,
-  RadioIcon,
   BellIcon,
   BellOffIcon,
   SparklesIcon,
@@ -30,8 +28,6 @@ import {
   BadgeCheckIcon,
   TicketIcon,
   XCircleIcon,
-  AlertTriangleIcon,
-  ClockIcon as ClockAltIcon,
   DownloadIcon,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -39,14 +35,9 @@ import { ExportDataDialog } from "@/components/admin/export-dialog";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogFooter,
-  DialogClose,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
   Select,
   SelectContent,
@@ -54,7 +45,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { deleteRegistration } from "@/actions/registration";
+import { deleteRegistration, resendConfirmationEmail } from "@/actions/registration";
+import { IdCardPreview } from "@/components/admin/id-card-preview";
 
 export interface RegistrationItem {
   id: string;
@@ -94,6 +86,7 @@ export interface RegistrationItem {
       college?: string | null;
       department?: string | null;
       year?: string | null;
+      collegeIdUrl?: string | null;
       transportOptIn: boolean;
       pickupRoute?: string | null;
       pickupStop?: string | null;
@@ -126,6 +119,23 @@ function ParticipantDetailDialog({
 }) {
   const { participant, event, team, checkIn } = registration;
   const [isCopied, setIsCopied] = React.useState(false);
+  const [isResending, setIsResending] = React.useState(false);
+
+  const handleResendPass = async () => {
+    setIsResending(true);
+    try {
+      const res = await resendConfirmationEmail(registration.id);
+      if (res.success) {
+        toast.success(res.message || `Confirmation pass re-sent to ${participant.email}`);
+      } else {
+        toast.error(res.error?.message || "Failed to re-send ticket pass.");
+      }
+    } catch {
+      toast.error("Network error while dispatching pass.");
+    } finally {
+      setIsResending(false);
+    }
+  };
 
   const handleCopyCode = () => {
     navigator.clipboard.writeText(registration.registrationNumber);
@@ -185,6 +195,7 @@ function ParticipantDetailDialog({
           <div className="flex items-center gap-4">
             {/* Avatar */}
             {participant.imageUrl ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
               <img
                 src={participant.imageUrl}
                 alt={participant.name}
@@ -382,6 +393,17 @@ function ParticipantDetailDialog({
             </div>
           </div>
 
+          {/* ── Section: Uploaded College ID Card Verification ── */}
+          <div className="border-t border-[#262626]" />
+          <div>
+            <IdCardPreview
+              primaryUrl={participant.imageUrl}
+              candidateName={participant.name}
+              college={participant.college}
+              members={team?.members}
+            />
+          </div>
+
           {/* ── Section: Transport Details ── */}
           {registration.transportOptIn && (
             <>
@@ -436,12 +458,31 @@ function ParticipantDetailDialog({
             <>
               <div className="border-t border-[#262626]" />
               <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <UsersIcon className="size-3.5 text-white" />
-                  <h3 className="text-[11px] font-bold uppercase tracking-wider text-white">
-                    TEAM • {team.name}
-                  </h3>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <UsersIcon className="size-3.5 text-white" />
+                    <h3 className="text-[11px] font-bold uppercase tracking-wider text-white">
+                      TEAM • {team.name}
+                    </h3>
+                  </div>
+                  <span className="text-[10px] text-purple-300 font-bold border border-purple-800/50 bg-purple-950/30 px-2 py-0.5 uppercase tracking-wider font-mono">
+                    {team.members.length} Members
+                  </span>
                 </div>
+
+                {/* Team Leader Deletion Warning Note */}
+                <div className="border border-red-900/50 bg-red-950/20 p-2.5 mb-3 flex items-start gap-2.5">
+                  <ShieldAlertIcon className="size-4 text-red-400 shrink-0 mt-0.5" />
+                  <div className="text-[11px] leading-relaxed">
+                    <span className="font-bold text-red-300 uppercase block tracking-wider">
+                      Team Leader Account Warning
+                    </span>
+                    <span className="text-[#A3A3A3]">
+                      This candidate is the Team Leader for &ldquo;{team.name}&rdquo;. Deleting this registration will permanently delete the entire team and all {team.members.length} team members from the database.
+                    </span>
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   {team.members.map((member, idx) => (
                     <div
@@ -485,16 +526,32 @@ function ParticipantDetailDialog({
           <button
             onClick={onRemove}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] uppercase tracking-wider font-bold text-red-400 border border-red-900/60 bg-red-950/30 hover:bg-red-950/60 hover:text-red-300 transition-colors cursor-pointer"
+            title={team && team.name ? "Delete team leader and purge all team members" : "Remove candidate registration"}
           >
             <Trash2Icon className="size-3 shrink-0" />
-            <span>REMOVE CANDIDATE</span>
+            <span>{team && team.name ? "DELETE TEAM & ALL MEMBERS" : "REMOVE CANDIDATE"}</span>
           </button>
-          <button
-            onClick={() => onOpenChange(false)}
-            className="inline-flex items-center gap-1.5 px-4 py-1.5 text-[11px] uppercase tracking-wider font-bold text-[#E5E5E5] border border-[#262626] bg-[#0F0F0F] hover:bg-[#161616] hover:text-white transition-colors cursor-pointer"
-          >
-            <span>CLOSE</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleResendPass}
+              disabled={isResending}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] uppercase tracking-wider font-bold text-emerald-400 border border-emerald-900/60 bg-emerald-950/30 hover:bg-emerald-950/60 hover:text-emerald-300 transition-colors cursor-pointer disabled:opacity-50"
+              title={`Re-send digital pass ticket to ${participant.email}`}
+            >
+              {isResending ? (
+                <RefreshCwIcon className="size-3 shrink-0 animate-spin" />
+              ) : (
+                <MailIcon className="size-3 shrink-0" />
+              )}
+              <span>{isResending ? "DISPATCHING..." : "RESEND PASS EMAIL"}</span>
+            </button>
+            <button
+              onClick={() => onOpenChange(false)}
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 text-[11px] uppercase tracking-wider font-bold text-[#E5E5E5] border border-[#262626] bg-[#0F0F0F] hover:bg-[#161616] hover:text-white transition-colors cursor-pointer"
+            >
+              <span>CLOSE</span>
+            </button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
@@ -549,10 +606,15 @@ function RemoveCandidateDialog({
   onConfirm: () => void;
   isRemoving: boolean;
 }) {
+  const isTeam = Boolean(registration.team && registration.team.name);
+  const teamName = registration.team?.name;
+  const members = registration.team?.members || [];
+  const memberCount = members.length > 0 ? members.length : 3;
+
   return (
     <Dialog open={open} onOpenChange={isRemoving ? undefined : onOpenChange}>
       <DialogContent
-        className="max-w-md w-full bg-[#0F0F0F] border border-red-900/60 text-white p-0 overflow-hidden font-mono no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        className="max-w-lg w-full bg-[#0F0F0F] border border-red-900/60 text-white p-0 overflow-hidden font-mono no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         showCloseButton={false}
       >
         {/* Danger header */}
@@ -563,10 +625,12 @@ function RemoveCandidateDialog({
             </div>
             <div>
               <DialogTitle className="text-sm font-bold text-white uppercase tracking-wider">
-                REMOVE CANDIDATE
+                {isTeam ? "PURGE TEAM LEADER & ALL MEMBERS" : "REMOVE CANDIDATE"}
               </DialogTitle>
               <DialogDescription className="text-[11px] text-red-400 mt-0.5">
-                Permanent action. Candidate record will be deleted from the database.
+                {isTeam
+                  ? `Permanent action. Wipes entire team "${teamName}" and all ${memberCount} members from database.`
+                  : "Permanent action. Candidate record will be deleted from the database."}
               </DialogDescription>
             </div>
           </div>
@@ -575,13 +639,39 @@ function RemoveCandidateDialog({
         {/* Confirmation body */}
         <div className="px-5 py-4 space-y-4 max-h-[75vh] overflow-y-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           <p className="text-xs text-[#E5E5E5] leading-relaxed">
-            You are about to permanently delete the registration record for:
+            {isTeam ? (
+              <>
+                You are about to permanently purge the <span className="text-red-400 font-bold">Team Leader</span> and all linked <span className="text-red-400 font-bold">Team Members</span> for:
+              </>
+            ) : (
+              "You are about to permanently delete the registration record for:"
+            )}
           </p>
 
-          {/* Candidate card */}
-          <div className="border border-red-900/50 bg-red-950/10 p-3 space-y-1.5">
-            <p className="text-sm font-bold text-white">{registration.participant.name}</p>
-            <p className="text-[11px] text-[#A3A3A3] font-mono">{registration.participant.email}</p>
+          {/* Candidate & Team card */}
+          <div className="border border-red-900/50 bg-red-950/10 p-3 space-y-2">
+            {isTeam && (
+              <div className="flex items-center justify-between gap-2 border-b border-red-900/40 pb-2">
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-purple-300 bg-purple-950/40 border border-purple-800/60 px-2 py-0.5 uppercase tracking-wider">
+                  <UsersIcon className="size-3 text-purple-400" />
+                  TEAM: {teamName}
+                </span>
+                <span className="text-[10px] font-bold text-red-400 font-mono">
+                  {memberCount} MEMBERS TOTAL
+                </span>
+              </div>
+            )}
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-bold text-white">{registration.participant.name}</span>
+                {isTeam && (
+                  <span className="text-[9px] font-bold text-white bg-red-900/80 px-1.5 py-0.2 uppercase tracking-wider">
+                    LEADER
+                  </span>
+                )}
+              </div>
+              <p className="text-[11px] text-[#A3A3A3] font-mono mt-0.5">{registration.participant.email}</p>
+            </div>
             <div className="flex items-center gap-2 pt-0.5">
               <span className="inline-flex items-center gap-1 text-[10px] font-bold text-white bg-[#161616] border border-[#262626] px-2 py-0.5 font-mono">
                 <TicketIcon className="size-2.5" />
@@ -594,25 +684,99 @@ function RemoveCandidateDialog({
             </div>
           </div>
 
+          {/* If Team: Prominent Roster of Members Being Purged */}
+          {isTeam && members.length > 0 && (
+            <div className="border border-red-900/50 bg-[#080808] p-3 space-y-2">
+              <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-red-400">
+                <span className="flex items-center gap-1.5">
+                  <UsersIcon className="size-3.5 shrink-0" />
+                  MEMBERS PURGED FROM DATABASE ({members.length}):
+                </span>
+                <span className="text-[9px] text-[#737373]">NO RECOVERY</span>
+              </div>
+              <div className="space-y-1.5 max-h-40 overflow-y-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                {members.map((m, idx) => (
+                  <div
+                    key={m.id || idx}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 bg-red-950/20 border border-red-900/30 px-2.5 py-1.5 text-xs"
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="text-[10px] font-bold text-red-400 font-mono shrink-0">
+                        #{idx + 1}
+                      </span>
+                      <div className="min-w-0">
+                        <span className="text-white font-semibold block truncate">
+                          {m.name}
+                        </span>
+                        <span className="text-[10px] text-[#A3A3A3] block truncate font-mono">
+                          {m.phone}{m.email ? ` • ${m.email}` : ""}{m.department ? ` • ${m.department}` : ""}{m.year ? ` (${m.year})` : ""}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="shrink-0 self-start sm:self-auto flex items-center gap-1 text-[9px] font-mono">
+                      {m.collegeIdUrl && (
+                        <span className="text-amber-400 border border-amber-800/40 bg-amber-950/30 px-1 py-0.2">
+                          ID Card Purged
+                        </span>
+                      )}
+                      {m.transportOptIn ? (
+                        <span className="text-white border border-[#262626] bg-[#161616] px-1 py-0.2">
+                          Bus Seat Wiped
+                        </span>
+                      ) : null}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Warning list */}
           <div className="bg-[#080808] border border-red-900/40 p-3 space-y-2">
             <p className="text-[10px] font-bold uppercase tracking-wider text-red-400 flex items-center gap-1.5">
               <ShieldAlertIcon className="size-3.5 shrink-0" />
-              <span>CRITICAL ACTION WARNING:</span>
+              <span>CRITICAL CASCADE PURGE WARNING:</span>
             </p>
             <ul className="space-y-1.5 text-[11px] text-[#E5E5E5]">
-              <li className="flex items-start gap-2">
-                <XCircleIcon className="size-3.5 text-red-400 shrink-0 mt-0.5" />
-                <span>Permanent deletion of participant registration record</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <XCircleIcon className="size-3.5 text-red-400 shrink-0 mt-0.5" />
-                <span>Purge linked gate check-in pass and payment records</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <XCircleIcon className="size-3.5 text-red-400 shrink-0 mt-0.5" />
-                <span>Revoke candidate event pass code and QR credentials</span>
-              </li>
+              {isTeam ? (
+                <>
+                  <li className="flex items-start gap-2">
+                    <XCircleIcon className="size-3.5 text-red-400 shrink-0 mt-0.5" />
+                    <span>Permanent deletion of team &quot;{teamName}&quot; and Leader registration</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <XCircleIcon className="size-3.5 text-red-400 shrink-0 mt-0.5" />
+                    <span>Permanent deletion of all {memberCount} team members and attendance entries</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <XCircleIcon className="size-3.5 text-red-400 shrink-0 mt-0.5" />
+                    <span>Purge all uploaded College ID documents (Leader &amp; Members) from Tigris S3 storage</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <XCircleIcon className="size-3.5 text-red-400 shrink-0 mt-0.5" />
+                    <span>Revoke all linked bus reservations, check-in passes, and QR credentials</span>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li className="flex items-start gap-2">
+                    <XCircleIcon className="size-3.5 text-red-400 shrink-0 mt-0.5" />
+                    <span>Permanent deletion of participant registration record</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <XCircleIcon className="size-3.5 text-red-400 shrink-0 mt-0.5" />
+                    <span>Purge linked gate check-in pass and payment records</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <XCircleIcon className="size-3.5 text-red-400 shrink-0 mt-0.5" />
+                    <span>Revoke candidate event pass code and QR credentials</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <XCircleIcon className="size-3.5 text-red-400 shrink-0 mt-0.5" />
+                    <span>Physically purge all uploaded College ID documents from Tigris S3 storage</span>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
         </div>
@@ -634,12 +798,12 @@ function RemoveCandidateDialog({
             {isRemoving ? (
               <>
                 <span className="size-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                <span>REMOVING...</span>
+                <span>{isTeam ? "PURGING TEAM & MEMBERS..." : "REMOVING..."}</span>
               </>
             ) : (
               <>
                 <Trash2Icon className="size-3 shrink-0" />
-                <span>CONFIRM REMOVAL</span>
+                <span>{isTeam ? "CONFIRM PERMANENT TEAM PURGE" : "CONFIRM REMOVAL"}</span>
               </>
             )}
           </button>
@@ -679,11 +843,6 @@ export function RegistrationsClient({
   const [removeDialogOpen, setRemoveDialogOpen] = React.useState(false);
   const [isRemoving, setIsRemoving] = React.useState(false);
   const [exportDialogOpen, setExportDialogOpen] = React.useState(false);
-
-  // Sync initial registrations when prop changes
-  React.useEffect(() => {
-    setRegistrations(initialRegistrations);
-  }, [initialRegistrations]);
 
   // Audio chime for new registrations using Web Audio API
   const playLiveTone = React.useCallback(() => {
@@ -785,9 +944,11 @@ export function RegistrationsClient({
 
   // Immediate fetch on mount to ensure fresh data right away
   React.useEffect(() => {
-    fetchLiveRegistrations(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const init = async () => {
+      await fetchLiveRegistrations(false);
+    };
+    init();
+  }, [fetchLiveRegistrations]);
 
   // Auto-sync polling timer (every 5 seconds)
   React.useEffect(() => {
@@ -846,17 +1007,29 @@ export function RegistrationsClient({
     if (!selectedRegistration) return;
 
     setIsRemoving(true);
+    const target = selectedRegistration;
+    const isTeam = Boolean(target.team && target.team.name);
+    const teamName = target.team?.name;
+    const memberCount = target.team?.members?.length || 3;
+
     try {
-      const result = await deleteRegistration(selectedRegistration.id);
+      const result = await deleteRegistration(target.id);
 
       if (result.success) {
-        toast.success("Candidate removed successfully", {
-          description: `${selectedRegistration.participant.name}'s registration has been permanently deleted.`,
-          duration: 5000,
-        });
+        if (isTeam) {
+          toast.success("Team & Members Deleted Successfully", {
+            description: `Permanently deleted team "${teamName}" and all ${memberCount} members from database.`,
+            duration: 6000,
+          });
+        } else {
+          toast.success("Candidate removed successfully", {
+            description: `${target.participant.name}'s registration has been permanently deleted.`,
+            duration: 5000,
+          });
+        }
         // Remove from local state immediately
         setRegistrations((prev) =>
-          prev.filter((r) => r.id !== selectedRegistration.id)
+          prev.filter((r) => r.id !== target.id)
         );
         setRemoveDialogOpen(false);
         setSelectedRegistration(null);
@@ -947,19 +1120,6 @@ export function RegistrationsClient({
       return acc + (r.passengersCount || 1);
     }, 0);
   }, [registrations]);
-
-  // Real candidates count in filtered view
-  const filteredCandidates = React.useMemo(() => {
-    return filteredRegistrations.reduce((acc, r) => {
-      if (r.team?.members && r.team.members.length > 0) {
-        return acc + r.team.members.length;
-      }
-      if (r.team) {
-        return acc + 3; // Standard 3-member team
-      }
-      return acc + 1; // Solo candidate
-    }, 0);
-  }, [filteredRegistrations]);
 
   return (
     <div className="space-y-4 font-mono">
@@ -1227,7 +1387,7 @@ export function RegistrationsClient({
                   className="rounded-none border border-[#262626] bg-[#0F0F0F] font-mono text-xs text-white shadow-2xl p-1 no-scrollbar min-w-[210px] ring-1 ring-[#262626] z-50 animate-in fade-in-0 zoom-in-95 duration-100"
                 >
                   <div className="px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-[#737373] border-b border-[#262626] mb-1 flex items-center justify-between">
-                    <span>// HOSTED EVENTS</span>
+                    <span>{"// HOSTED EVENTS"}</span>
                     <span className="text-white font-bold">{availableEvents.length} TOTAL</span>
                   </div>
                   <SelectItem
@@ -1381,13 +1541,27 @@ export function RegistrationsClient({
                       <span className="truncate">{r.participant.name}</span>
                       <UserIcon className="size-3 text-[#737373] group-hover:text-white transition-colors shrink-0" />
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => handleOpenDetail(r)}
-                      className="text-[9px] text-[#A3A3A3] hover:text-white uppercase font-bold border border-[#262626] bg-[#161616] px-1.5 py-0.5 shrink-0 transition-colors cursor-pointer"
-                    >
-                      [ Details ]
-                    </button>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => handleOpenDetail(r)}
+                        className="text-[9px] text-[#A3A3A3] hover:text-white uppercase font-bold border border-[#262626] bg-[#161616] px-1.5 py-0.5 transition-colors cursor-pointer"
+                      >
+                        [ Details &amp; ID ]
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedRegistration(r);
+                          setRemoveDialogOpen(true);
+                        }}
+                        className="text-[9px] text-red-400 hover:text-red-300 uppercase font-bold border border-red-900/60 bg-red-950/20 hover:bg-red-950/50 px-1.5 py-0.5 transition-colors cursor-pointer flex items-center gap-1"
+                        title={r.team && r.team.name ? `Delete team "${r.team.name}" and all members` : "Delete candidate"}
+                      >
+                        <Trash2Icon className="size-2.5" />
+                        <span>[ Delete ]</span>
+                      </button>
+                    </div>
                   </div>
                   {r.team && r.team.name && (
                     <div className="flex items-center gap-1 text-[10px] text-purple-300 font-bold truncate">
@@ -1460,12 +1634,13 @@ export function RegistrationsClient({
               <th className="px-4 py-3">Transport (6:00 AM)</th>
               <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3">Checked In</th>
+              <th className="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#262626]">
             {filteredRegistrations.length === 0 ? (
               <tr>
-                <td colSpan={8} className="text-center py-8 text-[#737373]">
+                <td colSpan={9} className="text-center py-8 text-[#737373]">
                   No registrations found matching the filters.
                 </td>
               </tr>
@@ -1603,6 +1778,49 @@ export function RegistrationsClient({
                           </>
                         )}
                       </span>
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            toast.promise(resendConfirmationEmail(r.id), {
+                              loading: `Dispatching pass to ${r.participant.email}...`,
+                              success: (res) => {
+                                if (!res.success) throw new Error(res.error?.message || "Failed to dispatch email");
+                                return `Pass re-sent to ${r.participant.email}!`;
+                              },
+                              error: (err: unknown) => (err instanceof Error ? err.message : "Failed to send pass email"),
+                            });
+                          }}
+                          className="p-1.5 text-emerald-400 hover:text-emerald-300 border border-emerald-900/60 bg-emerald-950/20 hover:bg-emerald-950/50 transition-colors cursor-pointer"
+                          title={`Resend ticket pass to ${r.participant.email}`}
+                        >
+                          <MailIcon className="size-3" />
+                          <span className="sr-only">Resend Pass</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleOpenDetail(r)}
+                          className="p-1.5 text-[#A3A3A3] hover:text-white border border-[#262626] bg-[#161616] hover:bg-[#202020] transition-colors cursor-pointer"
+                          title="View full details and ID cards"
+                        >
+                          <UserIcon className="size-3" />
+                          <span className="sr-only">Details</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedRegistration(r);
+                            setRemoveDialogOpen(true);
+                          }}
+                          className="p-1.5 text-red-400 hover:text-red-300 border border-red-900/60 bg-red-950/20 hover:bg-red-950/50 transition-colors cursor-pointer"
+                          title={r.team && r.team.name ? `Delete team "${r.team.name}" and all members` : "Delete candidate"}
+                        >
+                          <Trash2Icon className="size-3" />
+                          <span className="sr-only">Delete</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );

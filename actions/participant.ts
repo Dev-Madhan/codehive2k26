@@ -6,7 +6,14 @@ import { ActionResponse } from "@/types";
 import { Participant } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
+import { requireSelfOrAdmin } from "@/lib/auth-guard";
+
 export async function getParticipantProfile(userId: string): Promise<ActionResponse<Participant | null>> {
+  const authCheck = await requireSelfOrAdmin(userId);
+  if (authCheck.error) {
+    return { success: false, error: authCheck.error };
+  }
+
   try {
     const participant = await prisma.participant.findUnique({
       where: { userId },
@@ -33,6 +40,11 @@ export async function updateParticipantProfile(
   userId: string,
   input: ParticipantProfileInput
 ): Promise<ActionResponse<Participant>> {
+  const authCheck = await requireSelfOrAdmin(userId);
+  if (authCheck.error) {
+    return { success: false, error: authCheck.error };
+  }
+
   const parsed = participantProfileSchema.safeParse(input);
   if (!parsed.success) {
     return {

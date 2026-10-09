@@ -1,18 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
+import { auth } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export async function GET(req: NextRequest) {
   try {
+    // 1. Cybersecurity Guard: Restrict access strictly to authenticated ADMIN sessions
+    const session = await auth.api.getSession({
+      headers: req.headers,
+    });
+
+    const userRole = (session?.user as { role?: string })?.role?.toUpperCase();
+    if (!session?.user || userRole !== "ADMIN") {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: "UNAUTHORIZED",
+            message: "Administrative privileges required to access participant directory data.",
+          },
+        },
+        { status: 401 }
+      );
+    }
+
+    // 2. Parse & Bounds-Check Query Parameters (Anti-Memory Exhaustion)
     const { searchParams } = new URL(req.url);
     const eventId = searchParams.get("eventId");
     const eventSlug = searchParams.get("eventSlug");
     const limitParam = searchParams.get("limit");
-    const limit = limitParam ? Math.max(parseInt(limitParam, 10), 1) : undefined;
+    // Maximum safe bounding: 500 records per request to prevent DB starvation
+    const limit = limitParam ? Math.min(Math.max(parseInt(limitParam, 10), 1), 500) : undefined;
 
-    const where: any = {};
+    const where: Prisma.RegistrationWhereInput = {};
     if (eventId && eventId !== "ALL") {
       where.eventId = eventId;
     } else if (eventSlug && eventSlug !== "ALL") {
@@ -55,6 +78,11 @@ export async function GET(req: NextRequest) {
                 id: true,
                 name: true,
                 phone: true,
+                email: true,
+                college: true,
+                department: true,
+                year: true,
+                collegeIdUrl: true,
                 transportOptIn: true,
                 pickupRoute: true,
                 pickupStop: true,
@@ -102,4 +130,3 @@ export async function GET(req: NextRequest) {
     );
   }
 }
-

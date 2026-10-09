@@ -2,9 +2,11 @@
 
 import prisma from "@/lib/prisma";
 import crypto from "crypto";
+import { headers } from "next/headers";
 import { ActionResponse } from "@/types";
 import { generateVerificationToken } from "@/lib/otp-token";
 import { sendOtpEmail } from "@/lib/mailer";
+import { checkRateLimit, getClientIp, RATE_LIMIT_TIERS } from "@/lib/rate-limiter";
 
 const OTP_EXPIRY_MINUTES = 5;
 const OTP_COOLDOWN_SECONDS = 30;
@@ -18,6 +20,7 @@ function generateOtp(): string {
 
 /**
  * Send an Email OTP for team leader verification using Nodemailer
+ * Protected by multi-tier rate limiting (Per-IP & Per-Email)
  */
 export async function sendEmailOtp(
   email: string,
@@ -37,13 +40,47 @@ export async function sendEmailOtp(
     };
   }
 
+  // 1. IP & Email Composite Rate Limiting (Anti-Email Bomber)
+  try {
+    const reqHeaders = await headers();
+    const ip = getClientIp(reqHeaders);
+
+    const ipLimit = await checkRateLimit(`otp_send_ip:${ip}`, RATE_LIMIT_TIERS.OTP_SEND);
+    if (!ipLimit.success) {
+      return {
+        success: false,
+        error: {
+          code: "RATE_LIMIT_EXCEEDED",
+          message: `Too many verification requests from your network. Please wait ${ipLimit.resetSeconds}s before trying again.`,
+        },
+      };
+    }
+
+    const emailLimit = await checkRateLimit(`otp_send_email:${normalizedEmail}`, {
+      limit: 5,
+      windowSeconds: 900, // 5 requests per 15 minutes
+    });
+    if (!emailLimit.success) {
+      return {
+        success: false,
+        error: {
+          code: "RATE_LIMIT_EXCEEDED",
+          message: `Too many verification attempts for this email address. Please wait ${emailLimit.resetSeconds}s.`,
+        },
+      };
+    }
+  } catch {
+    // Non-blocking in headless contexts
+  }
+
   const identifier = `email:${normalizedEmail}`;
 
-  // EMERGENCY HOTFIX: If bypass is active, issue valid cryptographic token immediately
-  const isBypassActive = process.env.EMERGENCY_OTP_BYPASS !== "false";
+  // 2. Emergency Bypass Guard (Restricted to Development / Explicit Opt-in)
+  const isDev = process.env.NODE_ENV === "development";
+  const isBypassActive = process.env.EMERGENCY_OTP_BYPASS === "true" || (isDev && process.env.EMERGENCY_OTP_BYPASS !== "false");
   if (isBypassActive) {
     const verificationToken = generateVerificationToken(normalizedEmail);
-    console.log(`[EMERGENCY OTP BYPASS] Instant verification issued for: ${normalizedEmail}`);
+    console.log(`[EMERGENCY OTP BYPASS] Verification issued for: ${normalizedEmail}`);
     return {
       success: true,
       data: {
@@ -107,9 +144,8 @@ export async function sendEmailOtp(
       eventName,
     });
 
-    const isDev = process.env.NODE_ENV === "development";
     console.log(
-      `[EMAIL OTP] To: ${normalizedEmail} | OTP: ${otp} | Sent via SMTP: ${emailResult.success}`
+      `[EMAIL OTP] To: ${normalizedEmail} | OTP Sent via SMTP: ${emailResult.success}`
     );
 
     return {
@@ -135,7 +171,7 @@ export async function sendEmailOtp(
 
 /**
  * Verify the OTP entered by the team leader for their email
- * Returns a signed verification token on success
+ * Protected by attempt rate limits (Anti-Brute Force)
  */
 export async function verifyEmailOtp(
   email: string,
@@ -164,11 +200,31 @@ export async function verifyEmailOtp(
     };
   }
 
+  // 1. IP & Email Brute Force Protection
+  try {
+    const reqHeaders = await headers();
+    const ip = getClientIp(reqHeaders);
+
+    const verifyRateLimit = await checkRateLimit(`otp_verify_ip:${ip}`, RATE_LIMIT_TIERS.OTP_VERIFY);
+    if (!verifyRateLimit.success) {
+      return {
+        success: false,
+        error: {
+          code: "RATE_LIMIT_EXCEEDED",
+          message: `Too many invalid attempts. Brute-force lockout active for ${verifyRateLimit.resetSeconds}s.`,
+        },
+      };
+    }
+  } catch {
+    // Non-blocking in headless contexts
+  }
+
   const identifier = `email:${normalizedEmail}`;
 
-  // EMERGENCY HOTFIX: If bypass active or master code 262626 entered, authorize immediately
-  const isBypassActive = process.env.EMERGENCY_OTP_BYPASS !== "false";
-  if (isBypassActive || otp.trim() === "262626") {
+  // 2. Emergency Dev Bypass Guard
+  const isDev = process.env.NODE_ENV === "development";
+  const isBypassActive = process.env.EMERGENCY_OTP_BYPASS === "true" || (isDev && process.env.EMERGENCY_OTP_BYPASS !== "false");
+  if (isBypassActive || (isDev && otp.trim() === "262626")) {
     const verificationToken = generateVerificationToken(normalizedEmail);
     return {
       success: true,
@@ -205,7 +261,12 @@ export async function verifyEmailOtp(
       };
     }
 
-    if (record.value !== otp.trim()) {
+    // Timing-safe comparison to prevent side-channel timing attacks
+    const expected = Buffer.from(record.value);
+    const provided = Buffer.from(otp.trim());
+    const isMatch = expected.length === provided.length && crypto.timingSafeEqual(expected, provided);
+
+    if (!isMatch) {
       return {
         success: false,
         error: {
@@ -215,7 +276,7 @@ export async function verifyEmailOtp(
       };
     }
 
-    // OTP matches — delete the record so it cannot be reused
+    // OTP matches — delete the record immediately so it cannot be replayed
     await prisma.verification.delete({
       where: { id: record.id },
     });

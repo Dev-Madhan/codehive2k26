@@ -3,6 +3,8 @@
 import prisma from "@/lib/prisma";
 import { ActionResponse } from "@/types";
 import { Team } from "@prisma/client";
+import { requireAdminSession } from "@/lib/auth-guard";
+import { logAuditEvent } from "@/lib/audit";
 
 export async function createTeam(
   leaderParticipantId: string,
@@ -11,6 +13,11 @@ export async function createTeam(
   eventId: string,
   teamName: string
 ): Promise<ActionResponse<Team>> {
+  const authCheck = await requireAdminSession();
+  if (authCheck.error) {
+    return { success: false, error: authCheck.error };
+  }
+
   try {
     const existing = await prisma.team.findUnique({
       where: {
@@ -49,12 +56,21 @@ export async function createTeam(
       return newTeam;
     });
 
+    await logAuditEvent({
+      actorId: authCheck.user.id,
+      action: "EVENT_UPDATE",
+      entity: "Event",
+      entityId: eventId,
+      metadata: { action: "ADMIN_CREATE_TEAM", teamId: team.id, teamName },
+    });
+
     return { success: true, data: team, message: "Team created successfully!" };
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("createTeam error:", error);
+    const message = error instanceof Error ? error.message : "Failed to create team.";
     return {
       success: false,
-      error: { code: "INTERNAL_ERROR", message: "Failed to create team." },
+      error: { code: "INTERNAL_ERROR", message },
     };
   }
 }

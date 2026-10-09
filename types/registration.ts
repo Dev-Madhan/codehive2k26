@@ -55,6 +55,8 @@ export interface RegistrationDetails {
 export interface CheckInResult {
   registrationNumber: string;
   participantName: string;
+  participantEmail?: string;
+  participantPhone?: string;
   eventName: string;
   checkedInAt: Date;
   alreadyCheckedIn?: boolean;

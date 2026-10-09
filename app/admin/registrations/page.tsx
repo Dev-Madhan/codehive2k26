@@ -45,6 +45,7 @@ export default async function AdminRegistrationsPage() {
                 pickupRoute: true,
                 pickupStop: true,
                 pickupLandmark: true,
+                collegeIdUrl: true,
               },
             },
           },

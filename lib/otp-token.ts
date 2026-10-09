@@ -2,6 +2,17 @@ import crypto from "crypto";
 
 const VERIFICATION_TOKEN_EXPIRY_MINUTES = 15;
 
+function getVerificationSecret(): string {
+  const secret = process.env.BETTER_AUTH_SECRET;
+  if (!secret) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("[Security Alert] BETTER_AUTH_SECRET must be configured in production.");
+    }
+    return "dev-local-ephemeral-secret-codehive2k26";
+  }
+  return secret;
+}
+
 /**
  * Generate a signed verification token after successful OTP validation for an email address
  */
@@ -14,7 +25,7 @@ export function generateVerificationToken(email: string): string {
     ).toISOString(),
   });
 
-  const secret = process.env.BETTER_AUTH_SECRET || "codehive-fallback-secret";
+  const secret = getVerificationSecret();
   const hmac = crypto.createHmac("sha256", secret).update(payload).digest("hex");
 
   // Base64-encode the payload + hmac
@@ -23,7 +34,7 @@ export function generateVerificationToken(email: string): string {
 }
 
 /**
- * Verify a previously issued verification token
+ * Verify a previously issued verification token with timing-safe HMAC check
  */
 export function validateVerificationToken(token: string): {
   valid: boolean;
@@ -35,13 +46,21 @@ export function validateVerificationToken(token: string): {
 
     if (!payload || !hmac) return { valid: false };
 
-    const secret = process.env.BETTER_AUTH_SECRET || "codehive-fallback-secret";
+    const secret = getVerificationSecret();
     const expectedHmac = crypto
       .createHmac("sha256", secret)
       .update(payload)
       .digest("hex");
 
-    if (hmac !== expectedHmac) return { valid: false };
+    const hmacBuf = Buffer.from(hmac, "hex");
+    const expectedBuf = Buffer.from(expectedHmac, "hex");
+
+    if (
+      hmacBuf.length !== expectedBuf.length ||
+      !crypto.timingSafeEqual(hmacBuf, expectedBuf)
+    ) {
+      return { valid: false };
+    }
 
     const data = JSON.parse(payload);
     if (!data.verified || new Date(data.expiresAt) < new Date()) {
