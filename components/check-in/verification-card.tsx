@@ -1,21 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { CheckInResult } from "@/types/registration";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
 import {
   ShieldCheckIcon,
   AlertTriangleIcon,
-  ClockIcon,
   BusIcon,
   UsersIcon,
-  UserCheckIcon,
   CheckIcon,
   ArrowRightIcon,
+  CopyIcon,
+  EyeIcon,
+  ClockIcon,
 } from "lucide-react";
 
 interface VerificationCardProps {
@@ -31,196 +33,298 @@ export function VerificationCard({
   onAdmitNow,
   isInspectMode = false,
 }: VerificationCardProps) {
-  // Local state to keep track of team members physically present
-  const [presentMembers, setPresentMembers] = useState<Record<string, boolean>>(() => {
-    const initial: Record<string, boolean> = {};
-    if (result.teamMembers) {
-      result.teamMembers.forEach((m) => {
-        initial[m] = true;
-      });
-    }
-    return initial;
-  });
+  const [copied, setCopied] = useState(false);
+
+  // Extract and clean leader name
+  const leaderName = result.participantName.trim();
+
+  // Deduplicate other members and exclude leader
+  const uniqueOtherMembers = useMemo(() => {
+    if (!result.teamMembers || result.teamMembers.length === 0) return [];
+    const seen = new Set<string>();
+    const filtered: string[] = [];
+    result.teamMembers.forEach((raw) => {
+      const name = raw.trim();
+      if (!name) return;
+      if (name.toLowerCase() === leaderName.toLowerCase()) return;
+      const lower = name.toLowerCase();
+      if (!seen.has(lower)) {
+        seen.add(lower);
+        filtered.push(name);
+      }
+    });
+    return filtered;
+  }, [result.teamMembers, leaderName]);
+
+  // Local state for absent toggles (default is present)
+  const [absentMembers, setAbsentMembers] = useState<Record<string, boolean>>({});
 
   const toggleMember = (name: string) => {
-    setPresentMembers((prev) => ({
+    setAbsentMembers((prev) => ({
       ...prev,
       [name]: !prev[name],
     }));
   };
 
+  const isMemberPresent = (member: string) => !absentMembers[member];
+
+  // Keyboard shortcut: Space or Enter triggers next scan
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      if (target?.tagName === "INPUT" || target?.tagName === "TEXTAREA") return;
+      if (e.code === "Space" || e.code === "Enter") {
+        e.preventDefault();
+        onNextScan();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onNextScan]);
+
+  const handleCopyCode = async () => {
+    try {
+      await navigator.clipboard.writeText(result.registrationNumber);
+      setCopied(true);
+      toast.success("Pass code copied!");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("Failed to copy code");
+    }
+  };
+
   const isDuplicate = Boolean(result.alreadyCheckedIn);
+  const presentCount = 1 + uniqueOtherMembers.filter((m) => isMemberPresent(m)).length;
+  const totalCount = 1 + uniqueOtherMembers.length;
 
   return (
     <Card
-      className={`rounded-none border-2 font-mono shadow-2xl animate-in fade-in zoom-in-95 duration-200 ${
+      className={`rounded-none border font-mono shadow-xl animate-in fade-in slide-in-from-top-3 duration-200 overflow-hidden ${
         isDuplicate
-          ? "border-amber-500/80 bg-[#0F0808]"
-          : "border-white/80 bg-[#080808]"
+          ? "border-amber-500/80 bg-[#0B0707]"
+          : isInspectMode
+          ? "border-cyan-500/70 bg-[#070A0D]"
+          : "border-[#2E2E2E] bg-[#0A0A0A]"
       }`}
     >
-      {/* ── Status Header ── */}
-      <CardHeader className="border-b border-[#262626] p-3 sm:p-4 flex flex-row items-center justify-between space-y-0">
-        <div className="flex items-center gap-2 min-w-0">
+      {/* ── Status Indicator Accent Bar ── */}
+      <div
+        className={`h-1 w-full ${
+          isDuplicate
+            ? "bg-amber-500"
+            : isInspectMode
+            ? "bg-cyan-500"
+            : "bg-emerald-500"
+        }`}
+      />
+
+      {/* ── Minimal Header: Status Badge & Timestamp ── */}
+      <CardHeader className="border-b border-[#222222] p-3 sm:p-4 flex flex-row items-center justify-between space-y-0 bg-[#0E0E0E]">
+        <div className="flex items-center gap-2">
           {isDuplicate ? (
-            <AlertTriangleIcon className="size-5 text-amber-400 shrink-0" />
+            <AlertTriangleIcon className="size-4 text-amber-400 shrink-0" />
+          ) : isInspectMode ? (
+            <EyeIcon className="size-4 text-cyan-400 shrink-0" />
           ) : (
-            <ShieldCheckIcon className="size-5 text-white shrink-0" />
+            <ShieldCheckIcon className="size-4 text-emerald-400 shrink-0" />
           )}
-          <div className="min-w-0">
-            <span className="text-xs font-bold uppercase tracking-wider text-white block truncate">
-              {isDuplicate
-                ? "Duplicate Pass Warning"
+          <Badge
+            variant={isDuplicate ? "destructive" : "outline"}
+            className={`rounded-none text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 shrink-0 ${
+              isDuplicate
+                ? "bg-amber-500/20 text-amber-300 border-amber-500/60"
                 : isInspectMode
-                ? "Pass Inspected • Active"
-                : "Pass Verified • Admitted"}
-            </span>
-            <span className="text-[10px] text-[#737373] block truncate">
-              {isDuplicate
-                ? "This pass was already scanned for entry"
-                : isInspectMode
-                ? "Candidate details verified in inspect mode"
-                : "Candidate officially checked into event"}
-            </span>
-          </div>
+                ? "bg-cyan-500/15 text-cyan-300 border-cyan-500/50"
+                : "bg-emerald-500/15 text-emerald-400 border-emerald-500/60"
+            }`}
+          >
+            {isDuplicate ? "⚠ ALREADY CHECKED IN" : isInspectMode ? "◉ INSPECT ONLY" : "● ADMITTED"}
+          </Badge>
         </div>
 
-        <Badge
-          variant={isDuplicate ? "destructive" : "outline"}
-          className={`rounded-none text-[9px] sm:text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 shrink-0 ${
-            isDuplicate
-              ? "bg-amber-500/20 text-amber-300 border-amber-500/50"
-              : isInspectMode
-              ? "bg-[#1C1C1C] text-white border-white/40"
-              : "bg-white text-black border-white"
-          }`}
-        >
-          {isDuplicate ? "ALREADY CHECKED IN" : isInspectMode ? "INSPECT ONLY" : "ATTENDED"}
-        </Badge>
+        <div className="flex items-center gap-1.5 text-[10px] text-[#888888]">
+          <ClockIcon className="size-3 text-[#737373]" />
+          <span>
+            {new Date(result.checkedInAt).toLocaleTimeString("en-IN", {
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            })}
+          </span>
+        </div>
       </CardHeader>
 
-      <CardContent className="p-3 sm:p-5 space-y-3 text-xs">
-        {/* Pass Code & Attendee Name */}
-        <div className="flex items-baseline justify-between gap-1 border-b border-[#262626]/80 pb-2">
-          <span className="text-[#737373] uppercase text-[10px] shrink-0">Pass Code:</span>
-          <span className="text-base sm:text-xl font-bold text-white tracking-widest text-right">
-            {result.registrationNumber}
-          </span>
-        </div>
-
-        <div className="flex items-baseline justify-between gap-1 border-b border-[#262626]/80 pb-2">
-          <span className="text-[#737373] uppercase text-[10px] shrink-0">Candidate:</span>
-          <span className="font-bold text-white text-sm sm:text-base text-right truncate">
-            {result.participantName}
-          </span>
-        </div>
-
-        <div className="flex items-baseline justify-between gap-1 border-b border-[#262626]/80 pb-2">
-          <span className="text-[#737373] uppercase text-[10px] shrink-0">Event:</span>
-          <span className="font-semibold text-[#E5E5E5] text-right truncate">{result.eventName}</span>
-        </div>
-
-        {result.college && (
-          <div className="flex items-baseline justify-between gap-1 border-b border-[#262626]/80 pb-2">
-            <span className="text-[#737373] uppercase text-[10px] shrink-0">College:</span>
-            <span className="text-[#A3A3A3] text-right text-[11px] sm:text-xs truncate">
-              {result.college} {result.department ? `(${result.department})` : ""}
+      <CardContent className="p-3.5 sm:p-4 space-y-3 text-xs">
+        {/* ── Pass Code Strip with One-Tap Copy ── */}
+        <div className="flex items-center justify-between bg-[#121212] border border-[#222222] px-3 py-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="text-[9px] uppercase tracking-wider text-[#737373] font-bold shrink-0">
+              PASS:
+            </span>
+            <span className="text-sm sm:text-base font-black text-white tracking-widest truncate">
+              {result.registrationNumber}
             </span>
           </div>
-        )}
 
-        {/* Transportation Route Badge */}
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={handleCopyCode}
+            className="h-6 px-1.5 rounded-none text-[10px] text-[#A3A3A3] hover:text-white uppercase font-mono cursor-pointer shrink-0"
+          >
+            {copied ? (
+              <CheckIcon className="size-3 text-emerald-400" />
+            ) : (
+              <CopyIcon className="size-3" />
+            )}
+          </Button>
+        </div>
+
+        {/* ── Candidate & Event Primary Details ── */}
+        <div className="space-y-1.5 bg-[#0D0D0D] border border-[#222222] p-3">
+          <div className="flex items-baseline justify-between gap-2">
+            <span className="text-[9px] text-[#737373] uppercase font-bold shrink-0">
+              CANDIDATE:
+            </span>
+            <span className="text-sm sm:text-base font-bold text-white text-right truncate">
+              {result.participantName}
+            </span>
+          </div>
+
+          <div className="flex items-baseline justify-between gap-2 border-t border-[#1C1C1C] pt-1.5">
+            <span className="text-[9px] text-[#737373] uppercase font-bold shrink-0">
+              EVENT:
+            </span>
+            <span className="text-xs font-semibold text-[#E5E5E5] text-right truncate">
+              {result.eventName}
+            </span>
+          </div>
+
+          {result.college && (
+            <div className="flex items-baseline justify-between gap-2 border-t border-[#1C1C1C] pt-1.5">
+              <span className="text-[9px] text-[#737373] uppercase font-bold shrink-0">
+                COLLEGE:
+              </span>
+              <span className="text-[11px] text-[#A3A3A3] text-right truncate">
+                {result.college} {result.department ? `(${result.department})` : ""}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* ── Transportation Badge (Only if opted in) ── */}
         {result.transportOptIn && (
-          <div className="p-2.5 bg-[#141414] border border-[#262626] flex items-center justify-between gap-2">
+          <div className="flex items-center justify-between gap-2 bg-[#121212] border border-[#222222] p-2.5">
             <div className="flex items-center gap-2 min-w-0">
-              <BusIcon className="size-4 text-white shrink-0" />
+              <BusIcon className="size-3.5 text-white shrink-0" />
               <div className="min-w-0">
-                <span className="text-[9px] uppercase text-[#737373] block">College Bus Pass:</span>
-                <span className="text-white font-bold text-xs truncate block">
-                  {result.pickupRoute || "Assigned Bus Route"}
+                <span className="text-white font-bold text-xs block truncate">
+                  {result.pickupRoute || "College Bus Pass"}
                 </span>
                 {result.pickupStop && (
-                  <span className="text-[10px] text-[#A3A3A3] block truncate">
+                  <span className="text-[10px] text-[#888888] block truncate">
                     Stop: {result.pickupStop}
                   </span>
                 )}
               </div>
             </div>
-            <Badge variant="outline" className="rounded-none border-white/40 text-[9px] sm:text-[10px] font-mono shrink-0">
+            <Badge
+              variant="outline"
+              className="rounded-none border-[#333333] text-[9px] font-mono shrink-0"
+            >
               {result.passengersCount || 1} SEAT{(result.passengersCount || 1) > 1 ? "S" : ""}
             </Badge>
           </div>
         )}
 
-        {/* Team Details & Member Headcount Checkbox Roster */}
+        {/* ── Team Headcount Checklist (Only if team event) ── */}
         {result.teamName && (
-          <div className="space-y-2 pt-1 border-b border-[#262626]/80 pb-3">
-            <div className="flex items-center justify-between">
-              <span className="text-[#737373] uppercase text-[10px] flex items-center gap-1.5 truncate">
+          <div className="space-y-2 bg-[#0D0D0D] border border-[#222222] p-2.5 sm:p-3">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[10px] text-[#737373] uppercase font-bold flex items-center gap-1.5 truncate">
                 <UsersIcon className="size-3 text-white shrink-0" />
-                <span className="truncate">Team: {result.teamName.toUpperCase()}</span>
+                <span className="truncate">TEAM: {result.teamName.toUpperCase()}</span>
               </span>
-              <span className="text-[10px] text-[#A3A3A3] shrink-0">
-                {Object.values(presentMembers).filter(Boolean).length + 1}/{(result.teamMembers?.length || 0) + 1} Present
-              </span>
+              <Badge
+                variant="outline"
+                className="rounded-none border-[#333333] bg-[#141414] text-[9px] text-white font-mono px-1.5 py-0 shrink-0"
+              >
+                {presentCount}/{totalCount} Present
+              </Badge>
             </div>
 
-            {result.teamMembers && result.teamMembers.length > 0 && (
-              <div className="space-y-1.5 pt-1">
-                <div className="text-[9px] text-[#737373] uppercase">Gate Headcount Checklist:</div>
-                <div className="flex items-center gap-2 p-2 bg-[#121212] border border-[#262626]">
-                  <Checkbox checked disabled className="rounded-none border-white" />
-                  <span className="text-white text-xs font-semibold truncate">{result.participantName}</span>
-                  <Badge variant="outline" className="rounded-none text-[8px] px-1 py-0 ml-auto shrink-0">
-                    LEADER
-                  </Badge>
+            <div className="space-y-1">
+              {/* Leader Row (Always Checked, Never Duplicated) */}
+              <div className="flex items-center justify-between p-2 bg-[#141414] border border-[#222222]">
+                <div className="flex items-center gap-2 min-w-0">
+                  <Checkbox
+                    checked
+                    disabled
+                    className="rounded-none border-emerald-500 bg-emerald-500 text-black data-[state=checked]:bg-emerald-500 data-[state=checked]:text-black"
+                  />
+                  <span className="text-white text-xs font-semibold truncate">
+                    {leaderName}
+                  </span>
                 </div>
+                <Badge
+                  variant="outline"
+                  className="rounded-none border-emerald-500/40 bg-emerald-500/10 text-emerald-400 text-[8px] font-bold px-1 py-0 uppercase shrink-0"
+                >
+                  LEADER
+                </Badge>
+              </div>
 
-                {result.teamMembers.map((member, idx) => (
+              {/* Deduplicated Other Team Members */}
+              {uniqueOtherMembers.map((member) => {
+                const isPresent = isMemberPresent(member);
+                return (
                   <div
-                    key={idx}
+                    key={member}
                     onClick={() => toggleMember(member)}
-                    className="flex items-center gap-2 p-2 bg-[#121212] border border-[#262626] cursor-pointer hover:border-[#404040] active:bg-[#181818] touch-manipulation"
+                    className={`flex items-center justify-between p-2 border cursor-pointer select-none transition-colors active:scale-[0.99] touch-manipulation ${
+                      isPresent
+                        ? "bg-[#141414] border-[#2A2A2A]"
+                        : "bg-[#080808] border-[#1C1C1C] opacity-50"
+                    }`}
                   >
-                    <Checkbox
-                      checked={Boolean(presentMembers[member])}
-                      onCheckedChange={() => toggleMember(member)}
-                      className="rounded-none border-[#737373]"
-                    />
-                    <span className="text-white text-xs truncate">{member}</span>
-                    <span className="text-[9px] text-[#737373] ml-auto shrink-0">
-                      {presentMembers[member] ? "PRESENT" : "ABSENT"}
+                    <div className="flex items-center gap-2 min-w-0">
+                      <Checkbox
+                        checked={isPresent}
+                        onCheckedChange={() => toggleMember(member)}
+                        className="rounded-none border-[#555555]"
+                      />
+                      <span
+                        className={`text-xs truncate ${
+                          isPresent ? "text-white font-medium" : "text-[#737373] line-through"
+                        }`}
+                      >
+                        {member}
+                      </span>
+                    </div>
+                    <span
+                      className={`text-[9px] font-mono font-bold uppercase shrink-0 ${
+                        isPresent ? "text-emerald-400" : "text-[#737373]"
+                      }`}
+                    >
+                      {isPresent ? "PRESENT" : "ABSENT"}
                     </span>
                   </div>
-                ))}
-              </div>
-            )}
+                );
+              })}
+            </div>
           </div>
         )}
-
-        {/* Timestamp & Auditor Information */}
-        <div className="flex items-center justify-between text-[10px] text-[#737373] pt-1">
-          <span className="flex items-center gap-1">
-            <ClockIcon className="size-3 shrink-0" />
-            Time: {new Date(result.checkedInAt).toLocaleTimeString("en-IN")}
-          </span>
-          {result.checkedInBy && (
-            <span className="flex items-center gap-1 text-[#A3A3A3] truncate">
-              <UserCheckIcon className="size-3 shrink-0" />
-              Staff: {result.checkedInBy}
-            </span>
-          )}
-        </div>
       </CardContent>
 
-      <Separator className="bg-[#262626]" />
+      <Separator className="bg-[#222222]" />
 
-      <CardFooter className="p-3 sm:p-4 flex flex-col sm:flex-row gap-2">
+      <CardFooter className="p-3 sm:p-4 flex flex-col gap-2 bg-[#0E0E0E]">
         {isInspectMode && onAdmitNow && (
           <Button
             type="button"
             onClick={onAdmitNow}
-            className="w-full rounded-none bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs uppercase font-bold h-11 sm:h-12 cursor-pointer active:scale-[0.99] transition-transform"
+            className="w-full rounded-none bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs uppercase font-bold h-11 cursor-pointer active:scale-[0.99] transition-transform"
           >
             <CheckIcon className="size-3.5 mr-1.5" />
             <span>[ ADMIT &amp; CHECK-IN ATTENDEE NOW ]</span>
@@ -230,12 +334,14 @@ export function VerificationCard({
         <Button
           type="button"
           onClick={onNextScan}
-          className="w-full rounded-none bg-white hover:bg-neutral-200 text-black font-mono text-xs sm:text-sm uppercase tracking-wider font-bold h-11 sm:h-12 shadow-md cursor-pointer active:scale-[0.99] transition-transform"
+          className="w-full rounded-none bg-white hover:bg-neutral-200 text-black font-mono text-xs sm:text-sm uppercase tracking-wider font-black h-11 sm:h-12 shadow-md cursor-pointer active:scale-[0.99] transition-transform flex items-center justify-center gap-1.5"
         >
           <span>[ + SCAN NEXT ATTENDEE ]</span>
-          <ArrowRightIcon className="size-3.5 ml-1.5" />
+          <ArrowRightIcon className="size-4 shrink-0" />
         </Button>
       </CardFooter>
     </Card>
   );
 }
+
+export default VerificationCard;

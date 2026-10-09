@@ -103,6 +103,8 @@ export async function checkInParticipant(
         data: {
           registrationNumber: registration.registrationNumber,
           participantName: registration.participant.name,
+          participantEmail: registration.participant.email,
+          participantPhone: registration.participant.phone,
           eventName: registration.event.name,
           checkedInAt: registration.checkIn?.checkedInAt || new Date(),
           alreadyCheckedIn: Boolean(registration.checkedIn || registration.checkIn),
@@ -181,6 +183,8 @@ export async function checkInParticipant(
       data: {
         registrationNumber: registration.registrationNumber,
         participantName: registration.participant.name,
+        participantEmail: registration.participant.email,
+        participantPhone: registration.participant.phone,
         eventName: registration.event.name,
         checkedInAt: checkInRecord.checkedInAt,
         alreadyCheckedIn: false,

@@ -864,9 +864,9 @@ export function RegistrationForm({
 
           {/* Verified Badge */}
           {isEmailVerified && (
-            <div className="flex items-center gap-2 p-2.5 rounded-none border border-white/50 bg-[#161616]">
-              <ShieldCheckIcon className="size-4 text-white shrink-0" />
-              <span className="text-[11px] font-mono font-bold text-white uppercase tracking-wider">
+            <div className="inline-flex w-fit items-center gap-2 px-3 py-1.5 rounded-none border border-emerald-500/50 bg-emerald-950/40 text-emerald-400">
+              <ShieldCheckIcon className="size-3.5 text-emerald-400 shrink-0" />
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-400">
                 Email Authorized &amp; Verified
               </span>
             </div>
