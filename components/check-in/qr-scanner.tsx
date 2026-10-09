@@ -1,352 +1,457 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useSession } from "@/lib/auth-client";
 import { checkInParticipant } from "@/actions/checkin";
 import { CheckInResult } from "@/types/registration";
-import { useSession } from "@/lib/auth-client";
+import { useQrScanner, extractPassToken } from "@/hooks/use-qr-scanner";
+import { useGateFeedback } from "@/hooks/use-gate-feedback";
+import { CameraViewfinder } from "@/components/check-in/camera-viewfinder";
+import { FileDropScanner } from "@/components/check-in/file-drop-scanner";
+import { VerificationCard } from "@/components/check-in/verification-card";
+import { GateStatsBar } from "@/components/check-in/gate-stats-bar";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Toggle } from "@/components/ui/toggle";
 import { toast } from "sonner";
 import {
-  CheckCircle2Icon,
-  AlertCircleIcon,
-  ShieldCheckIcon,
   TicketIcon,
-  UsersIcon,
-  ClockIcon,
-  BuildingIcon,
   ClipboardPasteIcon,
   XIcon,
-  HistoryIcon,
-  ArrowRightIcon,
-  SparklesIcon,
+  AlertCircleIcon,
+  CameraIcon,
+  UploadCloudIcon,
+  KeyboardIcon,
+  EyeIcon,
+  CheckCircle2Icon,
+  Loader2Icon,
 } from "lucide-react";
 
 export function PassVerifierComponent() {
   const searchParams = useSearchParams();
   const codeFromUrl = searchParams.get("code") || searchParams.get("token") || "";
+
+  const [activeTab, setActiveTab] = useState<string>("camera");
   const [tokenInput, setTokenInput] = useState(codeFromUrl);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<CheckInResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [recentScans, setRecentScans] = useState<CheckInResult[]>([]);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [isRapidMode, setIsRapidMode] = useState<boolean>(false);
+  const [isInspectMode, setIsInspectMode] = useState<boolean>(false);
+  const [rapidFeedbackBanner, setRapidFeedbackBanner] = useState<{
+    name: string;
+    code: string;
+    success: boolean;
+  } | null>(null);
 
-  useEffect(() => {
-    if (codeFromUrl) {
-      setTokenInput(codeFromUrl);
-    }
-  }, [codeFromUrl]);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const autoResetTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const { data: session } = useSession();
+  const { isMuted, toggleMute, triggerFeedback } = useGateFeedback();
 
-  // Audio & Haptic feedback on mobile
-  const triggerMobileFeedback = (success: boolean) => {
-    // 1. Haptic vibration
-    if (typeof window !== "undefined" && "vibrate" in navigator) {
-      try {
-        if (success) {
-          navigator.vibrate([80, 40, 80]);
-        } else {
-          navigator.vibrate([150, 50, 150]);
+  // Primary verification runner
+  const executeVerification = useCallback(
+    async (token: string, inspectOnlyOverride?: boolean) => {
+      const cleanToken = extractPassToken(token);
+      if (!cleanToken) return;
+
+      setLoading(true);
+      setError(null);
+
+      // In rapid mode, we don't clear the previous full card immediately to prevent UI jumps
+      if (!isRapidMode) {
+        setResult(null);
+      }
+
+      const staffId = session?.user?.id || "admin_session_verifier";
+      const inspectFlag =
+        typeof inspectOnlyOverride === "boolean" ? inspectOnlyOverride : isInspectMode;
+
+      const res = await checkInParticipant(staffId, {
+        qrToken: cleanToken,
+        deviceInfo: "CodeHive Real-Time Web Scanner",
+        inspectOnly: inspectFlag,
+      });
+
+      setLoading(false);
+
+      if (res.success) {
+        setResult(res.data);
+        setTokenInput("");
+
+        // If not inspect mode, log in recent shift scans
+        if (!inspectFlag && !res.data.alreadyCheckedIn) {
+          setRecentScans((prev) => [res.data, ...prev.slice(0, 9)]);
         }
-      } catch {
-        // Ignore vibration errors
-      }
-    }
 
-    // 2. Synthesized audio chime
-    try {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      if (!AudioCtx) return;
-      const ctx = new AudioCtx();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
+        if (res.data.alreadyCheckedIn) {
+          triggerFeedback("duplicate");
+          toast.warning("Duplicate Entry Detected!", {
+            description: `${res.data.participantName} was already checked in.`,
+          });
+        } else {
+          triggerFeedback("success");
+          toast.success(
+            inspectFlag ? "Pass Inspected (View Mode)" : "Attendee Admitted & Checked In!",
+            {
+              description: `${res.data.participantName} (${res.data.registrationNumber})`,
+            }
+          );
+        }
 
-      if (success) {
-        osc.frequency.setValueAtTime(659.25, ctx.currentTime); // E5
-        osc.frequency.setValueAtTime(880, ctx.currentTime + 0.08); // A5
-        gain.gain.setValueAtTime(0.12, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.25);
+        // Rapid Gate Auto-Advance handling
+        if (isRapidMode && !inspectFlag) {
+          setRapidFeedbackBanner({
+            name: res.data.participantName,
+            code: res.data.registrationNumber,
+            success: !res.data.alreadyCheckedIn,
+          });
+
+          if (autoResetTimerRef.current) {
+            clearTimeout(autoResetTimerRef.current);
+          }
+
+          autoResetTimerRef.current = setTimeout(() => {
+            setRapidFeedbackBanner(null);
+            setResult(null);
+          }, 1800);
+        }
       } else {
-        osc.frequency.setValueAtTime(240, ctx.currentTime);
-        osc.frequency.setValueAtTime(180, ctx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.15, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.3);
+        setError(res.error.message);
+        triggerFeedback(
+          res.error.code === "ALREADY_CHECKED_IN" ? "duplicate" : "error"
+        );
+        toast.error("Verification Rejected", {
+          description: res.error.message,
+        });
+
+        if (isRapidMode) {
+          setRapidFeedbackBanner({
+            name: "REJECTED",
+            code: cleanToken,
+            success: false,
+          });
+          if (autoResetTimerRef.current) {
+            clearTimeout(autoResetTimerRef.current);
+          }
+          autoResetTimerRef.current = setTimeout(() => {
+            setRapidFeedbackBanner(null);
+          }, 2200);
+        }
       }
-    } catch {
-      // Audio context restricted by browser policy
+    },
+    [session?.user?.id, isInspectMode, isRapidMode, triggerFeedback]
+  );
+
+  // QR Scanner hook
+  const {
+    videoRef,
+    hasCamera,
+    isScanning,
+    permissionDenied,
+    cameras,
+    selectedCameraId,
+    hasFlash,
+    isFlashOn,
+    scannerError,
+    startScanning,
+    stopScanning,
+    toggleFlash,
+    changeCamera,
+    scanImageFile,
+  } = useQrScanner({
+    onScan: (token) => {
+      // Ignore new scans if actively loading a verification request
+      if (loading) return;
+      executeVerification(token);
+    },
+    debounceMs: 2500,
+    autoStart: activeTab === "camera",
+  });
+
+  // Handle URL query parameters on load
+  useEffect(() => {
+    if (codeFromUrl) {
+      Promise.resolve().then(() => {
+        executeVerification(codeFromUrl);
+      });
+    }
+  }, [codeFromUrl, executeVerification]);
+
+  // Tab change handler to start/stop camera stream cleanly
+  const handleTabChange = (newTab: string) => {
+    setActiveTab(newTab);
+    if (newTab === "camera") {
+      startScanning();
+    } else {
+      stopScanning();
     }
   };
 
-  const handleManualCheckIn = async (e: React.FormEvent) => {
+  const handleManualSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const clean = tokenInput.trim();
-    if (!clean) return;
-
-    setLoading(true);
-    setError(null);
-    setResult(null);
-
-    const staffId = session?.user?.id || "admin_session_verifier";
-
-    const res = await checkInParticipant(staffId, {
-      qrToken: clean,
-      deviceInfo: "Mobile Console Verifier",
-    });
-
-    setLoading(false);
-
-    if (res.success) {
-      setResult(res.data);
-      setTokenInput("");
-      setRecentScans((prev) => [res.data, ...prev.slice(0, 4)]);
-      triggerMobileFeedback(true);
-      toast.success("Attendee Verified & Checked In!", {
-        description: `${res.data.participantName} (${res.data.registrationNumber})`,
-      });
-    } else {
-      setError(res.error.message);
-      triggerMobileFeedback(false);
-      toast.error("Verification Rejected", {
-        description: res.error.message,
-      });
-    }
+    if (!tokenInput.trim() || loading) return;
+    executeVerification(tokenInput.trim());
   };
 
   const handlePaste = async () => {
     try {
       const text = await navigator.clipboard.readText();
       if (text) {
-        setTokenInput(text.trim().toUpperCase());
-        toast.info("Pasted from clipboard");
+        const clean = extractPassToken(text);
+        setTokenInput(clean);
+        toast.info("Pasted & Normalized Pass Code");
       }
     } catch {
       toast.error("Clipboard permission required");
     }
   };
 
-  const handleResetForNext = () => {
+  const handleScanNext = () => {
     setResult(null);
     setError(null);
     setTokenInput("");
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 100);
+    if (activeTab === "camera") {
+      startScanning();
+    } else if (activeTab === "manual") {
+      setTimeout(() => inputRef.current?.focus(), 100);
+    }
+  };
+
+  const handleAdmitNowFromInspect = () => {
+    if (result) {
+      executeVerification(result.registrationNumber, false);
+    }
   };
 
   return (
-    <div className="max-w-xl mx-auto rounded-none border border-[#262626] bg-[#0F0F0F] p-4 sm:p-7 space-y-5 font-mono max-w-full">
-      {/* ── Header ── */}
-      <div className="text-center space-y-2 border-b border-[#262626] pb-4 sm:pb-5">
-        <div className="inline-flex size-11 sm:size-12 items-center justify-center rounded-none bg-[#161616] text-white border border-[#262626] mb-1">
-          <TicketIcon className="size-5 sm:size-6" />
-        </div>
-        <h2 className="text-base sm:text-lg font-bold text-white uppercase tracking-wider">
-          &gt; Event Pass Verifier &amp; Check-In
-        </h2>
-        <p className="text-xs text-[#A3A3A3] max-w-md mx-auto leading-relaxed">
-          Enter attendee 6-character Pass Code (e.g. <span className="text-white font-bold">CH26-XXXXXX</span>) or scan QR token.
-        </p>
-      </div>
+    <div className="max-w-2xl mx-auto space-y-2.5 sm:space-y-4 font-mono">
+      {/* ── Gate Statistics Bar ── */}
+      <GateStatsBar recentScans={recentScans} shiftCount={recentScans.length} />
 
-      {/* ── Mobile Form with Touch-Friendly Inputs ── */}
-      <form onSubmit={handleManualCheckIn} className="space-y-3.5">
-        <div className="space-y-1.5">
-          <div className="flex items-center justify-between text-[10px] uppercase tracking-wider text-[#A3A3A3] font-bold">
-            <span>Pass Code or QR Token</span>
-            <button
-              type="button"
-              onClick={handlePaste}
-              className="inline-flex items-center gap-1 text-white hover:text-[#A3A3A3] cursor-pointer"
+      {/* ── Main Pass Verifier Card ── */}
+      <Card className="rounded-none border-[#262626] bg-[#0F0F0F] font-mono shadow-2xl p-0 overflow-hidden">
+        {/* Header Strip */}
+        <CardHeader className="border-b border-[#262626] p-3 sm:p-5 space-y-1 sm:space-y-2">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="size-8 sm:size-9 bg-[#161616] border border-[#262626] flex items-center justify-center text-white shrink-0">
+                <TicketIcon className="size-4" />
+              </div>
+              <div className="min-w-0">
+                <CardTitle className="text-xs sm:text-base font-bold uppercase tracking-wider text-white truncate">
+                  &gt; Event Pass Verifier
+                </CardTitle>
+                <CardDescription className="text-[10px] sm:text-[11px] text-[#A3A3A3] hidden sm:block">
+                  Real-time QR camera scanner with candidate check-in and anti-fraud checks.
+                </CardDescription>
+              </div>
+            </div>
+
+            {/* Inspect / Verify Mode Switcher */}
+            <Toggle
+              pressed={isInspectMode}
+              onPressedChange={setIsInspectMode}
+              title="Inspect Mode: View attendee details without marking check-in in database"
+              className="h-7 sm:h-8 px-2 sm:px-2.5 rounded-none border border-[#262626] text-[9px] sm:text-[10px] uppercase font-bold shrink-0 cursor-pointer active:scale-95"
             >
-              <ClipboardPasteIcon className="size-3" />
-              <span>[ Paste ]</span>
-            </button>
+              <EyeIcon className="size-3 mr-1" />
+              <span>{isInspectMode ? "VIEW ONLY" : "CHECK-IN"}</span>
+            </Toggle>
           </div>
+        </CardHeader>
 
-          <div className="relative">
-            <Input
-              ref={inputRef}
-              value={tokenInput}
-              onChange={(e) => setTokenInput(e.target.value.toUpperCase())}
-              placeholder="ENTER PASS CODE (e.g. CH26-ABC123)"
-              className="h-12 sm:h-13 rounded-none border border-[#262626] bg-[#080808] text-white font-mono text-center tracking-widest placeholder:text-[#525252] focus:border-white focus:ring-1 focus:ring-white text-sm sm:text-base uppercase pr-10"
-              autoCapitalize="characters"
-              autoCorrect="off"
-            />
-            {tokenInput && (
-              <button
-                type="button"
-                onClick={() => setTokenInput("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#737373] hover:text-white cursor-pointer"
-                aria-label="Clear input"
+        <CardContent className="p-3 sm:p-6 space-y-3 sm:space-y-4">
+          {/* Rapid Mode Floating Notification HUD */}
+          {rapidFeedbackBanner && (
+            <div
+              className={`p-2.5 sm:p-3 border text-center animate-in fade-in slide-in-from-top-2 duration-150 ${
+                rapidFeedbackBanner.success
+                  ? "bg-emerald-950/60 border-emerald-500 text-emerald-300"
+                  : "bg-red-950/60 border-red-500 text-red-300"
+              }`}
+            >
+              <div className="flex items-center justify-center gap-1.5 text-xs font-bold uppercase">
+                {rapidFeedbackBanner.success ? (
+                  <CheckCircle2Icon className="size-4 text-emerald-400 shrink-0" />
+                ) : (
+                  <AlertCircleIcon className="size-4 text-red-400 shrink-0" />
+                )}
+                <span className="truncate">
+                  {rapidFeedbackBanner.success ? "ADMITTED:" : "BLOCKED:"}{" "}
+                  {rapidFeedbackBanner.name} ({rapidFeedbackBanner.code})
+                </span>
+              </div>
+              <p className="text-[9px] sm:text-[10px] text-[#A3A3A3] mt-0.5">
+                Auto-resuming camera for next attendee...
+              </p>
+            </div>
+          )}
+
+          {/* Mode Tabs: Camera, Screenshot Upload, Manual Code */}
+          <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+            <TabsList className="w-full grid grid-cols-3 rounded-none bg-[#080808] border border-[#262626] p-0.5 sm:p-1 h-9 sm:h-10">
+              <TabsTrigger
+                value="camera"
+                className="rounded-none text-[10px] sm:text-xs uppercase font-mono tracking-wider text-[#A3A3A3] data-active:bg-white data-active:text-black data-active:font-bold py-1 cursor-pointer"
               >
-                <XIcon className="size-4" />
-              </button>
-            )}
-          </div>
-        </div>
+                <CameraIcon className="size-3 sm:size-3.5 mr-1 shrink-0" />
+                <span>Camera</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="upload"
+                className="rounded-none text-[10px] sm:text-xs uppercase font-mono tracking-wider text-[#A3A3A3] data-active:bg-white data-active:text-black data-active:font-bold py-1 cursor-pointer"
+              >
+                <UploadCloudIcon className="size-3 sm:size-3.5 mr-1 shrink-0" />
+                <span>Upload</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="manual"
+                className="rounded-none text-[10px] sm:text-xs uppercase font-mono tracking-wider text-[#A3A3A3] data-active:bg-white data-active:text-black data-active:font-bold py-1 cursor-pointer"
+              >
+                <KeyboardIcon className="size-3 sm:size-3.5 mr-1 shrink-0" />
+                <span>Manual</span>
+              </TabsTrigger>
+            </TabsList>
 
-        <Button
-          type="submit"
-          disabled={loading || !tokenInput.trim()}
-          className="h-11 sm:h-12 w-full rounded-none font-mono text-xs uppercase tracking-wider font-bold bg-white hover:bg-neutral-200 text-black border border-white transition-colors cursor-pointer shadow-md disabled:opacity-40"
-        >
-          {loading ? "[ VERIFYING PASS... ]" : "[ VALIDATE & CHECK-IN ATTENDEE ]"}
-        </Button>
-      </form>
+            {/* Tab 1: Real-time Live Camera Viewfinder */}
+            <TabsContent value="camera" className="mt-3 sm:mt-4 space-y-3">
+              <CameraViewfinder
+                videoRef={videoRef}
+                isScanning={isScanning}
+                hasCamera={hasCamera}
+                permissionDenied={permissionDenied}
+                cameras={cameras}
+                selectedCameraId={selectedCameraId}
+                hasFlash={hasFlash}
+                isFlashOn={isFlashOn}
+                scannerError={scannerError}
+                isMuted={isMuted}
+                isRapidMode={isRapidMode}
+                onCameraChange={changeCamera}
+                onToggleFlash={toggleFlash}
+                onToggleMute={toggleMute}
+                onToggleRapidMode={() => setIsRapidMode((prev) => !prev)}
+                onRetryCamera={startScanning}
+              />
+            </TabsContent>
 
-      {/* ── Success Result Card (Mobile-Optimized Stacking) ── */}
-      {result && (
-        <div className="rounded-none border-2 border-white/80 bg-[#080808] p-4 sm:p-5 space-y-4 shadow-xl animate-in fade-in zoom-in-95 duration-200">
-          <div className="flex items-center justify-between border-b border-[#262626] pb-3">
-            <div className="flex items-center gap-2 text-white font-bold text-xs uppercase">
-              <ShieldCheckIcon className="size-4 sm:size-5 text-white shrink-0" />
-              <span className="truncate">Pass Verified • Admitted</span>
-            </div>
-            <span className="text-[10px] font-mono text-black font-bold bg-white border border-white px-2 py-0.5 shrink-0">
-              ATTENDED
-            </span>
-          </div>
+            {/* Tab 2: Image / Screenshot Dropzone */}
+            <TabsContent value="upload" className="mt-4">
+              <FileDropScanner
+                onScanImage={async (file) => {
+                  const token = await scanImageFile(file);
+                  await executeVerification(token);
+                  return token;
+                }}
+                disabled={loading}
+              />
+            </TabsContent>
 
-          <div className="space-y-2.5 text-xs">
-            <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-0.5 border-b border-[#262626]/60 pb-1.5">
-              <span className="text-[#737373] uppercase text-[10px]">Pass Code:</span>
-              <span className="text-base sm:text-lg font-bold text-white tracking-wider">
-                {result.registrationNumber}
-              </span>
-            </div>
-
-            <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-0.5 border-b border-[#262626]/60 pb-1.5">
-              <span className="text-[#737373] uppercase text-[10px]">Attendee:</span>
-              <span className="font-bold text-white text-sm sm:text-base">
-                {result.participantName}
-              </span>
-            </div>
-
-            <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-0.5 border-b border-[#262626]/60 pb-1.5">
-              <span className="text-[#737373] uppercase text-[10px]">Event:</span>
-              <span className="font-semibold text-[#E5E5E5]">
-                {result.eventName}
-              </span>
-            </div>
-
-            {result.college && (
-              <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-0.5 border-b border-[#262626]/60 pb-1.5">
-                <span className="text-[#737373] uppercase text-[10px]">College:</span>
-                <span className="text-[#A3A3A3] text-[11px] sm:text-xs">
-                  {result.college} {result.department ? `(${result.department})` : ""}
-                </span>
-              </div>
-            )}
-
-            {result.teamName && (
-              <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-0.5 border-b border-[#262626]/60 pb-1.5">
-                <span className="text-[#737373] uppercase text-[10px]">Team:</span>
-                <span className="font-bold text-white">
-                  {result.teamName.toUpperCase()}
-                </span>
-              </div>
-            )}
-
-            {result.teamMembers && result.teamMembers.length > 0 && (
-              <div className="pt-1">
-                <span className="text-[#737373] uppercase text-[10px] block mb-1">
-                  Team Members:
-                </span>
-                <div className="flex flex-wrap gap-1.5">
-                  {result.teamMembers.map((m, i) => (
-                    <span
-                      key={i}
-                      className="px-2 py-0.5 rounded-none border border-[#262626] bg-[#161616] text-[10px] text-[#E5E5E5]"
+            {/* Tab 3: Manual Code Entry Fallback */}
+            <TabsContent value="manual" className="mt-4 space-y-3">
+              <form onSubmit={handleManualSubmit} className="space-y-3">
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between text-[10px] uppercase tracking-wider text-[#A3A3A3] font-bold">
+                    <span>Pass Code or Scanned Token</span>
+                    <button
+                      type="button"
+                      onClick={handlePaste}
+                      className="inline-flex items-center gap-1 text-white hover:text-[#A3A3A3] cursor-pointer"
                     >
-                      {m}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
+                      <ClipboardPasteIcon className="size-3" />
+                      <span>[ Paste ]</span>
+                    </button>
+                  </div>
 
-            <div className="flex items-center justify-between text-[10px] text-[#737373] pt-2 border-t border-[#262626]">
-              <span className="flex items-center gap-1">
-                <ClockIcon className="size-3" />
-                Time: {new Date(result.checkedInAt).toLocaleTimeString("en-IN")}
-              </span>
-              <span className="text-white font-bold">STATUS: OK</span>
-            </div>
-          </div>
-
-          <Button
-            type="button"
-            onClick={handleResetForNext}
-            className="w-full h-10 rounded-none bg-white hover:bg-neutral-200 text-black font-mono text-xs uppercase tracking-wider font-bold cursor-pointer transition-colors shadow-sm"
-          >
-            [ + Validate Next Attendee ]
-          </Button>
-        </div>
-      )}
-
-      {/* ── Error Banner ── */}
-      {error && (
-        <div className="rounded-none border border-red-900/60 bg-red-950/30 p-4 text-center space-y-1 text-red-400 animate-in fade-in duration-150">
-          <div className="flex items-center justify-center gap-1.5 font-bold text-xs uppercase">
-            <AlertCircleIcon className="size-4 shrink-0" />
-            <span>Verification Rejected</span>
-          </div>
-          <p className="text-xs text-red-300 font-sans">{error}</p>
-          <button
-            type="button"
-            onClick={() => {
-              setError(null);
-              inputRef.current?.focus();
-            }}
-            className="mt-2 text-[10px] text-red-400 hover:text-red-200 underline cursor-pointer"
-          >
-            [ Dismiss &amp; Retry ]
-          </button>
-        </div>
-      )}
-
-      {/* ── Recent Scans Feed (Mobile Gate Assistant) ── */}
-      {recentScans.length > 0 && (
-        <div className="border-t border-[#262626] pt-4 space-y-2">
-          <div className="flex items-center justify-between text-[11px] text-[#A3A3A3] font-bold uppercase">
-            <span className="flex items-center gap-1.5">
-              <HistoryIcon className="size-3 text-white" />
-              Recent Admissions
-            </span>
-            <span className="text-[10px] text-[#737373]">{recentScans.length} logged</span>
-          </div>
-
-          <div className="space-y-1.5">
-            {recentScans.map((scan, i) => (
-              <div
-                key={`${scan.registrationNumber}-${i}`}
-                className="flex items-center justify-between p-2 bg-[#080808] border border-[#262626] text-xs"
-              >
-                <div className="flex items-center gap-2 min-w-0">
-                  <CheckCircle2Icon className="size-3.5 text-white shrink-0" />
-                  <div className="min-w-0">
-                    <p className="font-bold text-white text-[11px] truncate">{scan.participantName}</p>
-                    <p className="text-[10px] text-[#737373] font-mono truncate">{scan.registrationNumber} • {scan.eventName}</p>
+                  <div className="relative">
+                    <Input
+                      ref={inputRef}
+                      value={tokenInput}
+                      onChange={(e) => setTokenInput(e.target.value.toUpperCase())}
+                      placeholder="ENTER PASS CODE (e.g. CH26-ABC123)"
+                      className="h-12 rounded-none border border-[#262626] bg-[#080808] text-white font-mono text-center tracking-widest placeholder:text-[#525252] focus:border-white focus:ring-1 focus:ring-white text-sm sm:text-base uppercase pr-10"
+                      autoCapitalize="characters"
+                      autoCorrect="off"
+                    />
+                    {tokenInput && (
+                      <button
+                        type="button"
+                        onClick={() => setTokenInput("")}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#737373] hover:text-white cursor-pointer"
+                        aria-label="Clear input"
+                      >
+                        <XIcon className="size-4" />
+                      </button>
+                    )}
                   </div>
                 </div>
-                <span className="text-[10px] text-[#A3A3A3] shrink-0 ml-2">
-                  {new Date(scan.checkedInAt).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
-                </span>
+
+                <Button
+                  type="submit"
+                  disabled={loading || !tokenInput.trim()}
+                  className="h-11 w-full rounded-none font-mono text-xs uppercase tracking-wider font-bold bg-white hover:bg-neutral-200 text-black border border-white transition-colors cursor-pointer shadow-md disabled:opacity-40"
+                >
+                  {loading ? (
+                    <span className="flex items-center gap-2">
+                      <Loader2Icon className="size-3.5 animate-spin" />
+                      [ VERIFYING PASS... ]
+                    </span>
+                  ) : (
+                    <span>[ VALIDATE &amp; CHECK-IN ATTENDEE ]</span>
+                  )}
+                </Button>
+              </form>
+            </TabsContent>
+          </Tabs>
+
+          {/* ── Loading Overlay Indicator ── */}
+          {loading && !rapidFeedbackBanner && (
+            <div className="p-4 bg-[#121212] border border-[#262626] text-center space-y-2">
+              <Loader2Icon className="size-5 animate-spin mx-auto text-white" />
+              <p className="text-xs uppercase tracking-wider text-white font-bold">
+                [ VERIFYING ATTENDEE PASS AGAINST DATABASE... ]
+              </p>
+            </div>
+          )}
+
+          {/* ── Error Banner ── */}
+          {error && !rapidFeedbackBanner && (
+            <div className="rounded-none border border-red-900/60 bg-red-950/30 p-4 text-center space-y-1 text-red-400 animate-in fade-in duration-150">
+              <div className="flex items-center justify-center gap-1.5 font-bold text-xs uppercase">
+                <AlertCircleIcon className="size-4 shrink-0" />
+                <span>Verification Rejected</span>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+              <p className="text-xs text-red-300 font-mono">{error}</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setError(null);
+                  if (activeTab === "camera") startScanning();
+                }}
+                className="mt-2 text-[10px] text-red-400 hover:text-red-200 underline cursor-pointer"
+              >
+                [ Dismiss &amp; Retry ]
+              </button>
+            </div>
+          )}
+
+          {/* ── Success & Candidate Details Verification Card ── */}
+          {result && !rapidFeedbackBanner && (
+            <VerificationCard
+              result={result}
+              onNextScan={handleScanNext}
+              onAdmitNow={handleAdmitNowFromInspect}
+              isInspectMode={isInspectMode}
+            />
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

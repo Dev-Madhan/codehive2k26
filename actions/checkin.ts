@@ -68,7 +68,16 @@ export async function checkInParticipant(
       include: {
         participant: true,
         event: true,
-        checkIn: true,
+        checkIn: {
+          include: {
+            staff: {
+              select: {
+                name: true,
+                email: true,
+              },
+            },
+          },
+        },
         team: {
           include: {
             members: true,
@@ -87,8 +96,32 @@ export async function checkInParticipant(
       };
     }
 
-    // 3. Check Registration Status
-    if (registration.status !== "CONFIRMED") {
+    // 3. Inspect Mode (Preview without mutating check-in status)
+    if (parsed.data.inspectOnly) {
+      return {
+        success: true,
+        data: {
+          registrationNumber: registration.registrationNumber,
+          participantName: registration.participant.name,
+          eventName: registration.event.name,
+          checkedInAt: registration.checkIn?.checkedInAt || new Date(),
+          alreadyCheckedIn: Boolean(registration.checkedIn || registration.checkIn),
+          checkedInBy: registration.checkIn?.staff?.name || null,
+          teamName: registration.team?.name || null,
+          college: registration.participant.college,
+          department: registration.participant.department,
+          teamMembers: registration.team?.members?.map((m) => m.name) || [],
+          transportOptIn: registration.transportOptIn,
+          pickupRoute: registration.pickupRoute,
+          pickupStop: registration.pickupStop,
+          passengersCount: registration.passengersCount,
+        },
+        message: "Pass inspected successfully (View Mode).",
+      };
+    }
+
+    // 4. Check Registration Status
+    if (registration.status !== "CONFIRMED" && registration.status !== "ATTENDED") {
       return {
         success: false,
         error: {
@@ -98,18 +131,26 @@ export async function checkInParticipant(
       };
     }
 
-    // 4. Duplicate Check-in Prevention
+    // 5. Duplicate Check-in Prevention with exact auditor details
     if (registration.checkedIn || registration.checkIn) {
+      const timeStr = registration.checkIn?.checkedInAt
+        ? new Date(registration.checkIn.checkedInAt).toLocaleTimeString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        : "earlier";
+      const staffName = registration.checkIn?.staff?.name || "Gate Staff";
+
       return {
         success: false,
         error: {
           code: "ALREADY_CHECKED_IN",
-          message: `Attendee "${registration.participant.name}" (${registration.registrationNumber}) is already checked in!`,
+          message: `Attendee "${registration.participant.name}" (${registration.registrationNumber}) was ALREADY checked in at ${timeStr} by ${staffName}!`,
         },
       };
     }
 
-    // 5. Record Check-in within Transaction
+    // 6. Record Check-in within Transaction
     const checkInRecord = await prisma.$transaction(async (tx) => {
       await tx.registration.update({
         where: { id: registration.id },
@@ -142,10 +183,16 @@ export async function checkInParticipant(
         participantName: registration.participant.name,
         eventName: registration.event.name,
         checkedInAt: checkInRecord.checkedInAt,
+        alreadyCheckedIn: false,
+        checkedInBy: staff.name,
         teamName: registration.team?.name || null,
         college: registration.participant.college,
         department: registration.participant.department,
         teamMembers: registration.team?.members?.map((m) => m.name) || [],
+        transportOptIn: registration.transportOptIn,
+        pickupRoute: registration.pickupRoute,
+        pickupStop: registration.pickupStop,
+        passengersCount: registration.passengersCount,
       },
       message: "Pass verified and attendee checked in successfully!",
     };
@@ -155,5 +202,31 @@ export async function checkInParticipant(
       success: false,
       error: { code: "INTERNAL_ERROR", message: "Check-in processing failed." },
     };
+  }
+}
+
+export async function getGateStats(): Promise<{
+  totalConfirmed: number;
+  totalCheckedIn: number;
+  percentage: number;
+}> {
+  try {
+    const totalConfirmed = await prisma.registration.count({
+      where: {
+        status: { in: ["CONFIRMED", "ATTENDED"] },
+      },
+    });
+    const totalCheckedIn = await prisma.registration.count({
+      where: {
+        OR: [{ checkedIn: true }, { status: "ATTENDED" }],
+      },
+    });
+    const percentage =
+      totalConfirmed > 0 ? Math.round((totalCheckedIn / totalConfirmed) * 100) : 0;
+
+    return { totalConfirmed, totalCheckedIn, percentage };
+  } catch (err) {
+    console.error("getGateStats error:", err);
+    return { totalConfirmed: 0, totalCheckedIn: 0, percentage: 0 };
   }
 }
