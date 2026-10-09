@@ -58,10 +58,15 @@ export interface CheckInResult {
   eventName: string;
   checkedInAt: Date;
   alreadyCheckedIn?: boolean;
+  checkedInBy?: string | null;
   teamName?: string | null;
   college?: string;
   department?: string;
   teamMembers?: string[];
+  transportOptIn?: boolean;
+  pickupRoute?: string | null;
+  pickupStop?: string | null;
+  passengersCount?: number;
 }
 
 export interface RegistrationSuccessPayload {
