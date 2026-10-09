@@ -91,6 +91,28 @@ const AMBER_FILL = "FFFBEB";
 const AMBER_TEXT = "92400E";
 
 /**
+ * Neutralizes Formula Injection (CSV / Excel Injection / CWE-1236).
+ * Any string value starting with '=', '+', '-', '@', '\t', '\r' is prefixed with an apostrophe `'`
+ * so spreadsheet software treats it strictly as verbatim text rather than executable macro/formula.
+ */
+export function sanitizeSpreadsheetCell<T>(val: T): T {
+  if (typeof val === "string") {
+    const trimmed = val.trim();
+    if (
+      trimmed.startsWith("=") ||
+      trimmed.startsWith("+") ||
+      trimmed.startsWith("-") ||
+      trimmed.startsWith("@") ||
+      trimmed.startsWith("\t") ||
+      trimmed.startsWith("\r")
+    ) {
+      return `'${val}` as unknown as T;
+    }
+  }
+  return val;
+}
+
+/**
  * Applies executive styling to a worksheet header banner
  */
 function applyExecutiveHeaderBanner(
@@ -264,7 +286,7 @@ function buildRegistrationsSheet(
 
   // Populate Data Rows
   records.forEach((r, idx) => {
-    const rowValues: any = {
+    const rowValues: Record<string, unknown> = {
       regNo: r.registrationNumber,
       eventName: r.event.name,
       name: r.participant.name,
@@ -291,7 +313,7 @@ function buildRegistrationsSheet(
       paymentStatus: r.paymentStatus || "COMPLETED",
     };
 
-    const rowData = cols.map((c) => rowValues[c.key] ?? "-");
+    const rowData = cols.map((c) => sanitizeSpreadsheetCell(rowValues[c.key] ?? "-"));
     const dataRow = worksheet.addRow(rowData);
     dataRow.height = 22;
 
@@ -348,8 +370,7 @@ function buildRegistrationsSheet(
  */
 function buildTransportSheet(
   workbook: ExcelJS.Workbook,
-  records: ExportRegistrationRecord[],
-  options: ExportOptions
+  records: ExportRegistrationRecord[]
 ) {
   const busRecords = records.filter((r) => r.transportOptIn);
 
@@ -477,7 +498,7 @@ function buildTransportSheet(
       entry.teamName,
     ];
 
-    const dataRow = worksheet.addRow(rowValues);
+    const dataRow = worksheet.addRow(rowValues.map(sanitizeSpreadsheetCell));
     dataRow.height = 22;
     const isEven = idx % 2 === 0;
 
@@ -591,13 +612,13 @@ function buildSummarySheet(
 
   summaryData.forEach((ev, idx) => {
     const dataRow = worksheet.addRow([
-      ev.name,
-      ev.category || "General",
+      sanitizeSpreadsheetCell(ev.name),
+      sanitizeSpreadsheetCell(ev.category || "General"),
       ev.registrationsCount,
       ev.checkedInCount,
       `${ev.turnoutRate}%`,
       ev.busCommutersCount,
-      ev.status,
+      sanitizeSpreadsheetCell(ev.status),
     ]);
     dataRow.height = 24;
 
@@ -612,7 +633,7 @@ function buildSummarySheet(
       cell.font = { name: "Calibri", size: 10 };
       cell.alignment = {
         vertical: "middle",
-        horizontal: (colDef?.alignment as any)?.horizontal || "left",
+        horizontal: colDef?.alignment?.horizontal || "left",
       };
       cell.border = {
         top: { style: "thin", color: { argb: `FF${BORDER_COLOR}` } },
@@ -653,9 +674,9 @@ export async function generateExportFile(
   if (options.scope === "MASTER") {
     buildSummarySheet(workbook, summaryList, totalRegs, totalCheckedIn, totalBus);
     buildRegistrationsSheet(workbook, registrations, options);
-    buildTransportSheet(workbook, registrations, options);
+    buildTransportSheet(workbook, registrations);
   } else if (options.scope === "TRANSPORT") {
-    buildTransportSheet(workbook, registrations, options);
+    buildTransportSheet(workbook, registrations);
   } else if (options.scope === "SUMMARY") {
     buildSummarySheet(workbook, summaryList, totalRegs, totalCheckedIn, totalBus);
   } else {

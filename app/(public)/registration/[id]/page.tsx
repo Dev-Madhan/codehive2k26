@@ -6,11 +6,21 @@ import { formatDate } from "@/utils/formatters";
 import Link from "next/link";
 import { ShieldCheckIcon, CheckCircle2Icon, UsersIcon, CalendarIcon, MapPinIcon, BuildingIcon, BusIcon } from "lucide-react";
 
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 interface Props {
   params: Promise<{ id: string }>;
+}
+
+function maskPhoneNumber(phone?: string | null): string {
+  if (!phone) return "-";
+  const cleaned = phone.trim();
+  if (cleaned.length <= 4) return "****";
+  return cleaned.slice(0, 2) + "******" + cleaned.slice(-2);
 }
 
 export default async function RegistrationViewPage({ params }: Props) {
@@ -37,8 +47,21 @@ export default async function RegistrationViewPage({ params }: Props) {
     notFound();
   }
 
-  // The QR code encodes the live URL for real-time verification
-  const livePassUrl = `https://codehive2k26.vercel.app/registration/${registration.registrationNumber}`;
+  // Determine viewer permissions (Owner or Admin gets unmasked PII)
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  const isOwner = session?.user?.id === registration.participant.userId;
+  const isAdmin = ((session?.user as { role?: string })?.role || "").toUpperCase() === "ADMIN";
+  const canViewFullDetails = isOwner || isAdmin;
+
+  // Dynamic base URL resolution for digital pass QR
+  const baseUrl =
+    process.env.NEXT_PUBLIC_APP_URL ||
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : "https://codehive2k26.vercel.app");
+  const livePassUrl = `${baseUrl.replace(/\/+$/, "")}/registration/${registration.registrationNumber}`;
   const qrDataUrl = await generateQrDataUrl(livePassUrl);
 
   const isCheckedIn = Boolean(registration.checkedIn || registration.checkIn);
@@ -223,7 +246,9 @@ export default async function RegistrationViewPage({ params }: Props) {
                     <span>
                       <strong className="text-white">[{idx + 1}] {member.name}</strong>
                     </span>
-                    <span className="text-[#737373]">{member.phone}</span>
+                    <span className="text-[#737373]">
+                      {canViewFullDetails ? member.phone : maskPhoneNumber(member.phone)}
+                    </span>
                   </li>
                 ))}
               </ul>

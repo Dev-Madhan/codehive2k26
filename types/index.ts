@@ -10,6 +10,7 @@ export type ErrorCode =
   | "REGISTRATION_NOT_FOUND"
   | "ALREADY_CHECKED_IN"
   | "INVALID_QR"
+  | "RATE_LIMIT_EXCEEDED"
   | "INTERNAL_ERROR";
 
 export interface ActionSuccess<T> {

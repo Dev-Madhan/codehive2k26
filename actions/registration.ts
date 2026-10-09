@@ -8,11 +8,46 @@ import { validateVerificationToken } from "@/lib/otp-token";
 import { ActionResponse } from "@/types";
 import { RegistrationSuccessPayload } from "@/types/registration";
 import { revalidatePath } from "next/cache";
+import { deleteFromTigris } from "@/lib/tigris";
+import { headers } from "next/headers";
+import { checkRateLimit, getClientIp, RATE_LIMIT_TIERS } from "@/lib/rate-limiter";
+import { requireAdminSession } from "@/lib/auth-guard";
+import { logAuditEvent } from "@/lib/audit";
+
+function extractTigrisKey(url: string): string {
+  try {
+    const parsed = new URL(url);
+    return parsed.pathname.replace(/^\/+/, "");
+  } catch {
+    if (url.includes("college-ids/")) {
+      return url.substring(url.indexOf("college-ids/"));
+    }
+    return url;
+  }
+}
 
 export async function createRegistration(
   userId: string,
   input: RegistrationInput
 ): Promise<ActionResponse<RegistrationSuccessPayload>> {
+  // Rate Limit Defense (Anti-Spam / Anti-Flooding)
+  try {
+    const reqHeaders = await headers();
+    const ip = getClientIp(reqHeaders);
+    const regLimit = await checkRateLimit(`reg_submit:${ip}`, RATE_LIMIT_TIERS.REGISTRATION);
+    if (!regLimit.success) {
+      return {
+        success: false,
+        error: {
+          code: "RATE_LIMIT_EXCEEDED",
+          message: `Too many registration attempts. Please wait ${regLimit.resetSeconds}s before submitting again.`,
+        },
+      };
+    }
+  } catch {
+    // Non-blocking in headless/testing contexts
+  }
+
   const parsed = registrationSchema.safeParse(input);
   if (!parsed.success) {
     return {
@@ -134,7 +169,7 @@ export async function createRegistration(
     const registrationNumber = generateRegistrationNumber();
     const qrToken = generateQrToken();
 
-    const result = await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx) => {
       // 1. Resolve or provision User record for Better Auth foreign key integrity
       let user = await tx.user.findUnique({
         where: { email },
@@ -419,8 +454,9 @@ export async function createRegistration(
       },
       message: "Registration successful! Your official event pass has been generated.",
     };
-  } catch (error: any) {
-    if (error.message === "DUPLICATE_REGISTRATION") {
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : "";
+    if (errorMsg === "DUPLICATE_REGISTRATION") {
       return {
         success: false,
         error: {
@@ -430,7 +466,7 @@ export async function createRegistration(
       };
     }
 
-    if (error.message === "DUPLICATE_TEAM_NAME") {
+    if (errorMsg === "DUPLICATE_TEAM_NAME") {
       return {
         success: false,
         error: {
@@ -447,8 +483,8 @@ export async function createRegistration(
       error: {
         code: "INTERNAL_ERROR",
         message:
-          isDev && error?.message
-            ? `Registration failed: ${error.message}`
+          isDev && errorMsg
+            ? `Registration failed: ${errorMsg}`
             : "Failed to complete registration.",
       },
     };
@@ -457,7 +493,12 @@ export async function createRegistration(
 
 export async function deleteRegistration(
   registrationId: string
-): Promise<ActionResponse<{ registrationId: string }>> {
+): Promise<ActionResponse<{ registrationId: string; deletedTeamName?: string; purgedMembersCount?: number }>> {
+  const authCheck = await requireAdminSession();
+  if (authCheck.error) {
+    return { success: false, error: authCheck.error };
+  }
+
   if (!registrationId) {
     return {
       success: false,
@@ -470,8 +511,35 @@ export async function deleteRegistration(
     const registration = await prisma.registration.findUnique({
       where: { id: registrationId },
       include: {
-        participant: { select: { name: true } },
-        event: { select: { name: true, slug: true } },
+        participant: {
+          select: {
+            id: true,
+            userId: true,
+            name: true,
+            email: true,
+            phone: true,
+            imageUrl: true,
+            registrations: { select: { id: true } },
+          },
+        },
+        event: { select: { id: true, name: true, slug: true } },
+        team: {
+          include: {
+            members: {
+              select: {
+                id: true,
+                name: true,
+                phone: true,
+                email: true,
+                collegeIdUrl: true,
+                participantId: true,
+              },
+            },
+            registrations: {
+              select: { id: true, participantId: true },
+            },
+          },
+        },
       },
     });
 
@@ -482,9 +550,201 @@ export async function deleteRegistration(
       };
     }
 
-    // Delete registration (cascades to CheckIn and Payment via schema)
-    await prisma.registration.delete({
-      where: { id: registrationId },
+    // Resolve team: direct registration.team or find if this candidate is the team leader for this event
+    let team = registration.team;
+    if (!team) {
+      team = await prisma.team.findFirst({
+        where: {
+          eventId: registration.eventId,
+          leaderId: registration.participant.id,
+        },
+        include: {
+          members: {
+            select: {
+              id: true,
+              name: true,
+              phone: true,
+              email: true,
+              collegeIdUrl: true,
+              participantId: true,
+            },
+          },
+          registrations: {
+            select: { id: true, participantId: true },
+          },
+        },
+      });
+    }
+
+    // 1. Identify and purge associated Tigris S3 ID card documents
+    const rawUrlsToPurge: string[] = [];
+
+    // From team members
+    if (team?.members) {
+      for (const m of team.members) {
+        if (m.collegeIdUrl) {
+          rawUrlsToPurge.push(m.collegeIdUrl);
+        }
+      }
+    }
+
+    // From participant / leader
+    if (registration.participant.imageUrl) {
+      rawUrlsToPurge.push(registration.participant.imageUrl);
+    }
+
+    // Deduplicate URLs
+    const uniqueUrls = Array.from(new Set(rawUrlsToPurge.filter(Boolean)));
+
+    for (const url of uniqueUrls) {
+      try {
+        const key = extractTigrisKey(url);
+        console.log(`[Tigris Purge] Removing candidate ID asset: ${key}`);
+        await deleteFromTigris(key);
+      } catch (purgeErr) {
+        console.warn(`[Tigris Purge Warning] Could not delete S3 asset ${url}:`, purgeErr);
+      }
+    }
+
+    let purgedMembersCount = 0;
+    const teamName = team?.name;
+
+    // 2. If Team exists (Team Leader or team registration deletion):
+    // Permanently purge all team members, team record, and all registrations linked to team
+    if (team) {
+      purgedMembersCount = team.members.length;
+
+      // Collect all linked registration IDs
+      const teamRegIds = new Set<string>();
+      teamRegIds.add(registration.id);
+      if (team.registrations) {
+        team.registrations.forEach((r) => teamRegIds.add(r.id));
+      }
+
+      // Also check any other registrations with this teamId
+      const additionalTeamRegs = await prisma.registration.findMany({
+        where: { teamId: team.id },
+        select: { id: true, participantId: true },
+      });
+      additionalTeamRegs.forEach((r) => teamRegIds.add(r.id));
+
+      const allRegIds = Array.from(teamRegIds);
+
+      // Collect all participant IDs associated with this team (leader + members)
+      const participantIdsToReview = new Set<string>();
+      participantIdsToReview.add(registration.participant.id);
+      team.members.forEach((m) => {
+        if (m.participantId) participantIdsToReview.add(m.participantId);
+      });
+      additionalTeamRegs.forEach((r) => {
+        if (r.participantId) participantIdsToReview.add(r.participantId);
+      });
+
+      // Member emails for fallback participant resolution
+      const memberEmails = team.members
+        .map((m) => m.email?.toLowerCase().trim())
+        .filter(Boolean) as string[];
+
+      if (memberEmails.length > 0) {
+        const matchedParticipants = await prisma.participant.findMany({
+          where: { email: { in: memberEmails } },
+          select: { id: true },
+        });
+        matchedParticipants.forEach((p) => participantIdsToReview.add(p.id));
+      }
+
+      // Delete CheckIns and Payments for all team registrations
+      await prisma.checkIn.deleteMany({
+        where: { registrationId: { in: allRegIds } },
+      }).catch(() => {});
+
+      await prisma.payment.deleteMany({
+        where: { registrationId: { in: allRegIds } },
+      }).catch(() => {});
+
+      // Delete all registrations for this team
+      await prisma.registration.deleteMany({
+        where: { id: { in: allRegIds } },
+      });
+
+      // Delete all TeamMember rows
+      await prisma.teamMember.deleteMany({
+        where: { teamId: team.id },
+      });
+
+      // Delete the Team record
+      await prisma.team.delete({
+        where: { id: team.id },
+      }).catch(() => {});
+
+      // Clean up orphaned Participant and User records if they have 0 registrations left
+      for (const pId of participantIdsToReview) {
+        try {
+          const remainingRegs = await prisma.registration.count({
+            where: { participantId: pId },
+          });
+          if (remainingRegs === 0) {
+            const pRecord = await prisma.participant.findUnique({
+              where: { id: pId },
+              select: { id: true, userId: true, user: { select: { id: true, role: true } } },
+            });
+            if (pRecord) {
+              if (pRecord.user?.role === "PARTICIPANT") {
+                await prisma.user.delete({ where: { id: pRecord.userId } }).catch(async () => {
+                  await prisma.participant.delete({ where: { id: pId } }).catch(() => {});
+                });
+              } else {
+                await prisma.participant.delete({ where: { id: pId } }).catch(() => {});
+              }
+            }
+          }
+        } catch (cleanupErr) {
+          console.warn(`[Participant Cleanup Notice for ${pId}]:`, cleanupErr);
+        }
+      }
+    } else {
+      // 3. Solo / Individual Registration Deletion
+      await prisma.registration.delete({
+        where: { id: registrationId },
+      });
+
+      const remainingRegs = await prisma.registration.count({
+        where: { participantId: registration.participant.id },
+      });
+
+      if (remainingRegs === 0) {
+        const pRecord = await prisma.participant.findUnique({
+          where: { id: registration.participant.id },
+          select: { id: true, userId: true, user: { select: { id: true, role: true } } },
+        });
+        if (pRecord) {
+          if (pRecord.user?.role === "PARTICIPANT") {
+            await prisma.user.delete({ where: { id: pRecord.userId } }).catch(async () => {
+              await prisma.participant.delete({ where: { id: pRecord.id } }).catch(() => {});
+            });
+          } else {
+            await prisma.participant.delete({ where: { id: pRecord.id } }).catch(() => {});
+          }
+        }
+      }
+    }
+
+    // Record Audit Log
+    await logAuditEvent({
+      actorId: authCheck.user.id,
+      action: "REGISTRATION_DELETE",
+      entity: "Registration",
+      entityId: registrationId,
+      metadata: {
+        participantName: registration.participant.name,
+        participantEmail: registration.participant.email,
+        registrationNumber: registration.registrationNumber,
+        eventName: registration.event.name,
+        isTeamLeader: Boolean(team),
+        teamName: teamName || null,
+        purgedMembersCount,
+        purgedDocumentsCount: uniqueUrls.length,
+      },
     });
 
     // Revalidate all admin views
@@ -499,21 +759,145 @@ export async function deleteRegistration(
 
     return {
       success: true,
-      data: { registrationId },
-      message: `Registration for ${registration.participant.name} removed successfully.`,
+      data: {
+        registrationId,
+        deletedTeamName: teamName || undefined,
+        purgedMembersCount: team ? purgedMembersCount : undefined,
+      },
+      message: team
+        ? `Team "${teamName}" and all ${purgedMembersCount} team members permanently deleted from database.`
+        : `Registration for ${registration.participant.name} and uploaded ID cards removed successfully.`,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     const isDev = process.env.NODE_ENV === "development";
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
     console.error("deleteRegistration error:", error);
     return {
       success: false,
       error: {
         code: "INTERNAL_ERROR",
         message:
-          isDev && error?.message
-            ? `Failed to delete registration: ${error.message}`
+          isDev && errorMessage
+            ? `Failed to delete registration: ${errorMessage}`
             : "Failed to remove registration.",
       },
     };
   }
 }
+
+/**
+ * Administrative pass recovery tool: re-dispatches the official confirmation
+ * ticket and dynamic QR code to the registered participant's email.
+ */
+export async function resendConfirmationEmail(
+  registrationId: string
+): Promise<ActionResponse<{ success: boolean; recipientEmail: string }>> {
+  const authCheck = await requireAdminSession();
+  if (authCheck.error) {
+    return { success: false, error: authCheck.error };
+  }
+
+  if (!registrationId) {
+    return {
+      success: false,
+      error: { code: "INVALID_INPUT", message: "Registration ID is required." },
+    };
+  }
+
+  try {
+    const registration = await prisma.registration.findUnique({
+      where: { id: registrationId },
+      include: {
+        participant: true,
+        event: true,
+        team: {
+          include: {
+            members: true,
+          },
+        },
+      },
+    });
+
+    if (!registration) {
+      return {
+        success: false,
+        error: { code: "NOT_FOUND", message: "Registration not found." },
+      };
+    }
+
+    const emailResult = await sendRegistrationConfirmationEmail({
+      to: registration.participant.email,
+      participantName: registration.participant.name,
+      eventName: registration.event.name,
+      registrationNumber: registration.registrationNumber,
+      venue: registration.event.venue,
+      date: new Date(registration.event.startAt).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }),
+      teamName: registration.team?.name || null,
+      college: registration.participant.college,
+      members: (registration.team?.members || []).map((m) => ({
+        name: m.name,
+        phone: m.phone,
+        email: m.email ?? undefined,
+        college: m.college ?? undefined,
+        department: m.department ?? undefined,
+        year: m.year ?? undefined,
+        transportOptIn: m.transportOptIn,
+        pickupRoute: m.pickupRoute,
+        pickupStop: m.pickupStop,
+        pickupLandmark: m.pickupLandmark,
+      })),
+      transportOptIn: registration.transportOptIn,
+      samePickupForTeam: registration.samePickupForTeam,
+      pickupRoute: registration.pickupRoute,
+      pickupStop: registration.pickupStop,
+      pickupLandmark: registration.pickupLandmark,
+      passengersCount: registration.passengersCount,
+    });
+
+    if (!emailResult.success) {
+      return {
+        success: false,
+        error: {
+          code: "INTERNAL_ERROR",
+          message: emailResult.error || "Failed to dispatch email pass.",
+        },
+      };
+    }
+
+    await logAuditEvent({
+      actorId: authCheck.user.id,
+      action: "TICKET_RESEND",
+      entity: "Registration",
+      entityId: registration.id,
+      metadata: {
+        recipientEmail: registration.participant.email,
+        registrationNumber: registration.registrationNumber,
+        eventName: registration.event.name,
+      },
+    });
+
+    return {
+      success: true,
+      data: {
+        success: true,
+        recipientEmail: registration.participant.email,
+      },
+      message: `Confirmation pass successfully re-sent to ${registration.participant.email}.`,
+    };
+  } catch (error: unknown) {
+    console.error("resendConfirmationEmail error:", error);
+    const message = error instanceof Error ? error.message : "Failed to resend confirmation email.";
+    return {
+      success: false,
+      error: {
+        code: "INTERNAL_ERROR",
+        message,
+      },
+    };
+  }
+}
+

@@ -1,16 +1,12 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { Logo } from "@/components/logo";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { NavMain, type NavMainItem } from "@/components/nav-main";
@@ -25,6 +21,7 @@ import {
   ExternalLinkIcon,
   Settings2Icon,
   XIcon,
+  UsersIcon,
 } from "lucide-react";
 
 // Minimal, essential console navigation
@@ -38,6 +35,11 @@ const navItems: NavMainItem[] = [
     title: "Registrations",
     url: "/admin/registrations",
     icon: <ClipboardListIcon className="size-4" />,
+  },
+  {
+    title: "Participants",
+    url: "/admin/participants",
+    icon: <UsersIcon className="size-4" />,
   },
   {
     title: "Events",

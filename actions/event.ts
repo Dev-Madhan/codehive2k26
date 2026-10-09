@@ -5,6 +5,8 @@ import { eventSchema, EventInput } from "@/lib/validations/event";
 import { ActionResponse } from "@/types";
 import { Event, EventCategory, EventStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { requireAdminSession } from "@/lib/auth-guard";
+import { logAuditEvent } from "@/lib/audit";
 
 export async function getEvents(): Promise<ActionResponse<Event[]>> {
   try {
@@ -63,6 +65,11 @@ export async function getEventBySlug(slug: string): Promise<ActionResponse<Event
 }
 
 export async function createEvent(input: EventInput): Promise<ActionResponse<Event>> {
+  const authCheck = await requireAdminSession();
+  if (authCheck.error) {
+    return { success: false, error: authCheck.error };
+  }
+
   const parsed = eventSchema.safeParse(input);
   if (!parsed.success) {
     return {
@@ -79,8 +86,16 @@ export async function createEvent(input: EventInput): Promise<ActionResponse<Eve
     const event = await prisma.event.create({
       data: {
         ...parsed.data,
-        status: (parsed.data as any).status || "PUBLISHED",
+        status: (parsed.data as { status?: EventStatus }).status || "PUBLISHED",
       },
+    });
+
+    await logAuditEvent({
+      actorId: authCheck.user.id,
+      action: "EVENT_CREATE",
+      entity: "Event",
+      entityId: event.id,
+      metadata: { name: event.name, slug: event.slug },
     });
 
     revalidatePath("/events");
@@ -100,9 +115,22 @@ export async function createEvent(input: EventInput): Promise<ActionResponse<Eve
 }
 
 export async function deleteEventBySlug(slug: string): Promise<ActionResponse<{ count: number }>> {
+  const authCheck = await requireAdminSession();
+  if (authCheck.error) {
+    return { success: false, error: authCheck.error };
+  }
+
   try {
     const deleted = await prisma.event.delete({
       where: { slug },
+    });
+
+    await logAuditEvent({
+      actorId: authCheck.user.id,
+      action: "EVENT_DELETE",
+      entity: "Event",
+      entityId: deleted.id,
+      metadata: { slug },
     });
 
     revalidatePath("/events");
@@ -125,6 +153,11 @@ export async function updateEvent(
   id: string,
   input: Partial<EventInput> & { status?: EventStatus }
 ): Promise<ActionResponse<Event>> {
+  const authCheck = await requireAdminSession();
+  if (authCheck.error) {
+    return { success: false, error: authCheck.error };
+  }
+
   try {
     const existing = await prisma.event.findUnique({ where: { id } });
     if (!existing) {
@@ -158,6 +191,14 @@ export async function updateEvent(
       },
     });
 
+    await logAuditEvent({
+      actorId: authCheck.user.id,
+      action: "EVENT_UPDATE",
+      entity: "Event",
+      entityId: updated.id,
+      metadata: { slug: updated.slug, changes: Object.keys(input) },
+    });
+
     revalidatePath("/events");
     revalidatePath("/admin/events");
     revalidatePath("/admin/registrations");
@@ -166,11 +207,12 @@ export async function updateEvent(
     revalidatePath("/dashboard");
 
     return { success: true, data: updated };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("updateEvent error:", error);
+    const message = error instanceof Error ? error.message : "Failed to update event.";
     return {
       success: false,
-      error: { code: "INTERNAL_ERROR", message: error?.message || "Failed to update event." },
+      error: { code: "INTERNAL_ERROR", message },
     };
   }
 }
@@ -179,6 +221,11 @@ export async function toggleEventRegistration(
   id: string,
   isOpen: boolean
 ): Promise<ActionResponse<Event>> {
+  const authCheck = await requireAdminSession();
+  if (authCheck.error) {
+    return { success: false, error: authCheck.error };
+  }
+
   try {
     const updated = await prisma.event.update({
       where: { id },
@@ -186,6 +233,14 @@ export async function toggleEventRegistration(
         registrationOpen: isOpen,
         status: isOpen ? "REGISTRATION_OPEN" : "REGISTRATION_CLOSED",
       },
+    });
+
+    await logAuditEvent({
+      actorId: authCheck.user.id,
+      action: "EVENT_UPDATE",
+      entity: "Event",
+      entityId: updated.id,
+      metadata: { registrationOpen: isOpen },
     });
 
     revalidatePath("/");
@@ -197,7 +252,7 @@ export async function toggleEventRegistration(
     revalidatePath("/dashboard");
 
     return { success: true, data: updated };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("toggleEventRegistration error:", error);
     return {
       success: false,
@@ -214,6 +269,11 @@ export async function updateEventRegistrationGate(
     capacity?: number;
   }
 ): Promise<ActionResponse<Event>> {
+  const authCheck = await requireAdminSession();
+  if (authCheck.error) {
+    return { success: false, error: authCheck.error };
+  }
+
   try {
     const updated = await prisma.event.update({
       where: { id },
@@ -222,6 +282,14 @@ export async function updateEventRegistrationGate(
         status: params.status || (params.isOpen ? "REGISTRATION_OPEN" : "REGISTRATION_CLOSED"),
         ...(params.capacity !== undefined ? { capacity: params.capacity } : {}),
       },
+    });
+
+    await logAuditEvent({
+      actorId: authCheck.user.id,
+      action: "EVENT_UPDATE",
+      entity: "Event",
+      entityId: updated.id,
+      metadata: params,
     });
 
     revalidatePath("/");
@@ -233,7 +301,7 @@ export async function updateEventRegistrationGate(
     revalidatePath("/dashboard");
 
     return { success: true, data: updated };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("updateEventRegistrationGate error:", error);
     return {
       success: false,
@@ -246,6 +314,11 @@ export async function updateEventStatus(
   id: string,
   status: EventStatus
 ): Promise<ActionResponse<Event>> {
+  const authCheck = await requireAdminSession();
+  if (authCheck.error) {
+    return { success: false, error: authCheck.error };
+  }
+
   try {
     const updated = await prisma.event.update({
       where: { id },
@@ -255,6 +328,14 @@ export async function updateEventStatus(
       },
     });
 
+    await logAuditEvent({
+      actorId: authCheck.user.id,
+      action: "EVENT_UPDATE",
+      entity: "Event",
+      entityId: updated.id,
+      metadata: { status },
+    });
+
     revalidatePath("/events");
     revalidatePath("/admin/events");
     revalidatePath("/admin/registrations");
@@ -262,7 +343,7 @@ export async function updateEventStatus(
     revalidatePath("/dashboard");
 
     return { success: true, data: updated };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("updateEventStatus error:", error);
     return {
       success: false,
@@ -277,7 +358,7 @@ export async function getEventCategories(): Promise<ActionResponse<EventCategory
       orderBy: { name: "asc" },
     });
     return { success: true, data: categories };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("getEventCategories error:", error);
     return {
       success: false,
@@ -287,9 +368,22 @@ export async function getEventCategories(): Promise<ActionResponse<EventCategory
 }
 
 export async function deleteEvent(id: string): Promise<ActionResponse<{ count: number }>> {
+  const authCheck = await requireAdminSession();
+  if (authCheck.error) {
+    return { success: false, error: authCheck.error };
+  }
+
   try {
     const deleted = await prisma.event.delete({
       where: { id },
+    });
+
+    await logAuditEvent({
+      actorId: authCheck.user.id,
+      action: "EVENT_DELETE",
+      entity: "Event",
+      entityId: deleted.id,
+      metadata: { id },
     });
 
     revalidatePath("/events");
