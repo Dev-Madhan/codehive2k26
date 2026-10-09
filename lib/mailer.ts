@@ -1223,6 +1223,384 @@ export async function sendEventPostponedEmail(
 }
 
 // ---------------------------------------------------------------------------
+// Date-Correction Email — reuses existing confirmation template
+// Sends an apology + corrected event date to a targeted list of recipients.
+// Does NOT regenerate passcodes or QR tokens.
+// ---------------------------------------------------------------------------
+
+export interface SendDateCorrectionEmailParams {
+  to: string;
+  participantName: string;
+  eventName: string;
+  registrationNumber: string; // existing passcode (unchanged)
+  venue: string;
+  date: string;               // corrected date: "23 October 2026"
+  qrBuffer?: Buffer;          // freshly rendered QR from existing livePassUrl (no token change)
+  passUrl?: string;
+  teamName?: string | null;
+  college?: string;
+  department?: string;
+  members?: Array<{
+    name: string;
+    phone: string;
+    email?: string;
+    college?: string;
+    department?: string;
+    year?: string;
+  }>;
+}
+
+export async function sendDateCorrectionEmail(
+  params: SendDateCorrectionEmailParams
+) {
+  const isTeam = Boolean(params.teamName || (params.members && params.members.length > 0));
+  const livePassUrl = params.passUrl || getLivePassUrl(params.registrationNumber);
+
+  // Re-generate QR buffer from the SAME live pass URL (unchanged URL = unchanged QR meaning).
+  let qrBuffer = params.qrBuffer;
+  if (!qrBuffer) {
+    try {
+      qrBuffer = await generateQrBuffer(livePassUrl);
+    } catch (err) {
+      console.error("Date-correction QR buffer generation error:", err);
+    }
+  }
+
+  const attachments: MailAttachment[] = [];
+  let qrImageMarkup = "";
+
+  if (qrBuffer) {
+    const qrCid = `pass-qr-${params.registrationNumber}@codehive`;
+    attachments.push({
+      filename: `codehive-pass-${params.registrationNumber}.png`,
+      content: qrBuffer,
+      cid: qrCid,
+      contentType: "image/png",
+    });
+
+    qrImageMarkup = `
+      <img
+        src="cid:${qrCid}"
+        alt="Pass QR Code ${params.registrationNumber}"
+        width="170"
+        height="170"
+        style="display: block; width: 170px; height: 170px; margin: 0 auto; border: 0; outline: none; text-decoration: none;"
+      />
+    `;
+  }
+
+  const htmlContent = `
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Important: CodeHive 2K26 Event Date Correction | ${params.eventName}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <style type="text/css">
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000000;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      color: #E5E5E5;
+    }
+    table { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+    a { color: #FFFFFF; text-decoration: underline; }
+    a[x-apple-data-detectors], .no-link-style a, span.MsoHyperlink {
+      color: inherit !important; text-decoration: none !important;
+      font-size: inherit !important; font-family: inherit !important;
+      font-weight: inherit !important; line-height: inherit !important;
+    }
+    u + #body a { color: inherit !important; text-decoration: none !important; }
+    @media only screen and (max-width: 620px) {
+      .email-wrapper { width: 100% !important; padding: 12px !important; }
+      .content-container { padding: 20px 16px !important; }
+      .pass-code-text { font-size: 26px !important; letter-spacing: 4px !important; }
+    }
+  </style>
+</head>
+<body id="body" style="margin: 0; padding: 0; background-color: #000000; color: #E5E5E5; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #000000; padding: 24px 12px;">
+    <tr>
+      <td align="center">
+        <!-- Main Email Container -->
+        <table role="presentation" class="email-wrapper" border="0" cellpadding="0" cellspacing="0" width="600" style="max-width: 600px; width: 100%; background-color: #0F0F0F; border: 1px solid #262626; border-collapse: collapse;">
+
+          <!-- Top Accent Bar -->
+          <tr>
+            <td height="3" style="background: #FFFFFF; font-size: 0; line-height: 0;">&nbsp;</td>
+          </tr>
+
+          <!-- Header Section -->
+          <tr>
+            <td align="center" style="padding: 32px 24px 20px 24px; border-bottom: 1px solid #262626; text-align: center;">
+              <!-- Verified Badge -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto 14px auto;">
+                <tr>
+                  <td style="background-color: #161616; border: 1px solid #404040; padding: 5px 14px;">
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 1.5px; display: inline-flex; align-items: center;">
+                      <span style="color: #FFFFFF; margin-right: 6px;">&#9679;</span> OFFICIAL ENTRY PASS // VERIFIED
+                    </span>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Date Correction Banner -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #FFFFFF; margin-bottom: 20px;">
+                <tr>
+                  <td align="center" style="padding: 12px; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; letter-spacing: 2px;">
+                    IMPORTANT: EVENT DATE CORRECTION — 23 OCTOBER 2026
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Main Brand Title -->
+              <h1 style="margin: 0 0 6px 0; font-family: 'Space Grotesk', 'Inter', sans-serif; font-size: 26px; font-weight: 800; color: #FFFFFF; letter-spacing: 1.5px; text-transform: uppercase;">
+                CODEHIVE 2K26
+              </h1>
+              <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; color: #737373; letter-spacing: 1px; text-transform: uppercase;">
+                National Level Technical Symposium &amp; Hackathon
+              </p>
+            </td>
+          </tr>
+
+          <!-- Body Container -->
+          <tr>
+            <td class="content-container" style="padding: 28px 24px;">
+
+              <!-- Apology Block -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border-left: 4px solid #FFFFFF; border-top: 1px solid #262626; border-right: 1px solid #262626; border-bottom: 1px solid #262626; margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 20px 20px;">
+                    <p style="margin: 0 0 10px 0; font-family: 'Inter', sans-serif; font-size: 14px; color: #E5E5E5; line-height: 1.7;">
+                      Dear <strong style="color: #FFFFFF;">${params.participantName}</strong>,
+                    </p>
+                    <p style="margin: 0 0 12px 0; font-family: 'Inter', sans-serif; font-size: 13px; color: #A3A3A3; line-height: 1.7;">
+                      We sincerely apologize for the inconvenience caused by the incorrect event date mentioned in our previous confirmation email.
+                    </p>
+                    <p style="margin: 0 0 12px 0; font-family: 'Inter', sans-serif; font-size: 13px; color: #E5E5E5; line-height: 1.7;">
+                      <strong style="color: #FFFFFF;">CodeHive 2K26 will take place on <span style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #FFFFFF;">23 October 2026</span>.</strong>
+                    </p>
+                    <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 13px; color: #A3A3A3; line-height: 1.7;">
+                      Your registration remains valid and you do <strong style="color: #FFFFFF;">not</strong> need to register again. You can use your <strong style="color: #FFFFFF;">existing passcode and existing QR code</strong> for event entry. Please retain this email for your reference.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Event Details Spotlight Card -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 20px;">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #A3A3A3; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;">
+                      &gt; REGISTERED EVENT
+                    </div>
+                    <h2 style="margin: 0 0 16px 0; font-family: 'Space Grotesk', 'Inter', sans-serif; font-size: 22px; font-weight: 700; color: #FFFFFF; letter-spacing: -0.3px;">
+                      ${params.eventName}
+                    </h2>
+
+                    <!-- Event Metadata Table -->
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 13px;">
+                      <tr>
+                        <td width="90" style="padding: 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase;">DATE:</td>
+                        <td style="padding: 6px 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #FFFFFF !important;">
+                          <span style="color: #FFFFFF !important; text-decoration: none !important;">${params.date}</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase;">VENUE:</td>
+                        <td style="padding: 6px 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #FFFFFF !important;">
+                          <span style="color: #FFFFFF !important; text-decoration: none !important;">${params.venue}</span>
+                        </td>
+                      </tr>
+                      ${
+                        params.college
+                          ? `<tr>
+                              <td style="padding: 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase;">COLLEGE:</td>
+                              <td style="padding: 6px 0; font-family: 'Inter', sans-serif; color: #E5E5E5 !important;">
+                                <span style="color: #E5E5E5 !important; text-decoration: none !important;">${params.college}</span>
+                              </td>
+                            </tr>`
+                          : ""
+                      }
+                      ${
+                        params.department
+                          ? `<tr>
+                              <td style="padding: 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase;">DEPT:</td>
+                              <td style="padding: 6px 0; font-family: 'Inter', sans-serif; color: #E5E5E5 !important;">
+                                <span style="color: #E5E5E5 !important; text-decoration: none !important;">${params.department}</span>
+                              </td>
+                            </tr>`
+                          : ""
+                      }
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Pass Code Highlight Card -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 2px solid #FFFFFF; margin-bottom: 24px; text-align: center;">
+                <tr>
+                  <td style="padding: 24px 18px;">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">
+                      [ OFFICIAL EVENT PASS CODE ]
+                    </div>
+                    <div class="pass-code-text" style="font-family: 'JetBrains Mono', monospace; font-size: 34px; font-weight: 800; letter-spacing: 6px; color: #FFFFFF; margin: 8px 0;">
+                      ${params.registrationNumber}
+                    </div>
+                    <p style="margin: 8px 0 0 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #A3A3A3; line-height: 1.5;">
+                      Quote this pass code at the registration desk or present the QR code below for gate authorization.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Scannable Real-Time QR Gate Pass Box -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 24px; text-align: center;">
+                <tr>
+                  <td style="padding: 26px 20px;">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px;">
+                      [ REAL-TIME GATE SCANNER PASS ]
+                    </div>
+                    <p style="margin: 0 0 16px 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #737373;">
+                      Scan with any smartphone camera or gate optical scanner for real-time live pass verification.
+                    </p>
+
+                    <!-- Pure White QR Frame -->
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto; background-color: #FFFFFF; border: 2px solid #262626;">
+                      <tr>
+                        <td align="center" style="padding: 14px;">
+                          ${qrImageMarkup}
+                        </td>
+                      </tr>
+                    </table>
+
+                    <div style="margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #737373;">
+                      PASS ID: <span style="color: #FFFFFF; font-weight: 600;">${params.registrationNumber}</span> &bull; STATUS: <span style="color: #FFFFFF; font-weight: 700;">ACTIVE // VERIFIED</span>
+                    </div>
+
+                    <!-- Direct Real-Time Pass Link Button -->
+                    <div style="margin-top: 18px;">
+                      <a href="${livePassUrl}" target="_blank" style="display: inline-block; background-color: #FFFFFF; color: #000000; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; padding: 12px 26px; border: 1px solid #FFFFFF; text-decoration: none;">
+                        [ VIEW LIVE PASS ] &rarr;
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Participant & Team Details -->
+              ${
+                isTeam
+                  ? `
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 24px;">
+                  <tr>
+                    <td style="padding: 18px 20px;">
+                      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; border-bottom: 1px solid #262626; padding-bottom: 6px;">
+                        TEAM CREDENTIALS: ${params.teamName ? params.teamName.toUpperCase() : "CONFIRMED SQUAD"}
+                      </div>
+                      <p style="margin: 0 0 8px 0; font-family: 'Inter', sans-serif; font-size: 13px; color: #E2E8F0;">
+                        <strong style="color: #FFFFFF;">Team Leader:</strong> ${params.participantName}
+                      </p>
+                      ${
+                        params.members && params.members.length > 0
+                          ? `
+                        <div style="margin-top: 12px;">
+                          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase; margin-bottom: 6px;">
+                            Team Members:
+                          </div>
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 12px; color: #CBD5E1;">
+                            ${params.members
+                              .map(
+                                (m, idx) => `
+                              <tr>
+                                <td style="padding: 3px 0; font-family: 'Inter', sans-serif;">
+                                  <span style="color: #737373; font-family: 'JetBrains Mono', monospace; margin-right: 6px;">[0${idx + 2}]</span>
+                                  <strong style="color: #FFFFFF;">${m.name}</strong>
+                                  <span style="color: #737373; margin-left: 4px;">(${m.phone}${m.email ? ` &bull; ${m.email}` : ""}${m.department ? ` &bull; ${m.department}` : ""})</span>
+                                </td>
+                              </tr>
+                            `
+                              )
+                              .join("")}
+                          </table>
+                        </div>
+                      `
+                          : ""
+                      }
+                    </td>
+                  </tr>
+                </table>
+              `
+                  : `
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 24px;">
+                  <tr>
+                    <td style="padding: 16px 20px;">
+                      <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 13px; color: #E5E5E5;">
+                        <span style="color: #737373; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; font-size: 11px; margin-right: 8px;">ATTENDEE:</span>
+                        <strong style="color: #FFFFFF;">${params.participantName}</strong>
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              `
+              }
+
+              <!-- Sign-off -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 18px 20px;">
+                    <p style="margin: 0 0 8px 0; font-family: 'Inter', sans-serif; font-size: 13px; color: #A3A3A3; line-height: 1.6;">
+                      Thank you for your understanding and patience. We look forward to welcoming you to CodeHive 2K26 on <strong style="color: #FFFFFF;">23 October 2026</strong>.
+                    </p>
+                    <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 13px; color: #E5E5E5; line-height: 1.6;">
+                      Regards,<br />
+                      <strong style="color: #FFFFFF;">Madhan Kumar</strong><br />
+                      <span style="color: #737373; font-family: 'JetBrains Mono', monospace; font-size: 11px;">Developer — CodeHive 2K26</span><br />
+                      <a href="mailto:devmadhan24@gmail.com" style="color: #A3A3A3; font-size: 11px; font-family: 'JetBrains Mono', monospace;">devmadhan24@gmail.com</a>
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- Footer Section -->
+          <tr>
+            <td style="border-top: 1px solid #262626; padding: 24px 20px; text-align: center; background-color: #080808;">
+              <p style="margin: 0 0 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #737373; text-transform: uppercase; letter-spacing: 1px;">
+                CODEHIVE 2K26 ORGANIZING COMMITTEE &bull; SECURE GATE VERIFICATION SYSTEM
+              </p>
+              <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 11px; color: #404040;">
+                Department of Computer Science &amp; Engineering &bull; Official Digital Verification Service
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `;
+
+  return sendMail({
+    to: params.to,
+    subject: `Important: CodeHive 2K26 Event Date Correction [${params.registrationNumber}]`,
+    html: htmlContent,
+    attachments,
+  });
+}
+
+// ---------------------------------------------------------------------------
 // Email OTP verification (Monochrome / B&W Edition, Space Grotesk + JetBrains Mono)
 // ---------------------------------------------------------------------------
 
