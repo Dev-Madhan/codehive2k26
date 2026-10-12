@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { checkMemoryRateLimit, getClientIp, RATE_LIMIT_TIERS, RateLimitConfig } from "@/lib/rate-limiter";
 
 /**
- * CodeHive 2K26 — Root Edge Security & Anti-DDoS Middleware
+ * CodeHive 2K26 — Root Edge Security & Anti-DDoS Proxy
  * 1. Layer 7 DDoS Mitigation via Sliding Window Rate Limiting
  * 2. Enterprise HTTP Security Headers (Anti-Clickjacking, HSTS, Nosniff)
  * 3. Bot & Route Throttling
@@ -29,7 +29,7 @@ function getTierForPath(pathname: string): { tierName: string; config: RateLimit
   return { tierName: "global", config: RATE_LIMIT_TIERS.GLOBAL };
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Health probe bypass: monitoring systems must not be throttled
@@ -135,7 +135,7 @@ export function middleware(request: NextRequest) {
   return response;
 }
 
-// Apply middleware to all routes except static assets
+// Apply proxy to all routes except static assets
 export const config = {
   matcher: [
     /*

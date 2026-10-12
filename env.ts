@@ -33,7 +33,7 @@ const serverSchema = z.object({
   SMTP_USER: z.string().optional().default(""),
   SMTP_PASS: z.string().optional().default(""),
   EMAIL_FROM: z.string().optional().default("CodeHive 2K26 <no-reply@codehive2k26.com>"),
-  EMERGENCY_OTP_BYPASS: z.string().optional().default("true"),
+  EMERGENCY_OTP_BYPASS: z.string().optional().default("false"),
 });
 
 const clientSchema = z.object({
