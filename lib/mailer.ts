@@ -614,7 +614,7 @@ export async function sendRegistrationConfirmationEmail(
     to: params.to,
     subject: params.isResend
       ? `[CONFIRMED PASS] CodeHive 2K26 Entry Pass [${params.registrationNumber}] — ${params.eventName} | 23 October 2026`
-      : `Official Event Pass [${params.registrationNumber}] — ${params.eventName} | CodeHive 2K26`,
+      : `Official Event Pass [${params.registrationNumber}] — ${params.eventName} | 23 October 2026`,
     html: htmlContent,
     attachments,
   });
