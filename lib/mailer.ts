@@ -216,6 +216,14 @@ export async function sendRegistrationConfirmationEmail(
       color: #FFFFFF;
       text-decoration: underline;
     }
+    a.btn-dark-text,
+    a.btn-dark-text span,
+    .btn-dark-text,
+    .btn-dark-text span {
+      color: #000000 !important;
+      text-decoration: none !important;
+      -webkit-text-fill-color: #000000 !important;
+    }
     /* Neutralize email client auto-link styling (dates, addresses, phone numbers) */
     a[x-apple-data-detectors],
     .no-link-style a,
@@ -406,11 +414,48 @@ export async function sendRegistrationConfirmationEmail(
                       PASS ID: <span style="color: #FFFFFF; font-weight: 600;">${params.registrationNumber}</span> &bull; STATUS: <span style="color: #FFFFFF; font-weight: 700;">ACTIVE // VERIFIED</span>
                     </div>
 
-                    <!-- Direct Real-Time Pass Link Button -->
-                    <div style="margin-top: 18px;">
-                      <a href="${livePassUrl}" target="_blank" style="display: inline-block; background-color: #FFFFFF; color: #000000; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; padding: 12px 26px; border-radius: 0px; border: 1px solid #FFFFFF; text-decoration: none;">
-                        [ VIEW LIVE PASS ] &rarr;
-                      </a>
+                    <!-- Direct Real-Time Pass Link Button (Bulletproof Contrast) -->
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: 18px auto 0 auto;">
+                      <tr>
+                        <td align="center" bgcolor="#FFFFFF" style="background-color: #FFFFFF; padding: 13px 28px; border: 1px solid #FFFFFF;">
+                          <a href="${livePassUrl}" target="_blank" class="btn-dark-text" style="color: #000000 !important; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; text-decoration: none !important; display: inline-block; line-height: 18px; -webkit-text-fill-color: #000000 !important;">
+                            <span style="color: #000000 !important; text-decoration: none !important; font-weight: 900; -webkit-text-fill-color: #000000 !important;">
+                              [ VIEW LIVE PASS ] &rarr;
+                            </span>
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Official WhatsApp Community Card -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #25D366; margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 20px;">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #25D366; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;">
+                      &#9679; OFFICIAL WHATSAPP COMMUNITY // MANDATORY FOR TEAMS
+                    </div>
+                    <h3 style="margin: 0 0 10px 0; font-family: 'Space Grotesk', 'Inter', sans-serif; font-size: 18px; font-weight: 700; color: #FFFFFF; letter-spacing: -0.2px;">
+                      Join the CodeHive 2K26 WhatsApp Group
+                    </h3>
+                    <p style="margin: 0 0 16px 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #A3A3A3; line-height: 1.6;">
+                      All team leaders and team members must join the official WhatsApp broadcast community. Real-time announcements, hackathon problem statements, bus transit live tracking, and desk check-in instructions will be shared exclusively in this group.
+                    </p>
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td align="center" bgcolor="#25D366" style="background-color: #25D366; padding: 12px 26px; border-radius: 2px;">
+                          <a href="https://chat.whatsapp.com/DJTRfxqaLKg8wFwaBDFxEb?s=cl&p=a&mlu=4&ilr=4" target="_blank" class="btn-dark-text" style="color: #000000 !important; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; text-decoration: none !important; display: inline-block; -webkit-text-fill-color: #000000 !important;">
+                            <span style="color: #000000 !important; font-weight: 900; text-decoration: none !important; -webkit-text-fill-color: #000000 !important;">
+                              [ JOIN WHATSAPP GROUP ] &rarr;
+                            </span>
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                    <div style="margin-top: 12px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #737373; word-break: break-all;">
+                      Direct Link: <a href="https://chat.whatsapp.com/DJTRfxqaLKg8wFwaBDFxEb?s=cl&p=a&mlu=4&ilr=4" target="_blank" style="color: #25D366; text-decoration: underline;">https://chat.whatsapp.com/DJTRfxqaLKg8wFwaBDFxEb?s=cl&p=a&mlu=4&ilr=4</a>
                     </div>
                   </td>
                 </tr>
@@ -1051,12 +1096,18 @@ export async function sendEventPostponedEmail(
                       PASS ID: <span style="color: #FFFFFF; font-weight: 600;">${params.registrationNumber}</span> &bull; STATUS: <span style="color: #FFFFFF; font-weight: 700;">ACTIVE // VERIFIED</span>
                     </div>
 
-                    <!-- Direct Real-Time Pass Link Button -->
-                    <div style="margin-top: 18px;">
-                      <a href="${livePassUrl}" target="_blank" style="display: inline-block; background-color: #FFFFFF; color: #000000; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; padding: 12px 26px; border-radius: 0px; border: 1px solid #FFFFFF; text-decoration: none;">
-                        [ VIEW LIVE PASS ] &rarr;
-                      </a>
-                    </div>
+                    <!-- Direct Real-Time Pass Link Button (Bulletproof Contrast) -->
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: 18px auto 0 auto;">
+                      <tr>
+                        <td align="center" bgcolor="#FFFFFF" style="background-color: #FFFFFF; padding: 13px 28px; border: 1px solid #FFFFFF;">
+                          <a href="${livePassUrl}" target="_blank" class="btn-dark-text" style="color: #000000 !important; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; text-decoration: none !important; display: inline-block; line-height: 18px; -webkit-text-fill-color: #000000 !important;">
+                            <span style="color: #000000 !important; text-decoration: none !important; font-weight: 900; -webkit-text-fill-color: #000000 !important;">
+                              [ VIEW LIVE PASS ] &rarr;
+                            </span>
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
                   </td>
                 </tr>
               </table>
@@ -1526,12 +1577,18 @@ export async function sendDateCorrectionEmail(
                       PASS ID: <span style="color: #FFFFFF; font-weight: 600;">${params.registrationNumber}</span> &bull; STATUS: <span style="color: #FFFFFF; font-weight: 700;">ACTIVE // VERIFIED</span>
                     </div>
 
-                    <!-- Direct Real-Time Pass Link Button -->
-                    <div style="margin-top: 18px;">
-                      <a href="${livePassUrl}" target="_blank" style="display: inline-block; background-color: #FFFFFF; color: #000000; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; padding: 12px 26px; border: 1px solid #FFFFFF; text-decoration: none;">
-                        [ VIEW LIVE PASS ] &rarr;
-                      </a>
-                    </div>
+                    <!-- Direct Real-Time Pass Link Button (Bulletproof Contrast) -->
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: 18px auto 0 auto;">
+                      <tr>
+                        <td align="center" bgcolor="#FFFFFF" style="background-color: #FFFFFF; padding: 13px 28px; border: 1px solid #FFFFFF;">
+                          <a href="${livePassUrl}" target="_blank" class="btn-dark-text" style="color: #000000 !important; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; text-decoration: none !important; display: inline-block; line-height: 18px; -webkit-text-fill-color: #000000 !important;">
+                            <span style="color: #000000 !important; text-decoration: none !important; font-weight: 900; -webkit-text-fill-color: #000000 !important;">
+                              [ VIEW LIVE PASS ] &rarr;
+                            </span>
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
                   </td>
                 </tr>
               </table>
@@ -1638,6 +1695,277 @@ export async function sendDateCorrectionEmail(
     subject: `Important: CodeHive 2K26 Event Date Correction [${params.registrationNumber}]`,
     html: htmlContent,
     attachments,
+  });
+}
+
+// ---------------------------------------------------------------------------
+// WhatsApp Group Invitation Broadcast Email (Cyberpunk Dark Mode)
+// ---------------------------------------------------------------------------
+
+export interface SendWhatsAppInviteEmailParams {
+  to: string;
+  participantName: string;
+  eventName: string;
+  registrationNumber: string;
+  teamName?: string | null;
+  membersCount?: number;
+}
+
+export async function sendWhatsAppGroupInviteEmail(
+  params: SendWhatsAppInviteEmailParams
+) {
+  const whatsappUrl =
+    "https://chat.whatsapp.com/DJTRfxqaLKg8wFwaBDFxEb?s=cl&p=a&mlu=4&ilr=4";
+
+  const htmlContent = `
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Official WhatsApp Community - CodeHive 2K26</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <style type="text/css">
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000000;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      color: #E5E5E5;
+    }
+    table {
+      border-collapse: collapse;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+    a {
+      color: #25D366;
+      text-decoration: underline;
+    }
+    a.btn-dark-text,
+    a.btn-dark-text span,
+    .btn-dark-text,
+    .btn-dark-text span {
+      color: #000000 !important;
+      text-decoration: none !important;
+      -webkit-text-fill-color: #000000 !important;
+    }
+    a[x-apple-data-detectors],
+    .no-link-style a,
+    span.MsoHyperlink {
+      color: inherit !important;
+      text-decoration: none !important;
+      font-size: inherit !important;
+      font-family: inherit !important;
+      font-weight: inherit !important;
+      line-height: inherit !important;
+    }
+    u + #body a {
+      color: inherit !important;
+      text-decoration: none !important;
+    }
+    @media only screen and (max-width: 620px) {
+      .email-wrapper {
+        width: 100% !important;
+        padding: 12px !important;
+      }
+      .content-container {
+        padding: 20px 16px !important;
+      }
+    }
+  </style>
+</head>
+<body id="body" style="margin: 0; padding: 0; background-color: #000000; color: #E5E5E5; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #000000; padding: 24px 12px;">
+    <tr>
+      <td align="center">
+        <!-- Main Email Frame -->
+        <table role="presentation" class="email-wrapper" border="0" cellpadding="0" cellspacing="0" width="600" style="max-width: 600px; width: 100%; background-color: #0F0F0F; border: 1px solid #262626; border-collapse: collapse;">
+          
+          <!-- Top Green Accent Line -->
+          <tr>
+            <td height="4" style="background: #25D366; font-size: 0; line-height: 0;">&nbsp;</td>
+          </tr>
+
+          <!-- Header Section -->
+          <tr>
+            <td align="center" style="padding: 32px 24px 20px 24px; border-bottom: 1px solid #262626; text-align: center;">
+              <!-- Action Required Pill Badge -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto 14px auto;">
+                <tr>
+                  <td style="background-color: #161616; border: 1px solid #25D366; padding: 5px 14px; border-radius: 0px;">
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #25D366; text-transform: uppercase; letter-spacing: 1.5px; display: inline-flex; align-items: center;">
+                      <span style="color: #25D366; margin-right: 6px;">&#9679;</span> MANDATORY ACTION // ALL TEAMS
+                    </span>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Event Date Banner -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #FFFFFF; margin-bottom: 20px;">
+                <tr>
+                  <td align="center" style="padding: 12px; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; letter-spacing: 2px;">
+                    EVENT DATE: 23 OCTOBER 2026 &bull; CODEHIVE 2K26
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Main Title -->
+              <h1 style="margin: 0 0 6px 0; font-family: 'Space Grotesk', 'Inter', sans-serif; font-size: 24px; font-weight: 800; color: #FFFFFF; letter-spacing: 1px; text-transform: uppercase;">
+                JOIN OFFICIAL WHATSAPP GROUP
+              </h1>
+              <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; color: #737373; letter-spacing: 1px; text-transform: uppercase;">
+                Live Hackathon Briefing &bull; Bus Tracking &bull; Desk Check-In
+              </p>
+            </td>
+          </tr>
+
+          <!-- Body Container -->
+          <tr>
+            <td class="content-container" style="padding: 28px 24px;">
+
+              <!-- Greeting & Context Card -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border-left: 4px solid #25D366; border-top: 1px solid #262626; border-right: 1px solid #262626; border-bottom: 1px solid #262626; margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 18px 20px;">
+                    <p style="margin: 0 0 8px 0; font-family: 'Inter', sans-serif; font-size: 14px; color: #FFFFFF; font-weight: 700;">
+                      Hello ${params.participantName},
+                    </p>
+                    <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 13px; color: #D4D4D4; line-height: 1.6;">
+                      You are registered as the Team Leader for <strong style="color: #FFFFFF;">${params.eventName}</strong> (Pass Code: <strong style="color: #FFFFFF; font-family: 'JetBrains Mono', monospace;">${params.registrationNumber}</strong>${params.teamName ? ` &bull; Team: <strong style="color: #FFFFFF;">${params.teamName}</strong>` : ""}).
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Urgent Notice -->
+              <p style="margin: 0 0 16px 0; font-family: 'Inter', sans-serif; font-size: 13px; color: #E5E5E5; line-height: 1.6;">
+                It is <strong>mandatory for all team leaders and team members</strong> to join the official CodeHive 2K26 WhatsApp Community immediately. All critical event-day communications will happen exclusively through this channel.
+              </p>
+
+              <!-- What Will Be Shared Box -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 20px;">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; border-bottom: 1px solid #262626; padding-bottom: 6px;">
+                      COMMUNICATIONS HANDLED IN THIS GROUP:
+                    </div>
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: 'Inter', sans-serif; font-size: 12px; color: #A3A3A3; line-height: 1.7;">
+                      <tr>
+                        <td width="20" valign="top" style="color: #25D366; font-weight: bold;">&bull;</td>
+                        <td style="padding-bottom: 8px;"><strong style="color: #FFFFFF;">Live Hackathon Problem Statements &amp; Track Releases:</strong> Released directly in the group on event morning.</td>
+                      </tr>
+                      <tr>
+                        <td width="20" valign="top" style="color: #25D366; font-weight: bold;">&bull;</td>
+                        <td style="padding-bottom: 8px;"><strong style="color: #FFFFFF;">Vel Tech Campus Bus Fleet Live Tracking:</strong> Real-time GPS and stop arrival coordination from 05:45 AM onwards.</td>
+                      </tr>
+                      <tr>
+                        <td width="20" valign="top" style="color: #25D366; font-weight: bold;">&bull;</td>
+                        <td style="padding-bottom: 8px;"><strong style="color: #FFFFFF;">On-Site Desk Check-In:</strong> Fast-track physical verification &amp; spot badge collection instructions.</td>
+                      </tr>
+                      <tr>
+                        <td width="20" valign="top" style="color: #25D366; font-weight: bold;">&bull;</td>
+                        <td><strong style="color: #FFFFFF;">Jury Round Slot Allocations &amp; Q&amp;A:</strong> Direct coordination with faculty coordinators and student leads.</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Big WhatsApp Join Button Card -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 2px solid #25D366; margin-bottom: 24px; text-align: center;">
+                <tr>
+                  <td style="padding: 28px 20px; text-align: center;">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #25D366; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px;">
+                      [ OFFICIAL CHAT INVITATION ]
+                    </div>
+                    <h2 style="margin: 0 0 14px 0; font-family: 'Space Grotesk', 'Inter', sans-serif; font-size: 20px; font-weight: 800; color: #FFFFFF;">
+                      Join CodeHive 2K26 WhatsApp Community
+                    </h2>
+
+                    <!-- WhatsApp CTA Button -->
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
+                      <tr>
+                        <td align="center" bgcolor="#25D366" style="background-color: #25D366; padding: 14px 34px; border-radius: 2px;">
+                          <a href="${whatsappUrl}" target="_blank" class="btn-dark-text" style="color: #000000 !important; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; text-decoration: none !important; display: inline-block; -webkit-text-fill-color: #000000 !important;">
+                            <span style="color: #000000 !important; font-weight: 900; text-decoration: none !important; -webkit-text-fill-color: #000000 !important;">
+                              [ JOIN WHATSAPP GROUP ] &rarr;
+                            </span>
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <div style="margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #737373; word-break: break-all;">
+                      Direct Link: <a href="${whatsappUrl}" target="_blank" style="color: #25D366; text-decoration: underline;">${whatsappUrl}</a>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Team Member Share Directive -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #161616; border-left: 4px solid #FFFFFF; border-top: 1px solid #262626; border-right: 1px solid #262626; border-bottom: 1px solid #262626; margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 16px 20px;">
+                    <div style="font-family: 'Space Grotesk', 'Inter', sans-serif; font-size: 13px; font-weight: 700; color: #FFFFFF; margin-bottom: 4px;">
+                      ⚠️ ACTION REQUIRED FOR TEAM LEADERS:
+                    </div>
+                    <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #D4D4D4; line-height: 1.5;">
+                      Please forward this WhatsApp invite link to <strong style="color: #FFFFFF;">all your team members</strong> immediately so every member is in the group before event day.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Event Details Recap Card -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 20px;">
+                <tr>
+                  <td style="padding: 16px 20px;">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 12px;">
+                      <tr>
+                        <td width="100" style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase;">DATE:</td>
+                        <td style="padding: 4px 0; font-family: 'Inter', sans-serif; font-weight: 700; color: #FFFFFF;">23 October 2026</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 4px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase;">VENUE:</td>
+                        <td style="padding: 4px 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #FFFFFF;">Palani Murugan Hall of Fame, Vel Tech Multi Tech, Avadi, Chennai</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- Footer Section -->
+          <tr>
+            <td style="border-top: 1px solid #262626; padding: 24px 20px; text-align: center; background-color: #080808;">
+              <p style="margin: 0 0 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #737373; text-transform: uppercase; letter-spacing: 1px;">
+                CODEHIVE 2K26 ORGANIZING COMMITTEE &bull; OFFICIAL COMMUNICATIONS
+              </p>
+              <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 11px; color: #404040;">
+                Department of Computer Science &amp; Engineering &bull; Vel Tech Multi Tech Dr.Rangarajan Dr.Sakunthala Engineering College
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `;
+
+  return sendMail({
+    to: params.to,
+    subject: `[ACTION REQUIRED] Join Official CodeHive 2K26 WhatsApp Group — ${params.eventName} [${params.registrationNumber}]`,
+    html: htmlContent,
   });
 }
 
