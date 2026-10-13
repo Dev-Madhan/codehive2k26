@@ -378,6 +378,29 @@ export function DigitalEventPass({
           )}
         </div>
 
+        {/* ── Official WhatsApp Community Card ── */}
+        <div className="mt-5 border border-[#25D366]/40 bg-[#0A1A10] p-4 text-left">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <div className="flex items-center gap-1.5 text-xs font-bold text-[#25D366] uppercase font-mono">
+                <span className="size-2 rounded-full bg-[#25D366] inline-block animate-pulse" />
+                <span>Official WhatsApp Community // Mandatory for Teams</span>
+              </div>
+              <p className="text-xs text-neutral-300 mt-1">
+                Mandatory for team leaders &amp; squad members. Real-time updates, bus tracking, and slot allocations.
+              </p>
+            </div>
+            <a
+              href="https://chat.whatsapp.com/DJTRfxqaLKg8wFwaBDFxEb?s=cl&p=a&mlu=4&ilr=4"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 inline-flex items-center justify-center gap-2 h-9 px-4 font-mono text-xs font-bold uppercase tracking-wider text-black bg-[#25D366] hover:bg-[#20ba59] transition-colors cursor-pointer"
+            >
+              <span>Join WhatsApp Group &rarr;</span>
+            </a>
+          </div>
+        </div>
+
         {/* ── Footer Notice ── */}
         <div className="mt-6 pt-4 border-t border-[#262626] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[10px] font-mono text-[#737373]">
           <span>CODEHIVE 2K26 ORGANIZING COMMITTEE &bull; GATE VERIFICATION</span>

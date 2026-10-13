@@ -255,6 +255,29 @@ export default async function RegistrationViewPage({ params }: Props) {
             </div>
           )}
 
+          {/* Official WhatsApp Community Card */}
+          <div className="border border-[#25D366]/40 bg-[#0A1A10] p-4 text-left font-mono">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div className="flex items-center gap-1.5 text-xs font-bold text-[#25D366] uppercase">
+                  <span className="size-2 rounded-full bg-[#25D366] inline-block animate-pulse" />
+                  <span>Official WhatsApp Community</span>
+                </div>
+                <p className="text-xs text-neutral-300 font-sans mt-1">
+                  Mandatory for all team leaders and members. Real-time slot announcements, bus tracking &amp; desk check-in alerts.
+                </p>
+              </div>
+              <a
+                href="https://chat.whatsapp.com/DJTRfxqaLKg8wFwaBDFxEb?s=cl&p=a&mlu=4&ilr=4"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="shrink-0 inline-flex items-center justify-center gap-1.5 h-9 px-4 text-xs font-bold uppercase tracking-wider text-black bg-[#25D366] hover:bg-[#20ba59] transition-colors cursor-pointer"
+              >
+                <span>Join WhatsApp &rarr;</span>
+              </a>
+            </div>
+          </div>
+
           {/* Action Links & Admin Check-In Shortcut */}
           <div className="border-t border-[#262626] pt-5 flex flex-col sm:flex-row gap-3">
             <Link
