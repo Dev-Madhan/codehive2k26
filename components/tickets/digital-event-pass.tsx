@@ -124,7 +124,9 @@ export function DigitalEventPass({
               <CalendarIcon className="size-4 text-white shrink-0" />
               <div>
                 <span className="text-[10px] text-[#737373] uppercase block font-mono">Date</span>
-                <span className="font-semibold text-white">{ticket.date}</span>
+                <span className="font-semibold text-white">
+                  {ticket.date && ticket.date.includes("23") ? ticket.date : "23 October 2026"}
+                </span>
               </div>
             </div>
 

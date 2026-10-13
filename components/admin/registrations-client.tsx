@@ -356,6 +356,7 @@ function ParticipantDetailDialog({
                   icon={<CalendarIcon className="size-3 text-[#737373]" />}
                   label="EVENT DATE"
                   value={new Date(event.startAt).toLocaleDateString("en-IN", {
+                    timeZone: "Asia/Kolkata",
                     weekday: "short",
                     day: "numeric",
                     month: "short",
