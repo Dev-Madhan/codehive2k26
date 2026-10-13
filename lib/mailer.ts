@@ -107,6 +107,7 @@ export interface SendRegistrationEmailParams {
   teamName?: string | null;
   college?: string;
   department?: string;
+  isResend?: boolean;
   members?: Array<{
     name: string;
     phone: string;
@@ -265,8 +266,17 @@ export async function sendRegistrationConfirmationEmail(
                 <tr>
                   <td style="background-color: #161616; border: 1px solid #404040; padding: 5px 14px; border-radius: 0px;">
                     <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 1.5px; display: inline-flex; align-items: center;">
-                      <span style="color: #FFFFFF; margin-right: 6px;">&#9679;</span> OFFICIAL ENTRY PASS // VERIFIED
+                      <span style="color: #FFFFFF; margin-right: 6px;">&#9679;</span> ${params.isResend ? "OFFICIAL ENTRY PASS // RE-ISSUED &amp; VERIFIED" : "OFFICIAL ENTRY PASS // VERIFIED"}
                     </span>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Confirmed Date Banner -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #FFFFFF; margin-bottom: 20px;">
+                <tr>
+                  <td align="center" style="padding: 12px; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 800; color: #000000; text-transform: uppercase; letter-spacing: 2px;">
+                    ${params.isResend ? "CONFIRMED EVENT DATE: 23 OCTOBER 2026" : "OFFICIAL EVENT DATE: 23 OCTOBER 2026"}
                   </td>
                 </tr>
               </table>
@@ -285,6 +295,26 @@ export async function sendRegistrationConfirmationEmail(
           <tr>
             <td class="content-container" style="padding: 28px 24px;">
 
+              ${
+                params.isResend
+                  ? `
+              <!-- Re-issued Pass Clarification Notice Card -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border-left: 4px solid #FFFFFF; border-top: 1px solid #262626; border-right: 1px solid #262626; border-bottom: 1px solid #262626; margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 18px 20px;">
+                    <p style="margin: 0 0 6px 0; font-family: 'Inter', sans-serif; font-size: 13px; color: #FFFFFF; font-weight: 700;">
+                      Official Pass Re-issued for ${params.participantName}
+                    </p>
+                    <p style="margin: 0; font-family: 'Inter', sans-serif; font-size: 12px; color: #A3A3A3; line-height: 1.6;">
+                      This pass confirms your registration for CodeHive 2K26 on <strong style="color: #FFFFFF;">23 October 2026</strong>. Your existing pass code (<strong style="color: #FFFFFF; font-family: 'JetBrains Mono', monospace;">${params.registrationNumber}</strong>) and optical QR gate pass remain active and valid.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+              `
+                  : ""
+              }
+
               <!-- Event Details Spotlight Card -->
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #080808; border: 1px solid #262626; margin-bottom: 24px;">
                 <tr>
@@ -301,7 +331,7 @@ export async function sendRegistrationConfirmationEmail(
                       <tr>
                         <td width="90" style="padding: 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase;">DATE:</td>
                         <td style="padding: 6px 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #FFFFFF !important;">
-                          <span style="color: #FFFFFF !important; text-decoration: none !important;">${params.date}</span>
+                          <span style="color: #FFFFFF !important; text-decoration: none !important;">23 October 2026</span>
                         </td>
                       </tr>
                       <tr>
@@ -582,9 +612,20 @@ export async function sendRegistrationConfirmationEmail(
 
   return sendMail({
     to: params.to,
-    subject: `Official Event Pass [${params.registrationNumber}] — ${params.eventName} | CodeHive 2K26`,
+    subject: params.isResend
+      ? `[CONFIRMED PASS] CodeHive 2K26 Entry Pass [${params.registrationNumber}] — ${params.eventName} | 23 October 2026`
+      : `Official Event Pass [${params.registrationNumber}] — ${params.eventName} | CodeHive 2K26`,
     html: htmlContent,
     attachments,
+  });
+}
+
+export async function sendResendPassEmail(
+  params: SendRegistrationEmailParams
+) {
+  return sendRegistrationConfirmationEmail({
+    ...params,
+    isResend: true,
   });
 }
 
@@ -935,7 +976,7 @@ export async function sendEventPostponedEmail(
                       <tr>
                         <td width="90" style="padding: 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase;">DATE:</td>
                         <td style="padding: 6px 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #FFFFFF !important;">
-                          <span style="color: #FFFFFF !important; text-decoration: none !important;">${params.date}</span>
+                          <span style="color: #FFFFFF !important; text-decoration: none !important;">23 October 2026</span>
                         </td>
                       </tr>
                       <tr>
@@ -1410,7 +1451,7 @@ export async function sendDateCorrectionEmail(
                       <tr>
                         <td width="90" style="padding: 6px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase;">DATE:</td>
                         <td style="padding: 6px 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #FFFFFF !important;">
-                          <span style="color: #FFFFFF !important; text-decoration: none !important;">${params.date}</span>
+                          <span style="color: #FFFFFF !important; text-decoration: none !important;">23 October 2026</span>
                         </td>
                       </tr>
                       <tr>

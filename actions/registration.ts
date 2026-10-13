@@ -3,7 +3,7 @@
 import prisma from "@/lib/prisma";
 import { registrationSchema, RegistrationInput } from "@/lib/validations/registration";
 import { generateQrToken, generateRegistrationNumber, generateQrDataUrl, generateQrBuffer } from "@/lib/qr";
-import { sendRegistrationConfirmationEmail } from "@/lib/mailer";
+import { sendRegistrationConfirmationEmail, sendResendPassEmail } from "@/lib/mailer";
 import { validateVerificationToken } from "@/lib/otp-token";
 import { ActionResponse } from "@/types";
 import { RegistrationSuccessPayload } from "@/types/registration";
@@ -374,12 +374,7 @@ export async function createRegistration(
       console.error("QR Code generation fallback error:", err);
     }
 
-    const formattedDate = event.startAt.toLocaleDateString("en-IN", {
-      weekday: "short",
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
+    const formattedDate = "23 October 2026";
 
     const resolvedTeamName = teamSizeNum > 1 ? (teamName || `${name}'s Team`) : null;
 
@@ -825,19 +820,21 @@ export async function resendConfirmationEmail(
       };
     }
 
-    const emailResult = await sendRegistrationConfirmationEmail({
+    const emailResult = await sendResendPassEmail({
       to: registration.participant.email,
       participantName: registration.participant.name,
       eventName: registration.event.name,
       registrationNumber: registration.registrationNumber,
       venue: registration.event.venue,
-      date: new Date(registration.event.startAt).toLocaleDateString("en-US", {
-        month: "short",
+      date: new Date(registration.event.startAt).toLocaleDateString("en-IN", {
+        timeZone: "Asia/Kolkata",
         day: "numeric",
+        month: "long",
         year: "numeric",
       }),
       teamName: registration.team?.name || null,
       college: registration.participant.college,
+      department: registration.participant.department || undefined,
       members: (registration.team?.members || []).map((m) => ({
         name: m.name,
         phone: m.phone,
@@ -886,7 +883,7 @@ export async function resendConfirmationEmail(
         success: true,
         recipientEmail: registration.participant.email,
       },
-      message: `Confirmation pass successfully re-sent to ${registration.participant.email}.`,
+      message: `Confirmation pass with confirmed date (23 October 2026) successfully re-sent to ${registration.participant.email}.`,
     };
   } catch (error: unknown) {
     console.error("resendConfirmationEmail error:", error);
