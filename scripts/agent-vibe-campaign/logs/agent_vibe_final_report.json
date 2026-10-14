@@ -1,0 +1,23 @@
+{
+  "campaignName": "AGENT_VIBE_PRELIMINARY_ANNOUNCEMENT",
+  "executionMode": "LIVE_PRODUCTION_DELIVERY",
+  "startedAt": "2026-10-14T05:50:54.590Z",
+  "completedAt": "2026-10-14T05:53:08.732Z",
+  "totalApprovedRecipients": 62,
+  "totalAttempted": 62,
+  "acceptedByProvider": 62,
+  "failedSends": 0,
+  "duplicateSendsPrevented": 0,
+  "reconciliationPercentage": "100.0%",
+  "providerDetails": {
+    "host": "smtp-relay.brevo.com",
+    "port": 587,
+    "sender": "CodeHive 2K26 <codehive2k26@gmail.com>"
+  },
+  "statusBreakdown": {
+    "accepted": 62,
+    "failed": 0,
+    "skipped": 0
+  },
+  "noteOnStatus": "Accepted by Provider means the SMTP server accepted the message into its delivery queue. Delivery and bounce status must be verified in the provider dashboard (e.g. Brevo transactional logs)."
+}

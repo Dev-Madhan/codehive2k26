@@ -1,0 +1,77 @@
+================================================================================
+AGENT VIBE – AI AGENT QUIZ (PRELIMINARY ROUND) // CODEHIVE 2K26
+Official Competition Guidelines for Team Leaders
+================================================================================
+
+Authorized Recipient: Hajj Mohaiyadeen A
+Team Name: Codex
+Registration ID: CH26-5GT2ZA
+
+Dear Hajj,
+
+Welcome to Codehive 2K26! This is the official directive regarding the Agent Vibe AI Agent Quiz Preliminary Round.
+
+The Preliminary Round is designed to evaluate your team's fundamental AI knowledge, quick thinking, and problem-solving skills in a competitive, fast-paced environment. Please read all guidelines below thoroughly to ensure your team is fully prepared.
+
+--------------------------------------------------------------------------------
+01. PLATFORM & SLOT ALLOCATION
+--------------------------------------------------------------------------------
+- Quiz Platform: Hosted online on Kahoot (https://kahoot.it) or via the Kahoot mobile app.
+- 6 Distinct Slots: All registered teams are distributed across six (6) slots.
+- Dedicated Rooms: Each slot operates in a separate Kahoot game room with its own unique Game PIN.
+- Mandatory Assigned Participation: Teams must participate exclusively in their assigned slot. Joining an unassigned slot without coordinator permission will lead to invalidation.
+- Slot Status: To be announced immediately before round commencement
+
+--------------------------------------------------------------------------------
+02. GAME PIN DISTRIBUTION PROCEDURE
+--------------------------------------------------------------------------------
+To preserve fairness and prevent unauthorized early room entries, NO Game PINs are distributed in advance.
+Event coordinators will announce your team's assigned Slot ID and Game PIN immediately before the respective round begins via the official event coordination desk / communication channel. Be on standby 10 minutes prior to your round.
+
+--------------------------------------------------------------------------------
+03. MANDATORY KAHOOT NICKNAME CONVENTION (MAX 15 CHARACTERS)
+--------------------------------------------------------------------------------
+Kahoot enforces a strict 15-character limit for all nicknames. You must join using this exact format:
+
+  Name (TeamName)
+
+Canonical Example: Arun (ByteRiders)
+
+CRITICAL NICKNAME LENGTH INSTRUCTION:
+Kahoot truncates any input beyond 15 characters. Not all names and team names will fit in full.
+You MUST verify your nickname length before joining. Use a shortened first name and an abbreviated team name if needed (e.g., "Sam (Codex)" = 11 chars) to ensure it stays strictly within the 15-character limit without truncation.
+
+--------------------------------------------------------------------------------
+04. STEP-BY-STEP PARTICIPATION PROTOCOL
+--------------------------------------------------------------------------------
+1. Be prepared with a stable internet connection 10 minutes prior to your team's assigned slot.
+2. Open your web browser and navigate to https://kahoot.it or launch the Kahoot app.
+3. Wait for the event coordinator to formally broadcast your assigned Slot ID and Game PIN.
+4. Enter the exact Game PIN designated for your slot.
+5. Enter your verified nickname in the prescribed "Name (TeamName)" format within 15 chars.
+6. Enter the game lobby and verify that your nickname is visible on screen. Wait for the host to commence.
+7. Read each AI question carefully and submit your answer as quickly and accurately as possible.
+8. Follow all live audio or text instructions from the event coordinators throughout the quiz.
+
+Official Kahoot Portal: https://kahoot.it
+
+--------------------------------------------------------------------------------
+05. SCORING & QUALIFICATION CRITERIA
+--------------------------------------------------------------------------------
+- Scoring Algorithm: Points are awarded based on answer correctness and response speed. Faster correct answers yield higher points.
+- Slot Qualification Rule: The top 3 teams from each of the 6 slots automatically qualify for the Main Event.
+- Qualifying Cohort: This results in up to 18 qualifying team positions in total advancing to the Agent Vibe Main Event.
+
+--------------------------------------------------------------------------------
+06. CRITICAL WARNINGS & DISQUALIFICATION RULES
+--------------------------------------------------------------------------------
+- DO NOT REFRESH OR CLOSE TAB: Refreshing the browser, closing the quiz tab, or switching apps on mobile may permanently disconnect your session. Disconnected sessions cannot be restored midway.
+- NO UNAUTHORIZED ALIASES OR EMOJIS: Avoid random emojis, offensive nicknames, or aliases that do not match your registered team name. Participants who violate naming rules will be immediately removed from the lobby.
+
+Best of luck to you and your team!
+
+Regards,
+Agent Vibe Event Coordination Team
+Codehive 2K26 Organizing Committee
+================================================================================
+Dispatched exclusively to registered team leaders of Agent Vibe.

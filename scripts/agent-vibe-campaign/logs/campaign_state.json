@@ -1,0 +1,508 @@
+{
+  "campaignName": "AGENT_VIBE_PRELIMINARY_ANNOUNCEMENT",
+  "startedAt": "2026-10-14T05:50:54.590Z",
+  "isDryRun": false,
+  "totalRecipients": 62,
+  "acceptedCount": 62,
+  "failedCount": 0,
+  "skippedCount": 0,
+  "results": {
+    "hajj26870@gmail.com": {
+      "recipientEmail": "hajj26870@gmail.com",
+      "teamName": "Codex",
+      "status": "ACCEPTED",
+      "messageId": "<83c8e733-a8a3-f89f-72b6-ab5b5ea46ffd@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:44.196Z"
+    },
+    "vinothini.s005@gmail.com": {
+      "recipientEmail": "vinothini.s005@gmail.com",
+      "teamName": "tech squards",
+      "status": "ACCEPTED",
+      "messageId": "<8806affe-b3e1-785d-61be-64c796dbbf2a@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:44.599Z"
+    },
+    "rethanantony@gmail.com": {
+      "recipientEmail": "rethanantony@gmail.com",
+      "teamName": "Jarvis Protocol",
+      "status": "ACCEPTED",
+      "messageId": "<2bf26f01-b7a8-7e3f-65d6-8c87b7bc6e56@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:45.006Z"
+    },
+    "vishwa.vimal.krk@gmail.com": {
+      "recipientEmail": "vishwa.vimal.krk@gmail.com",
+      "teamName": "ByteForce",
+      "status": "ACCEPTED",
+      "messageId": "<afb0c63f-6616-a181-f639-1af9feb09c26@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:45.399Z"
+    },
+    "shyaamsundar2310422@ssn.edu.in": {
+      "recipientEmail": "shyaamsundar2310422@ssn.edu.in",
+      "teamName": "The Outliers",
+      "status": "ACCEPTED",
+      "messageId": "<5756543d-d368-e9f1-75f0-ef9df92faceb@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:45.807Z"
+    },
+    "charishmasain@gmail.com": {
+      "recipientEmail": "charishmasain@gmail.com",
+      "teamName": "Ekdoteenchar",
+      "status": "ACCEPTED",
+      "messageId": "<f7e5c904-e8b1-10df-39af-7eaed0acdd60@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:46.204Z"
+    },
+    "nivassaha41@gmail.com": {
+      "recipientEmail": "nivassaha41@gmail.com",
+      "teamName": "AgentX",
+      "status": "ACCEPTED",
+      "messageId": "<5296c35a-225a-92e4-448e-9ea710ef49b0@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:46.600Z"
+    },
+    "akasht1704@gmail.com": {
+      "recipientEmail": "akasht1704@gmail.com",
+      "teamName": "Team Tech",
+      "status": "ACCEPTED",
+      "messageId": "<5e0b4a99-d732-af48-d857-52ec5f304847@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:46.997Z"
+    },
+    "sheikf347@gmail.com": {
+      "recipientEmail": "sheikf347@gmail.com",
+      "teamName": "Stark Industries",
+      "status": "ACCEPTED",
+      "messageId": "<70438a9f-5499-dc79-0dd3-f4affc982b0f@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:47.391Z"
+    },
+    "prathibha0907@gmail.com": {
+      "recipientEmail": "prathibha0907@gmail.com",
+      "teamName": "EDITH",
+      "status": "ACCEPTED",
+      "messageId": "<844e3417-2ff5-d441-f326-dc44c65a3dcf@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:47.783Z"
+    },
+    "ramandirector2@gmail.com": {
+      "recipientEmail": "ramandirector2@gmail.com",
+      "teamName": "TECHNAYAGANS",
+      "status": "ACCEPTED",
+      "messageId": "<04deb319-0493-2c1b-2a7f-07d514f49854@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:48.182Z"
+    },
+    "prasathram2210@gmail.com": {
+      "recipientEmail": "prasathram2210@gmail.com",
+      "teamName": "Raman&Co",
+      "status": "ACCEPTED",
+      "messageId": "<c75185fc-0e63-0822-e059-d00c7c236922@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:48.575Z"
+    },
+    "tamil99zt@gmail.com": {
+      "recipientEmail": "tamil99zt@gmail.com",
+      "teamName": "Error Breakers",
+      "status": "ACCEPTED",
+      "messageId": "<c148cc37-2366-2902-f396-b51ab7459771@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:48.979Z"
+    },
+    "mythiliramesh2007@gmail.com": {
+      "recipientEmail": "mythiliramesh2007@gmail.com",
+      "teamName": "AI Nexus",
+      "status": "ACCEPTED",
+      "messageId": "<3b2350c2-0bda-56d1-fa17-5b9e82e7ae06@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:49.374Z"
+    },
+    "mageshj06@gmail.com": {
+      "recipientEmail": "mageshj06@gmail.com",
+      "teamName": "Black pearl",
+      "status": "ACCEPTED",
+      "messageId": "<9ae5dade-5a76-d6c5-2fd1-b38cd0095ed8@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:49.767Z"
+    },
+    "2025aidspavithram@npsbcet.edu.in": {
+      "recipientEmail": "2025aidspavithram@npsbcet.edu.in",
+      "teamName": "Solution saurd",
+      "status": "ACCEPTED",
+      "messageId": "<21086f15-a209-f470-c097-4395e618936e@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:50.159Z"
+    },
+    "pranathisuresh7@gmail.com": {
+      "recipientEmail": "pranathisuresh7@gmail.com",
+      "teamName": "Nexus",
+      "status": "ACCEPTED",
+      "messageId": "<f62c96ce-a0f6-a7a3-1809-c2af4941e83a@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:50.552Z"
+    },
+    "vijayann19876@gmail.com": {
+      "recipientEmail": "vijayann19876@gmail.com",
+      "teamName": "Jackie",
+      "status": "ACCEPTED",
+      "messageId": "<89f83689-cd1d-7dd0-0aa4-eafe06932c10@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:50.949Z"
+    },
+    "priyanivasini2007@gmail.com": {
+      "recipientEmail": "priyanivasini2007@gmail.com",
+      "teamName": "Novahackers",
+      "status": "ACCEPTED",
+      "messageId": "<3e3564c4-2f0c-776b-01de-972eeab42eb6@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:51.347Z"
+    },
+    "s.chandrusscs@gmail.com": {
+      "recipientEmail": "s.chandrusscs@gmail.com",
+      "teamName": "TECHPULSE",
+      "status": "ACCEPTED",
+      "messageId": "<acb67ee3-4c39-4db9-5f44-11c2bd1d9743@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:51.744Z"
+    },
+    "ajerusha357@gmail.com": {
+      "recipientEmail": "ajerusha357@gmail.com",
+      "teamName": "TriByte",
+      "status": "ACCEPTED",
+      "messageId": "<aac1634c-9314-9c6c-52bd-de4d38f9039b@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:52.151Z"
+    },
+    "roshan4646ge@gmail.com": {
+      "recipientEmail": "roshan4646ge@gmail.com",
+      "teamName": "HACK NOVA",
+      "status": "ACCEPTED",
+      "messageId": "<afc6249e-12a3-444b-29a1-71328722f547@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:52.549Z"
+    },
+    "rsounda26@gmail.com": {
+      "recipientEmail": "rsounda26@gmail.com",
+      "teamName": "Team leaders",
+      "status": "ACCEPTED",
+      "messageId": "<5c12b860-2ff6-80ff-febf-008d125ea7ec@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:52.943Z"
+    },
+    "prithivrajprithivraj733@gmail.com": {
+      "recipientEmail": "prithivrajprithivraj733@gmail.com",
+      "teamName": "Nexaura trio",
+      "status": "ACCEPTED",
+      "messageId": "<8d136ec4-531d-5425-8f9b-addc50b24b4a@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:53.341Z"
+    },
+    "sarojjkumar08@gmail.com": {
+      "recipientEmail": "sarojjkumar08@gmail.com",
+      "teamName": "Nayasa",
+      "status": "ACCEPTED",
+      "messageId": "<50abc1b5-3c8e-d78f-0bb8-a134bb31cb31@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:53.740Z"
+    },
+    "shivaprakash8248@gmail.com": {
+      "recipientEmail": "shivaprakash8248@gmail.com",
+      "teamName": "MOONU FOOLU",
+      "status": "ACCEPTED",
+      "messageId": "<b46e5c1e-eb14-03a3-3c54-475d15a1ac49@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:54.276Z"
+    },
+    "srinivaseswar788@gmail.com": {
+      "recipientEmail": "srinivaseswar788@gmail.com",
+      "teamName": "VibeForge",
+      "status": "ACCEPTED",
+      "messageId": "<964e3f16-eed5-16ac-95e0-9a0c5fab9506@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:54.672Z"
+    },
+    "eshwersrvspmcbse9@gmail.com": {
+      "recipientEmail": "eshwersrvspmcbse9@gmail.com",
+      "teamName": "Syntax Syndicate",
+      "status": "ACCEPTED",
+      "messageId": "<9c35dc9b-3ca7-aed2-0765-dce10f0cec36@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:55.069Z"
+    },
+    "jagz07x@gmail.com": {
+      "recipientEmail": "jagz07x@gmail.com",
+      "teamName": "Test10010",
+      "status": "ACCEPTED",
+      "messageId": "<03ba5d5c-d344-0faf-6eb8-b17e9f55bf80@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:55.471Z"
+    },
+    "poolapaddu@gmail.com": {
+      "recipientEmail": "poolapaddu@gmail.com",
+      "teamName": "I AM HERE TO COLLECT YOU",
+      "status": "ACCEPTED",
+      "messageId": "<67dcbaf0-7a93-06ff-728e-31d80c0eee66@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:55.864Z"
+    },
+    "neetapandian@gmail.com": {
+      "recipientEmail": "neetapandian@gmail.com",
+      "teamName": "Code And Coffee",
+      "status": "ACCEPTED",
+      "messageId": "<d62bf246-0e94-5624-0e63-2fab66378605@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:56.264Z"
+    },
+    "rupavathymeikandamuthu@gmail.com": {
+      "recipientEmail": "rupavathymeikandamuthu@gmail.com",
+      "teamName": "Triple Charm",
+      "status": "ACCEPTED",
+      "messageId": "<5d43124c-b0b9-9ec3-8a0a-177b561f5532@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:56.659Z"
+    },
+    "sushmarameshan29@gmail.com": {
+      "recipientEmail": "sushmarameshan29@gmail.com",
+      "teamName": "TriSynapse",
+      "status": "ACCEPTED",
+      "messageId": "<4e363857-70bf-7b6d-ef2a-5113cadc4a5f@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:57.055Z"
+    },
+    "nanthanasekar20@gmail.com": {
+      "recipientEmail": "nanthanasekar20@gmail.com",
+      "teamName": "Kaizen-Drift",
+      "status": "ACCEPTED",
+      "messageId": "<1a2c15dd-d1c7-a420-2a35-b11c74d4dc50@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:57.452Z"
+    },
+    "nishaprabha600@gmail.com": {
+      "recipientEmail": "nishaprabha600@gmail.com",
+      "teamName": "Neuronova",
+      "status": "ACCEPTED",
+      "messageId": "<c5b28c39-3666-c533-b3da-a0faa44878ad@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:57.849Z"
+    },
+    "nithesh5252w@gmail.com": {
+      "recipientEmail": "nithesh5252w@gmail.com",
+      "teamName": "Kenxo",
+      "status": "ACCEPTED",
+      "messageId": "<dff1f30e-a805-7af5-3c6e-2b18ed530b56@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:58.252Z"
+    },
+    "abaran3344@gmail.com": {
+      "recipientEmail": "abaran3344@gmail.com",
+      "teamName": "† Legendary Trio †",
+      "status": "ACCEPTED",
+      "messageId": "<2e9e5100-520f-be24-eca4-68711e74c580@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:58.659Z"
+    },
+    "jeevithajaisankar15@gmail.com": {
+      "recipientEmail": "jeevithajaisankar15@gmail.com",
+      "teamName": "TECHNOGEK",
+      "status": "ACCEPTED",
+      "messageId": "<e01c7c33-ac2b-0ef5-4220-0a14a5e64aa4@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:59.195Z"
+    },
+    "d.dillibabu005@gmail.com": {
+      "recipientEmail": "d.dillibabu005@gmail.com",
+      "teamName": "Project x",
+      "status": "ACCEPTED",
+      "messageId": "<a2db67d7-3f92-fda7-01ff-592f932c2d32@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:59.585Z"
+    },
+    "mdkhizar2509@gmail.com": {
+      "recipientEmail": "mdkhizar2509@gmail.com",
+      "teamName": "Code Spartans",
+      "status": "ACCEPTED",
+      "messageId": "<7fbff338-ddd8-2e9f-0966-a5ea713da60f@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:52:59.986Z"
+    },
+    "ganeshragul354@gmail.com": {
+      "recipientEmail": "ganeshragul354@gmail.com",
+      "teamName": "AutoPilot",
+      "status": "ACCEPTED",
+      "messageId": "<0f9c6208-9edb-7926-2355-0c1dcea7ea45@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:00.387Z"
+    },
+    "devashine883@gmail.com": {
+      "recipientEmail": "devashine883@gmail.com",
+      "teamName": "Black squard",
+      "status": "ACCEPTED",
+      "messageId": "<fc9080b4-a311-92ef-328c-897f529507b3@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:00.792Z"
+    },
+    "livingghost1212@gmail.com": {
+      "recipientEmail": "livingghost1212@gmail.com",
+      "teamName": "Cross code",
+      "status": "ACCEPTED",
+      "messageId": "<1e077bce-9442-4e28-f9c4-1d9fba0e31b0@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:01.194Z"
+    },
+    "samueljason2006@gmail.com": {
+      "recipientEmail": "samueljason2006@gmail.com",
+      "teamName": "The Mavericks",
+      "status": "ACCEPTED",
+      "messageId": "<5b402b30-50e2-b772-6925-485ba92e47d3@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:01.590Z"
+    },
+    "spidey12041@gmail.com": {
+      "recipientEmail": "spidey12041@gmail.com",
+      "teamName": "Coders Syndicate",
+      "status": "ACCEPTED",
+      "messageId": "<2cd1d615-f9ae-338d-7336-66f204189f3f@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:01.994Z"
+    },
+    "kanmanimani2007@gmail.com": {
+      "recipientEmail": "kanmanimani2007@gmail.com",
+      "teamName": "INFINITE LOOP",
+      "status": "ACCEPTED",
+      "messageId": "<bd8b4619-0fbe-322f-996d-026bd7962433@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:02.382Z"
+    },
+    "harinanadarajan07@gmail.com": {
+      "recipientEmail": "harinanadarajan07@gmail.com",
+      "teamName": "TECHSTORM",
+      "status": "ACCEPTED",
+      "messageId": "<cb69df49-149e-f49e-efdc-a626e6ab4687@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:02.777Z"
+    },
+    "24ad070@excelcolleges.com": {
+      "recipientEmail": "24ad070@excelcolleges.com",
+      "teamName": "CODEX NINJA",
+      "status": "ACCEPTED",
+      "messageId": "<ffed3fed-c437-5cd5-cf2c-ee355c0e256e@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:03.174Z"
+    },
+    "lalith8302@gmail.com": {
+      "recipientEmail": "lalith8302@gmail.com",
+      "teamName": "Reg_X_",
+      "status": "ACCEPTED",
+      "messageId": "<fb94f34f-12e4-f01c-a469-a9adff7cd690@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:03.570Z"
+    },
+    "mbsadhanaarao@gmail.com": {
+      "recipientEmail": "mbsadhanaarao@gmail.com",
+      "teamName": "TENSHI TACTICS",
+      "status": "ACCEPTED",
+      "messageId": "<9cd1fb96-2899-c8a8-5a13-0f1ce8bd2554@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:03.967Z"
+    },
+    "banurasilabanu@gmail.com": {
+      "recipientEmail": "banurasilabanu@gmail.com",
+      "teamName": "TrioX",
+      "status": "ACCEPTED",
+      "messageId": "<bb887559-c171-6a9c-381d-9100b1e8c46e@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:04.361Z"
+    },
+    "srirathan461@gmail.com": {
+      "recipientEmail": "srirathan461@gmail.com",
+      "teamName": "Tech no",
+      "status": "ACCEPTED",
+      "messageId": "<8370429e-1847-2eed-97cb-fc78207855d8@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:04.757Z"
+    },
+    "vyas.s2026vlsi@sece.ac.in": {
+      "recipientEmail": "vyas.s2026vlsi@sece.ac.in",
+      "teamName": "Syntax error",
+      "status": "ACCEPTED",
+      "messageId": "<4905e9bb-0efa-12aa-89ec-176a4daf51df@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:05.159Z"
+    },
+    "sukanthlochan.d2026vlsi@sece.ac.in": {
+      "recipientEmail": "sukanthlochan.d2026vlsi@sece.ac.in",
+      "teamName": "Code red",
+      "status": "ACCEPTED",
+      "messageId": "<2a8eae49-721c-c7ad-2b59-498218685394@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:05.557Z"
+    },
+    "cmuthupandi302@gmail.com": {
+      "recipientEmail": "cmuthupandi302@gmail.com",
+      "teamName": "TRIAXIS",
+      "status": "ACCEPTED",
+      "messageId": "<eec5bce7-ebcd-199a-3385-88529cb1b4b0@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:05.952Z"
+    },
+    "kishorkk1886@gmail.com": {
+      "recipientEmail": "kishorkk1886@gmail.com",
+      "teamName": "ByteBees",
+      "status": "ACCEPTED",
+      "messageId": "<c06fecb7-e1e6-48ef-7f4f-f4d5d578450c@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:06.358Z"
+    },
+    "sathyashanmugam474@gmail.com": {
+      "recipientEmail": "sathyashanmugam474@gmail.com",
+      "teamName": "Kiot@Civilience",
+      "status": "ACCEPTED",
+      "messageId": "<73e9faa4-025a-710b-eddd-5329c5f56df6@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:06.751Z"
+    },
+    "310624244049@eec.srmrmp.edu.in": {
+      "recipientEmail": "310624244049@eec.srmrmp.edu.in",
+      "teamName": "return Sucess()",
+      "status": "ACCEPTED",
+      "messageId": "<caa63876-6add-7c4d-f40e-9d3daba045d2@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:07.146Z"
+    },
+    "divya3912d@gmail.com": {
+      "recipientEmail": "divya3912d@gmail.com",
+      "teamName": "Beyonder.exe",
+      "status": "ACCEPTED",
+      "messageId": "<85b14c19-853d-c6e0-4185-6ea52272dad4@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:07.541Z"
+    },
+    "josephvalan314@gmail.com": {
+      "recipientEmail": "josephvalan314@gmail.com",
+      "teamName": "Torex",
+      "status": "ACCEPTED",
+      "messageId": "<eb272672-79a0-6401-a96f-803f4b538c23@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:07.939Z"
+    },
+    "valanjoseph02@gmail.com": {
+      "recipientEmail": "valanjoseph02@gmail.com",
+      "teamName": "Elite",
+      "status": "ACCEPTED",
+      "messageId": "<99692b40-eebb-1754-f2fe-165f701132d8@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:08.336Z"
+    },
+    "bhatisapna2006@gmail.com": {
+      "recipientEmail": "bhatisapna2006@gmail.com",
+      "teamName": "Innova Tech",
+      "status": "ACCEPTED",
+      "messageId": "<058195f9-5c97-4faa-8cc4-b0bd64061701@gmail.com>",
+      "attempts": 1,
+      "timestamp": "2026-10-14T05:53:08.731Z"
+    }
+  },
+  "completedAt": "2026-10-14T05:53:08.732Z"
+}
