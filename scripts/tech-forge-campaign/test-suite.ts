@@ -1,4 +1,4 @@
-import { validateRecipients, recipientSchema } from "./lib/validator";
+import { validateRecipients, recipientSchema, ValidatedRecipient } from "./lib/validator";
 import {
   renderTechForgeHtmlEmail,
   renderTechForgePlainTextEmail,
@@ -75,12 +75,12 @@ async function runTestSuite() {
   // TEST GROUP 2: Official Template Rules & Content Integrity
   // ---------------------------------------------------------------------------
   console.log("\n--- 2. Template Rules & Content Integrity Tests ---");
-  const sampleRecipient = {
+  const sampleRecipient: ValidatedRecipient = {
     teamId: "team-tf-01",
     teamName: "ByteForge Innovators",
     leaderName: "Kousi M",
     leaderEmail: "kowshykm@gmail.com",
-    sendingStatus: "PENDING" as const,
+    sendingStatus: "PENDING",
     errorDetails: "",
     registrationNumber: "CH26-NN7TB4",
     college: "Vel Tech",

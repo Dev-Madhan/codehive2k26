@@ -1,8 +1,10 @@
-import nodemailer from "nodemailer";
+import nodemailer, { type Transporter } from "nodemailer";
 import * as fs from "fs";
 import * as path from "path";
 import { ValidatedRecipient } from "./validator";
 import { renderAgentVibeHtmlEmail, renderAgentVibePlainTextEmail, EMAIL_SUBJECT } from "./renderer";
+
+export type { ValidatedRecipient };
 
 export interface MailerConfig {
   host: string;
@@ -35,7 +37,7 @@ export interface CampaignState {
 }
 
 export class AgentVibeMailerService {
-  private transporter: nodemailer.Transporter | null = null;
+  private transporter: Transporter | null = null;
   private config: MailerConfig;
   private logDir: string;
   private stateFilePath: string;

@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer";
+import nodemailer, { type Transporter } from "nodemailer";
 import * as dns from "dns";
 import * as fs from "fs";
 import * as path from "path";
@@ -8,6 +8,9 @@ if (dns.setDefaultResultOrder) {
   dns.setDefaultResultOrder("ipv4first");
 }
 import { ValidatedRecipient } from "./validator";
+
+export type { ValidatedRecipient };
+
 import {
   renderTechForgeHtmlEmail,
   renderTechForgePlainTextEmail,
@@ -45,7 +48,7 @@ export interface CampaignState {
 }
 
 export class TechForgeMailerService {
-  private transporter: nodemailer.Transporter | null = null;
+  private transporter: Transporter | null = null;
   private config: MailerConfig;
   private logDir: string;
   private stateFilePath: string;

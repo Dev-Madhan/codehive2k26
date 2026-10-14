@@ -19,7 +19,7 @@ export const recipientSchema = z.object({
     .refine((val) => val !== "EXCLUDED", {
       message: "Recipient is marked as EXCLUDED and cannot enter sending queue",
     }),
-  errorDetails: z.string().default("").refine((val) => val === "", {
+  errorDetails: z.string().default("").refine((val: string): boolean => val === "", {
     message: "Record has errorDetails attached and requires operator resolution",
   }),
   registrationNumber: z.string().optional(),

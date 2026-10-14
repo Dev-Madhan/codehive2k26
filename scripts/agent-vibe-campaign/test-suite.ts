@@ -1,6 +1,6 @@
-import { validateRecipients, recipientSchema } from "./lib/validator";
+import { validateRecipients, recipientSchema, ValidatedRecipient } from "./lib/validator";
 import { renderAgentVibeHtmlEmail, renderAgentVibePlainTextEmail, EMAIL_SUBJECT } from "./lib/renderer";
-import { AgentVibeMailerService, MailerConfig, ValidatedRecipient } from "./lib/mailer-service";
+import { AgentVibeMailerService, MailerConfig } from "./lib/mailer-service";
 import * as fs from "fs";
 import * as path from "path";
 
