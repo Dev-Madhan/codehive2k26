@@ -1,0 +1,25 @@
+{
+  "campaignName": "TECH_FORGE_PRE_ELIMINATION_ANNOUNCEMENT",
+  "executionMode": "LIVE_PRODUCTION_DELIVERY",
+  "startedAt": "2026-10-14T06:51:04.898Z",
+  "completedAt": "2026-10-14T06:56:20.088Z",
+  "totalApprovedRecipients": 67,
+  "excludedOrphaned": 1,
+  "totalSendable": 66,
+  "totalAttempted": 66,
+  "acceptedByProvider": 66,
+  "failedSends": 0,
+  "duplicateSendsPrevented": 0,
+  "reconciliationPercentage": "100.0%",
+  "providerDetails": {
+    "host": "smtp-relay.brevo.com",
+    "port": 587,
+    "sender": "CodeHive 2K26 <codehive2k26@gmail.com>"
+  },
+  "statusBreakdown": {
+    "accepted": 66,
+    "failed": 0,
+    "skipped": 0
+  },
+  "noteOnStatus": "Accepted by Provider means the SMTP server accepted the message into its delivery queue. Delivery and bounce status must be verified in the provider dashboard (e.g., Brevo transactional logs)."
+}
