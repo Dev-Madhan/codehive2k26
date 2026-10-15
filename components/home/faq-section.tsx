@@ -36,8 +36,8 @@ const faqs = [
   {
     q: "When and where is the on-site hackathon conducted?",
     mobileQ: "When and where is the hackathon?",
-    a: "CodeHive 2K26 2.0 is a 2-day on-site event conducted on 23rd & 24th October 2026.\n\n• Daily Timings: 8:30 AM – 3:30 PM daily\n• Venue: Palani Murugan Hall of Fame, Room M/K 301, Vel Tech Multi Tech Dr. Rangarajan Dr. Sakunthala Engineering College (Autonomous), Avadi, Chennai.",
-    mobileA: "23 & 24 Oct 2026 • 8:30 AM – 3:30 PM daily.\nPalani Murugan Hall of Fame (Room M/K 301), Vel Tech Multi Tech, Avadi, Chennai.",
+    a: "CodeHive 2K26 2.0 has been temporarily postponed due to unforeseen college-related circumstances and scheduled examinations.\n\nThe event is tentatively expected to take place in December 2026. Confirmed dates will be announced once finalized.\n\n• Venue (unchanged): Palani Murugan Hall of Fame, Room M/K 301, Vel Tech Multi Tech Dr. Rangarajan Dr. Sakunthala Engineering College (Autonomous), Avadi, Chennai.\n• Daily Timings: 8:30 AM – 3:30 PM (as planned, subject to final schedule).",
+    mobileA: "Temporarily postponed — New dates: December 2026 (TBD).\nVenue: Palani Murugan Hall of Fame (M/K 301), Vel Tech Multi Tech, Avadi, Chennai.",
     category: "SCHEDULE & VENUE",
   },
   {

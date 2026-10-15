@@ -37,8 +37,8 @@ const steps: StepItem[] = [
   {
     number: "02",
     title: "BUILD",
-    desc: "Hack on campus on 23 & 24 October. Solve real-world problem statements and tackle surprise constraints.",
-    meta: "23 & 24 OCT • ON-CAMPUS",
+    desc: "Hack on campus in December 2026 (dates TBD). Solve real-world problem statements and tackle surprise constraints.",
+    meta: "DEC 2026 (TBD) • ON-CAMPUS",
     icon: CodeIcon,
   },
   {

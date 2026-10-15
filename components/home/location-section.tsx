@@ -86,7 +86,7 @@ const venueDetails = [
   },
   {
     label: "// DATES",
-    value: "23 & 24 OCT 2026",
+    value: "DEC 2026 (DATE TBD)",
     hideOnMobile: true,
   },
   {
@@ -191,7 +191,7 @@ export function LocationSection() {
 
           {/* Mobile Description: Ultra-Concise Essentials */}
           <p className="loc-desc md:hidden text-neutral-400 text-xs leading-relaxed font-mono">
-            Vel Tech Multi Tech, Avadi, Chennai // 23 &amp; 24 OCT 2026
+            Vel Tech Multi Tech, Avadi, Chennai // DEC 2026 (POSTPONED)
           </p>
         </div>
 

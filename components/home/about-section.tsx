@@ -104,7 +104,7 @@ export function AboutSection() {
           ease: "power2.out",
           onUpdate: () => {
             if (daysRef.current) {
-              daysRef.current.textContent = `${Math.round(daysCounter.val)} DAYS // 23 & 24 OCT`;
+              daysRef.current.textContent = `${Math.round(daysCounter.val)} DAYS // DEC 2026`;
             }
           },
         },
@@ -225,7 +225,7 @@ export function AboutSection() {
               ref={daysRef}
               className="font-mono text-xs sm:text-sm font-bold text-white tracking-wide"
             >
-              2 DAYS // 23 &amp; 24 OCT
+              2 DAYS // DEC 2026 (TBD)
             </span>
           </div>
 
