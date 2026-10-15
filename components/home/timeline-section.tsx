@@ -14,31 +14,31 @@ const timeline = [
   },
   {
     phase: "PHASE_02",
-    date: "23 OCT • 8:30 AM",
+    date: "TBD • 8:30 AM",
     title: "Day 1: Check-in & Round 1 (Analyze / Blueprint)",
     desc: "Arrival at Palani Murugan Hall of Fame, Avadi. QR Check-In, briefing, problem analysis, architecture, and Round 1 submission.",
-    status: "upcoming",
+    status: "postponed",
   },
   {
     phase: "PHASE_03",
-    date: "23 OCT • 1:00 PM",
+    date: "TBD • 1:00 PM",
     title: "Day 1: Round 2 (Core Build & Prototype)",
     desc: "Intensive development sprint. Working prototype implementation, role-based workflows, and Day 1 jury evaluation.",
-    status: "upcoming",
+    status: "postponed",
   },
   {
     phase: "PHASE_04",
-    date: "24 OCT • 8:30 AM",
+    date: "TBD • 8:30 AM",
     title: "Day 2: Round 3 (Surprise Challenge / Adapt)",
     desc: "Day 2 kicks off with a surprise technical challenge testing agility, live data integration, and edge-case resilience.",
-    status: "upcoming",
+    status: "postponed",
   },
   {
     phase: "PHASE_05",
-    date: "24 OCT • 1:30 PM",
+    date: "TBD • 1:30 PM",
     title: "Day 2: Round 4 (Defend & Deploy) & Valedictory",
     desc: "Live system viva defense before industry juries. Grand ₹20,000 cash prize distribution and certificates awarded to all.",
-    status: "upcoming",
+    status: "postponed",
   },
 ];
 
@@ -155,6 +155,8 @@ function TimelineCard({
         "p-4 border bg-[#0F0F0F] max-w-sm",
         item.status === "active"
           ? "border-white shadow-[0_0_20px_rgba(255,255,255,0.06)]"
+          : item.status === "postponed"
+          ? "border-amber-500/40"
           : "border-[#262626]",
         align === "right" && "ml-auto"
       )}
@@ -168,10 +170,12 @@ function TimelineCard({
             "font-mono text-[10px] uppercase tracking-widest",
             item.status === "active"
               ? "text-white font-bold"
+              : item.status === "postponed"
+              ? "text-amber-400 font-bold"
               : "text-[#737373]"
           )}
         >
-          {item.status === "active" ? "● LIVE" : item.date}
+          {item.status === "active" ? "● LIVE" : item.status === "postponed" ? "⚠ POSTPONED" : item.date}
         </span>
       </div>
       <h3 className="font-mono text-sm font-bold uppercase text-white mb-1">

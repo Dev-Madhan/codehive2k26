@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     template: "%s | CodeHive 2K26",
   },
   description:
-    "Official platform for CodeHive 2K26 2.0 National Level Hackathon on 23 & 24 October 2026 by Dept of CSBS, Vel Tech Multi Tech, in association with Sri Vensy Technologies.",
+    "Official platform for CodeHive 2K26 2.0 National Level Hackathon — Temporarily postponed. New dates: December 2026. Hosted by Dept of CSBS, Vel Tech Multi Tech, in association with Sri Vensy Technologies.",
   keywords: [
     "CodeHive 2K26",
     "CodeHive",
@@ -69,13 +69,13 @@ export const metadata: Metadata = {
     siteName: "CodeHive 2K26",
     title: "CodeHive 2K26 2.0 — National Level Hackathon | Ideas × Code × Impact",
     description:
-      "Official platform for CodeHive 2K26 2.0 National Level Hackathon on 23 & 24 October 2026 by Dept of CSBS, Vel Tech Multi Tech.",
+      "Official platform for CodeHive 2K26 2.0 National Level Hackathon — Temporarily postponed. New dates: December 2026. Hosted by Dept of CSBS, Vel Tech Multi Tech.",
   },
   twitter: {
     card: "summary_large_image",
     title: "CodeHive 2K26 2.0 — National Level Hackathon",
     description:
-      "Official platform for CodeHive 2K26 2.0 National Level Hackathon on 23 & 24 October 2026.",
+      "Official platform for CodeHive 2K26 2.0 National Level Hackathon — Temporarily postponed. New dates: December 2026.",
   },
   robots: {
     index: true,

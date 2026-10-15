@@ -90,7 +90,7 @@ export function HeroIntroWrapper() {
           <span className="relative inline-flex h-2 w-2 bg-white" />
         </span>
         <span className="font-mono text-[11px] sm:text-xs font-bold tracking-wider text-white uppercase">
-          23 &amp; 24 OCT 2026 // ENTRY FREE
+          DEC 2026 (POSTPONED) // ENTRY FREE
         </span>
       </div>
 

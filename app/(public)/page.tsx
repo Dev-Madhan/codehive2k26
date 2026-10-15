@@ -9,6 +9,7 @@ import { SponsorsSection } from "@/components/home/sponsors-section";
 import { FaqSection } from "@/components/home/faq-section";
 import { Footer } from "@/components/home/footer";
 import { LocationSection } from "@/components/home/location-section";
+import { PostponementBanner } from "@/components/home/postponement-banner";
 import { getEvents } from "@/actions/event";
 
 export default async function Home() {
@@ -17,6 +18,9 @@ export default async function Home() {
 
   return (
     <div className="relative min-h-screen flex flex-col bg-black text-white selection:bg-white selection:text-black font-sans overflow-x-hidden">
+      {/* ⚠️ Postponement Notice — Displayed above navigation until dismissed */}
+      <PostponementBanner />
+
       {/* Top Sticky Navigation */}
       <Header />
 

@@ -46,7 +46,7 @@ export function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
             <p className="font-mono text-[11px] uppercase tracking-widest text-[#737373] mb-1">
-              NATIONAL LEVEL HACKATHON // 23 &amp; 24 OCT 2026
+              NATIONAL LEVEL HACKATHON // DEC 2026 (DATE TBD)
             </p>
             <h3 className="font-mono text-2xl sm:text-3xl font-black uppercase text-white tracking-tight">
               READY TO FORGE YOUR CODE?
